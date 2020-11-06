@@ -31,26 +31,26 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform:
-          - linux-gcc
-          - linux-clang
-          - mingw
-          - rpi
-          - arm
-        lib-type:
-          - static
-          - shared
-        architecture:
-          - 64
-          - 32
-        build-type:
-          - rel
-          - dbg
+#        platform:
+#          - linux-gcc
+#          - linux-clang
+#          - mingw
+#          - rpi
+#          - arm
+#        lib-type:
+#          - static
+#          - shared
+#        architecture:
+#          - 64
+#          - 32
+#        build-type:
+#          - rel
+#          - dbg
         include:
-          - { platform: web, lib-type: static, architecture: wasm, build-type: rel }
-          - { platform: web, lib-type: static, architecture: wasm, build-type: dbg }
-          - { platform: android, lib-type: static, architecture: all, build-type: both }
-          - { platform: android, lib-type: shared, architecture: all, build-type: both }
+#          - { platform: web, lib-type: static, architecture: wasm, build-type: rel }
+#          - { platform: web, lib-type: static, architecture: wasm, build-type: dbg }
+#          - { platform: android, lib-type: static, architecture: all, build-type: both }
+#          - { platform: android, lib-type: shared, architecture: all, build-type: both }
           - { platform: linux-clang-tidy }
           - { platform: linux-clang-format }
     env:
@@ -157,123 +157,123 @@ jobs:
           (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')) &&
           (matrix.platform == 'android' || (matrix.platform == 'web' && matrix.build-type == 'rel'))
         continue-on-error: ${{ !startsWith(github.ref, 'refs/tags/') }}
-  macOS:
-    name: 🍏
-    runs-on: macos-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        platform:
-          - macOS
-        lib-type:
-          - static
-          - shared
-        include:
-          - { platform: iOS, lib-type: static }
-          - { platform: tvOS, lib-type: static }
-    env:
-      HOST: ${{ github.job }}
-      PLATFORM: ${{ matrix.platform }}
-      LIB_TYPE: ${{ matrix.lib-type }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with: { fetch-depth: 0 }
-      - name: Install dependencies
-        run: while ! brew install doxygen graphviz; do sleep 1; done
-      - name: CMake
-        run: rake cmake
-      - name: Build
-        run: rake build
-      - name: Test
-        run: rake test
-        if: matrix.platform == 'macOS'
-      - name: Documentation
-        run: rake doc
-      - name: Scaffolding - install
-        run: rake install[~/stage]
-      - name: Scaffolding - new
-        run: rake new
-      - name: Scaffolding - build
-        run: |
-          cd ~/projects/UrhoApp
-          rake URHO3D_HOME=~/stage/usr/local
-      - name: Scaffolding - test
-        run: |
-          cd ~/projects/UrhoApp
-          rake test
-        if: matrix.platform == 'macOS'
-      - name: Scaffolding - cleanup
-        run: rm -rf ~/{stage,projects}
-      - name: Package
-        run: rake package
-        if: github.event_name == 'push'
-      - name: Upload
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ matrix.platform }}-${{ matrix.lib-type }}-all-rel
-          path: build/ci/*.tar.gz
-        if: github.event_name == 'push'
-  windows:
-    name: 🔲
-    runs-on: windows-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        platform:
-          - win-vs
-          - win-gcc
-        lib-type:
-          - static
-          - shared
-        graphics-api:
-          - DX11
-          - DX9
-          - OpenGL
-    env:
-      HOST: ${{ github.job }}
-      PLATFORM: ${{ matrix.platform }}
-      LIB_TYPE: ${{ matrix.lib-type }}
-      GRAPHICS_API: ${{ matrix.graphics-api }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with: { fetch-depth: 0 }
-      - name: Install dependencies
-        run: do { choco install --no-progress doxygen.install graphviz } until ($?)
-      - name: CMake
-        run: rake cmake
-      - name: Build
-        run: rake build
-      - name: Test
-        run: rake test
-        if: matrix.graphics-api != 'OpenGL'
-      - name: Documentation
-        run: rake doc
-      - name: Scaffolding - install
-        run: rake install
-      - name: Scaffolding - new
-        run: rake new
-      - name: Scaffolding - build
-        run: |
-          cd ~/projects/UrhoApp
-          rake
-      - name: Scaffolding - test
-        run: |
-          cd ~/projects/UrhoApp
-          rake test
-        if: matrix.graphics-api != 'OpenGL'
-      - name: Scaffolding - cleanup
-        run: rm -r -fo $env:ProgramFiles/Urho3D, ~/Projects
-      - name: Package
-        run: rake package
-        if: github.event_name == 'push'
-      - name: Upload
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ matrix.platform }}-${{ matrix.lib-type }}-64-${{ matrix.graphics-api }}-rel
-          path: build/ci/*.zip
-        if: github.event_name == 'push'
+#  macOS:
+#    name: 🍏
+#    runs-on: macos-latest
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        platform:
+#          - macOS
+#        lib-type:
+#          - static
+#          - shared
+#        include:
+#          - { platform: iOS, lib-type: static }
+#          - { platform: tvOS, lib-type: static }
+#    env:
+#      HOST: ${{ github.job }}
+#      PLATFORM: ${{ matrix.platform }}
+#      LIB_TYPE: ${{ matrix.lib-type }}
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#        with: { fetch-depth: 0 }
+#      - name: Install dependencies
+#        run: while ! brew install doxygen graphviz; do sleep 1; done
+#      - name: CMake
+#        run: rake cmake
+#      - name: Build
+#        run: rake build
+#      - name: Test
+#        run: rake test
+#        if: matrix.platform == 'macOS'
+#      - name: Documentation
+#        run: rake doc
+#      - name: Scaffolding - install
+#        run: rake install[~/stage]
+#      - name: Scaffolding - new
+#        run: rake new
+#      - name: Scaffolding - build
+#        run: |
+#          cd ~/projects/UrhoApp
+#          rake URHO3D_HOME=~/stage/usr/local
+#      - name: Scaffolding - test
+#        run: |
+#          cd ~/projects/UrhoApp
+#          rake test
+#        if: matrix.platform == 'macOS'
+#      - name: Scaffolding - cleanup
+#        run: rm -rf ~/{stage,projects}
+#      - name: Package
+#        run: rake package
+#        if: github.event_name == 'push'
+#      - name: Upload
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: ${{ matrix.platform }}-${{ matrix.lib-type }}-all-rel
+#          path: build/ci/*.tar.gz
+#        if: github.event_name == 'push'
+#  windows:
+#    name: 🔲
+#    runs-on: windows-latest
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        platform:
+#          - win-vs
+#          - win-gcc
+#        lib-type:
+#          - static
+#          - shared
+#        graphics-api:
+#          - DX11
+#          - DX9
+#          - OpenGL
+#    env:
+#      HOST: ${{ github.job }}
+#      PLATFORM: ${{ matrix.platform }}
+#      LIB_TYPE: ${{ matrix.lib-type }}
+#      GRAPHICS_API: ${{ matrix.graphics-api }}
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#        with: { fetch-depth: 0 }
+#      - name: Install dependencies
+#        run: do { choco install --no-progress doxygen.install graphviz } until ($?)
+#      - name: CMake
+#        run: rake cmake
+#      - name: Build
+#        run: rake build
+#      - name: Test
+#        run: rake test
+#        if: matrix.graphics-api != 'OpenGL'
+#      - name: Documentation
+#        run: rake doc
+#      - name: Scaffolding - install
+#        run: rake install
+#      - name: Scaffolding - new
+#        run: rake new
+#      - name: Scaffolding - build
+#        run: |
+#          cd ~/projects/UrhoApp
+#          rake
+#      - name: Scaffolding - test
+#        run: |
+#          cd ~/projects/UrhoApp
+#          rake test
+#        if: matrix.graphics-api != 'OpenGL'
+#      - name: Scaffolding - cleanup
+#        run: rm -r -fo $env:ProgramFiles/Urho3D, ~/Projects
+#      - name: Package
+#        run: rake package
+#        if: github.event_name == 'push'
+#      - name: Upload
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: ${{ matrix.platform }}-${{ matrix.lib-type }}-64-${{ matrix.graphics-api }}-rel
+#          path: build/ci/*.zip
+#        if: github.event_name == 'push'
 
 ...
 
