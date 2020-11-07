@@ -72,8 +72,8 @@ public:
     void SetCursor(Cursor* cursor);
     /// Set focused UI element.
     void SetFocusElement(UIElement* element, bool byKey = false);
-    /// Set modal element. Until all the modal elements are dismissed, all the inputs and events are only sent to them. Return true when successful.
-    /// Only the modal element can clear its modal status or when it is being destructed.
+    /// Set modal element. Until all the modal elements are dismissed, all the inputs and events are only sent to them.
+    /// Return true when successful. Only the modal element can clear its modal status or when it is being destructed.
     bool SetModalElement(UIElement* modalElement, bool enable);
     /// Clear the UI (excluding the cursor).
     void Clear();
@@ -81,13 +81,17 @@ public:
     void Update(float timeStep);
     /// Update the UI for rendering. Called by HandleRenderUpdate().
     void RenderUpdate();
-    /// Render the UI. If renderUICommand is false (default), is assumed to be the default UI render to backbuffer called by Engine, and will be performed only once. Additional UI renders to a different rendertarget may be triggered from the renderpath.
+    /// Render the UI. If renderUICommand is false (default), is assumed to be the default UI render to backbuffer
+    /// called by Engine, and will be performed only once. Additional UI renders to a different rendertarget may be
+    /// triggered from the renderpath.
     void Render(bool renderUICommand = false);
     /// Debug draw a UI element.
     void DebugDraw(UIElement* element);
-    /// Load a UI layout from an XML file. Optionally specify another XML file for element style. Return the root element.
+    /// Load a UI layout from an XML file. Optionally specify another XML file for element style. Return the root
+    /// element.
     SharedPtr<UIElement> LoadLayout(Deserializer& source, XMLFile* styleFile = nullptr);
-    /// Load a UI layout from an XML file. Optionally specify another XML file for element style. Return the root element.
+    /// Load a UI layout from an XML file. Optionally specify another XML file for element style. Return the root
+    /// element.
     SharedPtr<UIElement> LoadLayout(XMLFile* file, XMLFile* styleFile = nullptr);
     /// Save a UI layout to an XML file. Return true if successful.
     bool SaveLayout(Serializer& dest, UIElement* element);
@@ -118,10 +122,12 @@ public:
     /// Set whether to use system clipboard. Default false.
     /// @property
     void SetUseSystemClipboard(bool enable);
-    /// Set whether to show the on-screen keyboard (if supported) when a %LineEdit is focused. Default true on mobile devices.
+    /// Set whether to show the on-screen keyboard (if supported) when a %LineEdit is focused. Default true on mobile
+    /// devices.
     /// @property
     void SetUseScreenKeyboard(bool enable);
-    /// Set whether to use mutable (eraseable) glyphs to ensure a font face never expands to more than one texture. Default false.
+    /// Set whether to use mutable (eraseable) glyphs to ensure a font face never expands to more than one texture.
+    /// Default false.
     /// @property
     void SetUseMutableGlyphs(bool enable);
     /// Set whether to force font autohinting instead of using FreeType's TTF bytecode interpreter.
@@ -130,10 +136,12 @@ public:
     /// Set the hinting level used by FreeType fonts.
     /// @property
     void SetFontHintLevel(FontHintLevel level);
-    /// Set the font subpixel threshold. Below this size, if the hint level is LIGHT or NONE, fonts will use subpixel positioning plus oversampling for higher-quality rendering. Has no effect at hint level NORMAL.
+    /// Set the font subpixel threshold. Below this size, if the hint level is LIGHT or NONE, fonts will use subpixel
+    /// positioning plus oversampling for higher-quality rendering. Has no effect at hint level NORMAL.
     /// @property
     void SetFontSubpixelThreshold(float threshold);
-    /// Set the oversampling (horizonal stretching) used to improve subpixel font rendering. Only affects fonts smaller than the subpixel limit.
+    /// Set the oversampling (horizonal stretching) used to improve subpixel font rendering. Only affects fonts smaller
+    /// than the subpixel limit.
     /// @property
     void SetFontOversampling(int oversampling);
     /// Set %UI scale. 1.0 is default (pixel perfect). Resize the root element to match.
@@ -143,7 +151,8 @@ public:
     void SetWidth(float width);
     /// Scale %UI to the specified height in pixels.
     void SetHeight(float height);
-    /// Set custom size of the root element. This disables automatic resizing of the root element according to window size. Set custom size 0,0 to return to automatic resizing.
+    /// Set custom size of the root element. This disables automatic resizing of the root element according to window
+    /// size. Set custom size 0,0 to return to automatic resizing.
     /// @property
     void SetCustomSize(const IntVector2& size);
     /// Set custom size of the root element.
@@ -200,7 +209,7 @@ public:
 
     /// Return max screen distance in pixels for double clicks to register.
     /// @property
-    float GetMaxDoubleClickDistance() const { return maxDoubleClickDist_;}
+    float GetMaxDoubleClickDistance() const { return maxDoubleClickDist_; }
 
     /// Return UI drag start event interval in seconds.
     /// @property
@@ -242,11 +251,13 @@ public:
     /// @property
     FontHintLevel GetFontHintLevel() const { return fontHintLevel_; }
 
-    /// Get the font subpixel threshold. Below this size, if the hint level is LIGHT or NONE, fonts will use subpixel positioning plus oversampling for higher-quality rendering. Has no effect at hint level NORMAL.
+    /// Get the font subpixel threshold. Below this size, if the hint level is LIGHT or NONE, fonts will use subpixel
+    /// positioning plus oversampling for higher-quality rendering. Has no effect at hint level NORMAL.
     /// @property
     float GetFontSubpixelThreshold() const { return fontSubpixelThreshold_; }
 
-    /// Get the oversampling (horizonal stretching) used to improve subpixel font rendering. Only affects fonts smaller than the subpixel limit.
+    /// Get the oversampling (horizonal stretching) used to improve subpixel font rendering. Only affects fonts smaller
+    /// than the subpixel limit.
     /// @property
     int GetFontOversampling() const { return fontOversampling_; }
 
@@ -260,7 +271,8 @@ public:
     /// @property
     float GetScale() const { return uiScale_; }
 
-    /// Return root element custom size. Returns 0,0 when custom size is not being used and automatic resizing according to window size is in use instead (default).
+    /// Return root element custom size. Returns 0,0 when custom size is not being used and automatic resizing according
+    /// to window size is in use instead (default).
     /// @property
     const IntVector2& GetCustomSize() const { return customSize_; }
 
@@ -315,7 +327,8 @@ private:
     /// Render UI batches to the current rendertarget. Geometry must have been uploaded first.
     void Render(VertexBuffer* buffer, const PODVector<UIBatch>& batches, unsigned batchStart, unsigned batchEnd);
     /// Generate batches from an UI element recursively. Skip the cursor element.
-    void GetBatches(PODVector<UIBatch>& batches, PODVector<float>& vertexData, UIElement* element, IntRect currentScissor);
+    void GetBatches(PODVector<UIBatch>& batches, PODVector<float>& vertexData, UIElement* element,
+                    IntRect currentScissor);
     /// Return UI element at global screen coordinates. Return position converted to element's screen coordinates.
     UIElement* GetElementAt(const IntVector2& position, bool enabledOnly, IntVector2* elementScreenPosition);
     /// Return UI element at screen position recursively.
@@ -329,25 +342,28 @@ private:
     /// Force release of font faces when global font properties change.
     void ReleaseFontFaces();
     /// Handle button or touch hover.
-    void ProcessHover(const IntVector2& windowCursorPos, MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor);
+    void ProcessHover(const IntVector2& windowCursorPos, MouseButtonFlags buttons, QualifierFlags qualifiers,
+                      Cursor* cursor);
     /// Handle button or touch begin.
-    void
-        ProcessClickBegin(const IntVector2& windowCursorPos, MouseButton button, MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor, bool cursorVisible);
+    void ProcessClickBegin(const IntVector2& windowCursorPos, MouseButton button, MouseButtonFlags buttons,
+                           QualifierFlags qualifiers, Cursor* cursor, bool cursorVisible);
     /// Handle button or touch end.
-    void ProcessClickEnd(const IntVector2& windowCursorPos, MouseButton button, MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor, bool cursorVisible);
+    void ProcessClickEnd(const IntVector2& windowCursorPos, MouseButton button, MouseButtonFlags buttons,
+                         QualifierFlags qualifiers, Cursor* cursor, bool cursorVisible);
     /// Handle mouse or touch move.
-    void ProcessMove(const IntVector2& windowCursorPos, const IntVector2& cursorDeltaPos, MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor,
-        bool cursorVisible);
+    void ProcessMove(const IntVector2& windowCursorPos, const IntVector2& cursorDeltaPos, MouseButtonFlags buttons,
+                     QualifierFlags qualifiers, Cursor* cursor, bool cursorVisible);
     /// Send a UI element drag or hover begin event.
-    void SendDragOrHoverEvent
-        (StringHash eventType, UIElement* element, const IntVector2& screenPos, const IntVector2& deltaPos, UI::DragData* dragData);
+    void SendDragOrHoverEvent(StringHash eventType, UIElement* element, const IntVector2& screenPos,
+                              const IntVector2& deltaPos, UI::DragData* dragData);
     /// Send a UI click event.
-    void SendClickEvent
-        (StringHash eventType, UIElement* beginElement, UIElement* endElement, const IntVector2& pos, MouseButton button, MouseButtonFlags buttons,
-            QualifierFlags qualifiers);
+    void SendClickEvent(StringHash eventType, UIElement* beginElement, UIElement* endElement, const IntVector2& pos,
+                        MouseButton button, MouseButtonFlags buttons, QualifierFlags qualifiers);
 
     /// Send a UI double click event.
-    void SendDoubleClickEvent(UIElement* beginElement, UIElement* endElement, const IntVector2& firstPos, const IntVector2& secondPos, MouseButton button, MouseButtonFlags buttons, QualifierFlags qualifiers);
+    void SendDoubleClickEvent(UIElement* beginElement, UIElement* endElement, const IntVector2& firstPos,
+                              const IntVector2& secondPos, MouseButton button, MouseButtonFlags buttons,
+                              QualifierFlags qualifiers);
 
     /// Handle screen mode event.
     void HandleScreenMode(StringHash eventType, VariantMap& eventData);
@@ -378,7 +394,8 @@ private:
     /// Handle a file being drag-dropped into the application window.
     void HandleDropFile(StringHash eventType, VariantMap& eventData);
     /// Remove drag data and return next iterator.
-    HashMap<WeakPtr<UIElement>, DragData*>::Iterator DragElementErase(HashMap<WeakPtr<UIElement>, DragData*>::Iterator i);
+    HashMap<WeakPtr<UIElement>, DragData*>::Iterator
+    DragElementErase(HashMap<WeakPtr<UIElement>, DragData*>::Iterator i);
     /// Handle clean up on a drag cancel.
     void ProcessDragCancel();
     /// Sum touch positions and return the begin position ready to send.
@@ -485,4 +502,4 @@ private:
 /// Register UI library objects.
 void URHO3D_API RegisterUILibrary(Context* context);
 
-}
+} // namespace Urho3D

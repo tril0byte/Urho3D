@@ -28,28 +28,21 @@
 namespace Urho3D
 {
 
-const char* interpolationModeNames[] =
-{
-    "Bezier",
-    "Catmull-Rom",
-    "Linear",
-    "Catmull-Rom Full",
-    nullptr
-};
+const char* interpolationModeNames[] = {"Bezier", "Catmull-Rom", "Linear", "Catmull-Rom Full", nullptr};
 
-Spline::Spline() :
-    interpolationMode_(BEZIER_CURVE)
+Spline::Spline()
+    : interpolationMode_(BEZIER_CURVE)
 {
 }
 
-Spline::Spline(InterpolationMode mode) :
-    interpolationMode_(mode)
+Spline::Spline(InterpolationMode mode)
+    : interpolationMode_(mode)
 {
 }
 
-Spline::Spline(const Vector<Variant>& knots, InterpolationMode mode) :
-    interpolationMode_(mode),
-    knots_(knots)
+Spline::Spline(const Vector<Variant>& knots, InterpolationMode mode)
+    : interpolationMode_(mode)
+    , knots_(knots)
 {
 }
 
@@ -72,28 +65,28 @@ Variant Spline::GetPoint(float f) const
     case LINEAR_CURVE:
         return LinearInterpolation(knots_, f);
     case CATMULL_ROM_FULL_CURVE:
+    {
+        /// \todo Do not allocate a new vector each time
+        Vector<Variant> fullKnots;
+        if (knots_.Size() > 1)
         {
-            /// \todo Do not allocate a new vector each time
-            Vector<Variant> fullKnots;
-            if (knots_.Size() > 1)
+            // Non-cyclic case: duplicate start and end
+            if (knots_.Front() != knots_.Back())
             {
-                // Non-cyclic case: duplicate start and end
-                if (knots_.Front() != knots_.Back())
-                {
-                    fullKnots.Push(knots_.Front());
-                    fullKnots.Push(knots_);
-                    fullKnots.Push(knots_.Back());
-                }
-                // Cyclic case: smooth the tangents
-                else
-                {
-                    fullKnots.Push(knots_[knots_.Size() - 2]);
-                    fullKnots.Push(knots_);
-                    fullKnots.Push(knots_[1]);
-                }
+                fullKnots.Push(knots_.Front());
+                fullKnots.Push(knots_);
+                fullKnots.Push(knots_.Back());
             }
-            return CatmullRomInterpolation(fullKnots, f);
+            // Cyclic case: smooth the tangents
+            else
+            {
+                fullKnots.Push(knots_[knots_.Size() - 2]);
+                fullKnots.Push(knots_);
+                fullKnots.Push(knots_[1]);
+            }
         }
+        return CatmullRomInterpolation(fullKnots, f);
+    }
 
     default:
         URHO3D_LOGERROR("Unsupported interpolation mode");
@@ -111,7 +104,7 @@ void Spline::SetKnot(const Variant& knot, unsigned index)
             knots_.Push(knot);
         else
             URHO3D_LOGERRORF("Attempted to set a Spline's Knot value of type %s where elements are already using %s",
-                knot.GetTypeName().CString(), knots_[0].GetTypeName().CString());
+                             knot.GetTypeName().CString(), knots_[0].GetTypeName().CString());
     }
 }
 
@@ -122,8 +115,8 @@ void Spline::AddKnot(const Variant& knot)
     else if (knots_.Empty())
         knots_.Push(knot);
     else
-        URHO3D_LOGERRORF("Attempted to add Knot to Spline of type %s where elements are already using %s", knot.GetTypeName().CString(),
-            knots_[0].GetTypeName().CString());
+        URHO3D_LOGERRORF("Attempted to add Knot to Spline of type %s where elements are already using %s",
+                         knot.GetTypeName().CString(), knots_[0].GetTypeName().CString());
 }
 
 void Spline::AddKnot(const Variant& knot, unsigned index)
@@ -136,8 +129,8 @@ void Spline::AddKnot(const Variant& knot, unsigned index)
     else if (knots_.Empty())
         knots_.Push(knot);
     else
-        URHO3D_LOGERRORF("Attempted to add Knot to Spline of type %s where elements are already using %s", knot.GetTypeName().CString(),
-            knots_[0].GetTypeName().CString());
+        URHO3D_LOGERRORF("Attempted to add Knot to Spline of type %s where elements are already using %s",
+                         knot.GetTypeName().CString(), knots_[0].GetTypeName().CString());
 }
 
 Variant Spline::BezierInterpolation(const Vector<Variant>& knots, float t) const
@@ -181,11 +174,11 @@ Variant Spline::BezierInterpolation(const Vector<Variant>& knots, float t) const
     }
 }
 
-template <typename T> Variant CalculateCatmullRom(const T& p0, const T& p1, const T& p2, const T& p3, float t, float t2, float t3)
+template <typename T>
+Variant CalculateCatmullRom(const T& p0, const T& p1, const T& p2, const T& p3, float t, float t2, float t3)
 {
-    return Variant(0.5f * ((2.0f * p1) + (-p0 + p2) * t +
-        (2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * t2 +
-        (-p0 + 3.0f * p1 - 3.0f * p2 + p3) * t3));
+    return Variant(0.5f * ((2.0f * p1) + (-p0 + p2) * t + (2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * t2 +
+                           (-p0 + 3.0f * p1 - 3.0f * p2 + p3) * t3));
 }
 
 Variant Spline::CatmullRomInterpolation(const Vector<Variant>& knots, float t) const
@@ -206,22 +199,26 @@ Variant Spline::CatmullRomInterpolation(const Vector<Variant>& knots, float t) c
         {
         case VAR_FLOAT:
             return CalculateCatmullRom(knots[originIndex].GetFloat(), knots[originIndex + 1].GetFloat(),
-                knots[originIndex + 2].GetFloat(), knots[originIndex + 3].GetFloat(), t, t2, t3);
+                                       knots[originIndex + 2].GetFloat(), knots[originIndex + 3].GetFloat(), t, t2, t3);
         case VAR_VECTOR2:
             return CalculateCatmullRom(knots[originIndex].GetVector2(), knots[originIndex + 1].GetVector2(),
-                knots[originIndex + 2].GetVector2(), knots[originIndex + 3].GetVector2(), t, t2, t3);
+                                       knots[originIndex + 2].GetVector2(), knots[originIndex + 3].GetVector2(), t, t2,
+                                       t3);
         case VAR_VECTOR3:
             return CalculateCatmullRom(knots[originIndex].GetVector3(), knots[originIndex + 1].GetVector3(),
-                knots[originIndex + 2].GetVector3(), knots[originIndex + 3].GetVector3(), t, t2, t3);
+                                       knots[originIndex + 2].GetVector3(), knots[originIndex + 3].GetVector3(), t, t2,
+                                       t3);
         case VAR_VECTOR4:
             return CalculateCatmullRom(knots[originIndex].GetVector4(), knots[originIndex + 1].GetVector4(),
-                knots[originIndex + 2].GetVector4(), knots[originIndex + 3].GetVector4(), t, t2, t3);
+                                       knots[originIndex + 2].GetVector4(), knots[originIndex + 3].GetVector4(), t, t2,
+                                       t3);
         case VAR_COLOR:
             return CalculateCatmullRom(knots[originIndex].GetColor(), knots[originIndex + 1].GetColor(),
-                knots[originIndex + 2].GetColor(), knots[originIndex + 3].GetColor(), t, t2, t3);
+                                       knots[originIndex + 2].GetColor(), knots[originIndex + 3].GetColor(), t, t2, t3);
         case VAR_DOUBLE:
             return CalculateCatmullRom(knots[originIndex].GetDouble(), knots[originIndex + 1].GetDouble(),
-                knots[originIndex + 2].GetDouble(), knots[originIndex + 3].GetDouble(), t, t2, t3);
+                                       knots[originIndex + 2].GetDouble(), knots[originIndex + 3].GetDouble(), t, t2,
+                                       t3);
         default:
             return Variant::EMPTY;
         }
@@ -264,4 +261,4 @@ Variant Spline::LinearInterpolation(const Variant& lhs, const Variant& rhs, floa
     }
 }
 
-}
+} // namespace Urho3D

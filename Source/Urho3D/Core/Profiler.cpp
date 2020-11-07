@@ -31,11 +31,11 @@
 namespace Urho3D
 {
 
-Profiler::Profiler(Context* context) :
-    Object(context),
-    current_(nullptr),
-    root_(nullptr),
-    intervalFrames_(0)
+Profiler::Profiler(Context* context)
+    : Object(context)
+    , current_(nullptr)
+    , root_(nullptr)
+    , intervalFrames_(0)
 {
     current_ = root_ = new ProfilerBlock(nullptr, "RunFrame");
 }
@@ -74,11 +74,13 @@ const String& Profiler::PrintData(bool showUnused, bool showTotal, unsigned maxD
     static String output;
 
     if (!showTotal)
-        output  = "Block                            Cnt     Avg      Max     Frame     Total\n\n";
+        output = "Block                            Cnt     Avg      Max     Frame     Total\n\n";
     else
     {
-        output  = "Block                                       Last frame                       Whole execution time\n\n";
-        output += "                                 Cnt     Avg      Max      Total      Cnt      Avg       Max        Total\n\n";
+        output =
+            "Block                                       Last frame                       Whole execution time\n\n";
+        output += "                                 Cnt     Avg      Max      Total      Cnt      Avg       Max        "
+                  "Total\n\n";
     }
 
     if (!maxDepth)
@@ -90,7 +92,7 @@ const String& Profiler::PrintData(bool showUnused, bool showTotal, unsigned maxD
 }
 
 void Profiler::PrintData(ProfilerBlock* block, String& output, unsigned depth, unsigned maxDepth, bool showUnused,
-    bool showTotal) const
+                         bool showTotal) const
 {
     static const int LINE_MAX_LENGTH = 256;
     static const int NAME_MAX_LENGTH = 30;
@@ -117,8 +119,8 @@ void Profiler::PrintData(ProfilerBlock* block, String& output, unsigned depth, u
             float frame = (float)block->intervalTime_ / (intervalFrames_ ? intervalFrames_ : 1) / 1000.0f;
             float all = block->intervalTime_ / 1000.0f;
 
-            sprintf(line, "%s %5u %8.3f %8.3f %8.3f %9.3f\n", indentedName, Min(block->intervalCount_, 99999U),
-                avg, max, frame, all);
+            sprintf(line, "%s %5u %8.3f %8.3f %8.3f %9.3f\n", indentedName, Min(block->intervalCount_, 99999U), avg,
+                    max, frame, all);
         }
         else
         {
@@ -130,8 +132,9 @@ void Profiler::PrintData(ProfilerBlock* block, String& output, unsigned depth, u
             float totalMax = block->totalMaxTime_ / 1000.0f;
             float totalAll = block->totalTime_ / 1000.0f;
 
-            sprintf(line, "%s %5u %8.3f %8.3f %9.3f  %7u %9.3f %9.3f %11.3f\n", indentedName, Min(block->frameCount_, 99999U),
-                avg, max, all, Min(block->totalCount_, 99999U), totalAvg, totalMax, totalAll);
+            sprintf(line, "%s %5u %8.3f %8.3f %9.3f  %7u %9.3f %9.3f %11.3f\n", indentedName,
+                    Min(block->frameCount_, 99999U), avg, max, all, Min(block->totalCount_, 99999U), totalAvg, totalMax,
+                    totalAll);
         }
 
         output += String(line);
@@ -141,4 +144,4 @@ void Profiler::PrintData(ProfilerBlock* block, String& output, unsigned depth, u
         PrintData(*i, output, depth, maxDepth, showUnused, showTotal);
 }
 
-}
+} // namespace Urho3D

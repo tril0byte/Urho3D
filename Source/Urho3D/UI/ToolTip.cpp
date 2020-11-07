@@ -31,10 +31,10 @@ namespace Urho3D
 
 extern const char* UI_CATEGORY;
 
-ToolTip::ToolTip(Context* context) :
-    UIElement(context),
-    delay_(0.0f),
-    hovered_(false)
+ToolTip::ToolTip(Context* context)
+    : UIElement(context)
+    , delay_(0.0f)
+    , hovered_(false)
 {
     SetVisible(false);
 }
@@ -125,14 +125,8 @@ void ToolTip::Reset()
     displayAt_.Reset();
 }
 
-void ToolTip::AddAltTarget(UIElement* target)
-{
-    altTargets_.Push(WeakPtr<UIElement>(target));
-}
+void ToolTip::AddAltTarget(UIElement* target) { altTargets_.Push(WeakPtr<UIElement>(target)); }
 
-void ToolTip::SetDelay(float delay)
-{
-    delay_ = delay;
-}
+void ToolTip::SetDelay(float delay) { delay_ = delay; }
 
-}
+} // namespace Urho3D

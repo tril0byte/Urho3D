@@ -30,5 +30,4 @@ namespace Urho3D
 URHO3D_API int WriteMiniDump(const char* applicationName, void* exceptionPointers);
 #endif
 
-}
-
+} // namespace Urho3D

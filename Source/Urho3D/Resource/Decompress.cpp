@@ -33,7 +33,8 @@ typedef short int16;
 
 // Implemented by ETCPACK
 extern void decompressBlockAlphaC(uint8* data, uint8* img, int width, int height, int ix, int iy, int channels);
-extern void decompressBlockETC2c(unsigned int block_part1, unsigned int block_part2, uint8 *img, int width, int height, int startx, int starty, int channels);
+extern void decompressBlockETC2c(unsigned int block_part1, unsigned int block_part2, uint8* img, int width, int height,
+                                 int startx, int starty, int channels);
 extern void setupAlphaTable();
 
 // DXT decompression based on the Squish library, modified for Urho3D
@@ -89,7 +90,7 @@ static int Unpack565(unsigned char const* packed, unsigned char* colour)
 static void DecompressColourDXT(unsigned char* rgba, void const* block, bool isDxt1)
 {
     // get the block bytes
-    auto const* bytes = reinterpret_cast< unsigned char const* >( block );
+    auto const* bytes = reinterpret_cast<unsigned char const*>(block);
 
     // unpack the endpoints
     unsigned char codes[16];
@@ -142,7 +143,7 @@ static void DecompressColourDXT(unsigned char* rgba, void const* block, bool isD
 
 static void DecompressAlphaDXT3(unsigned char* rgba, void const* block)
 {
-    auto const* bytes = reinterpret_cast< unsigned char const* >( block );
+    auto const* bytes = reinterpret_cast<unsigned char const*>(block);
 
     // unpack the alpha values pairwise
     for (int i = 0; i < 8; ++i)
@@ -163,7 +164,7 @@ static void DecompressAlphaDXT3(unsigned char* rgba, void const* block)
 static void DecompressAlphaDXT5(unsigned char* rgba, void const* block)
 {
     // get the two alpha values
-    auto const* bytes = reinterpret_cast< unsigned char const* >( block );
+    auto const* bytes = reinterpret_cast<unsigned char const*>(block);
     int alpha0 = bytes[0];
     int alpha1 = bytes[1];
 
@@ -219,7 +220,7 @@ static void DecompressDXT(unsigned char* rgba, const void* block, CompressedForm
     void const* colourBlock = block;
     void const* alphaBock = block;
     if (format == CF_DXT3 || format == CF_DXT5)
-        colourBlock = reinterpret_cast< unsigned char const* >( block ) + 8;
+        colourBlock = reinterpret_cast<unsigned char const*>(block) + 8;
 
     // decompress colour
     DecompressColourDXT(rgba, colourBlock, format == CF_DXT1);
@@ -231,10 +232,11 @@ static void DecompressDXT(unsigned char* rgba, const void* block, CompressedForm
         DecompressAlphaDXT5(rgba, alphaBock);
 }
 
-void DecompressImageDXT(unsigned char* rgba, const void* blocks, int width, int height, int depth, CompressedFormat format)
+void DecompressImageDXT(unsigned char* rgba, const void* blocks, int width, int height, int depth,
+                        CompressedFormat format)
 {
     // initialise the block input
-    auto const* sourceBlock = reinterpret_cast< unsigned char const* >( blocks );
+    auto const* sourceBlock = reinterpret_cast<unsigned char const*>(blocks);
     int bytesPerBlock = format == CF_DXT1 ? 8 : 16;
 
     // loop over blocks
@@ -283,17 +285,18 @@ void DecompressImageDXT(unsigned char* rgba, const void* blocks, int width, int 
 
 // PVRTC decompression based on the Oolong Engine, modified for Urho3D
 
-#define PT_INDEX    (2) /*The Punch-through index*/
-#define BLK_Y_SIZE  (4) /*always 4 for all 2D block types*/
-#define BLK_X_MAX   (8) /*Max X dimension for blocks*/
-#define BLK_X_2BPP  (8) /*dimensions for the two formats*/
-#define BLK_X_4BPP  (4)
+#define PT_INDEX (2) /*The Punch-through index*/
+#define BLK_Y_SIZE (4) /*always 4 for all 2D block types*/
+#define BLK_X_MAX (8) /*Max X dimension for blocks*/
+#define BLK_X_2BPP (8) /*dimensions for the two formats*/
+#define BLK_X_4BPP (4)
 
-#define _MIN(X, Y) (((X)<(Y))? (X):(Y))
-#define _MAX(X, Y) (((X)>(Y))? (X):(Y))
+#define _MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define _MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 #define WRAP_COORD(Val, Size) ((Val) & ((Size)-1))
-#define CLAMP(X, lower, upper) (_MIN(_MAX((X),(lower)), (upper)))
-#define LIMIT_COORD(Val, Size, AssumeImageTiles) ((AssumeImageTiles)? WRAP_COORD((Val), (Size)): CLAMP((Val), 0, (Size)-1))
+#define CLAMP(X, lower, upper) (_MIN(_MAX((X), (lower)), (upper)))
+#define LIMIT_COORD(Val, Size, AssumeImageTiles)                                                                       \
+    ((AssumeImageTiles) ? WRAP_COORD((Val), (Size)) : CLAMP((Val), 0, (Size)-1))
 
 using AMTC_BLOCK_STRUCT = struct
 {
@@ -308,7 +311,7 @@ static void Unpack5554Colour(const AMTC_BLOCK_STRUCT* pBlock, int ABColours[2][4
 
     // Extract A and B
     RawBits[0] = pBlock->PackedData[1] & (0xFFFE); /*15 bits (shifted up by one)*/
-    RawBits[1] = pBlock->PackedData[1] >> 16;       /*16 bits*/
+    RawBits[1] = pBlock->PackedData[1] >> 16;      /*16 bits*/
 
     // Step through both colours
     for (i = 0; i < 2; i++)
@@ -364,7 +367,7 @@ static void Unpack5554Colour(const AMTC_BLOCK_STRUCT* pBlock, int ABColours[2][4
 }
 
 static void UnpackModulations(const AMTC_BLOCK_STRUCT* pBlock, const int Do2bitMode, int ModulationVals[8][16],
-    int ModulationModes[8][16], int StartX, int StartY)
+                              int ModulationModes[8][16], int StartX, int StartY)
 {
     int BlockModMode;
     unsigned ModulationBits;
@@ -433,7 +436,7 @@ static void UnpackModulations(const AMTC_BLOCK_STRUCT* pBlock, const int Do2bitM
 }
 
 static void InterpolateColours(const int ColourP[4], const int ColourQ[4], const int ColourR[4], const int ColourS[4],
-    const int Do2bitMode, const int x, const int y, int Result[4])
+                               const int Do2bitMode, const int x, const int y, int Result[4])
 {
     int u, v, uscale;
     int k;
@@ -515,7 +518,7 @@ static void InterpolateColours(const int ColourP[4], const int ColourQ[4], const
 }
 
 static void GetModulationValue(int x, int y, const int Do2bitMode, const int ModulationVals[8][16],
-    const int ModulationModes[8][16], int* Mod, int* DoPT)
+                               const int ModulationModes[8][16], int* Mod, int* DoPT)
 {
     static const int RepVals0[4] = {0, 3, 5, 8};
     static const int RepVals1[4] = {0, 4, 4, 8};
@@ -553,22 +556,19 @@ static void GetModulationValue(int x, int y, const int Do2bitMode, const int Mod
         // If H&V interpolation...
         else if (ModulationModes[y][x] == 1)
         {
-            ModVal = (RepVals0[ModulationVals[y - 1][x]] +
-                      RepVals0[ModulationVals[y + 1][x]] +
-                      RepVals0[ModulationVals[y][x - 1]] +
-                      RepVals0[ModulationVals[y][x + 1]] + 2) / 4;
+            ModVal = (RepVals0[ModulationVals[y - 1][x]] + RepVals0[ModulationVals[y + 1][x]] +
+                      RepVals0[ModulationVals[y][x - 1]] + RepVals0[ModulationVals[y][x + 1]] + 2) /
+                     4;
         }
         // Else if H-Only
         else if (ModulationModes[y][x] == 2)
         {
-            ModVal = (RepVals0[ModulationVals[y][x - 1]] +
-                      RepVals0[ModulationVals[y][x + 1]] + 1) / 2;
+            ModVal = (RepVals0[ModulationVals[y][x - 1]] + RepVals0[ModulationVals[y][x + 1]] + 1) / 2;
         }
         // Else it's V-Only
         else
         {
-            ModVal = (RepVals0[ModulationVals[y - 1][x]] +
-                      RepVals0[ModulationVals[y + 1][x]] + 1) / 2;
+            ModVal = (RepVals0[ModulationVals[y - 1][x]] + RepVals0[ModulationVals[y + 1][x]] + 1) / 2;
         }
     }
     // Else it's 4BPP and PT encoding
@@ -623,7 +623,6 @@ static unsigned TwiddleUV(unsigned YSize, unsigned XSize, unsigned YPos, unsigne
         SrcBitPos <<= 1;
         DstBitPos <<= 2;
         ShiftCount += 1;
-
     }
 
     // Prepend any unused bits
@@ -660,8 +659,7 @@ void DecompressImagePVRTC(unsigned char* rgba, const void* blocks, int width, in
     // Local neighbourhood of blocks
     AMTC_BLOCK_STRUCT* pBlocks[2][2];
 
-    AMTC_BLOCK_STRUCT* pPrevious[2][2] = {{nullptr, nullptr},
-                                          {nullptr, nullptr}};
+    AMTC_BLOCK_STRUCT* pPrevious[2][2] = {{nullptr, nullptr}, {nullptr, nullptr}};
 
     // Low precision colours extracted from the blocks
     struct
@@ -708,10 +706,14 @@ void DecompressImagePVRTC(unsigned char* rgba, const void* blocks, int width, in
             BlkYp1 = LIMIT_COORD(BlkY + 1, BlkYDim, AssumeImageTiles);
 
             // Map to block memory locations
-            pBlocks[0][0] = pCompressedData + TwiddleUV((unsigned)BlkYDim, (unsigned)BlkXDim, (unsigned)BlkY, (unsigned)BlkX);
-            pBlocks[0][1] = pCompressedData + TwiddleUV((unsigned)BlkYDim, (unsigned)BlkXDim, (unsigned)BlkY, (unsigned)BlkXp1);
-            pBlocks[1][0] = pCompressedData + TwiddleUV((unsigned)BlkYDim, (unsigned)BlkXDim, (unsigned)BlkYp1, (unsigned)BlkX);
-            pBlocks[1][1] = pCompressedData + TwiddleUV((unsigned)BlkYDim, (unsigned)BlkXDim, (unsigned)BlkYp1, (unsigned)BlkXp1);
+            pBlocks[0][0] =
+                pCompressedData + TwiddleUV((unsigned)BlkYDim, (unsigned)BlkXDim, (unsigned)BlkY, (unsigned)BlkX);
+            pBlocks[0][1] =
+                pCompressedData + TwiddleUV((unsigned)BlkYDim, (unsigned)BlkXDim, (unsigned)BlkY, (unsigned)BlkXp1);
+            pBlocks[1][0] =
+                pCompressedData + TwiddleUV((unsigned)BlkYDim, (unsigned)BlkXDim, (unsigned)BlkYp1, (unsigned)BlkX);
+            pBlocks[1][1] =
+                pCompressedData + TwiddleUV((unsigned)BlkYDim, (unsigned)BlkXDim, (unsigned)BlkYp1, (unsigned)BlkXp1);
 
             // Extract the colours and the modulation information IF the previous values
             // have changed.
@@ -725,11 +727,7 @@ void DecompressImagePVRTC(unsigned char* rgba, const void* blocks, int width, in
                     {
                         Unpack5554Colour(pBlocks[i][j], Colours5554[i][j].Reps);
 
-                        UnpackModulations(pBlocks[i][j],
-                            Do2bitMode,
-                            ModulationVals,
-                            ModulationModes,
-                            StartX, StartY);
+                        UnpackModulations(pBlocks[i][j], Do2bitMode, ModulationVals, ModulationModes, StartX, StartY);
 
                         StartX += XBlockSize;
                     }
@@ -742,22 +740,14 @@ void DecompressImagePVRTC(unsigned char* rgba, const void* blocks, int width, in
             }
 
             // Decompress the pixel.  First compute the interpolated A and B signals
-            InterpolateColours(Colours5554[0][0].Reps[0],
-                Colours5554[0][1].Reps[0],
-                Colours5554[1][0].Reps[0],
-                Colours5554[1][1].Reps[0],
-                Do2bitMode, x, y,
-                ASig);
+            InterpolateColours(Colours5554[0][0].Reps[0], Colours5554[0][1].Reps[0], Colours5554[1][0].Reps[0],
+                               Colours5554[1][1].Reps[0], Do2bitMode, x, y, ASig);
 
-            InterpolateColours(Colours5554[0][0].Reps[1],
-                Colours5554[0][1].Reps[1],
-                Colours5554[1][0].Reps[1],
-                Colours5554[1][1].Reps[1],
-                Do2bitMode, x, y,
-                BSig);
+            InterpolateColours(Colours5554[0][0].Reps[1], Colours5554[0][1].Reps[1], Colours5554[1][0].Reps[1],
+                               Colours5554[1][1].Reps[1], Do2bitMode, x, y, BSig);
 
-            GetModulationValue(x, y, Do2bitMode, (const int (*)[16])ModulationVals, (const int (*)[16])ModulationModes,
-                &Mod, &DoPT);
+            GetModulationValue(x, y, Do2bitMode, (const int(*)[16])ModulationVals, (const int(*)[16])ModulationModes,
+                               &Mod, &DoPT);
 
             // Compute the modulated colour
             for (i = 0; i < 4; i++)
@@ -903,7 +893,7 @@ void FlipBlockHorizontal(unsigned char* dest, const unsigned char* src, Compress
     }
 }
 
-static void ReadBigEndian4byteWord(uint32_t* pBlock, const unsigned char *s)
+static void ReadBigEndian4byteWord(uint32_t* pBlock, const unsigned char* s)
 {
     *pBlock = (s[0] << 24) | (s[1] << 16) | (s[2] << 8) | s[3];
 }
@@ -912,7 +902,10 @@ static void ReadBigEndian4byteWord(uint32_t* pBlock, const unsigned char *s)
 void DecompressImageETC(unsigned char* dstImage, const void* blocks, int width, int height, bool hasAlpha)
 {
     // ETCPACK initialization.
-    static const bool placeholder = []() { setupAlphaTable(); return true; }();
+    static const bool placeholder = []() {
+        setupAlphaTable();
+        return true;
+    }();
 
     const int channelCount = hasAlpha ? 4 : 3;
     unsigned char* src = (unsigned char*)blocks;
@@ -924,9 +917,9 @@ void DecompressImageETC(unsigned char* dstImage, const void* blocks, int width, 
 
     unsigned char buffer4x4[4 * 4 * 4];
 
-    for (int y = 0; y < h4; ++y) 
+    for (int y = 0; y < h4; ++y)
     {
-        for (int x = 0; x < w4; ++x) 
+        for (int x = 0; x < w4; ++x)
         {
             memset(&buffer4x4[0], 0xFF, 4 * 4 * 4);
             if (hasAlpha)
@@ -943,7 +936,7 @@ void DecompressImageETC(unsigned char* dstImage, const void* blocks, int width, 
 
             int wbuf = Min(width - x * 4, 4);
             int hbuf = Min(height - y * 4, 4);
-            for(int dy = 0; dy < hbuf; ++dy)
+            for (int dy = 0; dy < hbuf; ++dy)
             {
                 for (int dx = 0; dx < wbuf; ++dx)
                 {
@@ -959,4 +952,4 @@ void DecompressImageETC(unsigned char* dstImage, const void* blocks, int width, 
     }
 }
 
-}
+} // namespace Urho3D

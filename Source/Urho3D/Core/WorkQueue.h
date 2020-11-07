@@ -34,7 +34,7 @@ namespace Urho3D
 /// Work item completed event.
 URHO3D_EVENT(E_WORKITEMCOMPLETED, WorkItemCompleted)
 {
-    URHO3D_PARAM(P_ITEM, Item);                        // WorkItem ptr
+    URHO3D_PARAM(P_ITEM, Item); // WorkItem ptr
 }
 
 class WorkerThread;
@@ -47,7 +47,7 @@ struct WorkItem : public RefCounted
 
 public:
     /// Work function. Called with the work item and thread index (0 = main thread) as parameters.
-    void (* workFunction_)(const WorkItem*, unsigned){};
+    void (*workFunction_)(const WorkItem*, unsigned){};
     /// Data start pointer.
     void* start_{};
     /// Data end pointer.
@@ -86,13 +86,15 @@ public:
     void AddWorkItem(const SharedPtr<WorkItem>& item);
     /// Remove a work item before it has started executing. Return true if successfully removed.
     bool RemoveWorkItem(SharedPtr<WorkItem> item);
-    /// Remove a number of work items before they have started executing. Return the number of items successfully removed.
-    unsigned RemoveWorkItems(const Vector<SharedPtr<WorkItem> >& items);
+    /// Remove a number of work items before they have started executing. Return the number of items successfully
+    /// removed.
+    unsigned RemoveWorkItems(const Vector<SharedPtr<WorkItem>>& items);
     /// Pause worker threads.
     void Pause();
     /// Resume worker threads.
     void Resume();
-    /// Finish all queued work which has at least the specified priority. Main thread will also execute priority work. Pause worker threads if no more work remains.
+    /// Finish all queued work which has at least the specified priority. Main thread will also execute priority work.
+    /// Pause worker threads if no more work remains.
     void Complete(unsigned priority);
 
     /// Set the pool telerance before it starts deleting pool items.
@@ -124,15 +126,17 @@ private:
     void PurgePool();
     /// Return a work item to the pool.
     void ReturnToPool(SharedPtr<WorkItem>& item);
-    /// Handle frame start event. Purge completed work from the main thread queue, and perform work if no threads at all.
+    /// Handle frame start event. Purge completed work from the main thread queue, and perform work if no threads at
+    /// all.
     void HandleBeginFrame(StringHash eventType, VariantMap& eventData);
 
     /// Worker threads.
-    Vector<SharedPtr<WorkerThread> > threads_;
-    /// Work item pool for reuse to cut down on allocation. The bool is a flag for item pooling and whether it is available or not.
-    List<SharedPtr<WorkItem> > poolItems_;
+    Vector<SharedPtr<WorkerThread>> threads_;
+    /// Work item pool for reuse to cut down on allocation. The bool is a flag for item pooling and whether it is
+    /// available or not.
+    List<SharedPtr<WorkItem>> poolItems_;
     /// Work item collection. Accessed only by the main thread.
-    List<SharedPtr<WorkItem> > workItems_;
+    List<SharedPtr<WorkItem>> workItems_;
     /// Work item prioritized queue for worker threads. Pointers are guaranteed to be valid (point to workItems).
     List<WorkItem*> queue_;
     /// Worker queue mutex.
@@ -153,4 +157,4 @@ private:
     int maxNonThreadedWorkMs_;
 };
 
-}
+} // namespace Urho3D

@@ -20,16 +20,16 @@
 // THE SOFTWARE.
 //
 
-#include "../Core/Context.h"
-#include "../Physics/PhysicsUtils.h"
-#include "../Physics/RigidBody.h"
-#include "../Physics/PhysicsWorld.h"
-#include "../Scene/Scene.h"
-#include "../IO/Log.h"
 #include "../Physics/RaycastVehicle.h"
+#include "../Core/Context.h"
+#include "../IO/Log.h"
+#include "../Physics/PhysicsUtils.h"
+#include "../Physics/PhysicsWorld.h"
+#include "../Physics/RigidBody.h"
+#include "../Scene/Scene.h"
 
-#include <Bullet/BulletDynamics/Vehicle/btRaycastVehicle.h>
 #include <Bullet/BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
+#include <Bullet/BulletDynamics/Vehicle/btRaycastVehicle.h>
 
 namespace Urho3D
 {
@@ -69,10 +69,7 @@ struct RaycastVehicleData
         vehicle_ = nullptr;
     }
 
-    btRaycastVehicle* Get()
-    {
-        return vehicle_;
-    }
+    btRaycastVehicle* Get() { return vehicle_; }
 
     void Init(Scene* scene, RigidBody* body, bool enabled, const IntVector3& coordinateSystem)
     {
@@ -136,8 +133,8 @@ struct RaycastVehicleData
     bool added_;
 };
 
-RaycastVehicle::RaycastVehicle(Context* context) :
-    LogicComponent(context)
+RaycastVehicle::RaycastVehicle(Context* context)
+    : LogicComponent(context)
 {
     // fixed update() for inputs and post update() to sync wheels for rendering
     SetUpdateEventMask(USE_FIXEDUPDATE | USE_FIXEDPOSTUPDATE | USE_POSTUPDATE);
@@ -155,37 +152,35 @@ RaycastVehicle::~RaycastVehicle()
     wheelNodes_.Clear();
 }
 
-static const StringVector wheelElementNames =
-{
-    "Number of wheels",
-    "   Wheel node id",
-    "   Wheel direction",
-    "   Wheel axle",
-    "   Wheel rest length",
-    "   Wheel radius",
-    "   Wheel is front wheel",
-    "   Steering",
-    "   Connection point vector",
-    "   Original rotation",
-    "   Cumulative skid info",
-    "   Side skip speed",
-    "   Grounded",
-    "   Contact position",
-    "   Contact normal",
-    "   Suspension stiffness",
-    "   Max suspension force",
-    "   Damping relaxation",
-    "   Damping compression",
-    "   Friction slip",
-    "   Roll influence",
-    "   Engine force",
-    "   Brake"
-};
+static const StringVector wheelElementNames = {"Number of wheels",
+                                               "   Wheel node id",
+                                               "   Wheel direction",
+                                               "   Wheel axle",
+                                               "   Wheel rest length",
+                                               "   Wheel radius",
+                                               "   Wheel is front wheel",
+                                               "   Steering",
+                                               "   Connection point vector",
+                                               "   Original rotation",
+                                               "   Cumulative skid info",
+                                               "   Side skip speed",
+                                               "   Grounded",
+                                               "   Contact position",
+                                               "   Contact normal",
+                                               "   Suspension stiffness",
+                                               "   Max suspension force",
+                                               "   Damping relaxation",
+                                               "   Damping compression",
+                                               "   Friction slip",
+                                               "   Roll influence",
+                                               "   Engine force",
+                                               "   Brake"};
 
 void RaycastVehicle::RegisterObject(Context* context)
 {
     context->RegisterFactory<RaycastVehicle>();
-    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Wheel data", GetWheelDataAttr, SetWheelDataAttr, VariantVector, Variant::emptyVariantVector, AM_DEFAULT)
+    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Wheel data", GetWheelDataAttr, SetWheelDataAttr, VariantVector,
+                                    Variant::emptyVariantVector, AM_DEFAULT)
         .SetMetadata(AttributeMetadata::P_VECTOR_STRUCT_ELEMENTS, wheelElementNames);
     URHO3D_ATTRIBUTE("Maximum side slip threshold", float, maxSideSlipSpeed_, 4.0f, AM_DEFAULT);
     URHO3D_ATTRIBUTE("RPM for wheel motors in air (0=calculate)", float, inAirRPM_, 0.0f, AM_DEFAULT);
@@ -248,13 +243,8 @@ void RaycastVehicle::ApplyAttributes()
         btVector3 connectionPointCS0(connectionPoint.x_, connectionPoint.y_, connectionPoint.z_);
         btVector3 wheelDirectionCS0(direction.x_, direction.y_, direction.z_);
         btVector3 wheelAxleCS(axle.x_, axle.y_, axle.z_);
-        btWheelInfo& wheel = vehicle->addWheel(connectionPointCS0,
-                                wheelDirectionCS0,
-                                wheelAxleCS,
-                                restLength,
-                                radius,
-                                vehicleData_->tuning_,
-                                isFrontWheel);
+        btWheelInfo& wheel = vehicle->addWheel(connectionPointCS0, wheelDirectionCS0, wheelAxleCS, restLength, radius,
+                                               vehicleData_->tuning_, isFrontWheel);
         wheelNodes_.Push(wheelNode);
         origRotation_.Push(origRotation);
         skidInfoCumulative_.Push(skidInfoC);
@@ -355,30 +345,16 @@ void RaycastVehicle::FixedPostUpdate(float timeStep)
     }
 }
 
-void RaycastVehicle::SetMaxSideSlipSpeed(float speed)
-{
-    maxSideSlipSpeed_ = speed;
-}
+void RaycastVehicle::SetMaxSideSlipSpeed(float speed) { maxSideSlipSpeed_ = speed; }
 
-float RaycastVehicle::GetMaxSideSlipSpeed() const
-{
-    return maxSideSlipSpeed_;
-}
+float RaycastVehicle::GetMaxSideSlipSpeed() const { return maxSideSlipSpeed_; }
 
-void RaycastVehicle::SetWheelSkidInfoCumulative(int wheel, float skid)
-{
-    skidInfoCumulative_[wheel] = skid;
-}
+void RaycastVehicle::SetWheelSkidInfoCumulative(int wheel, float skid) { skidInfoCumulative_[wheel] = skid; }
 
-float RaycastVehicle::GetWheelSkidInfoCumulative(int wheel) const
-{
-    return skidInfoCumulative_[wheel];
-}
+float RaycastVehicle::GetWheelSkidInfoCumulative(int wheel) const { return skidInfoCumulative_[wheel]; }
 
-void RaycastVehicle::AddWheel(Node* wheelNode,
-                                Vector3 wheelDirection, Vector3 wheelAxle,
-                                float restLength, float wheelRadius,
-                                bool frontWheel)
+void RaycastVehicle::AddWheel(Node* wheelNode, Vector3 wheelDirection, Vector3 wheelAxle, float restLength,
+                              float wheelRadius, bool frontWheel)
 {
     btRaycastVehicle* vehicle = vehicleData_->Get();
     int id = GetNumWheels();
@@ -386,13 +362,8 @@ void RaycastVehicle::AddWheel(Node* wheelNode,
     btVector3 connectionPointCS0(connectionPoint.x_, connectionPoint.y_, connectionPoint.z_);
     btVector3 wheelDirectionCS0(wheelDirection.x_, wheelDirection.y_, wheelDirection.z_);
     btVector3 wheelAxleCS(wheelAxle.x_, wheelAxle.y_, wheelAxle.z_);
-    btWheelInfo& wheel = vehicle->addWheel(connectionPointCS0,
-                            wheelDirectionCS0,
-                            wheelAxleCS,
-                            restLength,
-                            wheelRadius,
-                            vehicleData_->tuning_,
-                            frontWheel);
+    btWheelInfo& wheel = vehicle->addWheel(connectionPointCS0, wheelDirectionCS0, wheelAxleCS, restLength, wheelRadius,
+                                           vehicleData_->tuning_, frontWheel);
 
     wheelNodes_.Push(wheelNode);
     origRotation_.Push(wheelNode->GetWorldRotation());
@@ -540,10 +511,7 @@ Vector3 RaycastVehicle::GetContactNormal(int wheel) const
     return ToVector3(whInfo.m_raycastInfo.m_contactNormalWS);
 }
 
-float RaycastVehicle::GetWheelSideSlipSpeed(int wheel) const
-{
-    return wheelSideSlipSpeed_[wheel];
-}
+float RaycastVehicle::GetWheelSideSlipSpeed(int wheel) const { return wheelSideSlipSpeed_[wheel]; }
 
 float RaycastVehicle::GetWheelRollInfluence(int wheel) const
 {
@@ -598,10 +566,7 @@ int RaycastVehicle::GetNumWheels() const
     return vehicle->getNumWheels();
 }
 
-Node* RaycastVehicle::GetWheelNode(int wheel) const
-{
-    return wheelNodes_[wheel];
-}
+Node* RaycastVehicle::GetWheelNode(int wheel) const { return wheelNodes_[wheel]; }
 
 void RaycastVehicle::SetMaxSuspensionTravel(int wheel, float maxSuspensionTravel)
 {
@@ -689,15 +654,9 @@ bool RaycastVehicle::WheelIsGrounded(int wheel) const
     return whInfo.m_raycastInfo.m_isInContact;
 }
 
-void RaycastVehicle::SetInAirRPM(float rpm)
-{
-    inAirRPM_ = rpm;
-}
+void RaycastVehicle::SetInAirRPM(float rpm) { inAirRPM_ = rpm; }
 
-float RaycastVehicle::GetInAirRPM() const
-{
-    return inAirRPM_;
-}
+float RaycastVehicle::GetInAirRPM() const { return inAirRPM_; }
 
 void RaycastVehicle::SetCoordinateSystem(const IntVector3& coordinateSystem)
 {
@@ -740,7 +699,7 @@ VariantVector RaycastVehicle::GetWheelDataAttr() const
         ret.Push(GetWheelSideSlipSpeed(i));
         ret.Push(WheelIsGrounded(i));
         ret.Push(GetContactPosition(i));
-        ret.Push(GetContactNormal(i));       // 14
+        ret.Push(GetContactNormal(i)); // 14
         ret.Push(GetWheelSuspensionStiffness(i));
         ret.Push(GetWheelMaxSuspensionForce(i));
         ret.Push(GetWheelDampingRelaxation(i));

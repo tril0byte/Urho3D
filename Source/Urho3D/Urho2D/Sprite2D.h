@@ -60,7 +60,8 @@ public:
     /// Set offset.
     /// @property
     void SetOffset(const IntVector2& offset);
-    /// Set texture edge offset in pixels. This affects the left/right and top/bottom edges equally to prevent edge sampling artifacts. Default 0.
+    /// Set texture edge offset in pixels. This affects the left/right and top/bottom edges equally to prevent edge
+    /// sampling artifacts. Default 0.
     /// @property
     void SetTextureEdgeOffset(float offset);
     /// Set sprite sheet.
@@ -88,7 +89,6 @@ public:
 
     /// Return sprite sheet.
     SpriteSheet2D* GetSpriteSheet() const { return spriteSheet_; }
-
 
     /// Return draw rectangle.
     bool GetDrawRectangle(Rect& rect, bool flipX = false, bool flipY = false) const;
@@ -119,4 +119,4 @@ private:
     float edgeOffset_;
 };
 
-}
+} // namespace Urho3D

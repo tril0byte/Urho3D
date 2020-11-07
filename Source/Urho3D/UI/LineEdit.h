@@ -48,18 +48,17 @@ public:
     /// Perform UI element update.
     void Update(float timeStep) override;
     /// React to mouse click begin.
-    void OnClickBegin
-        (const IntVector2& position, const IntVector2& screenPosition, MouseButton button, MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor) override;
+    void OnClickBegin(const IntVector2& position, const IntVector2& screenPosition, MouseButton button,
+                      MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor) override;
     /// React to mouse doubleclick.
-    void OnDoubleClick
-        (const IntVector2& position, const IntVector2& screenPosition, MouseButton button, MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor) override;
+    void OnDoubleClick(const IntVector2& position, const IntVector2& screenPosition, MouseButton button,
+                       MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor) override;
     /// React to mouse drag begin.
-    void
-        OnDragBegin(const IntVector2& position, const IntVector2& screenPosition, MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor) override;
+    void OnDragBegin(const IntVector2& position, const IntVector2& screenPosition, MouseButtonFlags buttons,
+                     QualifierFlags qualifiers, Cursor* cursor) override;
     /// React to mouse drag motion.
-    void OnDragMove
-        (const IntVector2& position, const IntVector2& screenPosition, const IntVector2& deltaPos, MouseButtonFlags buttons, QualifierFlags qualifiers,
-            Cursor* cursor) override;
+    void OnDragMove(const IntVector2& position, const IntVector2& screenPosition, const IntVector2& deltaPos,
+                    MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor) override;
     /// React to drag and drop test. Return true to signal that the drop is acceptable.
     bool OnDragDropTest(UIElement* source) override;
     /// React to drag and drop finish. Return true to signal that the drop was accepted.
@@ -182,4 +181,4 @@ private:
     void HandleLayoutUpdated(StringHash eventType, VariantMap& eventData);
 };
 
-}
+} // namespace Urho3D

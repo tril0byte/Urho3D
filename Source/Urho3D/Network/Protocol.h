@@ -72,4 +72,4 @@ static const unsigned CONTROLS_CONTENT_ID = 1;
 /// Package file fragment size.
 static const unsigned PACKAGE_FRAGMENT_SIZE = 1024;
 
-}
+} // namespace Urho3D

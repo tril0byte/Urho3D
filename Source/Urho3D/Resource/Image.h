@@ -92,14 +92,18 @@ public:
 
     /// Load resource from stream. May be called from a worker thread. Return true if successful.
     bool BeginLoad(Deserializer& source) override;
-    /// Save the image to a stream. Regardless of original format, the image is saved as png. Compressed image data is not supported. Return true if successful.
+    /// Save the image to a stream. Regardless of original format, the image is saved as png. Compressed image data is
+    /// not supported. Return true if successful.
     bool Save(Serializer& dest) const override;
-    /// Save the image to a file. Format of the image is determined by file extension. JPG is saved with maximum quality.
+    /// Save the image to a file. Format of the image is determined by file extension. JPG is saved with maximum
+    /// quality.
     bool SaveFile(const String& fileName) const override;
 
-    /// Set 2D size and number of color components. Old image data will be destroyed and new data is undefined. Return true if successful.
+    /// Set 2D size and number of color components. Old image data will be destroyed and new data is undefined. Return
+    /// true if successful.
     bool SetSize(int width, int height, unsigned components);
-    /// Set 3D size and number of color components. Old image data will be destroyed and new data is undefined. Return true if successful.
+    /// Set 3D size and number of color components. Old image data will be destroyed and new data is undefined. Return
+    /// true if successful.
     bool SetSize(int width, int height, int depth, unsigned components);
     /// Set new image data.
     void SetData(const unsigned char* pixelData);
@@ -133,7 +137,8 @@ public:
     bool SaveJPG(const String& fileName, int quality) const;
     /// Save in DDS format. Only uncompressed RGBA images are supported. Return true if successful.
     bool SaveDDS(const String& fileName) const;
-    /// Save in WebP format with minimum (fastest) or specified compression. Return true if successful. Fails always if WebP support is not compiled in.
+    /// Save in WebP format with minimum (fastest) or specified compression. Return true if successful. Fails always if
+    /// WebP support is not compiled in.
     bool SaveWEBP(const String& fileName, float compression = 0.0f) const;
     /// Whether this texture is detected as a cubemap, only relevant for DDS.
     /// @property
@@ -185,30 +190,36 @@ public:
     /// @property
     CompressedFormat GetCompressedFormat() const { return compressedFormat_; }
 
-    /// Return number of compressed mip levels. Returns 0 if the image is has not been loaded from a source file containing multiple mip levels.
+    /// Return number of compressed mip levels. Returns 0 if the image is has not been loaded from a source file
+    /// containing multiple mip levels.
     /// @property
     unsigned GetNumCompressedLevels() const { return numCompressedLevels_; }
 
-    /// Return next mip level by bilinear filtering. Note that if the image is already 1x1x1, will keep returning an image of that size.
+    /// Return next mip level by bilinear filtering. Note that if the image is already 1x1x1, will keep returning an
+    /// image of that size.
     SharedPtr<Image> GetNextLevel() const;
     /// Return the next sibling image of an array or cubemap.
-    SharedPtr<Image> GetNextSibling() const { return nextSibling_;  }
-    /// Return image converted to 4-component (RGBA) to circumvent modern rendering API's not supporting e.g. the luminance-alpha format.
+    SharedPtr<Image> GetNextSibling() const { return nextSibling_; }
+    /// Return image converted to 4-component (RGBA) to circumvent modern rendering API's not supporting e.g. the
+    /// luminance-alpha format.
     SharedPtr<Image> ConvertToRGBA() const;
     /// Return a compressed mip level.
     CompressedLevel GetCompressedLevel(unsigned index) const;
     /// Return decompressed image data in RGBA format.
     SharedPtr<Image> GetDecompressedImage() const;
-    /// Return subimage from the image by the defined rect or null if failed. 3D images are not supported. You must free the subimage yourself.
+    /// Return subimage from the image by the defined rect or null if failed. 3D images are not supported. You must free
+    /// the subimage yourself.
     Image* GetSubimage(const IntRect& rect) const;
-    /// Return an SDL surface from the image, or null if failed. Only RGB images are supported. Specify rect to only return partial image. You must free the surface yourself.
+    /// Return an SDL surface from the image, or null if failed. Only RGB images are supported. Specify rect to only
+    /// return partial image. You must free the surface yourself.
     SDL_Surface* GetSDLSurface(const IntRect& rect = IntRect::ZERO) const;
     /// Precalculate the mip levels. Used by asynchronous texture loading.
     void PrecalculateLevels();
     /// Whether this texture has an alpha channel.
     /// @property
     bool HasAlphaChannel() const;
-    /// Copy contents of the image into the defined rect, scaling if necessary. This image should already be large enough to include the rect. Compressed and 3D images are not supported.
+    /// Copy contents of the image into the defined rect, scaling if necessary. This image should already be large
+    /// enough to include the rect. Compressed and 3D images are not supported.
     bool SetSubimage(const Image* image, const IntRect& rect);
     /// Clean up the mip levels.
     void CleanupLevels();
@@ -249,4 +260,4 @@ private:
     SharedPtr<Image> nextSibling_;
 };
 
-}
+} // namespace Urho3D

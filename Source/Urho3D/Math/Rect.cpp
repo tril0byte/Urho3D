@@ -103,4 +103,4 @@ void Rect::Clip(const Rect& rect)
     }
 }
 
-}
+} // namespace Urho3D

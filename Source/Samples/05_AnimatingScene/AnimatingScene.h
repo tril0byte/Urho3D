@@ -30,7 +30,7 @@ namespace Urho3D
 class Node;
 class Scene;
 
-}
+} // namespace Urho3D
 
 /// Animating 3D scene example.
 /// This sample demonstrates:

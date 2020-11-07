@@ -34,11 +34,10 @@ namespace Urho3D
 
 extern const char* URHO2D_CATEGORY;
 
-ConstraintFriction2D::ConstraintFriction2D(Context* context) :
-    Constraint2D(context),
-    anchor_(Vector2::ZERO)
+ConstraintFriction2D::ConstraintFriction2D(Context* context)
+    : Constraint2D(context)
+    , anchor_(Vector2::ZERO)
 {
-
 }
 
 ConstraintFriction2D::~ConstraintFriction2D() = default;
@@ -80,7 +79,6 @@ void ConstraintFriction2D::SetMaxForce(float maxForce)
     MarkNetworkUpdate();
 }
 
-
 void ConstraintFriction2D::SetMaxTorque(float maxTorque)
 {
     if (maxTorque == jointDef_.maxTorque)
@@ -111,4 +109,4 @@ b2JointDef* ConstraintFriction2D::GetJointDef()
     return &jointDef_;
 }
 
-}
+} // namespace Urho3D

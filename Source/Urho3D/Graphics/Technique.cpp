@@ -26,8 +26,8 @@
 #include "../Core/ProcessUtils.h"
 #include "../Core/Profiler.h"
 #include "../Graphics/Graphics.h"
-#include "../Graphics/Technique.h"
 #include "../Graphics/ShaderVariation.h"
+#include "../Graphics/Technique.h"
 #include "../IO/Log.h"
 #include "../Resource/ResourceCache.h"
 #include "../Resource/XMLFile.h"
@@ -39,98 +39,51 @@ namespace Urho3D
 
 extern const char* cullModeNames[];
 
-const char* blendModeNames[] =
-{
-    "replace",
-    "add",
-    "multiply",
-    "alpha",
-    "addalpha",
-    "premulalpha",
-    "invdestalpha",
-    "subtract",
-    "subtractalpha",
-    nullptr
-};
+const char* blendModeNames[] = {"replace",     "add",          "multiply", "alpha",         "addalpha",
+                                "premulalpha", "invdestalpha", "subtract", "subtractalpha", nullptr};
 
-static const char* compareModeNames[] =
-{
-    "always",
-    "equal",
-    "notequal",
-    "less",
-    "lessequal",
-    "greater",
-    "greaterequal",
-    nullptr
-};
+static const char* compareModeNames[] = {"always",    "equal",   "notequal",     "less",
+                                         "lessequal", "greater", "greaterequal", nullptr};
 
-static const char* lightingModeNames[] =
-{
-    "unlit",
-    "pervertex",
-    "perpixel",
-    nullptr
-};
+static const char* lightingModeNames[] = {"unlit", "pervertex", "perpixel", nullptr};
 
-Pass::Pass(const String& name) :
-    blendMode_(BLEND_REPLACE),
-    cullMode_(MAX_CULLMODES),
-    depthTestMode_(CMP_LESSEQUAL),
-    lightingMode_(LIGHTING_UNLIT),
-    shadersLoadedFrameNumber_(0),
-    alphaToCoverage_(false),
-    depthWrite_(true),
-    isDesktop_(false)
+Pass::Pass(const String& name)
+    : blendMode_(BLEND_REPLACE)
+    , cullMode_(MAX_CULLMODES)
+    , depthTestMode_(CMP_LESSEQUAL)
+    , lightingMode_(LIGHTING_UNLIT)
+    , shadersLoadedFrameNumber_(0)
+    , alphaToCoverage_(false)
+    , depthWrite_(true)
+    , isDesktop_(false)
 {
     name_ = name.ToLower();
     index_ = Technique::GetPassIndex(name_);
 
     // Guess default lighting mode from pass name
-    if (index_ == Technique::basePassIndex || index_ == Technique::alphaPassIndex || index_ == Technique::materialPassIndex ||
-        index_ == Technique::deferredPassIndex)
+    if (index_ == Technique::basePassIndex || index_ == Technique::alphaPassIndex ||
+        index_ == Technique::materialPassIndex || index_ == Technique::deferredPassIndex)
         lightingMode_ = LIGHTING_PERVERTEX;
-    else if (index_ == Technique::lightPassIndex || index_ == Technique::litBasePassIndex || index_ == Technique::litAlphaPassIndex)
+    else if (index_ == Technique::lightPassIndex || index_ == Technique::litBasePassIndex ||
+             index_ == Technique::litAlphaPassIndex)
         lightingMode_ = LIGHTING_PERPIXEL;
 }
 
 Pass::~Pass() = default;
 
-void Pass::SetBlendMode(BlendMode mode)
-{
-    blendMode_ = mode;
-}
+void Pass::SetBlendMode(BlendMode mode) { blendMode_ = mode; }
 
-void Pass::SetCullMode(CullMode mode)
-{
-    cullMode_ = mode;
-}
+void Pass::SetCullMode(CullMode mode) { cullMode_ = mode; }
 
-void Pass::SetDepthTestMode(CompareMode mode)
-{
-    depthTestMode_ = mode;
-}
+void Pass::SetDepthTestMode(CompareMode mode) { depthTestMode_ = mode; }
 
-void Pass::SetLightingMode(PassLightingMode mode)
-{
-    lightingMode_ = mode;
-}
+void Pass::SetLightingMode(PassLightingMode mode) { lightingMode_ = mode; }
 
-void Pass::SetDepthWrite(bool enable)
-{
-    depthWrite_ = enable;
-}
+void Pass::SetDepthWrite(bool enable) { depthWrite_ = enable; }
 
-void Pass::SetAlphaToCoverage(bool enable)
-{
-    alphaToCoverage_ = enable;
-}
+void Pass::SetAlphaToCoverage(bool enable) { alphaToCoverage_ = enable; }
 
-
-void Pass::SetIsDesktop(bool enable)
-{
-    isDesktop_ = enable;
-}
+void Pass::SetIsDesktop(bool enable) { isDesktop_ = enable; }
 
 void Pass::SetVertexShader(const String& name)
 {
@@ -176,10 +129,7 @@ void Pass::ReleaseShaders()
     extraPixelShaders_.Clear();
 }
 
-void Pass::MarkShadersLoaded(unsigned frameNumber)
-{
-    shadersLoadedFrameNumber_ = frameNumber;
-}
+void Pass::MarkShadersLoaded(unsigned frameNumber) { shadersLoadedFrameNumber_ = frameNumber; }
 
 String Pass::GetEffectiveVertexShaderDefines() const
 {
@@ -209,7 +159,7 @@ String Pass::GetEffectivePixelShaderDefines() const
     return String::Joined(psDefines, " ");
 }
 
-Vector<SharedPtr<ShaderVariation> >& Pass::GetVertexShaders(const StringHash& extraDefinesHash)
+Vector<SharedPtr<ShaderVariation>>& Pass::GetVertexShaders(const StringHash& extraDefinesHash)
 {
     // If empty hash, return the base shaders
     if (!extraDefinesHash.Value())
@@ -218,7 +168,7 @@ Vector<SharedPtr<ShaderVariation> >& Pass::GetVertexShaders(const StringHash& ex
         return extraVertexShaders_[extraDefinesHash];
 }
 
-Vector<SharedPtr<ShaderVariation> >& Pass::GetPixelShaders(const StringHash& extraDefinesHash)
+Vector<SharedPtr<ShaderVariation>>& Pass::GetPixelShaders(const StringHash& extraDefinesHash)
 {
     if (!extraDefinesHash.Value())
         return pixelShaders_;
@@ -237,9 +187,9 @@ unsigned Technique::shadowPassIndex = 0;
 
 HashMap<String, unsigned> Technique::passIndices;
 
-Technique::Technique(Context* context) :
-    Resource(context),
-    isDesktop_(false)
+Technique::Technique(Context* context)
+    : Resource(context)
+    , isDesktop_(false)
 {
 #ifdef DESKTOP_GRAPHICS
     desktopSupport_ = true;
@@ -250,10 +200,7 @@ Technique::Technique(Context* context) :
 
 Technique::~Technique() = default;
 
-void Technique::RegisterObject(Context* context)
-{
-    context->RegisterFactory<Technique>();
-}
+void Technique::RegisterObject(Context* context) { context->RegisterFactory<Technique>(); }
 
 bool Technique::BeginLoad(Deserializer& source)
 {
@@ -318,8 +265,8 @@ bool Technique::BeginLoad(Deserializer& source)
             if (passElem.HasAttribute("lighting"))
             {
                 String lighting = passElem.GetAttributeLower("lighting");
-                newPass->SetLightingMode((PassLightingMode)GetStringListIndex(lighting.CString(), lightingModeNames,
-                    LIGHTING_UNLIT));
+                newPass->SetLightingMode(
+                    (PassLightingMode)GetStringListIndex(lighting.CString(), lightingModeNames, LIGHTING_UNLIT));
             }
 
             if (passElem.HasAttribute("blend"))
@@ -340,7 +287,8 @@ bool Technique::BeginLoad(Deserializer& source)
                 if (depthTest == "false")
                     newPass->SetDepthTestMode(CMP_ALWAYS);
                 else
-                    newPass->SetDepthTestMode((CompareMode)GetStringListIndex(depthTest.CString(), compareModeNames, CMP_LESS));
+                    newPass->SetDepthTestMode(
+                        (CompareMode)GetStringListIndex(depthTest.CString(), compareModeNames, CMP_LESS));
             }
 
             if (passElem.HasAttribute("depthwrite"))
@@ -358,14 +306,11 @@ bool Technique::BeginLoad(Deserializer& source)
     return true;
 }
 
-void Technique::SetIsDesktop(bool enable)
-{
-    isDesktop_ = enable;
-}
+void Technique::SetIsDesktop(bool enable) { isDesktop_ = enable; }
 
 void Technique::ReleaseShaders()
 {
-    for (Vector<SharedPtr<Pass> >::ConstIterator i = passes_.Begin(); i != passes_.End(); ++i)
+    for (Vector<SharedPtr<Pass>>::ConstIterator i = passes_.Begin(); i != passes_.End(); ++i)
     {
         Pass* pass = i->Get();
         if (pass)
@@ -380,7 +325,7 @@ SharedPtr<Technique> Technique::Clone(const String& cloneName) const
     ret->SetName(cloneName);
 
     // Deep copy passes
-    for (Vector<SharedPtr<Pass> >::ConstIterator i = passes_.Begin(); i != passes_.End(); ++i)
+    for (Vector<SharedPtr<Pass>>::ConstIterator i = passes_.Begin(); i != passes_.End(); ++i)
     {
         Pass* srcPass = i->Get();
         if (!srcPass)
@@ -457,7 +402,7 @@ unsigned Technique::GetNumPasses() const
 {
     unsigned ret = 0;
 
-    for (Vector<SharedPtr<Pass> >::ConstIterator i = passes_.Begin(); i != passes_.End(); ++i)
+    for (Vector<SharedPtr<Pass>>::ConstIterator i = passes_.Begin(); i != passes_.End(); ++i)
     {
         if (i->Get())
             ++ret;
@@ -470,7 +415,7 @@ Vector<String> Technique::GetPassNames() const
 {
     Vector<String> ret;
 
-    for (Vector<SharedPtr<Pass> >::ConstIterator i = passes_.Begin(); i != passes_.End(); ++i)
+    for (Vector<SharedPtr<Pass>>::ConstIterator i = passes_.Begin(); i != passes_.End(); ++i)
     {
         Pass* pass = i->Get();
         if (pass)
@@ -484,7 +429,7 @@ PODVector<Pass*> Technique::GetPasses() const
 {
     PODVector<Pass*> ret;
 
-    for (Vector<SharedPtr<Pass> >::ConstIterator i = passes_.Begin(); i != passes_.End(); ++i)
+    for (Vector<SharedPtr<Pass>>::ConstIterator i = passes_.Begin(); i != passes_.End(); ++i)
     {
         Pass* pass = i->Get();
         if (pass)
@@ -503,15 +448,15 @@ SharedPtr<Technique> Technique::CloneWithDefines(const String& vsDefines, const 
     Pair<StringHash, StringHash> key = MakePair(StringHash(vsDefines), StringHash(psDefines));
 
     // Return existing if possible
-    HashMap<Pair<StringHash, StringHash>, SharedPtr<Technique> >::Iterator i = cloneTechniques_.Find(key);
+    HashMap<Pair<StringHash, StringHash>, SharedPtr<Technique>>::Iterator i = cloneTechniques_.Find(key);
     if (i != cloneTechniques_.End())
         return i->second_;
 
-    // Set same name as the original for the clones to ensure proper serialization of the material. This should not be a problem
-    // since the clones are never stored to the resource cache
+    // Set same name as the original for the clones to ensure proper serialization of the material. This should not be a
+    // problem since the clones are never stored to the resource cache
     i = cloneTechniques_.Insert(MakePair(key, Clone(GetName())));
 
-    for (Vector<SharedPtr<Pass> >::ConstIterator j = i->second_->passes_.Begin(); j != i->second_->passes_.End(); ++j)
+    for (Vector<SharedPtr<Pass>>::ConstIterator j = i->second_->passes_.Begin(); j != i->second_->passes_.End(); ++j)
     {
         Pass* pass = (*j);
         if (!pass)
@@ -553,4 +498,4 @@ unsigned Technique::GetPassIndex(const String& passName)
     }
 }
 
-}
+} // namespace Urho3D

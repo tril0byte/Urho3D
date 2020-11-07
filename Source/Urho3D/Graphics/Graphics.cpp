@@ -92,10 +92,7 @@ void Graphics::SetWindowPosition(const IntVector2& position)
         position_ = position; // Sets as initial position for OpenWindow()
 }
 
-void Graphics::SetWindowPosition(int x, int y)
-{
-    SetWindowPosition(IntVector2(x, y));
-}
+void Graphics::SetWindowPosition(int x, int y) { SetWindowPosition(IntVector2(x, y)); }
 
 void Graphics::SetOrientations(const String& orientations)
 {
@@ -103,16 +100,15 @@ void Graphics::SetOrientations(const String& orientations)
     SDL_SetHint(SDL_HINT_ORIENTATIONS, orientations_.CString());
 }
 
-bool Graphics::SetScreenMode(int width, int height)
-{
-    return SetScreenMode(width, height, screenParams_);
-}
+bool Graphics::SetScreenMode(int width, int height) { return SetScreenMode(width, height, screenParams_); }
 
-bool Graphics::SetWindowModes(const WindowModeParams& windowMode, const WindowModeParams& secondaryWindowMode, bool maximize)
+bool Graphics::SetWindowModes(const WindowModeParams& windowMode, const WindowModeParams& secondaryWindowMode,
+                              bool maximize)
 {
     primaryWindowMode_ = windowMode;
     secondaryWindowMode_ = secondaryWindowMode;
-    return SetScreenMode(primaryWindowMode_.width_, primaryWindowMode_.height_, primaryWindowMode_.screenParams_, maximize);
+    return SetScreenMode(primaryWindowMode_.width_, primaryWindowMode_.height_, primaryWindowMode_.screenParams_,
+                         maximize);
 }
 
 bool Graphics::SetDefaultWindowModes(int width, int height, const ScreenModeParams& params)
@@ -144,8 +140,8 @@ bool Graphics::SetDefaultWindowModes(int width, int height, const ScreenModePara
     return SetWindowModes(primaryWindowMode, secondaryWindowMode, maximize);
 }
 
-bool Graphics::SetMode(int width, int height, bool fullscreen, bool borderless, bool resizable,
-    bool highDPI, bool vsync, bool tripleBuffer, int multiSample, int monitor, int refreshRate)
+bool Graphics::SetMode(int width, int height, bool fullscreen, bool borderless, bool resizable, bool highDPI,
+                       bool vsync, bool tripleBuffer, int multiSample, int monitor, int refreshRate)
 {
     ScreenModeParams params;
     params.fullscreen_ = fullscreen;
@@ -161,10 +157,7 @@ bool Graphics::SetMode(int width, int height, bool fullscreen, bool borderless, 
     return SetDefaultWindowModes(width, height, params);
 }
 
-bool Graphics::SetMode(int width, int height)
-{
-    return SetDefaultWindowModes(width, height, screenParams_);
-}
+bool Graphics::SetMode(int width, int height) { return SetDefaultWindowModes(width, height, screenParams_); }
 
 bool Graphics::ToggleFullscreen()
 {
@@ -218,12 +211,12 @@ void Graphics::SetShaderParameter(StringHash param, const Variant& value)
         break;
 
     case VAR_BUFFER:
-        {
-            const PODVector<unsigned char>& buffer = value.GetBuffer();
-            if (buffer.Size() >= sizeof(float))
-                SetShaderParameter(param, reinterpret_cast<const float*>(&buffer[0]), buffer.Size() / sizeof(float));
-        }
-        break;
+    {
+        const PODVector<unsigned char>& buffer = value.GetBuffer();
+        if (buffer.Size() >= sizeof(float))
+            SetShaderParameter(param, reinterpret_cast<const float*>(&buffer[0]), buffer.Size() / sizeof(float));
+    }
+    break;
 
     default:
         // Unsupported parameter type, do nothing
@@ -312,19 +305,13 @@ IntVector2 Graphics::GetDesktopResolution(int monitor) const
 #endif
 }
 
-int Graphics::GetMonitorCount() const
-{
-    return SDL_GetNumVideoDisplays();
-}
+int Graphics::GetMonitorCount() const { return SDL_GetNumVideoDisplays(); }
 
-int Graphics::GetCurrentMonitor() const
-{
-    return window_ ? SDL_GetWindowDisplayIndex(window_) : 0;
-}
+int Graphics::GetCurrentMonitor() const { return window_ ? SDL_GetWindowDisplayIndex(window_) : 0; }
 
 bool Graphics::GetMaximized() const
 {
-    return window_? static_cast<bool>(SDL_GetWindowFlags(window_) & SDL_WINDOW_MAXIMIZED) : false;
+    return window_ ? static_cast<bool>(SDL_GetWindowFlags(window_) & SDL_WINDOW_MAXIMIZED) : false;
 }
 
 Vector3 Graphics::GetDisplayDPI(int monitor) const
@@ -358,15 +345,9 @@ void Graphics::Raise() const
     SDL_RaiseWindow(window_);
 }
 
-void Graphics::BeginDumpShaders(const String& fileName)
-{
-    shaderPrecache_ = new ShaderPrecache(context_, fileName);
-}
+void Graphics::BeginDumpShaders(const String& fileName) { shaderPrecache_ = new ShaderPrecache(context_, fileName); }
 
-void Graphics::EndDumpShaders()
-{
-    shaderPrecache_.Reset();
-}
+void Graphics::EndDumpShaders() { shaderPrecache_.Reset(); }
 
 void Graphics::PrecacheShaders(Deserializer& source)
 {
@@ -515,7 +496,7 @@ void Graphics::AdjustScreenMode(int& newWidth, int& newHeight, ScreenModeParams&
     if (params.borderless_)
         params.fullscreen_ = false;
 
-    // On iOS window needs to be resizable to handle orientation changes properly
+        // On iOS window needs to be resizable to handle orientation changes properly
 #ifdef IOS
     if (!externalWindow_)
         params.resizable_ = true;
@@ -524,8 +505,8 @@ void Graphics::AdjustScreenMode(int& newWidth, int& newHeight, ScreenModeParams&
     // Ensure that multisampl factor is in valid range
     params.multiSample_ = Clamp(params.multiSample_, 1, 16);
 
-    // If zero dimensions in windowed mode, set windowed mode to maximize and set a predefined default restored window size.
-    // If zero in fullscreen, use desktop mode
+    // If zero dimensions in windowed mode, set windowed mode to maximize and set a predefined default restored window
+    // size. If zero in fullscreen, use desktop mode
     if (!newWidth || !newHeight)
     {
         if (params.fullscreen_ || params.borderless_)
@@ -549,8 +530,8 @@ void Graphics::AdjustScreenMode(int& newWidth, int& newHeight, ScreenModeParams&
         const PODVector<IntVector3> resolutions = GetResolutions(params.monitor_);
         if (!resolutions.Empty())
         {
-            const unsigned bestResolution = FindBestResolutionIndex(params.monitor_,
-                newWidth, newHeight, params.refreshRate_);
+            const unsigned bestResolution =
+                FindBestResolutionIndex(params.monitor_, newWidth, newHeight, params.refreshRate_);
             newWidth = resolutions[bestResolution].x_;
             newHeight = resolutions[bestResolution].y_;
             params.refreshRate_ = resolutions[bestResolution].z_;
@@ -571,7 +552,7 @@ void Graphics::OnScreenModeChanged()
 #ifdef URHO3D_LOGGING
     String msg;
     msg.AppendWithFormat("Set screen mode %dx%d rate %d Hz %s monitor %d", width_, height_, screenParams_.refreshRate_,
-        (screenParams_.fullscreen_ ? "fullscreen" : "windowed"), screenParams_.monitor_);
+                         (screenParams_.fullscreen_ ? "fullscreen" : "windowed"), screenParams_.monitor_);
     if (screenParams_.borderless_)
         msg.Append(" borderless");
     if (screenParams_.resizable_)
@@ -629,4 +610,4 @@ void RegisterGraphicsLibrary(Context* context)
     Zone::RegisterObject(context);
 }
 
-}
+} // namespace Urho3D

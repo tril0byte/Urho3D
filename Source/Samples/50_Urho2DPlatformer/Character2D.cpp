@@ -20,35 +20,35 @@
 // THE SOFTWARE.
 //
 
-#include <Urho3D/Urho2D/AnimatedSprite2D.h>
-#include <Urho3D/Urho2D/AnimationSet2D.h>
 #include <Urho3D/Core/Context.h>
-#include <Urho3D/Input/Input.h>
 #include <Urho3D/IO/MemoryBuffer.h>
-#include <Urho3D/Urho2D/PhysicsWorld2D.h>
-#include <Urho3D/Urho2D/RigidBody2D.h>
+#include <Urho3D/Input/Input.h>
 #include <Urho3D/Scene/Scene.h>
 #include <Urho3D/Scene/SceneEvents.h>
 #include <Urho3D/UI/Text.h>
 #include <Urho3D/UI/UI.h>
+#include <Urho3D/Urho2D/AnimatedSprite2D.h>
+#include <Urho3D/Urho2D/AnimationSet2D.h>
+#include <Urho3D/Urho2D/PhysicsWorld2D.h>
+#include <Urho3D/Urho2D/RigidBody2D.h>
 
 #include <Urho3D/DebugNew.h>
 
 #include "Character2D.h"
 
 // Character2D logic component
-Character2D::Character2D(Context* context) :
-    LogicComponent(context),
-    wounded_(false),
-    killed_(false),
-    timer_(0.0f),
-    maxCoins_(0),
-    remainingCoins_(0),
-    remainingLifes_(3),
-    isClimbing_(false),
-    climb2_(false),
-    aboveClimbable_(false),
-    onSlope_(false)
+Character2D::Character2D(Context* context)
+    : LogicComponent(context)
+    , wounded_(false)
+    , killed_(false)
+    , timer_(0.0f)
+    , maxCoins_(0)
+    , remainingCoins_(0)
+    , remainingLifes_(3)
+    , isClimbing_(false)
+    , climb2_(false)
+    , aboveClimbable_(false)
+    , onSlope_(false)
 {
 }
 
@@ -57,7 +57,8 @@ void Character2D::RegisterObject(Context* context)
     context->RegisterFactory<Character2D>();
 
     // These macros register the class attributes to the Context for automatic load / save handling.
-    // We specify the 'Default' attribute mode which means it will be used both for saving into file, and network replication.
+    // We specify the 'Default' attribute mode which means it will be used both for saving into file, and network
+    // replication.
     URHO3D_ATTRIBUTE("Wounded", bool, wounded_, false, AM_DEFAULT);
     URHO3D_ATTRIBUTE("Killed", bool, killed_, false, AM_DEFAULT);
     URHO3D_ATTRIBUTE("Timer", float, timer_, 0.0f, AM_DEFAULT);
@@ -93,7 +94,9 @@ void Character2D::Update(float timeStep)
     Vector2 characterHalfSize = Vector2(0.16f, 0.16f);
     auto* physicsWorld = GetScene()->GetComponent<PhysicsWorld2D>();
     PODVector<RigidBody2D*> collidingBodies;
-    physicsWorld->GetRigidBodies(collidingBodies, Rect(node_->GetWorldPosition2D() - characterHalfSize - Vector2(0.0f, 0.1f), node_->GetWorldPosition2D() + characterHalfSize));
+    physicsWorld->GetRigidBodies(collidingBodies,
+                                 Rect(node_->GetWorldPosition2D() - characterHalfSize - Vector2(0.0f, 0.1f),
+                                      node_->GetWorldPosition2D() + characterHalfSize));
 
     if (collidingBodies.Size() > 1 && !isClimbing_)
         onGround = true;
@@ -130,7 +133,9 @@ void Character2D::Update(float timeStep)
     if (!moveDir.Equals(Vector2::ZERO) || jump)
     {
         if (onSlope_)
-            body->ApplyForceToCenter(moveDir * MOVE_SPEED / 2, true); // When climbing a slope, apply force (todo: replace by setting linear velocity to zero when will work)
+            body->ApplyForceToCenter(moveDir * MOVE_SPEED / 2,
+                                     true); // When climbing a slope, apply force (todo: replace by setting linear
+                                            // velocity to zero when will work)
         else
             node_->Translate(Vector3(moveDir.x_, moveDir.y_, 0) * timeStep * 1.8f);
         if (jump)

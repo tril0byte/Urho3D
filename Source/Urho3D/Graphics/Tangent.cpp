@@ -42,8 +42,9 @@ inline unsigned GetIndex(void*& indexPointer, unsigned indexSize)
     }
 }
 
-void GenerateTangents(void* vertexData, unsigned vertexSize, const void* indexData, unsigned indexSize, unsigned indexStart,
-    unsigned indexCount, unsigned normalOffset, unsigned texCoordOffset, unsigned tangentOffset)
+void GenerateTangents(void* vertexData, unsigned vertexSize, const void* indexData, unsigned indexSize,
+                      unsigned indexStart, unsigned indexCount, unsigned normalOffset, unsigned texCoordOffset,
+                      unsigned tangentOffset)
 {
     // Tangent generation from
     // http://www.terathon.com/code/tangent.html
@@ -126,4 +127,4 @@ void GenerateTangents(void* vertexData, unsigned vertexSize, const void* indexDa
     delete[] tan1;
 }
 
-}
+} // namespace Urho3D

@@ -41,7 +41,8 @@ enum InterpolationMode
     CATMULL_ROM_CURVE,
     /// Linear interpolation.
     LINEAR_CURVE,
-    /// Catmull-Rom full path interpolation. Start and end knots are duplicated or looped as necessary to move through the full path.
+    /// Catmull-Rom full path interpolation. Start and end knots are duplicated or looped as necessary to move through
+    /// the full path.
     CATMULL_ROM_FULL_CURVE
 };
 
@@ -59,19 +60,16 @@ public:
     Spline(const Spline& rhs) = default;
 
     /// Copy operator.
-    Spline& operator =(const Spline& rhs) = default;
+    Spline& operator=(const Spline& rhs) = default;
 
     /// Equality operator.
-    bool operator ==(const Spline& rhs) const
+    bool operator==(const Spline& rhs) const
     {
         return (knots_ == rhs.knots_ && interpolationMode_ == rhs.interpolationMode_);
     }
 
     /// Inequality operator.
-    bool operator !=(const Spline& rhs) const
-    {
-        return !(*this == rhs);
-    }
+    bool operator!=(const Spline& rhs) const { return !(*this == rhs); }
 
     /// Return the interpolation mode.
     /// @property
@@ -126,4 +124,4 @@ private:
     VariantVector knots_;
 };
 
-}
+} // namespace Urho3D

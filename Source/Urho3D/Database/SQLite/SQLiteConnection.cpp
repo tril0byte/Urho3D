@@ -28,10 +28,10 @@
 namespace Urho3D
 {
 
-DbConnection::DbConnection(Context* context, const String& connectionString) :
-    Object(context),
-    connectionString_(connectionString),
-    connectionImpl_(nullptr)
+DbConnection::DbConnection(Context* context, const String& connectionString)
+    : Object(context)
+    , connectionString_(connectionString)
+    , connectionImpl_(nullptr)
 {
     if (sqlite3_open(connectionString.CString(), &connectionImpl_) != SQLITE_OK)
     {
@@ -163,4 +163,4 @@ DbResult DbConnection::Execute(const String& sql, bool useCursorEvent)
     return result;
 }
 
-}
+} // namespace Urho3D

@@ -2,8 +2,8 @@
 
 // We need register all enums before registration of any members because members can use any enums
 
-#include "../Precompiled.h"
 #include "../AngelScript/APITemplates.h"
+#include "../Precompiled.h"
 
 // Ignored headers
 //#include "../Resource/PListFile.h"
@@ -1082,7 +1082,8 @@ void ASRegisterGenerated_Enums(asIScriptEngine* engine)
     engine->RegisterEnumValue("DeferredLightVSVariation", "DLVS_DIR", DLVS_DIR);
     engine->RegisterEnumValue("DeferredLightVSVariation", "DLVS_ORTHO", DLVS_ORTHO);
     engine->RegisterEnumValue("DeferredLightVSVariation", "DLVS_ORTHODIR", DLVS_ORTHODIR);
-    engine->RegisterEnumValue("DeferredLightVSVariation", "MAX_DEFERRED_LIGHT_VS_VARIATIONS", MAX_DEFERRED_LIGHT_VS_VARIATIONS);
+    engine->RegisterEnumValue("DeferredLightVSVariation", "MAX_DEFERRED_LIGHT_VS_VARIATIONS",
+                              MAX_DEFERRED_LIGHT_VS_VARIATIONS);
 
     // enum DeferredLightPSVariation | File: ../Graphics/Renderer.h
     engine->RegisterEnum("DeferredLightPSVariation");
@@ -1105,11 +1106,15 @@ void ASRegisterGenerated_Enums(asIScriptEngine* engine)
     engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_SHADOWNORMALOFFSET", DLPS_SHADOWNORMALOFFSET);
     engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_SPOTSHADOWNORMALOFFSET", DLPS_SPOTSHADOWNORMALOFFSET);
     engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_POINTSHADOWNORMALOFFSET", DLPS_POINTSHADOWNORMALOFFSET);
-    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_POINTMASKSHADOWNORMALOFFSET", DLPS_POINTMASKSHADOWNORMALOFFSET);
+    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_POINTMASKSHADOWNORMALOFFSET",
+                              DLPS_POINTMASKSHADOWNORMALOFFSET);
     engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_SHADOWSPECNORMALOFFSET", DLPS_SHADOWSPECNORMALOFFSET);
-    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_SPOTSHADOWSPECNORMALOFFSET", DLPS_SPOTSHADOWSPECNORMALOFFSET);
-    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_POINTSHADOWSPECNORMALOFFSET", DLPS_POINTSHADOWSPECNORMALOFFSET);
-    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_POINTMASKSHADOWSPECNORMALOFFSET", DLPS_POINTMASKSHADOWSPECNORMALOFFSET);
+    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_SPOTSHADOWSPECNORMALOFFSET",
+                              DLPS_SPOTSHADOWSPECNORMALOFFSET);
+    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_POINTSHADOWSPECNORMALOFFSET",
+                              DLPS_POINTSHADOWSPECNORMALOFFSET);
+    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_POINTMASKSHADOWSPECNORMALOFFSET",
+                              DLPS_POINTMASKSHADOWSPECNORMALOFFSET);
     engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHO", DLPS_ORTHO);
     engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOSPOT", DLPS_ORTHOSPOT);
     engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOPOINT", DLPS_ORTHOPOINT);
@@ -1125,16 +1130,25 @@ void ASRegisterGenerated_Enums(asIScriptEngine* engine)
     engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOSHADOWSPEC", DLPS_ORTHOSHADOWSPEC);
     engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOSPOTSHADOWSPEC", DLPS_ORTHOSPOTSHADOWSPEC);
     engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOPOINTSHADOWSPEC", DLPS_ORTHOPOINTSHADOWSPEC);
-    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOPOINTMASKSHADOWSPEC", DLPS_ORTHOPOINTMASKSHADOWSPEC);
+    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOPOINTMASKSHADOWSPEC",
+                              DLPS_ORTHOPOINTMASKSHADOWSPEC);
     engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOSHADOWNORMALOFFSET", DLPS_ORTHOSHADOWNORMALOFFSET);
-    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOSPOTSHADOWNORMALOFFSET", DLPS_ORTHOSPOTSHADOWNORMALOFFSET);
-    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOPOINTSHADOWNORMALOFFSET", DLPS_ORTHOPOINTSHADOWNORMALOFFSET);
-    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOPOINTMASKSHADOWNORMALOFFSET", DLPS_ORTHOPOINTMASKSHADOWNORMALOFFSET);
-    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOSHADOWSPECNORMALOFFSET", DLPS_ORTHOSHADOWSPECNORMALOFFSET);
-    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOSPOTSHADOWSPECNORMALOFFSET", DLPS_ORTHOSPOTSHADOWSPECNORMALOFFSET);
-    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOPOINTSHADOWSPECNORMALOFFSET", DLPS_ORTHOPOINTSHADOWSPECNORMALOFFSET);
-    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOPOINTMASKSHADOWSPECNORMALOFFSET", DLPS_ORTHOPOINTMASKSHADOWSPECNORMALOFFSET);
-    engine->RegisterEnumValue("DeferredLightPSVariation", "MAX_DEFERRED_LIGHT_PS_VARIATIONS", MAX_DEFERRED_LIGHT_PS_VARIATIONS);
+    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOSPOTSHADOWNORMALOFFSET",
+                              DLPS_ORTHOSPOTSHADOWNORMALOFFSET);
+    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOPOINTSHADOWNORMALOFFSET",
+                              DLPS_ORTHOPOINTSHADOWNORMALOFFSET);
+    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOPOINTMASKSHADOWNORMALOFFSET",
+                              DLPS_ORTHOPOINTMASKSHADOWNORMALOFFSET);
+    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOSHADOWSPECNORMALOFFSET",
+                              DLPS_ORTHOSHADOWSPECNORMALOFFSET);
+    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOSPOTSHADOWSPECNORMALOFFSET",
+                              DLPS_ORTHOSPOTSHADOWSPECNORMALOFFSET);
+    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOPOINTSHADOWSPECNORMALOFFSET",
+                              DLPS_ORTHOPOINTSHADOWSPECNORMALOFFSET);
+    engine->RegisterEnumValue("DeferredLightPSVariation", "DLPS_ORTHOPOINTMASKSHADOWSPECNORMALOFFSET",
+                              DLPS_ORTHOPOINTMASKSHADOWSPECNORMALOFFSET);
+    engine->RegisterEnumValue("DeferredLightPSVariation", "MAX_DEFERRED_LIGHT_PS_VARIATIONS",
+                              MAX_DEFERRED_LIGHT_PS_VARIATIONS);
 
     // enum RenderCommandType | File: ../Graphics/RenderPath.h
     engine->RegisterEnum("RenderCommandType");
@@ -1610,7 +1624,8 @@ void ASRegisterGenerated_Enums(asIScriptEngine* engine)
     engine->RegisterGlobalProperty("const uint SCANCODE_EXSEL", (void*)&Scancode_SCANCODE_EXSEL);
     engine->RegisterGlobalProperty("const uint SCANCODE_KP_00", (void*)&Scancode_SCANCODE_KP_00);
     engine->RegisterGlobalProperty("const uint SCANCODE_KP_000", (void*)&Scancode_SCANCODE_KP_000);
-    engine->RegisterGlobalProperty("const uint SCANCODE_THOUSANDSSEPARATOR", (void*)&Scancode_SCANCODE_THOUSANDSSEPARATOR);
+    engine->RegisterGlobalProperty("const uint SCANCODE_THOUSANDSSEPARATOR",
+                                   (void*)&Scancode_SCANCODE_THOUSANDSSEPARATOR);
     engine->RegisterGlobalProperty("const uint SCANCODE_DECIMALSEPARATOR", (void*)&Scancode_SCANCODE_DECIMALSEPARATOR);
     engine->RegisterGlobalProperty("const uint SCANCODE_CURRENCYUNIT", (void*)&Scancode_SCANCODE_CURRENCYUNIT);
     engine->RegisterGlobalProperty("const uint SCANCODE_CURRENCYSUBUNIT", (void*)&Scancode_SCANCODE_CURRENCYSUBUNIT);
@@ -1634,7 +1649,8 @@ void ASRegisterGenerated_Enums(asIScriptEngine* engine)
     engine->RegisterGlobalProperty("const uint SCANCODE_KP_AMPERSAND", (void*)&Scancode_SCANCODE_KP_AMPERSAND);
     engine->RegisterGlobalProperty("const uint SCANCODE_KP_DBLAMPERSAND", (void*)&Scancode_SCANCODE_KP_DBLAMPERSAND);
     engine->RegisterGlobalProperty("const uint SCANCODE_KP_VERTICALBAR", (void*)&Scancode_SCANCODE_KP_VERTICALBAR);
-    engine->RegisterGlobalProperty("const uint SCANCODE_KP_DBLVERTICALBAR", (void*)&Scancode_SCANCODE_KP_DBLVERTICALBAR);
+    engine->RegisterGlobalProperty("const uint SCANCODE_KP_DBLVERTICALBAR",
+                                   (void*)&Scancode_SCANCODE_KP_DBLVERTICALBAR);
     engine->RegisterGlobalProperty("const uint SCANCODE_KP_COLON", (void*)&Scancode_SCANCODE_KP_COLON);
     engine->RegisterGlobalProperty("const uint SCANCODE_KP_HASH", (void*)&Scancode_SCANCODE_KP_HASH);
     engine->RegisterGlobalProperty("const uint SCANCODE_KP_SPACE", (void*)&Scancode_SCANCODE_KP_SPACE);
@@ -1705,17 +1721,28 @@ void ASRegisterGenerated_Enums(asIScriptEngine* engine)
     engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_B", (void*)&ControllerButton_CONTROLLER_BUTTON_B);
     engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_X", (void*)&ControllerButton_CONTROLLER_BUTTON_X);
     engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_Y", (void*)&ControllerButton_CONTROLLER_BUTTON_Y);
-    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_BACK", (void*)&ControllerButton_CONTROLLER_BUTTON_BACK);
-    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_GUIDE", (void*)&ControllerButton_CONTROLLER_BUTTON_GUIDE);
-    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_START", (void*)&ControllerButton_CONTROLLER_BUTTON_START);
-    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_LEFTSTICK", (void*)&ControllerButton_CONTROLLER_BUTTON_LEFTSTICK);
-    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_RIGHTSTICK", (void*)&ControllerButton_CONTROLLER_BUTTON_RIGHTSTICK);
-    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_LEFTSHOULDER", (void*)&ControllerButton_CONTROLLER_BUTTON_LEFTSHOULDER);
-    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_RIGHTSHOULDER", (void*)&ControllerButton_CONTROLLER_BUTTON_RIGHTSHOULDER);
-    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_DPAD_UP", (void*)&ControllerButton_CONTROLLER_BUTTON_DPAD_UP);
-    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_DPAD_DOWN", (void*)&ControllerButton_CONTROLLER_BUTTON_DPAD_DOWN);
-    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_DPAD_LEFT", (void*)&ControllerButton_CONTROLLER_BUTTON_DPAD_LEFT);
-    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_DPAD_RIGHT", (void*)&ControllerButton_CONTROLLER_BUTTON_DPAD_RIGHT);
+    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_BACK",
+                                   (void*)&ControllerButton_CONTROLLER_BUTTON_BACK);
+    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_GUIDE",
+                                   (void*)&ControllerButton_CONTROLLER_BUTTON_GUIDE);
+    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_START",
+                                   (void*)&ControllerButton_CONTROLLER_BUTTON_START);
+    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_LEFTSTICK",
+                                   (void*)&ControllerButton_CONTROLLER_BUTTON_LEFTSTICK);
+    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_RIGHTSTICK",
+                                   (void*)&ControllerButton_CONTROLLER_BUTTON_RIGHTSTICK);
+    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_LEFTSHOULDER",
+                                   (void*)&ControllerButton_CONTROLLER_BUTTON_LEFTSHOULDER);
+    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_RIGHTSHOULDER",
+                                   (void*)&ControllerButton_CONTROLLER_BUTTON_RIGHTSHOULDER);
+    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_DPAD_UP",
+                                   (void*)&ControllerButton_CONTROLLER_BUTTON_DPAD_UP);
+    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_DPAD_DOWN",
+                                   (void*)&ControllerButton_CONTROLLER_BUTTON_DPAD_DOWN);
+    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_DPAD_LEFT",
+                                   (void*)&ControllerButton_CONTROLLER_BUTTON_DPAD_LEFT);
+    engine->RegisterGlobalProperty("const uint CONTROLLER_BUTTON_DPAD_RIGHT",
+                                   (void*)&ControllerButton_CONTROLLER_BUTTON_DPAD_RIGHT);
 
     // enum ControllerAxis : unsigned | File: ../Input/InputConstants.h
     engine->RegisterTypedef("ControllerAxis", "uint");
@@ -1723,8 +1750,10 @@ void ASRegisterGenerated_Enums(asIScriptEngine* engine)
     engine->RegisterGlobalProperty("const uint CONTROLLER_AXIS_LEFTY", (void*)&ControllerAxis_CONTROLLER_AXIS_LEFTY);
     engine->RegisterGlobalProperty("const uint CONTROLLER_AXIS_RIGHTX", (void*)&ControllerAxis_CONTROLLER_AXIS_RIGHTX);
     engine->RegisterGlobalProperty("const uint CONTROLLER_AXIS_RIGHTY", (void*)&ControllerAxis_CONTROLLER_AXIS_RIGHTY);
-    engine->RegisterGlobalProperty("const uint CONTROLLER_AXIS_TRIGGERLEFT", (void*)&ControllerAxis_CONTROLLER_AXIS_TRIGGERLEFT);
-    engine->RegisterGlobalProperty("const uint CONTROLLER_AXIS_TRIGGERRIGHT", (void*)&ControllerAxis_CONTROLLER_AXIS_TRIGGERRIGHT);
+    engine->RegisterGlobalProperty("const uint CONTROLLER_AXIS_TRIGGERLEFT",
+                                   (void*)&ControllerAxis_CONTROLLER_AXIS_TRIGGERLEFT);
+    engine->RegisterGlobalProperty("const uint CONTROLLER_AXIS_TRIGGERRIGHT",
+                                   (void*)&ControllerAxis_CONTROLLER_AXIS_TRIGGERRIGHT);
 
     // enum FileMode | File: ../IO/File.h
     engine->RegisterEnum("FileMode");
@@ -2141,4 +2170,4 @@ void ASRegisterGenerated_Enums(asIScriptEngine* engine)
     engine->RegisterTypedef("DragAndDropModeFlags", "uint");
 }
 
-}
+} // namespace Urho3D

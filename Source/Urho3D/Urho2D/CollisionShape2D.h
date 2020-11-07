@@ -133,4 +133,4 @@ protected:
     Vector3 cachedWorldScale_;
 };
 
-}
+} // namespace Urho3D

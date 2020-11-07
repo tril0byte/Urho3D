@@ -35,29 +35,14 @@
 namespace Urho3D
 {
 
-static const char* addressModeNames[] =
-{
-    "wrap",
-    "mirror",
-    "clamp",
-    "border",
-    nullptr
-};
+static const char* addressModeNames[] = {"wrap", "mirror", "clamp", "border", nullptr};
 
-static const char* filterModeNames[] =
-{
-    "nearest",
-    "bilinear",
-    "trilinear",
-    "anisotropic",
-    "nearestanisotropic",
-    "default",
-    nullptr
-};
+static const char* filterModeNames[] = {"nearest", "bilinear", "trilinear", "anisotropic", "nearestanisotropic",
+                                        "default", nullptr};
 
-Texture::Texture(Context* context) :
-    ResourceWithMetadata(context),
-    GPUObject(GetSubsystem<Graphics>())
+Texture::Texture(Context* context)
+    : ResourceWithMetadata(context)
+    , GPUObject(GetSubsystem<Graphics>())
 {
 }
 
@@ -101,10 +86,7 @@ void Texture::SetBorderColor(const Color& color)
     parametersDirty_ = true;
 }
 
-void Texture::SetBackupTexture(Texture* texture)
-{
-    backupTexture_ = texture;
-}
+void Texture::SetBackupTexture(Texture* texture) { backupTexture_ = texture; }
 
 void Texture::SetMipsToSkip(MaterialQuality quality, int toSkip)
 {
@@ -155,10 +137,7 @@ unsigned Texture::GetDataSize(int width, int height) const
         return GetRowDataSize(width) * height;
 }
 
-unsigned Texture::GetDataSize(int width, int height, int depth) const
-{
-    return depth * GetDataSize(width, height);
-}
+unsigned Texture::GetDataSize(int width, int height, int depth) const { return depth * GetDataSize(width, height); }
 
 unsigned Texture::GetComponents() const
 {
@@ -191,7 +170,8 @@ void Texture::SetParameters(const XMLElement& element)
             {
                 auto coordIndex = (TextureCoordinate)(coord[0] - 'u');
                 String mode = paramElem.GetAttributeLower("mode");
-                SetAddressMode(coordIndex, (TextureAddressMode)GetStringListIndex(mode.CString(), addressModeNames, ADDRESS_WRAP));
+                SetAddressMode(coordIndex,
+                               (TextureAddressMode)GetStringListIndex(mode.CString(), addressModeNames, ADDRESS_WRAP));
             }
         }
 
@@ -226,10 +206,7 @@ void Texture::SetParameters(const XMLElement& element)
     }
 }
 
-void Texture::SetParametersDirty()
-{
-    parametersDirty_ = true;
-}
+void Texture::SetParametersDirty() { parametersDirty_ = true; }
 
 void Texture::SetLevelsDirty()
 {
@@ -284,4 +261,4 @@ void Texture::CheckTextureBudget(StringHash type)
         cache->ReleaseResources(Material::GetTypeStatic());
 }
 
-}
+} // namespace Urho3D

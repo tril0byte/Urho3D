@@ -27,8 +27,8 @@
 #include <Urho3D/Engine/Console.h>
 #include <Urho3D/Engine/Engine.h>
 #include <Urho3D/Engine/EngineEvents.h>
-#include <Urho3D/Input/Input.h>
 #include <Urho3D/IO/Log.h>
+#include <Urho3D/Input/Input.h>
 #include <Urho3D/UI/Button.h>
 
 #include "DatabaseDemo.h"
@@ -36,18 +36,18 @@
 // Expands to this example's entry-point
 URHO3D_DEFINE_APPLICATION_MAIN(DatabaseDemo)
 
-DatabaseDemo::DatabaseDemo(Context* context) :
-    Sample(context),
-    connection_(nullptr),
-    row_(0),
-    maxRows_(50)
+DatabaseDemo::DatabaseDemo(Context* context)
+    : Sample(context)
+    , connection_(nullptr)
+    , row_(0)
+    , maxRows_(50)
 {
 }
 
 DatabaseDemo::~DatabaseDemo()
 {
-    // Although the managed database connection will be disconnected by Database subsystem automatically in its destructor,
-    // it is a good practice for a class to balance the number of connect() and disconnect() calls.
+    // Although the managed database connection will be disconnected by Database subsystem automatically in its
+    // destructor, it is a good practice for a class to balance the number of connect() and disconnect() calls.
     GetSubsystem<Database>()->Disconnect(connection_);
     connection_ = nullptr;
 }
@@ -85,36 +85,39 @@ void DatabaseDemo::Start()
     // Open the operating system console window (for stdin / stdout) if not open yet
     OpenConsoleWindow();
 
-    // In general, the connection string is really the only thing that need to be changed when switching underlying database API
+    // In general, the connection string is really the only thing that need to be changed when switching underlying
+    // database API
     //   and that when using ODBC API then the connection string must refer to an already installed ODBC driver
-    // Although it has not been tested yet but the ODBC API should be able to interface with any vendor provided ODBC drivers
-    // In this particular demo, however, when using ODBC API then the SQLite-ODBC driver need to be installed
+    // Although it has not been tested yet but the ODBC API should be able to interface with any vendor provided ODBC
+    // drivers In this particular demo, however, when using ODBC API then the SQLite-ODBC driver need to be installed
     // The SQLite-ODBC driver can be built from source downloaded from http://www.ch-werner.de/sqliteodbc/
     // You can try to install other ODBC driver and modify the connection string below to match your ODBC driver
     // Both DSN and DSN-less connection string should work
     // The ODBC API, i.e. URHO3D_DATABASE_ODBC build option, is only available for native (including RPI) platforms
     //   and it is designed for development of game server connecting to ODBC-compliant databases in mind
 
-    // This demo will always work when using SQLite API as the SQLite database engine is embedded inside Urho3D game engine
+    // This demo will always work when using SQLite API as the SQLite database engine is embedded inside Urho3D game
+    // engine
     //   and this is also the case when targeting Web platform
 
-    // We could have used #ifdef to init the connection string during compile time, but below shows how it is done during runtime
-    // The "URHO3D_DATABASE_ODBC" compiler define is set when URHO3D_DATABASE_ODBC build option is enabled
-    // Connect to a temporary in-memory SQLite database
-    connection_ =
-        GetSubsystem<Database>()->Connect(Database::GetAPI() == DBAPI_ODBC ? "Driver=SQLite3;Database=:memory:" : "file://");
+    // We could have used #ifdef to init the connection string during compile time, but below shows how it is done
+    // during runtime The "URHO3D_DATABASE_ODBC" compiler define is set when URHO3D_DATABASE_ODBC build option is
+    // enabled Connect to a temporary in-memory SQLite database
+    connection_ = GetSubsystem<Database>()->Connect(
+        Database::GetAPI() == DBAPI_ODBC ? "Driver=SQLite3;Database=:memory:" : "file://");
 
     // Subscribe to database cursor event to loop through query resultset
     SubscribeToEvent(E_DBCURSOR, URHO3D_HANDLER(DatabaseDemo, HandleDbCursor));
 
     // Show instruction
     Print("This demo connects to temporary in-memory database.\n"
-        "All the tables and their data will be lost after exiting the demo.\n"
-        "Enter a valid SQL statement in the console input and press Enter to execute.\n"
-        "Enter 'get/set maxrows [number]' to get/set the maximum rows to be printed out.\n"
-        "Enter 'get/set connstr [string]' to get/set the database connection string and establish a new connection to it.\n"
-        "Enter 'quit' or 'exit' to exit the demo.\n"
-        "For example:\n ");
+          "All the tables and their data will be lost after exiting the demo.\n"
+          "Enter a valid SQL statement in the console input and press Enter to execute.\n"
+          "Enter 'get/set maxrows [number]' to get/set the maximum rows to be printed out.\n"
+          "Enter 'get/set connstr [string]' to get/set the database connection string and establish a new connection "
+          "to it.\n"
+          "Enter 'quit' or 'exit' to exit the demo.\n"
+          "For example:\n ");
     HandleInput("create table tbl1(col1 varchar(10), col2 smallint)");
     HandleInput("insert into tbl1 values('Hello', 10)");
     HandleInput("insert into tbl1 values('World', 20)");
@@ -153,8 +156,8 @@ void DatabaseDemo::HandleDbCursor(StringHash eventType, VariantMap& eventData)
     const VariantVector& colValues = eventData[P_COLVALUES].GetVariantVector();
     const Vector<String>& colHeaders = eventData[P_COLHEADERS].GetStringVector();
 
-    // In this sample demo we just use db cursor to dump each row immediately so we can filter out the row to conserve memory
-    // In a real application this can be used to perform the client-side filtering logic
+    // In this sample demo we just use db cursor to dump each row immediately so we can filter out the row to conserve
+    // memory In a real application this can be used to perform the client-side filtering logic
     eventData[P_FILTER] = true;
     // In this sample demo we abort the further cursor movement when maximum rows being dumped has been reached
     eventData[P_ABORT] = ++row_ >= maxRows_;
@@ -206,7 +209,8 @@ void DatabaseDemo::HandleInput(const String& input)
     else
     {
         // In this sample demo we use the dbCursor event to loop through each row as it is being fetched
-        // Regardless of this event is being used or not, all the fetched rows will be made available in the DbResult object,
+        // Regardless of this event is being used or not, all the fetched rows will be made available in the DbResult
+        // object,
         //   unless the dbCursor event handler has instructed to filter out the fetched row from the final result
         DbResult result = connection_->Execute(input, true);
 

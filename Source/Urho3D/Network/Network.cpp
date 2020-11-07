@@ -27,10 +27,10 @@
 #include "../Core/Profiler.h"
 #include "../Engine/EngineEvents.h"
 #include "../IO/FileSystem.h"
-#include "../Input/InputEvents.h"
 #include "../IO/IOEvents.h"
 #include "../IO/Log.h"
 #include "../IO/MemoryBuffer.h"
+#include "../Input/InputEvents.h"
 #include "../Network/HttpRequest.h"
 #include "../Network/Network.h"
 #include "../Network/NetworkEvents.h"
@@ -52,158 +52,156 @@
 namespace Urho3D
 {
 
-static const char* RAKNET_MESSAGEID_STRINGS[] = {
-    "ID_CONNECTED_PING",  
-    "ID_UNCONNECTED_PING",
-    "ID_UNCONNECTED_PING_OPEN_CONNECTIONS",
-    "ID_CONNECTED_PONG",
-    "ID_DETECT_LOST_CONNECTIONS",
-    "ID_OPEN_CONNECTION_REQUEST_1",
-    "ID_OPEN_CONNECTION_REPLY_1",
-    "ID_OPEN_CONNECTION_REQUEST_2",
-    "ID_OPEN_CONNECTION_REPLY_2",
-    "ID_CONNECTION_REQUEST",
-    "ID_REMOTE_SYSTEM_REQUIRES_PUBLIC_KEY",
-    "ID_OUR_SYSTEM_REQUIRES_SECURITY",
-    "ID_PUBLIC_KEY_MISMATCH",
-    "ID_OUT_OF_BAND_INTERNAL",
-    "ID_SND_RECEIPT_ACKED",
-    "ID_SND_RECEIPT_LOSS",
-    "ID_CONNECTION_REQUEST_ACCEPTED",
-    "ID_CONNECTION_ATTEMPT_FAILED",
-    "ID_ALREADY_CONNECTED",
-    "ID_NEW_INCOMING_CONNECTION",
-    "ID_NO_FREE_INCOMING_CONNECTIONS",
-    "ID_DISCONNECTION_NOTIFICATION",
-    "ID_CONNECTION_LOST",
-    "ID_CONNECTION_BANNED",
-    "ID_INVALID_PASSWORD",
-    "ID_INCOMPATIBLE_PROTOCOL_VERSION",
-    "ID_IP_RECENTLY_CONNECTED",
-    "ID_TIMESTAMP",
-    "ID_UNCONNECTED_PONG",
-    "ID_ADVERTISE_SYSTEM",
-    "ID_DOWNLOAD_PROGRESS",
-    "ID_REMOTE_DISCONNECTION_NOTIFICATION",
-    "ID_REMOTE_CONNECTION_LOST",
-    "ID_REMOTE_NEW_INCOMING_CONNECTION",
-    "ID_FILE_LIST_TRANSFER_HEADER",
-    "ID_FILE_LIST_TRANSFER_FILE",
-    "ID_FILE_LIST_REFERENCE_PUSH_ACK",
-    "ID_DDT_DOWNLOAD_REQUEST",
-    "ID_TRANSPORT_STRING",
-    "ID_REPLICA_MANAGER_CONSTRUCTION",
-    "ID_REPLICA_MANAGER_SCOPE_CHANGE",
-    "ID_REPLICA_MANAGER_SERIALIZE",
-    "ID_REPLICA_MANAGER_DOWNLOAD_STARTED",
-    "ID_REPLICA_MANAGER_DOWNLOAD_COMPLETE",
-    "ID_RAKVOICE_OPEN_CHANNEL_REQUEST",
-    "ID_RAKVOICE_OPEN_CHANNEL_REPLY",
-    "ID_RAKVOICE_CLOSE_CHANNEL",
-    "ID_RAKVOICE_DATA",
-    "ID_AUTOPATCHER_GET_CHANGELIST_SINCE_DATE",
-    "ID_AUTOPATCHER_CREATION_LIST",
-    "ID_AUTOPATCHER_DELETION_LIST",
-    "ID_AUTOPATCHER_GET_PATCH",
-    "ID_AUTOPATCHER_PATCH_LIST",
-    "ID_AUTOPATCHER_REPOSITORY_FATAL_ERROR",
-    "ID_AUTOPATCHER_CANNOT_DOWNLOAD_ORIGINAL_UNMODIFIED_FILES",
-    "ID_AUTOPATCHER_FINISHED_INTERNAL",
-    "ID_AUTOPATCHER_FINISHED",
-    "ID_AUTOPATCHER_RESTART_APPLICATION",
-    "ID_NAT_PUNCHTHROUGH_REQUEST",
-    "ID_NAT_CONNECT_AT_TIME",
-    "ID_NAT_GET_MOST_RECENT_PORT",
-    "ID_NAT_CLIENT_READY",
-    "ID_NAT_TARGET_NOT_CONNECTED",
-    "ID_NAT_TARGET_UNRESPONSIVE",
-    "ID_NAT_CONNECTION_TO_TARGET_LOST",
-    "ID_NAT_ALREADY_IN_PROGRESS",
-    "ID_NAT_PUNCHTHROUGH_FAILED",
-    "ID_NAT_PUNCHTHROUGH_SUCCEEDED",
-    "ID_READY_EVENT_SET",
-    "ID_READY_EVENT_UNSET",
-    "ID_READY_EVENT_ALL_SET",
-    "ID_READY_EVENT_QUERY",
-    "ID_LOBBY_GENERAL",
-    "ID_RPC_REMOTE_ERROR",
-    "ID_RPC_PLUGIN",
-    "ID_FILE_LIST_REFERENCE_PUSH",
-    "ID_READY_EVENT_FORCE_ALL_SET",
-    "ID_ROOMS_EXECUTE_FUNC",
-    "ID_ROOMS_LOGON_STATUS",
-    "ID_ROOMS_HANDLE_CHANGE",
-    "ID_LOBBY2_SEND_MESSAGE",
-    "ID_LOBBY2_SERVER_ERROR",
-    "ID_FCM2_NEW_HOST",
-    "ID_FCM2_REQUEST_FCMGUID",
-    "ID_FCM2_RESPOND_CONNECTION_COUNT",
-    "ID_FCM2_INFORM_FCMGUID",
-    "ID_FCM2_UPDATE_MIN_TOTAL_CONNECTION_COUNT",
-    "ID_FCM2_VERIFIED_JOIN_START",
-    "ID_FCM2_VERIFIED_JOIN_CAPABLE",
-    "ID_FCM2_VERIFIED_JOIN_FAILED",
-    "ID_FCM2_VERIFIED_JOIN_ACCEPTED",
-    "ID_FCM2_VERIFIED_JOIN_REJECTED",
-    "ID_UDP_PROXY_GENERAL",
-    "ID_SQLite3_EXEC",
-    "ID_SQLite3_UNKNOWN_DB",
-    "ID_SQLLITE_LOGGER",
-    "ID_NAT_TYPE_DETECTION_REQUEST",
-    "ID_NAT_TYPE_DETECTION_RESULT",
-    "ID_ROUTER_2_INTERNAL",
-    "ID_ROUTER_2_FORWARDING_NO_PATH",
-    "ID_ROUTER_2_FORWARDING_ESTABLISHED",
-    "ID_ROUTER_2_REROUTED",
-    "ID_TEAM_BALANCER_INTERNAL",
-    "ID_TEAM_BALANCER_REQUESTED_TEAM_FULL",
-    "ID_TEAM_BALANCER_REQUESTED_TEAM_LOCKED",
-    "ID_TEAM_BALANCER_TEAM_REQUESTED_CANCELLED",
-    "ID_TEAM_BALANCER_TEAM_ASSIGNED",
-    "ID_LIGHTSPEED_INTEGRATION",
-    "ID_XBOX_LOBBY",
-    "ID_TWO_WAY_AUTHENTICATION_INCOMING_CHALLENGE_SUCCESS",
-    "ID_TWO_WAY_AUTHENTICATION_OUTGOING_CHALLENGE_SUCCESS",
-    "ID_TWO_WAY_AUTHENTICATION_INCOMING_CHALLENGE_FAILURE",
-    "ID_TWO_WAY_AUTHENTICATION_OUTGOING_CHALLENGE_FAILURE",
-    "ID_TWO_WAY_AUTHENTICATION_OUTGOING_CHALLENGE_TIMEOUT",
-    "ID_TWO_WAY_AUTHENTICATION_NEGOTIATION",
-    "ID_CLOUD_POST_REQUEST",
-    "ID_CLOUD_RELEASE_REQUEST",
-    "ID_CLOUD_GET_REQUEST",
-    "ID_CLOUD_GET_RESPONSE",
-    "ID_CLOUD_UNSUBSCRIBE_REQUEST",
-    "ID_CLOUD_SERVER_TO_SERVER_COMMAND",
-    "ID_CLOUD_SUBSCRIPTION_NOTIFICATION",
-    "ID_LIB_VOICE",
-    "ID_RELAY_PLUGIN",
-    "ID_NAT_REQUEST_BOUND_ADDRESSES",
-    "ID_NAT_RESPOND_BOUND_ADDRESSES",
-    "ID_FCM2_UPDATE_USER_CONTEXT",
-    "ID_RESERVED_3",
-    "ID_RESERVED_4",
-    "ID_RESERVED_5",
-    "ID_RESERVED_6",
-    "ID_RESERVED_7",
-    "ID_RESERVED_8",
-    "ID_RESERVED_9",
-    "ID_USER_PACKET_ENUM"
-};
+static const char* RAKNET_MESSAGEID_STRINGS[] = {"ID_CONNECTED_PING",
+                                                 "ID_UNCONNECTED_PING",
+                                                 "ID_UNCONNECTED_PING_OPEN_CONNECTIONS",
+                                                 "ID_CONNECTED_PONG",
+                                                 "ID_DETECT_LOST_CONNECTIONS",
+                                                 "ID_OPEN_CONNECTION_REQUEST_1",
+                                                 "ID_OPEN_CONNECTION_REPLY_1",
+                                                 "ID_OPEN_CONNECTION_REQUEST_2",
+                                                 "ID_OPEN_CONNECTION_REPLY_2",
+                                                 "ID_CONNECTION_REQUEST",
+                                                 "ID_REMOTE_SYSTEM_REQUIRES_PUBLIC_KEY",
+                                                 "ID_OUR_SYSTEM_REQUIRES_SECURITY",
+                                                 "ID_PUBLIC_KEY_MISMATCH",
+                                                 "ID_OUT_OF_BAND_INTERNAL",
+                                                 "ID_SND_RECEIPT_ACKED",
+                                                 "ID_SND_RECEIPT_LOSS",
+                                                 "ID_CONNECTION_REQUEST_ACCEPTED",
+                                                 "ID_CONNECTION_ATTEMPT_FAILED",
+                                                 "ID_ALREADY_CONNECTED",
+                                                 "ID_NEW_INCOMING_CONNECTION",
+                                                 "ID_NO_FREE_INCOMING_CONNECTIONS",
+                                                 "ID_DISCONNECTION_NOTIFICATION",
+                                                 "ID_CONNECTION_LOST",
+                                                 "ID_CONNECTION_BANNED",
+                                                 "ID_INVALID_PASSWORD",
+                                                 "ID_INCOMPATIBLE_PROTOCOL_VERSION",
+                                                 "ID_IP_RECENTLY_CONNECTED",
+                                                 "ID_TIMESTAMP",
+                                                 "ID_UNCONNECTED_PONG",
+                                                 "ID_ADVERTISE_SYSTEM",
+                                                 "ID_DOWNLOAD_PROGRESS",
+                                                 "ID_REMOTE_DISCONNECTION_NOTIFICATION",
+                                                 "ID_REMOTE_CONNECTION_LOST",
+                                                 "ID_REMOTE_NEW_INCOMING_CONNECTION",
+                                                 "ID_FILE_LIST_TRANSFER_HEADER",
+                                                 "ID_FILE_LIST_TRANSFER_FILE",
+                                                 "ID_FILE_LIST_REFERENCE_PUSH_ACK",
+                                                 "ID_DDT_DOWNLOAD_REQUEST",
+                                                 "ID_TRANSPORT_STRING",
+                                                 "ID_REPLICA_MANAGER_CONSTRUCTION",
+                                                 "ID_REPLICA_MANAGER_SCOPE_CHANGE",
+                                                 "ID_REPLICA_MANAGER_SERIALIZE",
+                                                 "ID_REPLICA_MANAGER_DOWNLOAD_STARTED",
+                                                 "ID_REPLICA_MANAGER_DOWNLOAD_COMPLETE",
+                                                 "ID_RAKVOICE_OPEN_CHANNEL_REQUEST",
+                                                 "ID_RAKVOICE_OPEN_CHANNEL_REPLY",
+                                                 "ID_RAKVOICE_CLOSE_CHANNEL",
+                                                 "ID_RAKVOICE_DATA",
+                                                 "ID_AUTOPATCHER_GET_CHANGELIST_SINCE_DATE",
+                                                 "ID_AUTOPATCHER_CREATION_LIST",
+                                                 "ID_AUTOPATCHER_DELETION_LIST",
+                                                 "ID_AUTOPATCHER_GET_PATCH",
+                                                 "ID_AUTOPATCHER_PATCH_LIST",
+                                                 "ID_AUTOPATCHER_REPOSITORY_FATAL_ERROR",
+                                                 "ID_AUTOPATCHER_CANNOT_DOWNLOAD_ORIGINAL_UNMODIFIED_FILES",
+                                                 "ID_AUTOPATCHER_FINISHED_INTERNAL",
+                                                 "ID_AUTOPATCHER_FINISHED",
+                                                 "ID_AUTOPATCHER_RESTART_APPLICATION",
+                                                 "ID_NAT_PUNCHTHROUGH_REQUEST",
+                                                 "ID_NAT_CONNECT_AT_TIME",
+                                                 "ID_NAT_GET_MOST_RECENT_PORT",
+                                                 "ID_NAT_CLIENT_READY",
+                                                 "ID_NAT_TARGET_NOT_CONNECTED",
+                                                 "ID_NAT_TARGET_UNRESPONSIVE",
+                                                 "ID_NAT_CONNECTION_TO_TARGET_LOST",
+                                                 "ID_NAT_ALREADY_IN_PROGRESS",
+                                                 "ID_NAT_PUNCHTHROUGH_FAILED",
+                                                 "ID_NAT_PUNCHTHROUGH_SUCCEEDED",
+                                                 "ID_READY_EVENT_SET",
+                                                 "ID_READY_EVENT_UNSET",
+                                                 "ID_READY_EVENT_ALL_SET",
+                                                 "ID_READY_EVENT_QUERY",
+                                                 "ID_LOBBY_GENERAL",
+                                                 "ID_RPC_REMOTE_ERROR",
+                                                 "ID_RPC_PLUGIN",
+                                                 "ID_FILE_LIST_REFERENCE_PUSH",
+                                                 "ID_READY_EVENT_FORCE_ALL_SET",
+                                                 "ID_ROOMS_EXECUTE_FUNC",
+                                                 "ID_ROOMS_LOGON_STATUS",
+                                                 "ID_ROOMS_HANDLE_CHANGE",
+                                                 "ID_LOBBY2_SEND_MESSAGE",
+                                                 "ID_LOBBY2_SERVER_ERROR",
+                                                 "ID_FCM2_NEW_HOST",
+                                                 "ID_FCM2_REQUEST_FCMGUID",
+                                                 "ID_FCM2_RESPOND_CONNECTION_COUNT",
+                                                 "ID_FCM2_INFORM_FCMGUID",
+                                                 "ID_FCM2_UPDATE_MIN_TOTAL_CONNECTION_COUNT",
+                                                 "ID_FCM2_VERIFIED_JOIN_START",
+                                                 "ID_FCM2_VERIFIED_JOIN_CAPABLE",
+                                                 "ID_FCM2_VERIFIED_JOIN_FAILED",
+                                                 "ID_FCM2_VERIFIED_JOIN_ACCEPTED",
+                                                 "ID_FCM2_VERIFIED_JOIN_REJECTED",
+                                                 "ID_UDP_PROXY_GENERAL",
+                                                 "ID_SQLite3_EXEC",
+                                                 "ID_SQLite3_UNKNOWN_DB",
+                                                 "ID_SQLLITE_LOGGER",
+                                                 "ID_NAT_TYPE_DETECTION_REQUEST",
+                                                 "ID_NAT_TYPE_DETECTION_RESULT",
+                                                 "ID_ROUTER_2_INTERNAL",
+                                                 "ID_ROUTER_2_FORWARDING_NO_PATH",
+                                                 "ID_ROUTER_2_FORWARDING_ESTABLISHED",
+                                                 "ID_ROUTER_2_REROUTED",
+                                                 "ID_TEAM_BALANCER_INTERNAL",
+                                                 "ID_TEAM_BALANCER_REQUESTED_TEAM_FULL",
+                                                 "ID_TEAM_BALANCER_REQUESTED_TEAM_LOCKED",
+                                                 "ID_TEAM_BALANCER_TEAM_REQUESTED_CANCELLED",
+                                                 "ID_TEAM_BALANCER_TEAM_ASSIGNED",
+                                                 "ID_LIGHTSPEED_INTEGRATION",
+                                                 "ID_XBOX_LOBBY",
+                                                 "ID_TWO_WAY_AUTHENTICATION_INCOMING_CHALLENGE_SUCCESS",
+                                                 "ID_TWO_WAY_AUTHENTICATION_OUTGOING_CHALLENGE_SUCCESS",
+                                                 "ID_TWO_WAY_AUTHENTICATION_INCOMING_CHALLENGE_FAILURE",
+                                                 "ID_TWO_WAY_AUTHENTICATION_OUTGOING_CHALLENGE_FAILURE",
+                                                 "ID_TWO_WAY_AUTHENTICATION_OUTGOING_CHALLENGE_TIMEOUT",
+                                                 "ID_TWO_WAY_AUTHENTICATION_NEGOTIATION",
+                                                 "ID_CLOUD_POST_REQUEST",
+                                                 "ID_CLOUD_RELEASE_REQUEST",
+                                                 "ID_CLOUD_GET_REQUEST",
+                                                 "ID_CLOUD_GET_RESPONSE",
+                                                 "ID_CLOUD_UNSUBSCRIBE_REQUEST",
+                                                 "ID_CLOUD_SERVER_TO_SERVER_COMMAND",
+                                                 "ID_CLOUD_SUBSCRIPTION_NOTIFICATION",
+                                                 "ID_LIB_VOICE",
+                                                 "ID_RELAY_PLUGIN",
+                                                 "ID_NAT_REQUEST_BOUND_ADDRESSES",
+                                                 "ID_NAT_RESPOND_BOUND_ADDRESSES",
+                                                 "ID_FCM2_UPDATE_USER_CONTEXT",
+                                                 "ID_RESERVED_3",
+                                                 "ID_RESERVED_4",
+                                                 "ID_RESERVED_5",
+                                                 "ID_RESERVED_6",
+                                                 "ID_RESERVED_7",
+                                                 "ID_RESERVED_8",
+                                                 "ID_RESERVED_9",
+                                                 "ID_USER_PACKET_ENUM"};
 
 static const int DEFAULT_UPDATE_FPS = 30;
 static const int SERVER_TIMEOUT_TIME = 10000;
 
-Network::Network(Context* context) :
-    Object(context),
-    updateFps_(DEFAULT_UPDATE_FPS),
-    simulatedLatency_(0),
-    simulatedPacketLoss_(0.0f),
-    updateInterval_(1.0f / (float)DEFAULT_UPDATE_FPS),
-    updateAcc_(0.0f),
-    isServer_(false),
-    scene_(nullptr),
-    natPunchServerAddress_(nullptr),
-    remoteGUID_(nullptr)
+Network::Network(Context* context)
+    : Object(context)
+    , updateFps_(DEFAULT_UPDATE_FPS)
+    , simulatedLatency_(0)
+    , simulatedPacketLoss_(0.0f)
+    , updateInterval_(1.0f / (float)DEFAULT_UPDATE_FPS)
+    , updateAcc_(0.0f)
+    , isServer_(false)
+    , scene_(nullptr)
+    , natPunchServerAddress_(nullptr)
+    , remoteGUID_(nullptr)
 {
     rakPeer_ = SLNet::RakPeerInterface::GetInstance();
     rakPeerClient_ = SLNet::RakPeerInterface::GetInstance();
@@ -291,7 +289,8 @@ Network::~Network()
     rakPeerClient_ = nullptr;
 }
 
-void Network::HandleMessage(const SLNet::AddressOrGUID& source, int packetID, int msgID, const char* data, size_t numBytes)
+void Network::HandleMessage(const SLNet::AddressOrGUID& source, int packetID, int msgID, const char* data,
+                            size_t numBytes)
 {
     // Only process messages from known sources
     Connection* connection = GetConnection(source);
@@ -323,7 +322,7 @@ void Network::NewConnectionEstablished(const SLNet::AddressOrGUID& connection)
 void Network::ClientDisconnected(const SLNet::AddressOrGUID& connection)
 {
     // Remove the client connection that corresponds to this MessageConnection
-    HashMap<SLNet::AddressOrGUID, SharedPtr<Connection> >::Iterator i = clientConnections_.Find(connection);
+    HashMap<SLNet::AddressOrGUID, SharedPtr<Connection>>::Iterator i = clientConnections_.Find(connection);
     if (i != clientConnections_.End())
     {
         Connection* connection = i->second_;
@@ -344,7 +343,8 @@ void Network::SetDiscoveryBeacon(const VariantMap& data)
     VectorBuffer buffer;
     buffer.WriteVariantMap(data);
     if (buffer.GetSize() > 400)
-        URHO3D_LOGERROR("Discovery beacon of size: " + String(buffer.GetSize()) + " bytes is too large, modify MAX_OFFLINE_DATA_LENGTH in RakNet or reduce size");
+        URHO3D_LOGERROR("Discovery beacon of size: " + String(buffer.GetSize()) +
+                        " bytes is too large, modify MAX_OFFLINE_DATA_LENGTH in RakNet or reduce size");
     rakPeer_->SetOfflinePingResponse((const char*)buffer.GetData(), buffer.GetSize());
 }
 
@@ -378,8 +378,9 @@ bool Network::Connect(const String& address, unsigned short port, Scene* scene, 
         rakPeerClient_->Startup(2, &socket, 1);
     }
 
-    //isServer_ = false;
-    SLNet::ConnectionAttemptResult connectResult = rakPeerClient_->Connect(address.CString(), port, password_.CString(), password_.Length());
+    // isServer_ = false;
+    SLNet::ConnectionAttemptResult connectResult =
+        rakPeerClient_->Connect(address.CString(), port, password_.CString(), password_.Length());
     if (connectResult == SLNet::CONNECTION_ATTEMPT_STARTED)
     {
         serverConnection_ = new Connection(context_, false, rakPeerClient_->GetMyBoundAddress(), rakPeerClient_);
@@ -388,22 +389,26 @@ bool Network::Connect(const String& address, unsigned short port, Scene* scene, 
         serverConnection_->SetConnectPending(true);
         serverConnection_->ConfigureNetworkSimulator(simulatedLatency_, simulatedPacketLoss_);
 
-        URHO3D_LOGINFO("Connecting to server " + address + ":" + String(port) + ", Client: " + serverConnection_->ToString());
+        URHO3D_LOGINFO("Connecting to server " + address + ":" + String(port) +
+                       ", Client: " + serverConnection_->ToString());
         return true;
     }
-    else if (connectResult == SLNet::ALREADY_CONNECTED_TO_ENDPOINT) {
+    else if (connectResult == SLNet::ALREADY_CONNECTED_TO_ENDPOINT)
+    {
         URHO3D_LOGWARNING("Already connected to server!");
         SendEvent(E_CONNECTIONINPROGRESS);
         return false;
     }
-    else if (connectResult == SLNet::CONNECTION_ATTEMPT_ALREADY_IN_PROGRESS) {
+    else if (connectResult == SLNet::CONNECTION_ATTEMPT_ALREADY_IN_PROGRESS)
+    {
         URHO3D_LOGWARNING("Connection attempt already in progress!");
         SendEvent(E_CONNECTIONINPROGRESS);
         return false;
     }
     else
     {
-        URHO3D_LOGERROR("Failed to connect to server " + address + ":" + String(port) + ", error code: " + String((int)connectResult));
+        URHO3D_LOGERROR("Failed to connect to server " + address + ":" + String(port) +
+                        ", error code: " + String((int)connectResult));
         SendEvent(E_CONNECTFAILED);
         return false;
     }
@@ -424,8 +429,8 @@ bool Network::StartServer(unsigned short port, unsigned int maxConnections)
         return true;
 
     URHO3D_PROFILE(StartServer);
-    
-    SLNet::SocketDescriptor socket;//(port, AF_INET);
+
+    SLNet::SocketDescriptor socket; //(port, AF_INET);
     socket.port = port;
     socket.socketFamily = AF_INET;
     // Startup local connection with max 128 incoming connection(first param) and 1 socket description (third param)
@@ -437,7 +442,7 @@ bool Network::StartServer(unsigned short port, unsigned int maxConnections)
         isServer_ = true;
         rakPeer_->SetOccasionalPing(true);
         rakPeer_->SetUnreliableTimeout(1000);
-        //rakPeer_->SetIncomingPassword("Parole", (int)strlen("Parole"));
+        // rakPeer_->SetIncomingPassword("Parole", (int)strlen("Parole"));
         return true;
     }
     else
@@ -474,11 +479,13 @@ void Network::SetNATServerInfo(const String& address, unsigned short port)
 
 void Network::StartNATClient()
 {
-    if (!rakPeer_) {
+    if (!rakPeer_)
+    {
         URHO3D_LOGERROR("Unable to start NAT client, client not initialized!");
         return;
     }
-    if (natPunchServerAddress_->GetPort() == 0) {
+    if (natPunchServerAddress_->GetPort() == 0)
+    {
         URHO3D_LOGERROR("NAT master server address incorrect!");
         return;
     }
@@ -498,10 +505,12 @@ void Network::AttemptNATPunchtrough(const String& guid, Scene* scene, const Vari
 
     remoteGUID_->FromString(guid.CString());
     rakPeerClient_->AttachPlugin(natPunchthroughClient_);
-    if (rakPeerClient_->IsActive()) {
+    if (rakPeerClient_->IsActive())
+    {
         natPunchthroughClient_->OpenNAT(*remoteGUID_, *natPunchServerAddress_);
     }
-    else {
+    else
+    {
         SLNet::SocketDescriptor socket;
         // Startup local connection with max 2 incoming connections(first param) and 1 socket description (third param)
         rakPeerClient_->Startup(2, &socket, 1);
@@ -516,9 +525,9 @@ void Network::BroadcastMessage(int msgID, bool reliable, bool inOrder, const Vec
 }
 
 void Network::BroadcastMessage(int msgID, bool reliable, bool inOrder, const unsigned char* data, unsigned numBytes,
-    unsigned contentID)
+                               unsigned contentID)
 {
-    if (!rakPeer_) 
+    if (!rakPeer_)
         return;
 
     VectorBuffer msgData;
@@ -527,20 +536,22 @@ void Network::BroadcastMessage(int msgID, bool reliable, bool inOrder, const uns
     msgData.Write(data, numBytes);
 
     if (isServer_)
-        rakPeer_->Send((const char*)msgData.GetData(), (int)msgData.GetSize(), HIGH_PRIORITY, RELIABLE, (char)0, SLNet::UNASSIGNED_RAKNET_GUID, true);
+        rakPeer_->Send((const char*)msgData.GetData(), (int)msgData.GetSize(), HIGH_PRIORITY, RELIABLE, (char)0,
+                       SLNet::UNASSIGNED_RAKNET_GUID, true);
     else
         URHO3D_LOGERROR("Server not running, can not broadcast messages");
 }
 
 void Network::BroadcastRemoteEvent(StringHash eventType, bool inOrder, const VariantMap& eventData)
 {
-    for (HashMap<SLNet::AddressOrGUID, SharedPtr<Connection> >::Iterator i = clientConnections_.Begin(); i != clientConnections_.End(); ++i)
+    for (HashMap<SLNet::AddressOrGUID, SharedPtr<Connection>>::Iterator i = clientConnections_.Begin();
+         i != clientConnections_.End(); ++i)
         i->second_->SendRemoteEvent(eventType, inOrder, eventData);
 }
 
 void Network::BroadcastRemoteEvent(Scene* scene, StringHash eventType, bool inOrder, const VariantMap& eventData)
 {
-    for (HashMap<SLNet::AddressOrGUID, SharedPtr<Connection> >::Iterator i = clientConnections_.Begin();
+    for (HashMap<SLNet::AddressOrGUID, SharedPtr<Connection>>::Iterator i = clientConnections_.Begin();
          i != clientConnections_.End(); ++i)
     {
         if (i->second_->GetScene() == scene)
@@ -562,7 +573,7 @@ void Network::BroadcastRemoteEvent(Node* node, StringHash eventType, bool inOrde
     }
 
     Scene* scene = node->GetScene();
-    for (HashMap<SLNet::AddressOrGUID, SharedPtr<Connection> >::Iterator i = clientConnections_.Begin();
+    for (HashMap<SLNet::AddressOrGUID, SharedPtr<Connection>>::Iterator i = clientConnections_.Begin();
          i != clientConnections_.End(); ++i)
     {
         if (i->second_->GetScene() == scene)
@@ -600,20 +611,11 @@ void Network::RegisterRemoteEvent(StringHash eventType)
     allowedRemoteEvents_.Insert(eventType);
 }
 
-void Network::UnregisterRemoteEvent(StringHash eventType)
-{
-    allowedRemoteEvents_.Erase(eventType);
-}
+void Network::UnregisterRemoteEvent(StringHash eventType) { allowedRemoteEvents_.Erase(eventType); }
 
-void Network::UnregisterAllRemoteEvents()
-{
-    allowedRemoteEvents_.Clear();
-}
+void Network::UnregisterAllRemoteEvents() { allowedRemoteEvents_.Clear(); }
 
-void Network::SetPackageCacheDir(const String& path)
-{
-    packageCacheDir_ = AddTrailingSlash(path);
-}
+void Network::SetPackageCacheDir(const String& path) { packageCacheDir_ = AddTrailingSlash(path); }
 
 void Network::SendPackageToClients(Scene* scene, PackageFile* package)
 {
@@ -628,7 +630,7 @@ void Network::SendPackageToClients(Scene* scene, PackageFile* package)
         return;
     }
 
-    for (HashMap<SLNet::AddressOrGUID, SharedPtr<Connection> >::Iterator i = clientConnections_.Begin();
+    for (HashMap<SLNet::AddressOrGUID, SharedPtr<Connection>>::Iterator i = clientConnections_.Begin();
          i != clientConnections_.End(); ++i)
     {
         if (i->second_->GetScene() == scene)
@@ -637,7 +639,7 @@ void Network::SendPackageToClients(Scene* scene, PackageFile* package)
 }
 
 SharedPtr<HttpRequest> Network::MakeHttpRequest(const String& url, const String& verb, const Vector<String>& headers,
-    const String& postData)
+                                                const String& postData)
 {
     URHO3D_PROFILE(MakeHttpRequest);
 
@@ -646,10 +648,7 @@ SharedPtr<HttpRequest> Network::MakeHttpRequest(const String& url, const String&
     return request;
 }
 
-void Network::BanAddress(const String& address)
-{
-    rakPeer_->AddToBanList(address.CString(), 0);
-}
+void Network::BanAddress(const String& address) { rakPeer_->AddToBanList(address.CString(), 0); }
 
 Connection* Network::GetConnection(const SLNet::AddressOrGUID& connection) const
 {
@@ -657,7 +656,7 @@ Connection* Network::GetConnection(const SLNet::AddressOrGUID& connection) const
         return serverConnection_;
     else
     {
-        HashMap<SLNet::AddressOrGUID, SharedPtr<Connection> >::ConstIterator i = clientConnections_.Find(connection);
+        HashMap<SLNet::AddressOrGUID, SharedPtr<Connection>>::ConstIterator i = clientConnections_.Find(connection);
         if (i != clientConnections_.End())
             return i->second_;
         else
@@ -665,15 +664,12 @@ Connection* Network::GetConnection(const SLNet::AddressOrGUID& connection) const
     }
 }
 
-Connection* Network::GetServerConnection() const
-{
-    return serverConnection_;
-}
+Connection* Network::GetServerConnection() const { return serverConnection_; }
 
-Vector<SharedPtr<Connection> > Network::GetClientConnections() const
+Vector<SharedPtr<Connection>> Network::GetClientConnections() const
 {
-    Vector<SharedPtr<Connection> > ret;
-    for (HashMap<SLNet::AddressOrGUID, SharedPtr<Connection> >::ConstIterator i = clientConnections_.Begin();
+    Vector<SharedPtr<Connection>> ret;
+    for (HashMap<SLNet::AddressOrGUID, SharedPtr<Connection>>::ConstIterator i = clientConnections_.Begin();
          i != clientConnections_.End(); ++i)
         ret.Push(i->second_);
 
@@ -687,10 +683,7 @@ bool Network::IsServerRunning() const
     return rakPeer_->IsActive() && isServer_;
 }
 
-bool Network::CheckRemoteEvent(StringHash eventType) const
-{
-    return allowedRemoteEvents_.Contains(eventType);
-}
+bool Network::CheckRemoteEvent(StringHash eventType) const { return allowedRemoteEvents_.Contains(eventType); }
 
 void Network::HandleIncomingPacket(SLNet::Packet* packet, bool isServer)
 {
@@ -716,7 +709,8 @@ void Network::HandleIncomingPacket(SLNet::Packet* packet, bool isServer)
     }
     else if (packetID == ID_ALREADY_CONNECTED)
     {
-        if (natPunchServerAddress_ && packet->systemAddress == *natPunchServerAddress_) {
+        if (natPunchServerAddress_ && packet->systemAddress == *natPunchServerAddress_)
+        {
             URHO3D_LOGINFO("Already connected to NAT server! ");
             if (!isServer)
             {
@@ -727,14 +721,17 @@ void Network::HandleIncomingPacket(SLNet::Packet* packet, bool isServer)
     }
     else if (packetID == ID_CONNECTION_REQUEST_ACCEPTED) // We're a client, our connection as been accepted
     {
-        if(natPunchServerAddress_ && packet->systemAddress == *natPunchServerAddress_) {
+        if (natPunchServerAddress_ && packet->systemAddress == *natPunchServerAddress_)
+        {
             URHO3D_LOGINFO("Succesfully connected to NAT punchtrough server! ");
             SendEvent(E_NATMASTERCONNECTIONSUCCEEDED);
             if (!isServer)
             {
                 natPunchthroughClient_->OpenNAT(*remoteGUID_, *natPunchServerAddress_);
             }
-        } else {
+        }
+        else
+        {
             if (!isServer)
             {
                 OnServerConnected(packet->systemAddress);
@@ -773,11 +770,13 @@ void Network::HandleIncomingPacket(SLNet::Packet* packet, bool isServer)
     }
     else if (packetID == ID_CONNECTION_ATTEMPT_FAILED) // We've failed to connect to the server/peer
     {
-        if (natPunchServerAddress_ && packet->systemAddress == *natPunchServerAddress_) {
+        if (natPunchServerAddress_ && packet->systemAddress == *natPunchServerAddress_)
+        {
             URHO3D_LOGERROR("Connection to NAT punchtrough server failed!");
             SendEvent(E_NATMASTERCONNECTIONFAILED);
-
-        } else {
+        }
+        else
+        {
 
             if (!isServer)
             {
@@ -827,7 +826,7 @@ void Network::HandleIncomingPacket(SLNet::Packet* packet, bool isServer)
     }
     else if (packetID == ID_DOWNLOAD_PROGRESS) // Part of a file transfer
     {
-        //URHO3D_LOGINFO("101010");
+        // URHO3D_LOGINFO("101010");
     }
     else if (packetID == ID_UNCONNECTED_PING)
     {
@@ -838,15 +837,17 @@ void Network::HandleIncomingPacket(SLNet::Packet* packet, bool isServer)
         if (!isServer)
         {
             using namespace NetworkHostDiscovered;
-            
+
             dataStart += sizeof(SLNet::TimeMS);
             VariantMap& eventMap = context_->GetEventDataMap();
-            if (packet->length > packet->length - dataStart) {
+            if (packet->length > packet->length - dataStart)
+            {
                 VectorBuffer buffer(packet->data + dataStart, packet->length - dataStart);
                 VariantMap srcData = buffer.ReadVariantMap();
                 eventMap[P_BEACON] = srcData;
             }
-            else {
+            else
+            {
                 eventMap[P_BEACON] = VariantMap();
             }
 
@@ -865,7 +866,8 @@ void Network::HandleIncomingPacket(SLNet::Packet* packet, bool isServer)
 
         if (isServer)
         {
-            HandleMessage(packet->systemAddress, 0, messageID, (const char*)(packet->data + dataStart), packet->length - dataStart);
+            HandleMessage(packet->systemAddress, 0, messageID, (const char*)(packet->data + dataStart),
+                          packet->length - dataStart);
         }
         else
         {
@@ -873,7 +875,8 @@ void Network::HandleIncomingPacket(SLNet::Packet* packet, bool isServer)
             bool processed = serverConnection_ && serverConnection_->ProcessMessage(messageID, buffer);
             if (!processed)
             {
-                HandleMessage(packet->systemAddress, 0, messageID, (const char*)(packet->data + dataStart), packet->length - dataStart);
+                HandleMessage(packet->systemAddress, 0, messageID, (const char*)(packet->data + dataStart),
+                              packet->length - dataStart);
             }
         }
         packetHandled = true;
@@ -883,14 +886,13 @@ void Network::HandleIncomingPacket(SLNet::Packet* packet, bool isServer)
         URHO3D_LOGERROR("Unhandled network packet: " + String(RAKNET_MESSAGEID_STRINGS[packetID]));
     else if (!packetHandled)
         URHO3D_LOGERRORF("Unhandled network packet: %i", packetID);
-
 }
 
 void Network::Update(float timeStep)
 {
     URHO3D_PROFILE(UpdateNetwork);
 
-    //Process all incoming messages for the server
+    // Process all incoming messages for the server
     if (rakPeer_->IsActive())
     {
         while (SLNet::Packet* packet = rakPeer_->Receive())
@@ -931,7 +933,7 @@ void Network::PostUpdate(float timeStep)
                 URHO3D_PROFILE(PrepareServerUpdate);
 
                 networkScenes_.Clear();
-                for (HashMap<SLNet::AddressOrGUID, SharedPtr<Connection> >::Iterator i = clientConnections_.Begin();
+                for (HashMap<SLNet::AddressOrGUID, SharedPtr<Connection>>::Iterator i = clientConnections_.Begin();
                      i != clientConnections_.End(); ++i)
                 {
                     Scene* scene = i->second_->GetScene();
@@ -947,7 +949,7 @@ void Network::PostUpdate(float timeStep)
                 URHO3D_PROFILE(SendServerUpdate);
 
                 // Then send server updates for each client connection
-                for (HashMap<SLNet::AddressOrGUID, SharedPtr<Connection> >::Iterator i = clientConnections_.Begin();
+                for (HashMap<SLNet::AddressOrGUID, SharedPtr<Connection>>::Iterator i = clientConnections_.Begin();
                      i != clientConnections_.End(); ++i)
                 {
                     i->second_->SendServerUpdate();
@@ -1001,7 +1003,8 @@ void Network::OnServerConnected(const SLNet::AddressOrGUID& address)
 
 void Network::OnServerDisconnected(const SLNet::AddressOrGUID& address)
 {
-    if (natPunchServerAddress_ && *natPunchServerAddress_ == address.systemAddress) {
+    if (natPunchServerAddress_ && *natPunchServerAddress_ == address.systemAddress)
+    {
         SendEvent(E_NATMASTERDISCONNECTED);
         return;
     }
@@ -1027,14 +1030,11 @@ void Network::ConfigureNetworkSimulator()
     if (serverConnection_)
         serverConnection_->ConfigureNetworkSimulator(simulatedLatency_, simulatedPacketLoss_);
 
-    for (HashMap<SLNet::AddressOrGUID, SharedPtr<Connection> >::Iterator i = clientConnections_.Begin();
+    for (HashMap<SLNet::AddressOrGUID, SharedPtr<Connection>>::Iterator i = clientConnections_.Begin();
          i != clientConnections_.End(); ++i)
         i->second_->ConfigureNetworkSimulator(simulatedLatency_, simulatedPacketLoss_);
 }
 
-void RegisterNetworkLibrary(Context* context)
-{
-    NetworkPriority::RegisterObject(context);
-}
+void RegisterNetworkLibrary(Context* context) { NetworkPriority::RegisterObject(context); }
 
-}
+} // namespace Urho3D

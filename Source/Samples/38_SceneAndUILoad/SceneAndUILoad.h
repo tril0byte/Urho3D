@@ -31,7 +31,7 @@ class Drawable;
 class Node;
 class Scene;
 
-}
+} // namespace Urho3D
 
 /// Scene & UI load example.
 /// This sample demonstrates:

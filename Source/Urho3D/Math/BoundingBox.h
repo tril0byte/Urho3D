@@ -45,37 +45,37 @@ class URHO3D_API BoundingBox
 {
 public:
     /// Construct with zero size.
-    BoundingBox() noexcept :
-        min_(M_INFINITY, M_INFINITY, M_INFINITY),
-        max_(-M_INFINITY, -M_INFINITY, -M_INFINITY)
+    BoundingBox() noexcept
+        : min_(M_INFINITY, M_INFINITY, M_INFINITY)
+        , max_(-M_INFINITY, -M_INFINITY, -M_INFINITY)
     {
     }
 
     /// Copy-construct from another bounding box.
-    BoundingBox(const BoundingBox& box) noexcept :
-        min_(box.min_),
-        max_(box.max_)
+    BoundingBox(const BoundingBox& box) noexcept
+        : min_(box.min_)
+        , max_(box.max_)
     {
     }
 
     /// Construct from a rect, with the Z dimension left zero.
-    explicit BoundingBox(const Rect& rect) noexcept :
-        min_(Vector3(rect.min_, 0.0f)),
-        max_(Vector3(rect.max_, 0.0f))
+    explicit BoundingBox(const Rect& rect) noexcept
+        : min_(Vector3(rect.min_, 0.0f))
+        , max_(Vector3(rect.max_, 0.0f))
     {
     }
 
     /// Construct from minimum and maximum vectors.
-    BoundingBox(const Vector3& min, const Vector3& max) noexcept :
-        min_(min),
-        max_(max)
+    BoundingBox(const Vector3& min, const Vector3& max) noexcept
+        : min_(min)
+        , max_(max)
     {
     }
 
     /// Construct from minimum and maximum floats (all dimensions same).
-    BoundingBox(float min, float max) noexcept :
-        min_(Vector3(min, min, min)),
-        max_(Vector3(max, max, max))
+    BoundingBox(float min, float max) noexcept
+        : min_(Vector3(min, min, min))
+        , max_(Vector3(max, max, max))
     {
     }
 
@@ -89,39 +89,39 @@ public:
 #endif
 
     /// Construct from an array of vertices.
-    BoundingBox(const Vector3* vertices, unsigned count) :
-        min_(M_INFINITY, M_INFINITY, M_INFINITY),
-        max_(-M_INFINITY, -M_INFINITY, -M_INFINITY)
+    BoundingBox(const Vector3* vertices, unsigned count)
+        : min_(M_INFINITY, M_INFINITY, M_INFINITY)
+        , max_(-M_INFINITY, -M_INFINITY, -M_INFINITY)
     {
         Define(vertices, count);
     }
 
     /// Construct from a frustum.
-    explicit BoundingBox(const Frustum& frustum) :
-        min_(M_INFINITY, M_INFINITY, M_INFINITY),
-        max_(-M_INFINITY, -M_INFINITY, -M_INFINITY)
+    explicit BoundingBox(const Frustum& frustum)
+        : min_(M_INFINITY, M_INFINITY, M_INFINITY)
+        , max_(-M_INFINITY, -M_INFINITY, -M_INFINITY)
     {
         Define(frustum);
     }
 
     /// Construct from a polyhedron.
-    explicit BoundingBox(const Polyhedron& poly) :
-        min_(M_INFINITY, M_INFINITY, M_INFINITY),
-        max_(-M_INFINITY, -M_INFINITY, -M_INFINITY)
+    explicit BoundingBox(const Polyhedron& poly)
+        : min_(M_INFINITY, M_INFINITY, M_INFINITY)
+        , max_(-M_INFINITY, -M_INFINITY, -M_INFINITY)
     {
         Define(poly);
     }
 
     /// Construct from a sphere.
-    explicit BoundingBox(const Sphere& sphere) :
-        min_(M_INFINITY, M_INFINITY, M_INFINITY),
-        max_(-M_INFINITY, -M_INFINITY, -M_INFINITY)
+    explicit BoundingBox(const Sphere& sphere)
+        : min_(M_INFINITY, M_INFINITY, M_INFINITY)
+        , max_(-M_INFINITY, -M_INFINITY, -M_INFINITY)
     {
         Define(sphere);
     }
 
     /// Assign from another bounding box.
-    BoundingBox& operator =(const BoundingBox& rhs) noexcept
+    BoundingBox& operator=(const BoundingBox& rhs) noexcept
     {
         min_ = rhs.min_;
         max_ = rhs.max_;
@@ -129,7 +129,7 @@ public:
     }
 
     /// Assign from a Rect, with the Z dimension left zero.
-    BoundingBox& operator =(const Rect& rhs) noexcept
+    BoundingBox& operator=(const Rect& rhs) noexcept
     {
         min_ = Vector3(rhs.min_, 0.0f);
         max_ = Vector3(rhs.max_, 0.0f);
@@ -137,22 +137,16 @@ public:
     }
 
     /// Test for equality with another bounding box.
-    bool operator ==(const BoundingBox& rhs) const { return (min_ == rhs.min_ && max_ == rhs.max_); }
+    bool operator==(const BoundingBox& rhs) const { return (min_ == rhs.min_ && max_ == rhs.max_); }
 
     /// Test for inequality with another bounding box.
-    bool operator !=(const BoundingBox& rhs) const { return (min_ != rhs.min_ || max_ != rhs.max_); }
+    bool operator!=(const BoundingBox& rhs) const { return (min_ != rhs.min_ || max_ != rhs.max_); }
 
     /// Define from another bounding box.
-    void Define(const BoundingBox& box)
-    {
-        Define(box.min_, box.max_);
-    }
+    void Define(const BoundingBox& box) { Define(box.min_, box.max_); }
 
     /// Define from a Rect.
-    void Define(const Rect& rect)
-    {
-        Define(Vector3(rect.min_, 0.0f), Vector3(rect.max_, 0.0f));
-    }
+    void Define(const Rect& rect) { Define(Vector3(rect.min_, 0.0f), Vector3(rect.max_, 0.0f)); }
 
     /// Define from minimum and maximum vectors.
     void Define(const Vector3& min, const Vector3& max)
@@ -169,10 +163,7 @@ public:
     }
 
     /// Define from a point.
-    void Define(const Vector3& point)
-    {
-        min_ = max_ = point;
-    }
+    void Define(const Vector3& point) { min_ = max_ = point; }
 
     /// Merge a point.
     void Merge(const Vector3& point)
@@ -255,10 +246,7 @@ public:
     }
 
     /// Return true if this bounding box is defined via a previous call to Define() or Merge().
-    bool Defined() const
-    {
-        return min_.x_ != M_INFINITY;
-    }
+    bool Defined() const { return min_.x_ != M_INFINITY; }
 
     /// Return center.
     /// @property
@@ -330,4 +318,4 @@ public:
     float dummyMax_{}; // This is never used, but exists to pad the max_ value to four floats.
 };
 
-}
+} // namespace Urho3D

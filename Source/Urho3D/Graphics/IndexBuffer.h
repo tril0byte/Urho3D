@@ -22,8 +22,8 @@
 
 #pragma once
 
-#include "../Core/Object.h"
 #include "../Container/ArrayPtr.h"
+#include "../Core/Object.h"
 #include "../Graphics/GPUObject.h"
 #include "../Graphics/GraphicsDefs.h"
 
@@ -57,7 +57,8 @@ public:
     bool SetData(const void* data);
     /// Set a data range in the buffer. Optionally discard data outside the range.
     bool SetDataRange(const void* data, unsigned start, unsigned count, bool discard = false);
-    /// Lock the buffer for write-only editing. Return data pointer if successful. Optionally discard data outside the range.
+    /// Lock the buffer for write-only editing. Return data pointer if successful. Optionally discard data outside the
+    /// range.
     void* Lock(unsigned start, unsigned count, bool discard = false);
     /// Unlock the buffer and apply changes to the GPU buffer.
     void Unlock();
@@ -122,4 +123,4 @@ private:
     bool discardLock_;
 };
 
-}
+} // namespace Urho3D

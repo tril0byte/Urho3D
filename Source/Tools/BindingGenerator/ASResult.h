@@ -57,7 +57,7 @@ public:
     void AddIgnoredHeader(const string& headerFile);
 
     // Write result to file
-    virtual void Save() {};
+    virtual void Save(){};
 };
 
 class ASGeneratedFile_WithRegistrationFunction : public ASGeneratedFile_Base
@@ -74,7 +74,7 @@ class ASGeneratedFile_Enums : public ASGeneratedFile_WithRegistrationFunction
 {
 public:
     using ASGeneratedFile_WithRegistrationFunction::ASGeneratedFile_WithRegistrationFunction;
-    
+
     void Save() override;
 };
 
@@ -128,4 +128,4 @@ public:
     void Save() override;
 };
 
-}
+} // namespace ASBindingGenerator

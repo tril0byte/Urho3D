@@ -75,4 +75,4 @@ private:
     SharedPtr<XMLFile> loadParameters_;
 };
 
-}
+} // namespace Urho3D

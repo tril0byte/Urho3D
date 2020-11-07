@@ -21,54 +21,54 @@
 //
 
 #include <Urho3D/Audio/Audio.h>
+#include <Urho3D/Core/CoreEvents.h>
+#include <Urho3D/Core/StringUtils.h>
+#include <Urho3D/Engine/Engine.h>
+#include <Urho3D/Graphics/Camera.h>
+#include <Urho3D/Graphics/DebugRenderer.h>
+#include <Urho3D/Graphics/Graphics.h>
+#include <Urho3D/Graphics/GraphicsEvents.h>
+#include <Urho3D/Graphics/Octree.h>
+#include <Urho3D/Graphics/Renderer.h>
+#include <Urho3D/Graphics/Zone.h>
+#include <Urho3D/Input/Input.h>
+#include <Urho3D/Resource/ResourceCache.h>
+#include <Urho3D/Scene/Scene.h>
+#include <Urho3D/Scene/SceneEvents.h>
+#include <Urho3D/UI/Button.h>
+#include <Urho3D/UI/Font.h>
+#include <Urho3D/UI/Text.h>
+#include <Urho3D/UI/UI.h>
+#include <Urho3D/UI/UIEvents.h>
 #include <Urho3D/Urho2D/AnimatedSprite2D.h>
 #include <Urho3D/Urho2D/AnimationSet2D.h>
-#include <Urho3D/UI/Button.h>
-#include <Urho3D/Graphics/Camera.h>
 #include <Urho3D/Urho2D/CollisionBox2D.h>
 #include <Urho3D/Urho2D/CollisionChain2D.h>
 #include <Urho3D/Urho2D/CollisionCircle2D.h>
 #include <Urho3D/Urho2D/CollisionPolygon2D.h>
-#include <Urho3D/Core/CoreEvents.h>
-#include <Urho3D/Graphics/DebugRenderer.h>
-#include <Urho3D/Engine/Engine.h>
-#include <Urho3D/UI/Font.h>
-#include <Urho3D/Graphics/Graphics.h>
-#include <Urho3D/Graphics/GraphicsEvents.h>
-#include <Urho3D/Input/Input.h>
-#include <Urho3D/Graphics/Octree.h>
 #include <Urho3D/Urho2D/PhysicsEvents2D.h>
 #include <Urho3D/Urho2D/PhysicsWorld2D.h>
-#include <Urho3D/Graphics/Renderer.h>
-#include <Urho3D/Resource/ResourceCache.h>
 #include <Urho3D/Urho2D/RigidBody2D.h>
-#include <Urho3D/Scene/Scene.h>
-#include <Urho3D/Scene/SceneEvents.h>
-#include <Urho3D/Core/StringUtils.h>
-#include <Urho3D/UI/Text.h>
 #include <Urho3D/Urho2D/TileMap2D.h>
 #include <Urho3D/Urho2D/TileMapLayer2D.h>
 #include <Urho3D/Urho2D/TmxFile2D.h>
-#include <Urho3D/UI/UI.h>
-#include <Urho3D/UI/UIEvents.h>
-#include <Urho3D/Graphics/Zone.h>
 
 #include <Urho3D/DebugNew.h>
 
 #include "Character2D.h"
-#include "Utilities2D/Sample2D.h"
-#include "Utilities2D/Mover.h"
 #include "Urho2DPlatformer.h"
-
+#include "Utilities2D/Mover.h"
+#include "Utilities2D/Sample2D.h"
 
 URHO3D_DEFINE_APPLICATION_MAIN(Urho2DPlatformer)
 
-Urho2DPlatformer::Urho2DPlatformer(Context* context) :
-    Sample(context)
+Urho2DPlatformer::Urho2DPlatformer(Context* context)
+    : Sample(context)
 {
     // Register factory for the Character2D component so it can be created via CreateComponent
     Character2D::RegisterObject(context);
-    // Register factory and attributes for the Mover component so it can be created via CreateComponent, and loaded / saved
+    // Register factory and attributes for the Mover component so it can be created via CreateComponent, and loaded /
+    // saved
     Mover::RegisterObject(context);
 }
 
@@ -109,7 +109,7 @@ void Urho2DPlatformer::CreateScene()
     // Create the Octree, DebugRenderer and PhysicsWorld2D components to the scene
     scene_->CreateComponent<Octree>();
     scene_->CreateComponent<DebugRenderer>();
-    /*PhysicsWorld2D* physicsWorld =*/ scene_->CreateComponent<PhysicsWorld2D>();
+    /*PhysicsWorld2D* physicsWorld =*/scene_->CreateComponent<PhysicsWorld2D>();
 
     // Create camera
     cameraNode_ = scene_->CreateChild("Camera");
@@ -118,7 +118,10 @@ void Urho2DPlatformer::CreateScene()
 
     auto* graphics = GetSubsystem<Graphics>();
     camera->SetOrthoSize((float)graphics->GetHeight() * PIXEL_SIZE);
-    camera->SetZoom(2.0f * Min((float)graphics->GetWidth() / 1280.0f, (float)graphics->GetHeight() / 800.0f)); // Set zoom according to user's resolution to ensure full visibility (initial zoom (2.0) is set for full visibility at 1280x800 resolution)
+    camera->SetZoom(2.0f * Min((float)graphics->GetWidth() / 1280.0f,
+                               (float)graphics->GetHeight() /
+                                   800.0f)); // Set zoom according to user's resolution to ensure full visibility
+                                             // (initial zoom (2.0) is set for full visibility at 1280x800 resolution)
 
     // Setup the viewport for displaying the scene
     SharedPtr<Viewport> viewport(new Viewport(context_, scene_, camera));
@@ -144,7 +147,8 @@ void Urho2DPlatformer::CreateScene()
     TileMapLayer2D* tileMapLayer = tileMap->GetLayer(tileMap->GetNumLayers() - 1);
     sample2D_->CreateCollisionShapesFromTMXObjects(tileMapNode, tileMapLayer, info);
 
-    // Instantiate enemies and moving platforms at each placeholder of "MovingEntities" layer (placeholders are Poly Line objects defining a path from points)
+    // Instantiate enemies and moving platforms at each placeholder of "MovingEntities" layer (placeholders are Poly
+    // Line objects defining a path from points)
     sample2D_->PopulateMovingEntities(tileMap->GetLayer(tileMap->GetNumLayers() - 2));
 
     // Instantiate coins to pick at each placeholder of "Coins" layer (placeholders for coins are Rectangle objects)
@@ -155,7 +159,8 @@ void Urho2DPlatformer::CreateScene()
     character2D_->remainingCoins_ = coinsLayer->GetNumObjects();
     character2D_->maxCoins_ = coinsLayer->GetNumObjects();
 
-    //Instantiate triggers (for ropes, ladders, lava, slopes...) at each placeholder of "Triggers" layer (placeholders for triggers are Rectangle objects)
+    // Instantiate triggers (for ropes, ladders, lava, slopes...) at each placeholder of "Triggers" layer (placeholders
+    // for triggers are Rectangle objects)
     sample2D_->PopulateTriggers(tileMap->GetLayer(tileMap->GetNumLayers() - 4));
 
     // Create background
@@ -212,7 +217,8 @@ void Urho2DPlatformer::HandleCollisionBegin(StringHash eventType, VariantMap& ev
             character2D_->isClimbing_ = true;
             auto* body = character2DNode->GetComponent<RigidBody2D>();
             body->SetGravityScale(0.0f); // Override gravity so that the character doesn't fall
-            // Clear forces so that the character stops (should be performed by setting linear velocity to zero, but currently doesn't work)
+            // Clear forces so that the character stops (should be performed by setting linear velocity to zero, but
+            // currently doesn't work)
             body->SetLinearVelocity(Vector2(0.0f, 0.0f));
             body->SetAwake(false);
             body->SetAwake(true);
@@ -245,7 +251,8 @@ void Urho2DPlatformer::HandleCollisionBegin(StringHash eventType, VariantMap& ev
         float deltaX = character2DNode->GetPosition().x_ - hitNode->GetPosition().x_;
 
         // Orc killed if character is fighting in its direction when the contact occurs (flowers are not destroyable)
-        if (nodeName == "Orc" && animatedSprite->GetAnimation() == "attack" && (deltaX < 0 == animatedSprite->GetFlipX()))
+        if (nodeName == "Orc" && animatedSprite->GetAnimation() == "attack" &&
+            (deltaX < 0 == animatedSprite->GetFlipX()))
         {
             static_cast<Mover*>(hitNode->GetComponent<Mover>())->emitTime_ = 1;
             if (!hitNode->GetChild("Emitter", true))
@@ -255,7 +262,8 @@ void Urho2DPlatformer::HandleCollisionBegin(StringHash eventType, VariantMap& ev
                 sample2D_->PlaySoundEffect("BigExplosion.wav");
             }
         }
-        // Player killed if not fighting in the direction of the Orc when the contact occurs, or when colliding with a flower
+        // Player killed if not fighting in the direction of the Orc when the contact occurs, or when colliding with a
+        // flower
         else
         {
             if (!character2DNode->GetChild("Emitter", true))
@@ -367,7 +375,8 @@ void Urho2DPlatformer::HandlePostUpdate(StringHash eventType, VariantMap& eventD
         return;
 
     Node* character2DNode = character2D_->GetNode();
-    cameraNode_->SetPosition(Vector3(character2DNode->GetPosition().x_, character2DNode->GetPosition().y_, -10.0f)); // Camera tracks character
+    cameraNode_->SetPosition(Vector3(character2DNode->GetPosition().x_, character2DNode->GetPosition().y_,
+                                     -10.0f)); // Camera tracks character
 }
 
 void Urho2DPlatformer::HandlePostRenderUpdate(StringHash eventType, VariantMap& eventData)
@@ -389,7 +398,8 @@ void Urho2DPlatformer::ReloadScene(bool reInit)
     if (!reInit)
         filename += "InGame";
 
-    File loadFile(context_, GetSubsystem<FileSystem>()->GetProgramDir() + "Data/Scenes/" + filename + ".xml", FILE_READ);
+    File loadFile(context_, GetSubsystem<FileSystem>()->GetProgramDir() + "Data/Scenes/" + filename + ".xml",
+                  FILE_READ);
     scene_->LoadXML(loadFile);
     // After loading we have to reacquire the weak pointer to the Character2D component, as it has been recreated
     // Simply find the character's scene node by name as there's only one of them
@@ -397,7 +407,8 @@ void Urho2DPlatformer::ReloadScene(bool reInit)
     if (character2DNode)
         character2D_ = character2DNode->GetComponent<Character2D>();
 
-    // Set what number to use depending whether reload is requested from 'PLAY' button (reInit=true) or 'F7' key (reInit=false)
+    // Set what number to use depending whether reload is requested from 'PLAY' button (reInit=true) or 'F7' key
+    // (reInit=false)
     int lifes = character2D_->remainingLifes_;
     int coins = character2D_->remainingCoins_;
     if (reInit)

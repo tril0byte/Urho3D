@@ -42,7 +42,8 @@
 
 using namespace Urho3D;
 
-// number of nodes allocated to each packer info.  since this packer is not suited for real time purposes we can over allocate.
+// number of nodes allocated to each packer info.  since this packer is not suited for real time purposes we can over
+// allocate.
 const int PACKER_NUM_NODES = 4096;
 const int MAX_TEXTURE_SIZE = 2048;
 
@@ -63,9 +64,9 @@ public:
     int frameWidth{};
     int frameHeight{};
 
-    PackerInfo(const String& path_, const String& name_) :
-        path(path_),
-        name(name_)
+    PackerInfo(const String& path_, const String& name_)
+        : path(path_)
+        , name(name_)
     {
     }
 
@@ -75,18 +76,18 @@ public:
 void Help()
 {
     ErrorExit("Usage: SpritePacker -options <input file> <input file> <output png file>\n"
-        "\n"
-        "Options:\n"
-        "-h Shows this help message.\n"
-        "-px Adds x pixels of padding per image to width.\n"
-        "-py Adds y pixels of padding per image to height.\n"
-        "-ox Adds x pixels to the horizontal position per image.\n"
-        "-oy Adds y pixels to the horizontal position per image.\n"
-        "-frameHeight Sets a fixed height for image and centers within frame.\n"
-        "-frameWidth Sets a fixed width for image and centers within frame.\n"
-        "-trim Trims excess transparent space from individual images offsets by frame size.\n"
-        "-xml \'path\' Generates an SpriteSheet xml file at path.\n"
-        "-debug Draws allocation boxes on sprite.\n");
+              "\n"
+              "Options:\n"
+              "-h Shows this help message.\n"
+              "-px Adds x pixels of padding per image to width.\n"
+              "-py Adds y pixels of padding per image to height.\n"
+              "-ox Adds x pixels to the horizontal position per image.\n"
+              "-oy Adds y pixels to the horizontal position per image.\n"
+              "-frameHeight Sets a fixed height for image and centers within frame.\n"
+              "-frameWidth Sets a fixed width for image and centers within frame.\n"
+              "-trim Trims excess transparent space from individual images offsets by frame size.\n"
+              "-xml \'path\' Generates an SpriteSheet xml file at path.\n"
+              "-debug Draws allocation boxes on sprite.\n");
 }
 
 int main(int argc, char** argv)
@@ -136,16 +137,54 @@ void Run(Vector<String>& arguments)
 
         if (arg.StartsWith("-"))
         {
-            if (arg == "-px")      { padX = ToUInt(arguments[0]); arguments.Erase(0); }
-            else if (arg == "-py") { padY = ToUInt(arguments[0]); arguments.Erase(0); }
-            else if (arg == "-ox") { offsetX = ToUInt(arguments[0]); arguments.Erase(0); }
-            else if (arg == "-oy") { offsetY = ToUInt(arguments[0]); arguments.Erase(0); }
-            else if (arg == "-frameWidth") { frameWidth = ToUInt(arguments[0]); arguments.Erase(0); }
-            else if (arg == "-frameHeight") { frameHeight = ToUInt(arguments[0]); arguments.Erase(0); }
-            else if (arg == "-trim") { trim = true; }
-            else if (arg == "-xml")  { spriteSheetFileName = arguments[0]; arguments.Erase(0); }
-            else if (arg == "-h")  { help = true; break; }
-            else if (arg == "-debug")  { debug = true; }
+            if (arg == "-px")
+            {
+                padX = ToUInt(arguments[0]);
+                arguments.Erase(0);
+            }
+            else if (arg == "-py")
+            {
+                padY = ToUInt(arguments[0]);
+                arguments.Erase(0);
+            }
+            else if (arg == "-ox")
+            {
+                offsetX = ToUInt(arguments[0]);
+                arguments.Erase(0);
+            }
+            else if (arg == "-oy")
+            {
+                offsetY = ToUInt(arguments[0]);
+                arguments.Erase(0);
+            }
+            else if (arg == "-frameWidth")
+            {
+                frameWidth = ToUInt(arguments[0]);
+                arguments.Erase(0);
+            }
+            else if (arg == "-frameHeight")
+            {
+                frameHeight = ToUInt(arguments[0]);
+                arguments.Erase(0);
+            }
+            else if (arg == "-trim")
+            {
+                trim = true;
+            }
+            else if (arg == "-xml")
+            {
+                spriteSheetFileName = arguments[0];
+                arguments.Erase(0);
+            }
+            else if (arg == "-h")
+            {
+                help = true;
+                break;
+            }
+            else if (arg == "-debug")
+            {
+                debug = true;
+            }
         }
         else
             inputFiles.Push(arg);
@@ -187,7 +226,7 @@ void Run(Vector<String>& arguments)
     offsetX = Min((int)offsetX, (int)padX);
     offsetY = Min((int)offsetY, (int)padY);
 
-    Vector<SharedPtr<PackerInfo > > packerInfos;
+    Vector<SharedPtr<PackerInfo>> packerInfos;
 
     for (unsigned i = 0; i < inputFiles.Size(); ++i)
     {
@@ -222,7 +261,8 @@ void Run(Vector<String>& arguments)
                 for (int x = 0; x < imageWidth; ++x)
                 {
                     bool found = (image.GetPixelInt(x, y) & 0x000000ffu) != 0;
-                    if (found) {
+                    if (found)
+                    {
                         minX = Min(minX, x);
                         minY = Min(minY, y);
                         maxX = Max(maxX, x);
@@ -259,10 +299,10 @@ void Run(Vector<String>& arguments)
     {
         // fill up an list of tries in increasing size and take the first win
         Vector<IntVector2> tries;
-        for(unsigned x=2; x<11; ++x)
+        for (unsigned x = 2; x < 11; ++x)
         {
-            for(unsigned y=2; y<11; ++y)
-                tries.Push(IntVector2((1u<<x), (1u<<y)));
+            for (unsigned y = 2; y < 11; ++y)
+                tries.Push(IntVector2((1u << x), (1u << y)));
         }
 
         // load rectangles
@@ -313,7 +353,8 @@ void Run(Vector<String>& arguments)
         }
         delete[] packerRects;
         if (!success)
-            ErrorExit("Could not allocate for all images.  The max sprite sheet texture size is " + String(MAX_TEXTURE_SIZE) + "x" + String(MAX_TEXTURE_SIZE) + ".");
+            ErrorExit("Could not allocate for all images.  The max sprite sheet texture size is " +
+                      String(MAX_TEXTURE_SIZE) + "x" + String(MAX_TEXTURE_SIZE) + ".");
     }
 
     // create image for spritesheet
@@ -357,9 +398,7 @@ void Run(Vector<String>& arguments)
             for (int x = 0; x < packerInfo->width; ++x)
             {
                 unsigned color = image.GetPixelInt(x - packerInfo->offsetX, y - packerInfo->offsetY);
-                spriteSheetImage.SetPixelInt(
-                    packerInfo->x + offsetX + x,
-                    packerInfo->y + offsetY + y, color);
+                spriteSheetImage.SetPixelInt(packerInfo->x + offsetX + x, packerInfo->y + offsetY + y, color);
             }
         }
     }
@@ -378,24 +417,30 @@ void Run(Vector<String>& arguments)
             for (int x = 0; x < packerInfo->frameWidth; ++x)
             {
                 spriteSheetImage.SetPixelInt(packerInfo->x + x, packerInfo->y, OUTER_BOUNDS_DEBUG_COLOR);
-                spriteSheetImage.SetPixelInt(packerInfo->x + x, packerInfo->y + packerInfo->frameHeight, OUTER_BOUNDS_DEBUG_COLOR);
+                spriteSheetImage.SetPixelInt(packerInfo->x + x, packerInfo->y + packerInfo->frameHeight,
+                                             OUTER_BOUNDS_DEBUG_COLOR);
             }
             for (int y = 0; y < packerInfo->frameHeight; ++y)
             {
                 spriteSheetImage.SetPixelInt(packerInfo->x, packerInfo->y + y, OUTER_BOUNDS_DEBUG_COLOR);
-                spriteSheetImage.SetPixelInt(packerInfo->x + packerInfo->frameWidth, packerInfo->y + y, OUTER_BOUNDS_DEBUG_COLOR);
+                spriteSheetImage.SetPixelInt(packerInfo->x + packerInfo->frameWidth, packerInfo->y + y,
+                                             OUTER_BOUNDS_DEBUG_COLOR);
             }
 
             // Draw inner bounds
             for (int x = 0; x < packerInfo->width; ++x)
             {
-                spriteSheetImage.SetPixelInt(packerInfo->x + offsetX + x, packerInfo->y + offsetY, INNER_BOUNDS_DEBUG_COLOR);
-                spriteSheetImage.SetPixelInt(packerInfo->x + offsetX + x, packerInfo->y + offsetY + packerInfo->height, INNER_BOUNDS_DEBUG_COLOR);
+                spriteSheetImage.SetPixelInt(packerInfo->x + offsetX + x, packerInfo->y + offsetY,
+                                             INNER_BOUNDS_DEBUG_COLOR);
+                spriteSheetImage.SetPixelInt(packerInfo->x + offsetX + x, packerInfo->y + offsetY + packerInfo->height,
+                                             INNER_BOUNDS_DEBUG_COLOR);
             }
             for (int y = 0; y < packerInfo->height; ++y)
             {
-                spriteSheetImage.SetPixelInt(packerInfo->x + offsetX, packerInfo->y + offsetY + y, INNER_BOUNDS_DEBUG_COLOR);
-                spriteSheetImage.SetPixelInt(packerInfo->x + offsetX + packerInfo->width, packerInfo->y + offsetY + y, INNER_BOUNDS_DEBUG_COLOR);
+                spriteSheetImage.SetPixelInt(packerInfo->x + offsetX, packerInfo->y + offsetY + y,
+                                             INNER_BOUNDS_DEBUG_COLOR);
+                spriteSheetImage.SetPixelInt(packerInfo->x + offsetX + packerInfo->width, packerInfo->y + offsetY + y,
+                                             INNER_BOUNDS_DEBUG_COLOR);
             }
         }
     }

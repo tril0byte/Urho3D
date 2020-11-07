@@ -30,8 +30,8 @@
 namespace Urho3D
 {
 
-Skeleton::Skeleton() :
-    rootBoneIndex_(M_MAX_UNSIGNED)
+Skeleton::Skeleton()
+    : rootBoneIndex_(M_MAX_UNSIGNED)
 {
 }
 
@@ -144,11 +144,7 @@ void Skeleton::ResetSilent()
     }
 }
 
-
-Bone* Skeleton::GetRootBone()
-{
-    return GetBone(rootBoneIndex_);
-}
+Bone* Skeleton::GetRootBone() { return GetBone(rootBoneIndex_); }
 
 unsigned Skeleton::GetBoneIndex(const StringHash& boneNameHash) const
 {
@@ -170,10 +166,7 @@ unsigned Skeleton::GetBoneIndex(const Bone* bone) const
     return static_cast<unsigned>(bone - &bones_.Front());
 }
 
-unsigned Skeleton::GetBoneIndex(const String& boneName) const
-{
-    return GetBoneIndex(StringHash(boneName));
-}
+unsigned Skeleton::GetBoneIndex(const String& boneName) const { return GetBoneIndex(StringHash(boneName)); }
 
 Bone* Skeleton::GetBoneParent(const Bone* bone)
 {
@@ -183,20 +176,11 @@ Bone* Skeleton::GetBoneParent(const Bone* bone)
         return GetBone(bone->parentIndex_);
 }
 
-Bone* Skeleton::GetBone(unsigned index)
-{
-    return index < bones_.Size() ? &bones_[index] : nullptr;
-}
+Bone* Skeleton::GetBone(unsigned index) { return index < bones_.Size() ? &bones_[index] : nullptr; }
 
-Bone* Skeleton::GetBone(const String& name)
-{
-    return GetBone(StringHash(name));
-}
+Bone* Skeleton::GetBone(const String& name) { return GetBone(StringHash(name)); }
 
-Bone* Skeleton::GetBone(const char* name)
-{
-    return GetBone(StringHash(name));
-}
+Bone* Skeleton::GetBone(const char* name) { return GetBone(StringHash(name)); }
 
 Bone* Skeleton::GetBone(const StringHash& boneNameHash)
 {
@@ -204,4 +188,4 @@ Bone* Skeleton::GetBone(const StringHash& boneNameHash)
     return index < bones_.Size() ? &bones_[index] : nullptr;
 }
 
-}
+} // namespace Urho3D

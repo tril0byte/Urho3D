@@ -42,4 +42,4 @@ void SinCos(float angle, float& sin, float& cos)
 #endif
 }
 
-}
+} // namespace Urho3D

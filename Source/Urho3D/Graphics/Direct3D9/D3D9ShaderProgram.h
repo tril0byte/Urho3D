@@ -51,4 +51,4 @@ public:
     HashMap<StringHash, ShaderParameter> parameters_;
 };
 
-}
+} // namespace Urho3D

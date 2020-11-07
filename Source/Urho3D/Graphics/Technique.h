@@ -52,7 +52,8 @@ public:
     /// Set blend mode.
     /// @property
     void SetBlendMode(BlendMode mode);
-    /// Set culling mode override. By default culling mode is read from the material instead. Set the illegal culling mode MAX_CULLMODES to disable override again.
+    /// Set culling mode override. By default culling mode is read from the material instead. Set the illegal culling
+    /// mode MAX_CULLMODES to disable override again.
     /// @property
     void SetCullMode(CullMode mode);
     /// Set depth compare mode.
@@ -82,10 +83,12 @@ public:
     /// Set pixel shader defines. Separate multiple defines with spaces.
     /// @property
     void SetPixelShaderDefines(const String& defines);
-    /// Set vertex shader define excludes. Use to mark defines that the shader code will not recognize, to prevent compiling redundant shader variations.
+    /// Set vertex shader define excludes. Use to mark defines that the shader code will not recognize, to prevent
+    /// compiling redundant shader variations.
     /// @property
     void SetVertexShaderDefineExcludes(const String& excludes);
-    /// Set pixel shader define excludes. Use to mark defines that the shader code will not recognize, to prevent compiling redundant shader variations.
+    /// Set pixel shader define excludes. Use to mark defines that the shader code will not recognize, to prevent
+    /// compiling redundant shader variations.
     /// @property
     void SetPixelShaderDefineExcludes(const String& excludes);
     /// Reset shader pointers.
@@ -103,7 +106,8 @@ public:
     /// @property
     BlendMode GetBlendMode() const { return blendMode_; }
 
-    /// Return culling mode override. If pass is not overriding culling mode (default), the illegal mode MAX_CULLMODES is returned.
+    /// Return culling mode override. If pass is not overriding culling mode (default), the illegal mode MAX_CULLMODES
+    /// is returned.
     /// @property
     CullMode GetCullMode() const { return cullMode_; }
 
@@ -155,15 +159,15 @@ public:
     const String& GetPixelShaderDefineExcludes() const { return pixelShaderDefineExcludes_; }
 
     /// Return vertex shaders.
-    Vector<SharedPtr<ShaderVariation> >& GetVertexShaders() { return vertexShaders_; }
+    Vector<SharedPtr<ShaderVariation>>& GetVertexShaders() { return vertexShaders_; }
 
     /// Return pixel shaders.
-    Vector<SharedPtr<ShaderVariation> >& GetPixelShaders() { return pixelShaders_; }
+    Vector<SharedPtr<ShaderVariation>>& GetPixelShaders() { return pixelShaders_; }
 
     /// Return vertex shaders with extra defines from the renderpath.
-    Vector<SharedPtr<ShaderVariation> >& GetVertexShaders(const StringHash& extraDefinesHash);
+    Vector<SharedPtr<ShaderVariation>>& GetVertexShaders(const StringHash& extraDefinesHash);
     /// Return pixel shaders with extra defines from the renderpath.
-    Vector<SharedPtr<ShaderVariation> >& GetPixelShaders(const StringHash& extraDefinesHash);
+    Vector<SharedPtr<ShaderVariation>>& GetPixelShaders(const StringHash& extraDefinesHash);
     /// Return the effective vertex shader defines, accounting for excludes. Called internally by Renderer.
     String GetEffectiveVertexShaderDefines() const;
     /// Return the effective pixel shader defines, accounting for excludes. Called internally by Renderer.
@@ -201,13 +205,13 @@ private:
     /// Pixel shader define excludes.
     String pixelShaderDefineExcludes_;
     /// Vertex shaders.
-    Vector<SharedPtr<ShaderVariation> > vertexShaders_;
+    Vector<SharedPtr<ShaderVariation>> vertexShaders_;
     /// Pixel shaders.
-    Vector<SharedPtr<ShaderVariation> > pixelShaders_;
+    Vector<SharedPtr<ShaderVariation>> pixelShaders_;
     /// Vertex shaders with extra defines from the renderpath.
-    HashMap<StringHash, Vector<SharedPtr<ShaderVariation> > > extraVertexShaders_;
+    HashMap<StringHash, Vector<SharedPtr<ShaderVariation>>> extraVertexShaders_;
     /// Pixel shaders with extra defines from the renderpath.
-    HashMap<StringHash, Vector<SharedPtr<ShaderVariation> > > extraPixelShaders_;
+    HashMap<StringHash, Vector<SharedPtr<ShaderVariation>>> extraPixelShaders_;
     /// Pass name.
     String name_;
 };
@@ -253,13 +257,15 @@ public:
     /// Return whether has a pass.
     bool HasPass(unsigned passIndex) const { return passIndex < passes_.Size() && passes_[passIndex].Get() != nullptr; }
 
-    /// Return whether has a pass by name. This overload should not be called in time-critical rendering loops; use a pre-acquired pass index instead.
+    /// Return whether has a pass by name. This overload should not be called in time-critical rendering loops; use a
+    /// pre-acquired pass index instead.
     bool HasPass(const String& name) const;
 
     /// Return a pass, or null if not found.
     Pass* GetPass(unsigned passIndex) const { return passIndex < passes_.Size() ? passes_[passIndex].Get() : nullptr; }
 
-    /// Return a pass by name, or null if not found. This overload should not be called in time-critical rendering loops; use a pre-acquired pass index instead.
+    /// Return a pass by name, or null if not found. This overload should not be called in time-critical rendering
+    /// loops; use a pre-acquired pass index instead.
     Pass* GetPass(const String& name) const;
 
     /// Return a pass that is supported for rendering, or null if not found.
@@ -269,7 +275,8 @@ public:
         return pass && (!pass->IsDesktop() || desktopSupport_) ? pass : nullptr;
     }
 
-    /// Return a supported pass by name. This overload should not be called in time-critical rendering loops; use a pre-acquired pass index instead.
+    /// Return a supported pass by name. This overload should not be called in time-critical rendering loops; use a
+    /// pre-acquired pass index instead.
     Pass* GetSupportedPass(const String& name) const;
 
     /// Return number of passes.
@@ -311,12 +318,12 @@ private:
     /// Cached desktop GPU support flag.
     bool desktopSupport_;
     /// Passes.
-    Vector<SharedPtr<Pass> > passes_;
+    Vector<SharedPtr<Pass>> passes_;
     /// Cached clones with added shader compilation defines.
-    HashMap<Pair<StringHash, StringHash>, SharedPtr<Technique> > cloneTechniques_;
+    HashMap<Pair<StringHash, StringHash>, SharedPtr<Technique>> cloneTechniques_;
 
     /// Pass index assignments.
     static HashMap<String, unsigned> passIndices;
 };
 
-}
+} // namespace Urho3D

@@ -1,7 +1,7 @@
 // DO NOT EDIT. This file is generated
 
-#include "../Precompiled.h"
 #include "../AngelScript/APITemplates.h"
+#include "../Precompiled.h"
 
 #include "../Audio/AudioDefs.h"
 #include "../Audio/SoundSource.h"
@@ -71,7 +71,8 @@ void ASRegisterGenerated_GlobalVariables(asIScriptEngine* engine)
     // static const int CONVERSION_BUFFER_LENGTH | File: ../Container/Str.h
     engine->RegisterGlobalProperty("const int CONVERSION_BUFFER_LENGTH", (void*)&CONVERSION_BUFFER_LENGTH);
     // static const int MATRIX_CONVERSION_BUFFER_LENGTH | File: ../Container/Str.h
-    engine->RegisterGlobalProperty("const int MATRIX_CONVERSION_BUFFER_LENGTH", (void*)&MATRIX_CONVERSION_BUFFER_LENGTH);
+    engine->RegisterGlobalProperty("const int MATRIX_CONVERSION_BUFFER_LENGTH",
+                                   (void*)&MATRIX_CONVERSION_BUFFER_LENGTH);
     // static const unsigned VARIANT_VALUE_SIZE | File: ../Core/Variant.h
     engine->RegisterGlobalProperty("const uint VARIANT_VALUE_SIZE", (void*)&VARIANT_VALUE_SIZE);
     // static const unsigned DEBUGHUD_SHOW_NONE | File: ../Engine/DebugHud.h
@@ -353,7 +354,8 @@ void ASRegisterGenerated_GlobalVariables(asIScriptEngine* engine)
     // static const int OCCLUSION_MIN_SIZE | File: ../Graphics/OcclusionBuffer.h
     engine->RegisterGlobalProperty("const int OCCLUSION_MIN_SIZE", (void*)&OCCLUSION_MIN_SIZE);
     // static const int OCCLUSION_DEFAULT_MAX_TRIANGLES | File: ../Graphics/OcclusionBuffer.h
-    engine->RegisterGlobalProperty("const int OCCLUSION_DEFAULT_MAX_TRIANGLES", (void*)&OCCLUSION_DEFAULT_MAX_TRIANGLES);
+    engine->RegisterGlobalProperty("const int OCCLUSION_DEFAULT_MAX_TRIANGLES",
+                                   (void*)&OCCLUSION_DEFAULT_MAX_TRIANGLES);
     // static const float OCCLUSION_RELATIVE_BIAS | File: ../Graphics/OcclusionBuffer.h
     engine->RegisterGlobalProperty("const float OCCLUSION_RELATIVE_BIAS", (void*)&OCCLUSION_RELATIVE_BIAS);
     // static const int OCCLUSION_FIXED_BIAS | File: ../Graphics/OcclusionBuffer.h
@@ -522,7 +524,8 @@ void ASRegisterGenerated_GlobalVariables(asIScriptEngine* engine)
 #endif
 #ifdef URHO3D_PHYSICS
     // static const float DEFAULT_MAX_NETWORK_ANGULAR_VELOCITY | File: ../Physics/PhysicsWorld.h
-    engine->RegisterGlobalProperty("const float DEFAULT_MAX_NETWORK_ANGULAR_VELOCITY", (void*)&DEFAULT_MAX_NETWORK_ANGULAR_VELOCITY);
+    engine->RegisterGlobalProperty("const float DEFAULT_MAX_NETWORK_ANGULAR_VELOCITY",
+                                   (void*)&DEFAULT_MAX_NETWORK_ANGULAR_VELOCITY);
 #endif
     // static const int COLOR_LUT_SIZE | File: ../Resource/Image.h
     engine->RegisterGlobalProperty("const int COLOR_LUT_SIZE", (void*)&COLOR_LUT_SIZE);
@@ -572,4 +575,4 @@ void ASRegisterGenerated_GlobalVariables(asIScriptEngine* engine)
 #endif
 }
 
-}
+} // namespace Urho3D

@@ -33,7 +33,7 @@ class Scene;
 class Text;
 class UIElement;
 
-}
+} // namespace Urho3D
 
 /// Scene network replication example.
 /// This sample demonstrates:
@@ -54,12 +54,13 @@ public:
 
 protected:
     /// Return XML patch instructions for screen joystick layout for a specific sample app, if any.
-    String GetScreenJoystickPatchString() const override { return
-        "<patch>"
-        "    <add sel=\"/element/element[./attribute[@name='Name' and @value='Hat0']]\">"
-        "        <attribute name=\"Is Visible\" value=\"false\" />"
-        "    </add>"
-        "</patch>";
+    String GetScreenJoystickPatchString() const override
+    {
+        return "<patch>"
+               "    <add sel=\"/element/element[./attribute[@name='Name' and @value='Hat0']]\">"
+               "        <attribute name=\"Is Visible\" value=\"false\" />"
+               "    </add>"
+               "</patch>";
     }
 
 private:
@@ -99,7 +100,7 @@ private:
     void HandleClientObjectID(StringHash eventType, VariantMap& eventData);
 
     /// Mapping from client connections to controllable objects.
-    HashMap<Connection*, WeakPtr<Node> > serverObjects_;
+    HashMap<Connection*, WeakPtr<Node>> serverObjects_;
     /// Button container element.
     SharedPtr<UIElement> buttonContainer_;
     /// Server address line editor element.

@@ -41,4 +41,4 @@ String Vector4::ToString() const
     return String(tempBuffer);
 }
 
-}
+} // namespace Urho3D

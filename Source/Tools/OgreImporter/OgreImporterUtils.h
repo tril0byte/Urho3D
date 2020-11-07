@@ -23,20 +23,20 @@
 #pragma once
 
 #include <Urho3D/Graphics/Animation.h>
-#include <Urho3D/Math/BoundingBox.h>
 #include <Urho3D/Graphics/Graphics.h>
 #include <Urho3D/Graphics/VertexBuffer.h>
 #include <Urho3D/IO/Serializer.h>
+#include <Urho3D/Math/BoundingBox.h>
 #include <Urho3D/Math/Matrix3x4.h>
 
 using namespace Urho3D;
 
 struct Triangle
 {
-    Triangle(unsigned v0, unsigned v1, unsigned v2) :
-        v0_{v0},
-        v1_{v1},
-        v2_{v2}
+    Triangle(unsigned v0, unsigned v1, unsigned v2)
+        : v0_{v0}
+        , v1_{v1}
+        , v2_{v2}
     {
     }
 
@@ -71,9 +71,9 @@ struct ModelAnimation
 
 struct BoneWeightAssignment
 {
-    BoneWeightAssignment(unsigned char boneIndex, float weight) :
-        boneIndex_{boneIndex},
-        weight_{weight}
+    BoneWeightAssignment(unsigned char boneIndex, float weight)
+        : boneIndex_{boneIndex}
+        , weight_{weight}
     {
     }
 
@@ -86,10 +86,7 @@ bool CompareWeights(const BoneWeightAssignment& lhs, const BoneWeightAssignment&
     return lhs.weight_ > rhs.weight_;
 }
 
-bool CompareKeyFrames(const AnimationKeyFrame& lhs, const AnimationKeyFrame& rhs)
-{
-    return lhs.time_ < rhs.time_;
-}
+bool CompareKeyFrames(const AnimationKeyFrame& lhs, const AnimationKeyFrame& rhs) { return lhs.time_ < rhs.time_; }
 
 struct ModelVertex
 {
@@ -116,10 +113,10 @@ struct ModelVertexBuffer
     unsigned morphCount_;
     Vector<ModelVertex> vertices_;
 
-    ModelVertexBuffer() :
-        elementMask_(MASK_NONE),
-        morphStart_(0),
-        morphCount_(0)
+    ModelVertexBuffer()
+        : elementMask_(MASK_NONE)
+        , morphStart_(0)
+        , morphCount_(0)
     {
     }
 
@@ -131,9 +128,8 @@ struct ModelVertexBuffer
         dest.WriteUInt(elements.Size());
         for (unsigned j = 0; j < elements.Size(); ++j)
         {
-            unsigned elementDesc = ((unsigned)elements[j].type_) |
-                (((unsigned)elements[j].semantic_) << 8u) |
-                (((unsigned)elements[j].index_) << 16u);
+            unsigned elementDesc = ((unsigned)elements[j].type_) | (((unsigned)elements[j].semantic_) << 8u) |
+                                   (((unsigned)elements[j].index_) << 16u);
             dest.WriteUInt(elementDesc);
         }
 
@@ -170,7 +166,7 @@ struct ModelMorphBuffer
 {
     unsigned vertexBuffer_;
     unsigned elementMask_;
-    Vector<Pair<unsigned, ModelVertex> > vertices_;
+    Vector<Pair<unsigned, ModelVertex>> vertices_;
 };
 
 struct ModelMorph
@@ -189,8 +185,8 @@ struct ModelMorph
             dest.WriteUInt(buffers_[i].vertices_.Size());
             unsigned elementMask = buffers_[i].elementMask_;
 
-            for (Vector<Pair<unsigned, ModelVertex> >::Iterator j = buffers_[i].vertices_.Begin();
-                j != buffers_[i].vertices_.End(); ++j)
+            for (Vector<Pair<unsigned, ModelVertex>>::Iterator j = buffers_[i].vertices_.Begin();
+                 j != buffers_[i].vertices_.End(); ++j)
             {
                 dest.WriteUInt(j->first_);
                 if (elementMask & MASK_POSITION)
@@ -209,8 +205,8 @@ struct ModelIndexBuffer
     unsigned indexSize_;
     PODVector<unsigned> indices_;
 
-    ModelIndexBuffer() :
-        indexSize_(sizeof(unsigned short))
+    ModelIndexBuffer()
+        : indexSize_(sizeof(unsigned short))
     {
     }
 
@@ -237,6 +233,6 @@ struct ModelSubGeometryLodLevel
     unsigned indexBuffer_{};
     unsigned indexStart_{};
     unsigned indexCount_{};
-    HashMap<unsigned, PODVector<BoneWeightAssignment> > boneWeights_;
+    HashMap<unsigned, PODVector<BoneWeightAssignment>> boneWeights_;
     PODVector<unsigned> boneMapping_;
 };

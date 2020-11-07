@@ -30,16 +30,16 @@
 namespace Urho3D
 {
 
-GraphicsImpl::GraphicsImpl() :
-    device_(nullptr),
-    deviceContext_(nullptr),
-    swapChain_(nullptr),
-    defaultRenderTargetView_(nullptr),
-    defaultDepthTexture_(nullptr),
-    defaultDepthStencilView_(nullptr),
-    depthStencilView_(nullptr),
-    resolveTexture_(nullptr),
-    shaderProgram_(nullptr)
+GraphicsImpl::GraphicsImpl()
+    : device_(nullptr)
+    , deviceContext_(nullptr)
+    , swapChain_(nullptr)
+    , defaultRenderTargetView_(nullptr)
+    , defaultDepthTexture_(nullptr)
+    , defaultDepthStencilView_(nullptr)
+    , depthStencilView_(nullptr)
+    , resolveTexture_(nullptr)
+    , shaderProgram_(nullptr)
 {
     for (unsigned i = 0; i < MAX_RENDERTARGETS; ++i)
         renderTargetViews_[i] = nullptr;
@@ -91,4 +91,4 @@ unsigned GraphicsImpl::GetMultiSampleQuality(DXGI_FORMAT format, unsigned sample
         return numLevels - 1; // D3D10.0 and below: use the best quality
 }
 
-}
+} // namespace Urho3D

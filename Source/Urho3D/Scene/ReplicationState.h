@@ -22,10 +22,10 @@
 
 #pragma once
 
-#include "../Core/Attribute.h"
 #include "../Container/HashMap.h"
 #include "../Container/HashSet.h"
 #include "../Container/Ptr.h"
+#include "../Core/Attribute.h"
 #include "../Math/StringHash.h"
 
 #include <cstring>
@@ -52,8 +52,8 @@ struct URHO3D_API DirtyBits
     DirtyBits() = default;
 
     /// Copy-construct.
-    DirtyBits(const DirtyBits& bits) :
-        count_(bits.count_)
+    DirtyBits(const DirtyBits& bits)
+        : count_(bits.count_)
     {
         memcpy(data_, bits.data_, MAX_NETWORK_ATTRIBUTES / 8);
     }
@@ -186,4 +186,4 @@ struct URHO3D_API SceneReplicationState : public ReplicationState
     }
 };
 
-}
+} // namespace Urho3D

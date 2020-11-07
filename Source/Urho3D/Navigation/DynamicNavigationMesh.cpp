@@ -22,7 +22,6 @@
 
 #include "../Precompiled.h"
 
-
 #include "../Core/Context.h"
 #include "../Core/Profiler.h"
 #include "../Graphics/DebugRenderer.h"
@@ -39,11 +38,11 @@
 #include "../Scene/Scene.h"
 #include "../Scene/SceneEvents.h"
 
-#include <LZ4/lz4.h>
 #include <Detour/DetourNavMesh.h>
 #include <Detour/DetourNavMeshBuilder.h>
 #include <DetourTileCache/DetourTileCache.h>
 #include <DetourTileCache/DetourTileCacheBuilder.h>
+#include <LZ4/lz4.h>
 #include <Recast/Recast.h>
 
 // DebugNew is deliberately not used because the macro 'free' conflicts with DetourTileCache's LinearAllocator interface
@@ -67,20 +66,18 @@ struct DynamicNavigationMesh::TileCacheData
 
 struct TileCompressor : public dtTileCacheCompressor
 {
-    int maxCompressedSize(const int bufferSize) override
-    {
-        return (int)(bufferSize * 1.05f);
-    }
+    int maxCompressedSize(const int bufferSize) override { return (int)(bufferSize * 1.05f); }
 
-    dtStatus compress(const unsigned char* buffer, const int bufferSize,
-        unsigned char* compressed, const int /*maxCompressedSize*/, int* compressedSize) override
+    dtStatus compress(const unsigned char* buffer, const int bufferSize, unsigned char* compressed,
+                      const int /*maxCompressedSize*/, int* compressedSize) override
     {
-        *compressedSize = LZ4_compress_default((const char*)buffer, (char*)compressed, bufferSize, LZ4_compressBound(bufferSize));
+        *compressedSize =
+            LZ4_compress_default((const char*)buffer, (char*)compressed, bufferSize, LZ4_compressBound(bufferSize));
         return DT_SUCCESS;
     }
 
-    dtStatus decompress(const unsigned char* compressed, const int compressedSize,
-        unsigned char* buffer, const int maxBufferSize, int* bufferSize) override
+    dtStatus decompress(const unsigned char* compressed, const int compressedSize, unsigned char* buffer,
+                        const int maxBufferSize, int* bufferSize) override
     {
         *bufferSize = LZ4_decompress_safe((const char*)compressed, (char*)buffer, compressedSize, maxBufferSize);
         return *bufferSize < 0 ? DT_FAILURE : DT_SUCCESS;
@@ -96,8 +93,8 @@ struct MeshProcess : public dtTileCacheMeshProcess
     PODVector<unsigned char> offMeshAreas_;
     PODVector<unsigned char> offMeshDir_;
 
-    inline explicit MeshProcess(DynamicNavigationMesh* owner) :
-        owner_(owner)
+    inline explicit MeshProcess(DynamicNavigationMesh* owner)
+        : owner_(owner)
     {
     }
 
@@ -157,7 +154,6 @@ struct MeshProcess : public dtTileCacheMeshProcess
     }
 };
 
-
 // From the Detour/Recast Sample_TempObstacles.cpp
 struct LinearAllocator : public dtTileCacheAlloc
 {
@@ -166,16 +162,16 @@ struct LinearAllocator : public dtTileCacheAlloc
     int top;
     int high;
 
-    explicit LinearAllocator(const int cap) :
-        buffer(nullptr), capacity(0), top(0), high(0)
+    explicit LinearAllocator(const int cap)
+        : buffer(nullptr)
+        , capacity(0)
+        , top(0)
+        , high(0)
     {
         resize(cap);
     }
 
-    ~LinearAllocator() override
-    {
-        dtFree(buffer);
-    }
+    ~LinearAllocator() override { dtFree(buffer); }
 
     void resize(const int cap)
     {
@@ -202,35 +198,30 @@ struct LinearAllocator : public dtTileCacheAlloc
         return mem;
     }
 
-    void free(void*) override
-    {
-    }
+    void free(void*) override {}
 };
 
-
-DynamicNavigationMesh::DynamicNavigationMesh(Context* context) :
-    NavigationMesh(context),
-    maxLayers_(DEFAULT_MAX_LAYERS)
+DynamicNavigationMesh::DynamicNavigationMesh(Context* context)
+    : NavigationMesh(context)
+    , maxLayers_(DEFAULT_MAX_LAYERS)
 {
     // 64 is the largest tile-size that DetourTileCache will tolerate without silently failing
     tileSize_ = 64;
     partitionType_ = NAVMESH_PARTITION_MONOTONE;
-    allocator_ = new LinearAllocator(32000); //32kb to start
+    allocator_ = new LinearAllocator(32000); // 32kb to start
     compressor_ = new TileCompressor();
     meshProcessor_ = new MeshProcess(this);
 }
 
-DynamicNavigationMesh::~DynamicNavigationMesh()
-{
-    ReleaseNavigationMesh();
-}
+DynamicNavigationMesh::~DynamicNavigationMesh() { ReleaseNavigationMesh(); }
 
 void DynamicNavigationMesh::RegisterObject(Context* context)
 {
     context->RegisterFactory<DynamicNavigationMesh>(NAVIGATION_CATEGORY);
 
     URHO3D_COPY_BASE_ATTRIBUTES(NavigationMesh);
-    URHO3D_ACCESSOR_ATTRIBUTE("Max Obstacles", GetMaxObstacles, SetMaxObstacles, unsigned, DEFAULT_MAX_OBSTACLES, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Max Obstacles", GetMaxObstacles, SetMaxObstacles, unsigned, DEFAULT_MAX_OBSTACLES,
+                              AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Max Layers", GetMaxLayers, SetMaxLayers, unsigned, DEFAULT_MAX_LAYERS, AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Draw Obstacles", GetDrawObstacles, SetDrawObstacles, bool, false, AM_DEFAULT);
 }
@@ -260,7 +251,7 @@ bool DynamicNavigationMesh::Allocate(const BoundingBox& boundingBox, unsigned ma
     unsigned tileBits = LogBaseTwo(maxTiles);
     unsigned maxPolys = 1u << (22 - tileBits);
 
-    dtNavMeshParams params;     // NOLINT(hicpp-member-init)
+    dtNavMeshParams params; // NOLINT(hicpp-member-init)
     rcVcopy(params.orig, &boundingBox_.min_.x_);
     params.tileWidth = tileEdgeLength;
     params.tileHeight = tileEdgeLength;
@@ -281,7 +272,7 @@ bool DynamicNavigationMesh::Allocate(const BoundingBox& boundingBox, unsigned ma
         return false;
     }
 
-    dtTileCacheParams tileCacheParams;      // NOLINT(hicpp-member-init)
+    dtTileCacheParams tileCacheParams; // NOLINT(hicpp-member-init)
     memset(&tileCacheParams, 0, sizeof(tileCacheParams));
     rcVcopy(tileCacheParams.orig, &boundingBox_.min_.x_);
     tileCacheParams.ch = cellHeight_;
@@ -375,7 +366,7 @@ bool DynamicNavigationMesh::Build()
         unsigned tileBits = LogBaseTwo(maxTiles);
         unsigned maxPolys = 1u << (22 - tileBits);
 
-        dtNavMeshParams params;     // NOLINT(hicpp-member-init)
+        dtNavMeshParams params; // NOLINT(hicpp-member-init)
         rcVcopy(params.orig, &boundingBox_.min_.x_);
         params.tileWidth = tileEdgeLength;
         params.tileHeight = tileEdgeLength;
@@ -396,7 +387,7 @@ bool DynamicNavigationMesh::Build()
             return false;
         }
 
-        dtTileCacheParams tileCacheParams;      // NOLINT(hicpp-member-init)
+        dtTileCacheParams tileCacheParams; // NOLINT(hicpp-member-init)
         memset(&tileCacheParams, 0, sizeof(tileCacheParams));
         rcVcopy(tileCacheParams.orig, &boundingBox_.min_.x_);
         tileCacheParams.ch = cellHeight_;
@@ -419,7 +410,8 @@ bool DynamicNavigationMesh::Build()
             return false;
         }
 
-        if (dtStatusFailed(tileCache_->init(&tileCacheParams, allocator_.Get(), compressor_.Get(), meshProcessor_.Get())))
+        if (dtStatusFailed(
+                tileCache_->init(&tileCacheParams, allocator_.Get(), compressor_.Get(), meshProcessor_.Get())))
         {
             URHO3D_LOGERROR("Could not initialize tile cache");
             ReleaseNavigationMesh();
@@ -438,7 +430,8 @@ bool DynamicNavigationMesh::Build()
                 for (int i = 0; i < layerCt; ++i)
                 {
                     dtCompressedTileRef tileRef;
-                    int status = tileCache_->addTile(tiles[i].data, tiles[i].dataSize, DT_COMPRESSEDTILE_FREE_DATA, &tileRef);
+                    int status =
+                        tileCache_->addTile(tiles[i].data, tiles[i].dataSize, DT_COMPRESSEDTILE_FREE_DATA, &tileRef);
                     if (dtStatusFailed((dtStatus)status))
                     {
                         dtFree(tiles[i].data);
@@ -611,8 +604,9 @@ void DynamicNavigationMesh::DrawDebugGeometry(DebugRenderer* debug, bool depthTe
             for (unsigned j = 0; j < poly->vertCount; ++j)
             {
                 debug->AddLine(worldTransform * *reinterpret_cast<const Vector3*>(&tile->verts[poly->verts[j] * 3]),
-                    worldTransform * *reinterpret_cast<const Vector3*>(&tile->verts[poly->verts[(j + 1) % poly->vertCount] * 3]),
-                    Color::YELLOW, depthTest);
+                               worldTransform * *reinterpret_cast<const Vector3*>(
+                                                    &tile->verts[poly->verts[(j + 1) % poly->vertCount] * 3]),
+                               Color::YELLOW, depthTest);
             }
         }
     }
@@ -684,7 +678,7 @@ void DynamicNavigationMesh::SetNavigationDataAttr(const PODVector<unsigned char>
     numTilesX_ = buffer.ReadInt();
     numTilesZ_ = buffer.ReadInt();
 
-    dtNavMeshParams params;     // NOLINT(hicpp-member-init)
+    dtNavMeshParams params; // NOLINT(hicpp-member-init)
     buffer.Read(&params, sizeof(dtNavMeshParams));
 
     navMesh_ = dtAllocNavMesh();
@@ -701,7 +695,7 @@ void DynamicNavigationMesh::SetNavigationDataAttr(const PODVector<unsigned char>
         return;
     }
 
-    dtTileCacheParams tcParams;     // NOLINT(hicpp-member-init)
+    dtTileCacheParams tcParams; // NOLINT(hicpp-member-init)
     buffer.Read(&tcParams, sizeof(tcParams));
 
     tileCache_ = dtAllocTileCache();
@@ -772,7 +766,7 @@ bool DynamicNavigationMesh::ReadTiles(Deserializer& source, bool silent)
     tileQueue_.Clear();
     while (!source.IsEof())
     {
-        dtTileCacheLayerHeader header;      // NOLINT(hicpp-member-init)
+        dtTileCacheLayerHeader header; // NOLINT(hicpp-member-init)
         source.Read(&header, sizeof(dtTileCacheLayerHeader));
         const int dataSize = source.ReadInt();
 
@@ -827,7 +821,7 @@ int DynamicNavigationMesh::BuildTile(Vector<NavigationGeometryInfo>& geometryLis
 
     DynamicNavBuildData build(allocator_.Get());
 
-    rcConfig cfg;   // NOLINT(hicpp-member-init)
+    rcConfig cfg; // NOLINT(hicpp-member-init)
     memset(&cfg, 0, sizeof cfg);
     cfg.cs = cellSize_;
     cfg.ch = cellHeight_;
@@ -868,7 +862,7 @@ int DynamicNavigationMesh::BuildTile(Vector<NavigationGeometryInfo>& geometryLis
     }
 
     if (!rcCreateHeightfield(build.ctx_, *build.heightField_, cfg.width, cfg.height, cfg.bmin, cfg.bmax, cfg.cs,
-        cfg.ch))
+                             cfg.ch))
     {
         URHO3D_LOGERROR("Could not create heightfield");
         return 0;
@@ -879,9 +873,9 @@ int DynamicNavigationMesh::BuildTile(Vector<NavigationGeometryInfo>& geometryLis
     memset(triAreas.Get(), 0, numTriangles);
 
     rcMarkWalkableTriangles(build.ctx_, cfg.walkableSlopeAngle, &build.vertices_[0].x_, build.vertices_.Size(),
-        &build.indices_[0], numTriangles, triAreas.Get());
-    rcRasterizeTriangles(build.ctx_, &build.vertices_[0].x_, build.vertices_.Size(), &build.indices_[0],
-        triAreas.Get(), numTriangles, *build.heightField_, cfg.walkableClimb);
+                            &build.indices_[0], numTriangles, triAreas.Get());
+    rcRasterizeTriangles(build.ctx_, &build.vertices_[0].x_, build.vertices_.Size(), &build.indices_[0], triAreas.Get(),
+                         numTriangles, *build.heightField_, cfg.walkableClimb);
     rcFilterLowHangingWalkableObstacles(build.ctx_, cfg.walkableClimb, *build.heightField_);
 
     rcFilterLedgeSpans(build.ctx_, cfg.walkableHeight, cfg.walkableClimb, *build.heightField_);
@@ -894,7 +888,7 @@ int DynamicNavigationMesh::BuildTile(Vector<NavigationGeometryInfo>& geometryLis
         return 0;
     }
     if (!rcBuildCompactHeightfield(build.ctx_, cfg.walkableHeight, cfg.walkableClimb, *build.heightField_,
-        *build.compactHeightField_))
+                                   *build.compactHeightField_))
     {
         URHO3D_LOGERROR("Could not build compact heightfield");
         return 0;
@@ -908,7 +902,7 @@ int DynamicNavigationMesh::BuildTile(Vector<NavigationGeometryInfo>& geometryLis
     // area volumes
     for (unsigned i = 0; i < build.navAreas_.Size(); ++i)
         rcMarkBoxArea(build.ctx_, &build.navAreas_[i].bounds_.min_.x_, &build.navAreas_[i].bounds_.max_.x_,
-            build.navAreas_[i].areaID_, *build.compactHeightField_);
+                      build.navAreas_[i].areaID_, *build.compactHeightField_);
 
     if (this->partitionType_ == NAVMESH_PARTITION_WATERSHED)
     {
@@ -918,7 +912,7 @@ int DynamicNavigationMesh::BuildTile(Vector<NavigationGeometryInfo>& geometryLis
             return 0;
         }
         if (!rcBuildRegions(build.ctx_, *build.compactHeightField_, cfg.borderSize, cfg.minRegionArea,
-            cfg.mergeRegionArea))
+                            cfg.mergeRegionArea))
         {
             URHO3D_LOGERROR("Could not build regions");
             return 0;
@@ -926,7 +920,8 @@ int DynamicNavigationMesh::BuildTile(Vector<NavigationGeometryInfo>& geometryLis
     }
     else
     {
-        if (!rcBuildRegionsMonotone(build.ctx_, *build.compactHeightField_, cfg.borderSize, cfg.minRegionArea, cfg.mergeRegionArea))
+        if (!rcBuildRegionsMonotone(build.ctx_, *build.compactHeightField_, cfg.borderSize, cfg.minRegionArea,
+                                    cfg.mergeRegionArea))
         {
             URHO3D_LOGERROR("Could not build monotone regions");
             return 0;
@@ -941,7 +936,7 @@ int DynamicNavigationMesh::BuildTile(Vector<NavigationGeometryInfo>& geometryLis
     }
 
     if (!rcBuildHeightfieldLayers(build.ctx_, *build.compactHeightField_, cfg.borderSize, cfg.walkableHeight,
-        *build.heightFieldLayers_))
+                                  *build.heightFieldLayers_))
     {
         URHO3D_LOGERROR("Could not build height field layers");
         return 0;
@@ -950,7 +945,7 @@ int DynamicNavigationMesh::BuildTile(Vector<NavigationGeometryInfo>& geometryLis
     int retCt = 0;
     for (int i = 0; i < build.heightFieldLayers_->nlayers; ++i)
     {
-        dtTileCacheLayerHeader header;      // NOLINT(hicpp-member-init)
+        dtTileCacheLayerHeader header; // NOLINT(hicpp-member-init)
         header.magic = DT_TILECACHE_MAGIC;
         header.version = DT_TILECACHE_VERSION;
         header.tx = x;
@@ -971,9 +966,9 @@ int DynamicNavigationMesh::BuildTile(Vector<NavigationGeometryInfo>& geometryLis
         header.hmin = (unsigned short)layer->hmin;
         header.hmax = (unsigned short)layer->hmax;
 
-        if (dtStatusFailed(
-            dtBuildTileCacheLayer(compressor_.Get()/*compressor*/, &header, layer->heights, layer->areas/*areas*/, layer->cons,
-                &(tiles[retCt].data), &tiles[retCt].dataSize)))
+        if (dtStatusFailed(dtBuildTileCacheLayer(compressor_.Get() /*compressor*/, &header, layer->heights,
+                                                 layer->areas /*areas*/, layer->cons, &(tiles[retCt].data),
+                                                 &tiles[retCt].dataSize)))
         {
             URHO3D_LOGERROR("Failed to build tile cache layers");
             return 0;
@@ -996,7 +991,8 @@ int DynamicNavigationMesh::BuildTile(Vector<NavigationGeometryInfo>& geometryLis
     return retCt;
 }
 
-unsigned DynamicNavigationMesh::BuildTiles(Vector<NavigationGeometryInfo>& geometryList, const IntVector2& from, const IntVector2& to)
+unsigned DynamicNavigationMesh::BuildTiles(Vector<NavigationGeometryInfo>& geometryList, const IntVector2& from,
+                                           const IntVector2& to)
 {
     unsigned numTiles = 0;
 
@@ -1018,7 +1014,8 @@ unsigned DynamicNavigationMesh::BuildTiles(Vector<NavigationGeometryInfo>& geome
             for (int i = 0; i < layerCt; ++i)
             {
                 dtCompressedTileRef tileRef;
-                int status = tileCache_->addTile(tiles[i].data, tiles[i].dataSize, DT_COMPRESSEDTILE_FREE_DATA, &tileRef);
+                int status =
+                    tileCache_->addTile(tiles[i].data, tiles[i].dataSize, DT_COMPRESSEDTILE_FREE_DATA, &tileRef);
                 if (dtStatusFailed((dtStatus)status))
                 {
                     dtFree(tiles[i].data);
@@ -1070,7 +1067,8 @@ void DynamicNavigationMesh::OnSceneSet(Scene* scene)
 {
     // Subscribe to the scene subsystem update, which will trigger the tile cache to update the nav mesh
     if (scene)
-        SubscribeToEvent(scene, E_SCENESUBSYSTEMUPDATE, URHO3D_HANDLER(DynamicNavigationMesh, HandleSceneSubsystemUpdate));
+        SubscribeToEvent(scene, E_SCENESUBSYSTEMUPDATE,
+                         URHO3D_HANDLER(DynamicNavigationMesh, HandleSceneSubsystemUpdate));
     else
         UnsubscribeFromEvent(E_SCENESUBSYSTEMUPDATE);
 }
@@ -1158,4 +1156,4 @@ void DynamicNavigationMesh::HandleSceneSubsystemUpdate(StringHash eventType, Var
         tileCache_->update(eventData[P_TIMESTEP].GetFloat(), navMesh_);
 }
 
-}
+} // namespace Urho3D

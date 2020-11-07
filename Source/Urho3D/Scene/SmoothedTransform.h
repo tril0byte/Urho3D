@@ -105,4 +105,4 @@ private:
     bool subscribed_;
 };
 
-}
+} // namespace Urho3D

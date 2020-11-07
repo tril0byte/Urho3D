@@ -29,7 +29,7 @@
 #include "../DebugNew.h"
 
 #ifdef _MSC_VER
-#pragma warning(disable:6293)
+#pragma warning(disable : 6293)
 #endif
 
 namespace Urho3D
@@ -39,118 +39,118 @@ char String::endZero = 0;
 
 const String String::EMPTY;
 
-String::String(const WString& str) :
-    length_(0),
-    capacity_(0),
-    buffer_(&endZero)
+String::String(const WString& str)
+    : length_(0)
+    , capacity_(0)
+    , buffer_(&endZero)
 {
     SetUTF8FromWChar(str.CString());
 }
 
-String::String(int value) :
-    length_(0),
-    capacity_(0),
-    buffer_(&endZero)
+String::String(int value)
+    : length_(0)
+    , capacity_(0)
+    , buffer_(&endZero)
 {
     char tempBuffer[CONVERSION_BUFFER_LENGTH];
     sprintf(tempBuffer, "%d", value);
     *this = tempBuffer;
 }
 
-String::String(short value) :
-    length_(0),
-    capacity_(0),
-    buffer_(&endZero)
+String::String(short value)
+    : length_(0)
+    , capacity_(0)
+    , buffer_(&endZero)
 {
     char tempBuffer[CONVERSION_BUFFER_LENGTH];
     sprintf(tempBuffer, "%d", value);
     *this = tempBuffer;
 }
 
-String::String(long value) :
-    length_(0),
-    capacity_(0),
-    buffer_(&endZero)
+String::String(long value)
+    : length_(0)
+    , capacity_(0)
+    , buffer_(&endZero)
 {
     char tempBuffer[CONVERSION_BUFFER_LENGTH];
     sprintf(tempBuffer, "%ld", value);
     *this = tempBuffer;
 }
 
-String::String(long long value) :
-    length_(0),
-    capacity_(0),
-    buffer_(&endZero)
+String::String(long long value)
+    : length_(0)
+    , capacity_(0)
+    , buffer_(&endZero)
 {
     char tempBuffer[CONVERSION_BUFFER_LENGTH];
     sprintf(tempBuffer, "%lld", value);
     *this = tempBuffer;
 }
 
-String::String(unsigned value) :
-    length_(0),
-    capacity_(0),
-    buffer_(&endZero)
+String::String(unsigned value)
+    : length_(0)
+    , capacity_(0)
+    , buffer_(&endZero)
 {
     char tempBuffer[CONVERSION_BUFFER_LENGTH];
     sprintf(tempBuffer, "%u", value);
     *this = tempBuffer;
 }
 
-String::String(unsigned short value) :
-    length_(0),
-    capacity_(0),
-    buffer_(&endZero)
+String::String(unsigned short value)
+    : length_(0)
+    , capacity_(0)
+    , buffer_(&endZero)
 {
     char tempBuffer[CONVERSION_BUFFER_LENGTH];
     sprintf(tempBuffer, "%u", value);
     *this = tempBuffer;
 }
 
-String::String(unsigned long value) :
-    length_(0),
-    capacity_(0),
-    buffer_(&endZero)
+String::String(unsigned long value)
+    : length_(0)
+    , capacity_(0)
+    , buffer_(&endZero)
 {
     char tempBuffer[CONVERSION_BUFFER_LENGTH];
     sprintf(tempBuffer, "%lu", value);
     *this = tempBuffer;
 }
 
-String::String(unsigned long long value) :
-    length_(0),
-    capacity_(0),
-    buffer_(&endZero)
+String::String(unsigned long long value)
+    : length_(0)
+    , capacity_(0)
+    , buffer_(&endZero)
 {
     char tempBuffer[CONVERSION_BUFFER_LENGTH];
     sprintf(tempBuffer, "%llu", value);
     *this = tempBuffer;
 }
 
-String::String(float value) :
-    length_(0),
-    capacity_(0),
-    buffer_(&endZero)
+String::String(float value)
+    : length_(0)
+    , capacity_(0)
+    , buffer_(&endZero)
 {
     char tempBuffer[CONVERSION_BUFFER_LENGTH];
     sprintf(tempBuffer, "%g", value);
     *this = tempBuffer;
 }
 
-String::String(double value) :
-    length_(0),
-    capacity_(0),
-    buffer_(&endZero)
+String::String(double value)
+    : length_(0)
+    , capacity_(0)
+    , buffer_(&endZero)
 {
     char tempBuffer[CONVERSION_BUFFER_LENGTH];
     sprintf(tempBuffer, "%.15g", value);
     *this = tempBuffer;
 }
 
-String::String(bool value) :
-    length_(0),
-    capacity_(0),
-    buffer_(&endZero)
+String::String(bool value)
+    : length_(0)
+    , capacity_(0)
+    , buffer_(&endZero)
 {
     if (value)
         *this = "true";
@@ -158,74 +158,44 @@ String::String(bool value) :
         *this = "false";
 }
 
-String::String(char value) :
-    length_(0),
-    capacity_(0),
-    buffer_(&endZero)
+String::String(char value)
+    : length_(0)
+    , capacity_(0)
+    , buffer_(&endZero)
 {
     Resize(1);
     buffer_[0] = value;
 }
 
-String::String(char value, unsigned length) :
-    length_(0),
-    capacity_(0),
-    buffer_(&endZero)
+String::String(char value, unsigned length)
+    : length_(0)
+    , capacity_(0)
+    , buffer_(&endZero)
 {
     Resize(length);
     for (unsigned i = 0; i < length; ++i)
         buffer_[i] = value;
 }
 
-String& String::operator +=(int rhs)
-{
-    return *this += String(rhs);
-}
+String& String::operator+=(int rhs) { return *this += String(rhs); }
 
-String& String::operator +=(short rhs)
-{
-    return *this += String(rhs);
-}
+String& String::operator+=(short rhs) { return *this += String(rhs); }
 
-String& String::operator +=(long rhs)
-{
-    return *this += String(rhs);
-}
+String& String::operator+=(long rhs) { return *this += String(rhs); }
 
-String& String::operator +=(long long rhs)
-{
-    return *this += String(rhs);
-}
+String& String::operator+=(long long rhs) { return *this += String(rhs); }
 
-String& String::operator +=(unsigned rhs)
-{
-    return *this += String(rhs);
-}
+String& String::operator+=(unsigned rhs) { return *this += String(rhs); }
 
-String& String::operator +=(unsigned short rhs)
-{
-    return *this += String(rhs);
-}
+String& String::operator+=(unsigned short rhs) { return *this += String(rhs); }
 
-String& String::operator +=(unsigned long rhs)
-{
-    return *this += String(rhs);
-}
+String& String::operator+=(unsigned long rhs) { return *this += String(rhs); }
 
-String& String::operator +=(unsigned long long rhs)
-{
-    return *this += String(rhs);
-}
+String& String::operator+=(unsigned long long rhs) { return *this += String(rhs); }
 
-String& String::operator +=(float rhs)
-{
-    return *this += String(rhs);
-}
+String& String::operator+=(float rhs) { return *this += String(rhs); }
 
-String& String::operator +=(bool rhs)
-{
-    return *this += String(rhs);
-}
+String& String::operator+=(bool rhs) { return *this += String(rhs); }
 
 void String::Replace(char replaceThis, char replaceWith, bool caseSensitive)
 {
@@ -305,20 +275,11 @@ String String::Replaced(const String& replaceThis, const String& replaceWith, bo
     return ret;
 }
 
-String& String::Append(const String& str)
-{
-    return *this += str;
-}
+String& String::Append(const String& str) { return *this += str; }
 
-String& String::Append(const char* str)
-{
-    return *this += str;
-}
+String& String::Append(const char* str) { return *this += str; }
 
-String& String::Append(char c)
-{
-    return *this += c;
-}
+String& String::Append(char c) { return *this += c; }
 
 String& String::Append(const char* str, unsigned length)
 {
@@ -368,7 +329,8 @@ String::Iterator String::Insert(const String::Iterator& dest, const String& str)
     return Begin() + pos;
 }
 
-String::Iterator String::Insert(const String::Iterator& dest, const String::Iterator& start, const String::Iterator& end)
+String::Iterator String::Insert(const String::Iterator& dest, const String::Iterator& start,
+                                const String::Iterator& end)
 {
     unsigned pos = (unsigned)(dest - Begin());
     if (pos > length_)
@@ -389,10 +351,7 @@ String::Iterator String::Insert(const String::Iterator& dest, char c)
     return Begin() + pos;
 }
 
-void String::Erase(unsigned pos, unsigned length)
-{
-    Replace(pos, length, String::EMPTY);
-}
+void String::Erase(unsigned pos, unsigned length) { Replace(pos, length, String::EMPTY); }
 
 String::Iterator String::Erase(const String::Iterator& it)
 {
@@ -475,10 +434,7 @@ void String::Compact()
         Reserve(length_ + 1);
 }
 
-void String::Clear()
-{
-    Resize(0);
-}
+void String::Clear() { Resize(0); }
 
 void String::Swap(String& str)
 {
@@ -563,10 +519,7 @@ Vector<String> String::Split(char separator, bool keepEmptyStrings) const
     return Split(CString(), separator, keepEmptyStrings);
 }
 
-void String::Join(const Vector<String>& subStrings, const String& glue)
-{
-    *this = Joined(subStrings, glue);
-}
+void String::Join(const Vector<String>& subStrings, const String& glue) { *this = Joined(subStrings, glue); }
 
 unsigned String::Find(char c, unsigned startPos, bool caseSensitive) const
 {
@@ -709,10 +662,7 @@ unsigned String::FindLast(const String& str, unsigned startPos, bool caseSensiti
     return NPOS;
 }
 
-bool String::StartsWith(const String& str, bool caseSensitive) const
-{
-    return Find(str, 0, caseSensitive) == 0;
-}
+bool String::StartsWith(const String& str, bool caseSensitive) const { return Find(str, 0, caseSensitive) == 0; }
 
 bool String::EndsWith(const String& str, bool caseSensitive) const
 {
@@ -725,10 +675,7 @@ int String::Compare(const String& str, bool caseSensitive) const
     return Compare(CString(), str.CString(), caseSensitive);
 }
 
-int String::Compare(const char* str, bool caseSensitive) const
-{
-    return Compare(CString(), str, caseSensitive);
-}
+int String::Compare(const char* str, bool caseSensitive) const { return Compare(CString(), str, caseSensitive); }
 
 void String::SetUTF8FromLatin1(const char* str)
 {
@@ -938,7 +885,12 @@ void String::EncodeUTF8(char*& dest, unsigned unicodeChar)
     }
 }
 
-#define GET_NEXT_CONTINUATION_BYTE(ptr) *(ptr); if ((unsigned char)*(ptr) < 0x80 || (unsigned char)*(ptr) >= 0xc0) return '?'; else ++(ptr);
+#define GET_NEXT_CONTINUATION_BYTE(ptr)                                                                                \
+    *(ptr);                                                                                                            \
+    if ((unsigned char)*(ptr) < 0x80 || (unsigned char)*(ptr) >= 0xc0)                                                 \
+        return '?';                                                                                                    \
+    else                                                                                                               \
+        ++(ptr);
 
 unsigned String::DecodeUTF8(const char*& src)
 {
@@ -973,7 +925,8 @@ unsigned String::DecodeUTF8(const char*& src)
         unsigned char char2 = GET_NEXT_CONTINUATION_BYTE(src);
         unsigned char char3 = GET_NEXT_CONTINUATION_BYTE(src);
         unsigned char char4 = GET_NEXT_CONTINUATION_BYTE(src);
-        return (unsigned)((char4 & 0x3fu) | ((char3 & 0x3fu) << 6u) | ((char2 & 0x3fu) << 12u) | ((char1 & 0x7u) << 18u));
+        return (unsigned)((char4 & 0x3fu) | ((char3 & 0x3fu) << 6u) | ((char2 & 0x3fu) << 12u) |
+                          ((char1 & 0x7u) << 18u));
     }
     else if (char1 < 0xfc)
     {
@@ -981,8 +934,8 @@ unsigned String::DecodeUTF8(const char*& src)
         unsigned char char3 = GET_NEXT_CONTINUATION_BYTE(src);
         unsigned char char4 = GET_NEXT_CONTINUATION_BYTE(src);
         unsigned char char5 = GET_NEXT_CONTINUATION_BYTE(src);
-        return (unsigned)((char5 & 0x3fu) | ((char4 & 0x3fu) << 6u) | ((char3 & 0x3fu) << 12u) | ((char2 & 0x3fu) << 18u) |
-                          ((char1 & 0x3u) << 24u));
+        return (unsigned)((char5 & 0x3fu) | ((char4 & 0x3fu) << 6u) | ((char3 & 0x3fu) << 12u) |
+                          ((char2 & 0x3fu) << 18u) | ((char1 & 0x3u) << 24u));
     }
     else
     {
@@ -991,8 +944,8 @@ unsigned String::DecodeUTF8(const char*& src)
         unsigned char char4 = GET_NEXT_CONTINUATION_BYTE(src);
         unsigned char char5 = GET_NEXT_CONTINUATION_BYTE(src);
         unsigned char char6 = GET_NEXT_CONTINUATION_BYTE(src);
-        return (unsigned)((char6 & 0x3fu) | ((char5 & 0x3fu) << 6u) | ((char4 & 0x3fu) << 12u) | ((char3 & 0x3fu) << 18u) |
-                          ((char2 & 0x3fu) << 24u) | ((char1 & 0x1u) << 30u));
+        return (unsigned)((char6 & 0x3fu) | ((char5 & 0x3fu) << 6u) | ((char4 & 0x3fu) << 12u) |
+                          ((char3 & 0x3fu) << 18u) | ((char2 & 0x3fu) << 24u) | ((char1 & 0x1u) << 30u));
     }
 }
 
@@ -1092,7 +1045,8 @@ String& String::AppendWithFormatArgs(const char* formatString, va_list args)
     while (true)
     {
         // Scan the format string and find %a argument where a is one of d, f, s ...
-        while (pos < length && formatString[pos] != '%') pos++;
+        while (pos < length && formatString[pos] != '%')
+            pos++;
         Append(formatString + lastPos, (unsigned)(pos - lastPos));
         if (pos >= length)
             return *this;
@@ -1106,77 +1060,77 @@ String& String::AppendWithFormatArgs(const char* formatString, va_list args)
         // Integer
         case 'd':
         case 'i':
-            {
-                int arg = va_arg(args, int);
-                Append(String(arg));
-                break;
-            }
+        {
+            int arg = va_arg(args, int);
+            Append(String(arg));
+            break;
+        }
 
         // Unsigned
         case 'u':
-            {
-                unsigned arg = va_arg(args, unsigned);
-                Append(String(arg));
-                break;
-            }
+        {
+            unsigned arg = va_arg(args, unsigned);
+            Append(String(arg));
+            break;
+        }
 
         // Unsigned long
         case 'l':
-            {
-                unsigned long arg = va_arg(args, unsigned long);
-                Append(String(arg));
-                break;
-            }
+        {
+            unsigned long arg = va_arg(args, unsigned long);
+            Append(String(arg));
+            break;
+        }
 
         // Real
         case 'f':
-            {
-                double arg = va_arg(args, double);
-                Append(String(arg));
-                break;
-            }
+        {
+            double arg = va_arg(args, double);
+            Append(String(arg));
+            break;
+        }
 
         // Character
         case 'c':
-            {
-                int arg = va_arg(args, int);
-                Append((char)arg);
-                break;
-            }
+        {
+            int arg = va_arg(args, int);
+            Append((char)arg);
+            break;
+        }
 
         // C string
         case 's':
-            {
-                char* arg = va_arg(args, char*);
-                Append(arg);
-                break;
-            }
+        {
+            char* arg = va_arg(args, char*);
+            Append(arg);
+            break;
+        }
 
         // Hex
         case 'x':
-            {
-                char buf[CONVERSION_BUFFER_LENGTH];
-                int arg = va_arg(args, int);
-                int arglen = ::sprintf(buf, "%x", arg);
-                Append(buf, (unsigned)arglen);
-                break;
-            }
+        {
+            char buf[CONVERSION_BUFFER_LENGTH];
+            int arg = va_arg(args, int);
+            int arglen = ::sprintf(buf, "%x", arg);
+            Append(buf, (unsigned)arglen);
+            break;
+        }
 
         // Pointer
         case 'p':
-            {
-                char buf[CONVERSION_BUFFER_LENGTH];
-                int arg = va_arg(args, int);
-                int arglen = ::sprintf(buf, "%p", reinterpret_cast<void*>(arg));
-                Append(buf, (unsigned)arglen);
-                break;
-            }
+        {
+            char buf[CONVERSION_BUFFER_LENGTH];
+            int arg = va_arg(args, int);
+            int arglen = ::sprintf(buf, "%p", reinterpret_cast<void*>(arg));
+            Append(buf, (unsigned)arglen);
+            break;
+        }
 
         case '%':
-            {
-                Append("%", 1);
-                break;
-            }
+        {
+            Append("%", 1);
+            break;
+        }
 
         default:
             URHO3D_LOGWARNINGF("Unsupported format specifier: '%c'", format);
@@ -1234,15 +1188,15 @@ void String::Replace(unsigned pos, unsigned length, const char* srcStart, unsign
     CopyChars(buffer_ + pos, srcStart, srcLength);
 }
 
-WString::WString() :
-    length_(0),
-    buffer_(nullptr)
+WString::WString()
+    : length_(0)
+    , buffer_(nullptr)
 {
 }
 
-WString::WString(const String& str) :
-    length_(0),
-    buffer_(nullptr)
+WString::WString(const String& str)
+    : length_(0)
+    , buffer_(nullptr)
 {
 #ifdef _WIN32
     unsigned neededSize = 0;
@@ -1272,10 +1226,7 @@ WString::WString(const String& str) :
 #endif
 }
 
-WString::~WString()
-{
-    delete[] buffer_;
-}
+WString::~WString() { delete[] buffer_; }
 
 void WString::Resize(unsigned newLength)
 {
@@ -1300,4 +1251,4 @@ void WString::Resize(unsigned newLength)
     }
 }
 
-}
+} // namespace Urho3D

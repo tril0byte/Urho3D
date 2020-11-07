@@ -39,23 +39,17 @@
 namespace Urho3D
 {
 
-Texture2D::Texture2D(Context* context) :
-    Texture(context)
+Texture2D::Texture2D(Context* context)
+    : Texture(context)
 {
 #ifdef URHO3D_OPENGL
     target_ = GL_TEXTURE_2D;
 #endif
 }
 
-Texture2D::~Texture2D()
-{
-    Release();
-}
+Texture2D::~Texture2D() { Release(); }
 
-void Texture2D::RegisterObject(Context* context)
-{
-    context->RegisterFactory<Texture2D>();
-}
+void Texture2D::RegisterObject(Context* context) { context->RegisterFactory<Texture2D>(); }
 
 bool Texture2D::BeginLoad(Deserializer& source)
 {
@@ -192,4 +186,4 @@ void Texture2D::HandleRenderSurfaceUpdate(StringHash eventType, VariantMap& even
     }
 }
 
-}
+} // namespace Urho3D

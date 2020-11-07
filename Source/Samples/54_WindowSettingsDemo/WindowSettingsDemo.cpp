@@ -73,10 +73,7 @@ void WindowSettingsDemo::Start()
     InitSettings();
     SynchronizeSettings();
     SubscribeToEvent(E_SCREENMODE,
-        [this](StringHash /*eventType*/, const VariantMap& /*eventData*/)
-    {
-        SynchronizeSettings();
-    });
+                     [this](StringHash /*eventType*/, const VariantMap& /*eventData*/) { SynchronizeSettings(); });
 
     // Set the mouse mode to use in the sample
     Sample::InitMouseMode(MM_FREE);
@@ -113,9 +110,7 @@ void WindowSettingsDemo::CreateScene()
     cameraNode_->SetPosition(Vector3(0.0f, 0.0f, -4.0f));
 
     // Rotate object
-    SubscribeToEvent(scene_, E_SCENEUPDATE,
-        [objectNode](StringHash /*eventType*/, VariantMap& eventData)
-    {
+    SubscribeToEvent(scene_, E_SCENEUPDATE, [objectNode](StringHash /*eventType*/, VariantMap& eventData) {
         const float timeStep = eventData[SceneUpdate::P_TIMESTEP].GetFloat();
         objectNode->Rotate(Quaternion(0.0f, 20.0f * timeStep, 0.0f), TS_WORLD);
     });
@@ -244,34 +239,35 @@ void WindowSettingsDemo::InitSettings()
 
     // Apply settings when "Apply" button is clicked
     SubscribeToEvent(applyButton, E_RELEASED,
-        [this, graphics](StringHash /*eventType*/, const VariantMap& /*eventData*/)
-    {
-        const unsigned monitor = monitorControl_->GetSelection();
-        if (monitor == M_MAX_UNSIGNED)
-            return;
+                     [this, graphics](StringHash /*eventType*/, const VariantMap& /*eventData*/) {
+                         const unsigned monitor = monitorControl_->GetSelection();
+                         if (monitor == M_MAX_UNSIGNED)
+                             return;
 
-        const auto& resolutions = graphics->GetResolutions(monitor);
-        const unsigned selectedResolution = resolutionControl_->GetSelection();
-        if (selectedResolution >= resolutions.Size())
-            return;
+                         const auto& resolutions = graphics->GetResolutions(monitor);
+                         const unsigned selectedResolution = resolutionControl_->GetSelection();
+                         if (selectedResolution >= resolutions.Size())
+                             return;
 
-        const bool fullscreen = fullscreenControl_->IsChecked();
-        const bool borderless = borderlessControl_->IsChecked();
-        const bool resizable = resizableControl_->IsChecked();
-        const bool vsync = vsyncControl_->IsChecked();
+                         const bool fullscreen = fullscreenControl_->IsChecked();
+                         const bool borderless = borderlessControl_->IsChecked();
+                         const bool resizable = resizableControl_->IsChecked();
+                         const bool vsync = vsyncControl_->IsChecked();
 
-        const unsigned multiSampleSelection = multiSampleControl_->GetSelection();
-        const int multiSample = multiSampleSelection == M_MAX_UNSIGNED ? 1 : static_cast<int>(1 << multiSampleSelection);
+                         const unsigned multiSampleSelection = multiSampleControl_->GetSelection();
+                         const int multiSample =
+                             multiSampleSelection == M_MAX_UNSIGNED ? 1 : static_cast<int>(1 << multiSampleSelection);
 
-        // TODO: Expose these options too?
-        const bool highDPI = graphics->GetHighDPI();
-        const bool tripleBuffer = graphics->GetTripleBuffer();
+                         // TODO: Expose these options too?
+                         const bool highDPI = graphics->GetHighDPI();
+                         const bool tripleBuffer = graphics->GetTripleBuffer();
 
-        const int width = resolutions[selectedResolution].x_;
-        const int height = resolutions[selectedResolution].y_;
-        const int refreshRate = resolutions[selectedResolution].z_;
-        graphics->SetMode(width, height, fullscreen, borderless, resizable, highDPI, vsync, tripleBuffer, multiSample, monitor, refreshRate);
-    });
+                         const int width = resolutions[selectedResolution].x_;
+                         const int height = resolutions[selectedResolution].y_;
+                         const int refreshRate = resolutions[selectedResolution].z_;
+                         graphics->SetMode(width, height, fullscreen, borderless, resizable, highDPI, vsync,
+                                           tripleBuffer, multiSample, monitor, refreshRate);
+                     });
 }
 
 void WindowSettingsDemo::SynchronizeSettings()
@@ -295,8 +291,8 @@ void WindowSettingsDemo::SynchronizeSettings()
     }
 
     // Synchronize selected resolution
-    const unsigned currentResolution = graphics->FindBestResolutionIndex(currentMonitor,
-        graphics->GetWidth(), graphics->GetHeight(), graphics->GetRefreshRate());
+    const unsigned currentResolution = graphics->FindBestResolutionIndex(
+        currentMonitor, graphics->GetWidth(), graphics->GetHeight(), graphics->GetRefreshRate());
     resolutionControl_->SetSelection(currentResolution);
 
     // Synchronize fullscreen and borderless flags

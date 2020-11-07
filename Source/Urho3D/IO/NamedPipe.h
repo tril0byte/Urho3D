@@ -57,9 +57,12 @@ public:
     /// Not supported.
     void SetName(const String& name) override;
 
-    /// Open the pipe in either server or client mode. If already open, the existing pipe is closed. For a client end to open successfully the server end must already to be open. Return true if successful.
+    /// Open the pipe in either server or client mode. If already open, the existing pipe is closed. For a client end to
+    /// open successfully the server end must already to be open. Return true if successful.
     bool Open(const String& name, bool isServer);
-    /// Close the pipe. Note that once a client has disconnected, the server needs to close and reopen the pipe so that another client can connect. At least on Windows this is not possible to detect automatically, so the communication protocol should include a "bye" message to handle this situation.
+    /// Close the pipe. Note that once a client has disconnected, the server needs to close and reopen the pipe so that
+    /// another client can connect. At least on Windows this is not possible to detect automatically, so the
+    /// communication protocol should include a "bye" message to handle this situation.
     void Close();
 
     /// Return whether is open.
@@ -81,4 +84,4 @@ private:
 #endif
 };
 
-}
+} // namespace Urho3D

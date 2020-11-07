@@ -124,4 +124,4 @@ protected:
     WeakPtr<Renderer2D> renderer_;
 };
 
-}
+} // namespace Urho3D

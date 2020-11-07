@@ -64,11 +64,11 @@ public:
     /// Prevent copy construction.
     MutexLock(const MutexLock& rhs) = delete;
     /// Prevent assignment.
-    MutexLock& operator =(const MutexLock& rhs) = delete;
+    MutexLock& operator=(const MutexLock& rhs) = delete;
 
 private:
     /// Mutex reference.
     Mutex& mutex_;
 };
 
-}
+} // namespace Urho3D

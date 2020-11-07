@@ -99,7 +99,6 @@ private:
     PODVector<unsigned char> binaryAttributes_;
     /// Flag of whether was loaded using XML/JSON data.
     bool useXML_;
-
 };
 
-}
+} // namespace Urho3D

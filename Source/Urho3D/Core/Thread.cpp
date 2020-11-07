@@ -60,16 +60,13 @@ static void* ThreadFunctionStatic(void* data)
 
 ThreadID Thread::mainThreadID;
 
-Thread::Thread() :
-    handle_(nullptr),
-    shouldRun_(false)
+Thread::Thread()
+    : handle_(nullptr)
+    , shouldRun_(false)
 {
 }
 
-Thread::~Thread()
-{
-    Stop();
-}
+Thread::~Thread() { Stop(); }
 
 bool Thread::Run()
 {
@@ -129,10 +126,7 @@ void Thread::SetPriority(int priority)
 #endif // URHO3D_THREADING
 }
 
-void Thread::SetMainThread()
-{
-    mainThreadID = GetCurrentThreadID();
-}
+void Thread::SetMainThread() { mainThreadID = GetCurrentThreadID(); }
 
 ThreadID Thread::GetCurrentThreadID()
 {
@@ -156,4 +150,4 @@ bool Thread::IsMainThread()
 #endif // URHO3D_THREADING
 }
 
-}
+} // namespace Urho3D

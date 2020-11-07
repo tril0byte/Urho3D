@@ -32,7 +32,7 @@
 #if defined(IOS) || defined(TVOS)
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
-#elif defined(__ANDROID__) || defined (__arm__) || defined(__aarch64__) || defined (__EMSCRIPTEN__)
+#elif defined(__ANDROID__) || defined(__arm__) || defined(__aarch64__) || defined(__EMSCRIPTEN__)
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 #else
@@ -70,15 +70,15 @@
 #define COMPRESSED_RGBA_PVRTC_2BPPV1_IMG 0x8c03
 #endif
 
-using SDL_GLContext = void *;
+using SDL_GLContext = void*;
 
 namespace Urho3D
 {
 
 class Context;
 
-using ConstantBufferMap = HashMap<unsigned, SharedPtr<ConstantBuffer> >;
-using ShaderProgramMap = HashMap<Pair<ShaderVariation*, ShaderVariation*>, SharedPtr<ShaderProgram> >;
+using ConstantBufferMap = HashMap<unsigned, SharedPtr<ConstantBuffer>>;
+using ShaderProgramMap = HashMap<Pair<ShaderVariation*, ShaderVariation*>, SharedPtr<ShaderProgram>>;
 
 /// Cached state of a frame buffer object.
 struct FrameBufferObject
@@ -120,7 +120,8 @@ private:
     unsigned usedVertexAttributes_{};
     /// Vertex attribute instancing bitmask for keeping track of divisors.
     unsigned instancingVertexAttributes_{};
-    /// Current mapping of vertex attribute locations by semantic. The map is owned by the shader program, so care must be taken to switch a null shader program when it's destroyed.
+    /// Current mapping of vertex attribute locations by semantic. The map is owned by the shader program, so care must
+    /// be taken to switch a null shader program when it's destroyed.
     const HashMap<Pair<unsigned char, unsigned char>, unsigned>* vertexAttributes_{};
     /// Currently bound frame buffer object.
     unsigned boundFBO_{};
@@ -147,7 +148,7 @@ private:
     /// Last used instance data offset.
     unsigned lastInstanceOffset_{};
     /// Map for additional depth textures, to emulate Direct3D9 ability to mix render texture and backbuffer rendering.
-    HashMap<unsigned, SharedPtr<Texture2D> > depthTextures_;
+    HashMap<unsigned, SharedPtr<Texture2D>> depthTextures_;
     /// Shader program in use.
     ShaderProgram* shaderProgram_{};
     /// Linked shader programs.
@@ -160,4 +161,4 @@ private:
     bool sRGBWrite_{};
 };
 
-}
+} // namespace Urho3D

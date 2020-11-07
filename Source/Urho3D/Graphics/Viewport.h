@@ -22,8 +22,8 @@
 
 #pragma once
 
-#include "../Core/Object.h"
 #include "../Container/Ptr.h"
+#include "../Core/Object.h"
 #include "../Math/Ray.h"
 #include "../Math/Rect.h"
 #include "../Math/Vector2.h"
@@ -69,7 +69,9 @@ public:
     /// Set whether to render debug geometry. Default true.
     /// @property
     void SetDrawDebug(bool enable);
-    /// Set separate camera to use for culling. Sharing a culling camera between several viewports allows to prepare the view only once, saving in CPU use. The culling camera's frustum should cover all the viewport cameras' frusta or else objects may be missing from the rendered view.
+    /// Set separate camera to use for culling. Sharing a culling camera between several viewports allows to prepare the
+    /// view only once, saving in CPU use. The culling camera's frustum should cover all the viewport cameras' frusta or
+    /// else objects may be missing from the rendered view.
     /// @property
     void SetCullCamera(Camera* camera);
 
@@ -82,7 +84,8 @@ public:
     /// Return the internal rendering structure. May be null if the viewport has not been rendered yet.
     View* GetView() const;
 
-    /// Return view rectangle. A zero rectangle (0 0 0 0) means to use the rendertarget's full dimensions. In this case you could fetch the actual view rectangle from View object, though it will be valid only after the first frame.
+    /// Return view rectangle. A zero rectangle (0 0 0 0) means to use the rendertarget's full dimensions. In this case
+    /// you could fetch the actual view rectangle from View object, though it will be valid only after the first frame.
     /// @property
     const IntRect& GetRect() const { return rect_; }
 
@@ -125,4 +128,4 @@ private:
     bool drawDebug_;
 };
 
-}
+} // namespace Urho3D

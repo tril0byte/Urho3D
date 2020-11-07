@@ -80,7 +80,7 @@ private:
             break;
 
         default:
-            assert(false);  // Should never reach here
+            assert(false); // Should never reach here
             break;
         }
 
@@ -117,4 +117,4 @@ private:
     SDL_RWops ops_;
 };
 
-}
+} // namespace Urho3D

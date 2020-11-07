@@ -61,13 +61,16 @@ public:
     /// Set maximum number of LOD levels for terrain patches. This can be between 1-4.
     /// @property
     void SetMaxLodLevels(unsigned levels);
-    /// Set LOD level used for terrain patch occlusion. By default (M_MAX_UNSIGNED) the coarsest. Since the LOD level used needs to be fixed, using finer LOD levels may result in false positive occlusion in cases where the actual rendered geometry is coarser, so use with caution.
+    /// Set LOD level used for terrain patch occlusion. By default (M_MAX_UNSIGNED) the coarsest. Since the LOD level
+    /// used needs to be fixed, using finer LOD levels may result in false positive occlusion in cases where the actual
+    /// rendered geometry is coarser, so use with caution.
     /// @property
     void SetOcclusionLodLevel(unsigned level);
     /// Set smoothing of heightmap.
     /// @property
     void SetSmoothing(bool enable);
-    /// Set heightmap image. Dimensions should be a power of two + 1. Uses 8-bit grayscale, or optionally red as MSB and green as LSB for 16-bit accuracy. Return true if successful.
+    /// Set heightmap image. Dimensions should be a power of two + 1. Uses 8-bit grayscale, or optionally red as MSB and
+    /// green as LSB for 16-bit accuracy. Return true if successful.
     /// @property
     bool SetHeightMap(Image* image);
     /// Set material.
@@ -102,7 +105,8 @@ public:
     /// Set light mask for patches. Is and'ed with light's and zone's light mask to see if the object should be lit.
     /// @property
     void SetLightMask(unsigned mask);
-    /// Set shadow mask for patches. Is and'ed with light's light mask and zone's shadow mask to see if the object should be rendered to a shadow map.
+    /// Set shadow mask for patches. Is and'ed with light's light mask and zone's shadow mask to see if the object
+    /// should be rendered to a shadow map.
     /// @property
     void SetShadowMask(unsigned mask);
     /// Set zone mask for patches. Is and'ed with zone's zone mask to see if the object should belong to the zone.
@@ -168,7 +172,8 @@ public:
     float GetHeight(const Vector3& worldPosition) const;
     /// Return normal at world coordinates.
     Vector3 GetNormal(const Vector3& worldPosition) const;
-    /// Convert world position to heightmap pixel position. Note that the internal height data representation is reversed vertically, but in the heightmap image north is at the top.
+    /// Convert world position to heightmap pixel position. Note that the internal height data representation is
+    /// reversed vertically, but in the heightmap image north is at the top.
     IntVector2 WorldToHeightMap(const Vector3& worldPosition) const;
     /// Convert heightmap pixel position to world position.
     Vector3 HeightMapToWorld(const IntVector2& pixelPosition) const;
@@ -299,9 +304,9 @@ private:
     /// Material.
     SharedPtr<Material> material_;
     /// Terrain patches.
-    Vector<WeakPtr<TerrainPatch> > patches_;
+    Vector<WeakPtr<TerrainPatch>> patches_;
     /// Draw ranges for different LODs and stitching combinations.
-    PODVector<Pair<unsigned, unsigned> > drawRanges_;
+    PODVector<Pair<unsigned, unsigned>> drawRanges_;
     /// North neighbor terrain.
     WeakPtr<Terrain> north_;
     /// South neighbor terrain.
@@ -374,4 +379,4 @@ private:
     bool neighborsDirty_;
 };
 
-}
+} // namespace Urho3D

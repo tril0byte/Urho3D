@@ -83,8 +83,10 @@ template <class T> void InitialQuickSort(RandomAccessIterator<T> begin, RandomAc
         T pivotValue = *pivot;
         for (;;)
         {
-            while (pivotValue < *(--j));
-            while (*(++i) < pivotValue);
+            while (pivotValue < *(--j))
+                ;
+            while (*(++i) < pivotValue)
+                ;
             if (i < j)
                 Swap(*i, *j);
             else
@@ -114,8 +116,10 @@ template <class T, class U> void InitialQuickSort(RandomAccessIterator<T> begin,
         T pivotValue = *pivot;
         for (;;)
         {
-            while (compare(pivotValue, *(--j)));
-            while (compare(*(++i), pivotValue));
+            while (compare(pivotValue, *(--j)))
+                ;
+            while (compare(*(++i), pivotValue))
+                ;
             if (i < j)
                 Swap(*i, *j);
             else
@@ -134,11 +138,12 @@ template <class T> void Sort(RandomAccessIterator<T> begin, RandomAccessIterator
     InsertionSort(begin, end);
 }
 
-/// Sort in ascending order using quicksort for initial passes, then an insertion sort to finalize, using a compare function.
+/// Sort in ascending order using quicksort for initial passes, then an insertion sort to finalize, using a compare
+/// function.
 template <class T, class U> void Sort(RandomAccessIterator<T> begin, RandomAccessIterator<T> end, U compare)
 {
     InitialQuickSort(begin, end, compare);
     InsertionSort(begin, end, compare);
 }
 
-}
+} // namespace Urho3D

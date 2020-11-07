@@ -28,4 +28,4 @@ namespace Urho3D
 /// Register Urho2D library objects.
 void URHO3D_API RegisterUrho2DLibrary(Context* context);
 
-}
+} // namespace Urho3D

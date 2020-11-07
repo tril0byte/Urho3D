@@ -20,8 +20,8 @@
 // THE SOFTWARE.
 //
 
-#include "../Precompiled.h"
 #include "../AngelScript/APITemplates.h"
+#include "../Precompiled.h"
 
 #include "../AngelScript/Manual_UI.h"
 
@@ -29,17 +29,12 @@ namespace Urho3D
 {
 
 // This function is called before ASRegisterGenerated()
-void ASRegisterManualFirst_UI(asIScriptEngine* engine)
-{
-}
+void ASRegisterManualFirst_UI(asIScriptEngine* engine) {}
 
 // ========================================================================================
 
 // template<class T> T * Object::GetSubsystem() const | File: ../Core/Object.h
-static UI* GetUI()
-{
-    return GetScriptContext()->GetSubsystem<UI>();
-}
+static UI* GetUI() { return GetScriptContext()->GetSubsystem<UI>(); }
 
 // This function is called after ASRegisterGenerated()
 void ASRegisterManualLast_UI(asIScriptEngine* engine)
@@ -50,13 +45,15 @@ void ASRegisterManualLast_UI(asIScriptEngine* engine)
 
 // ========================================================================================
 
-// bool Font::SaveXML(Serializer &dest, int pointSize, bool usedGlyphs=false, const String &indentation="\t") | File: ../UI/Font.h
+// bool Font::SaveXML(Serializer &dest, int pointSize, bool usedGlyphs=false, const String &indentation="\t") | File:
+// ../UI/Font.h
 bool FontSaveXMLVectorBuffer(VectorBuffer& buffer, int pointSize, bool usedGlyphs, const String& indentation, Font* ptr)
 {
     return ptr->SaveXML(buffer, pointSize, usedGlyphs, indentation);
 }
 
-// bool Font::SaveXML(Serializer &dest, int pointSize, bool usedGlyphs=false, const String &indentation="\t") | File: ../UI/Font.h
+// bool Font::SaveXML(Serializer &dest, int pointSize, bool usedGlyphs=false, const String &indentation="\t") | File:
+// ../UI/Font.h
 bool FontSaveXML(const String& fileName, int pointSize, bool usedGlyphs, const String& indentation, Font* ptr)
 {
     if (fileName.Empty())
@@ -66,7 +63,8 @@ bool FontSaveXML(const String& fileName, int pointSize, bool usedGlyphs, const S
     return ptr->SaveXML(file, pointSize, usedGlyphs, indentation);
 }
 
-// bool Font::SaveXML(Serializer &dest, int pointSize, bool usedGlyphs=false, const String &indentation="\t") | File: ../UI/Font.h
+// bool Font::SaveXML(Serializer &dest, int pointSize, bool usedGlyphs=false, const String &indentation="\t") | File:
+// ../UI/Font.h
 bool FontSaveXMLFile(File* file, int pointSize, bool usedGlyphs, const String& indentation, Font* ptr)
 {
     return ptr->SaveXML(*file, pointSize, usedGlyphs, indentation);
@@ -121,10 +119,7 @@ UIElement* UILoadLayoutFromVectorBufferWithStyle(VectorBuffer& buffer, XMLFile* 
 }
 
 // bool UI::SaveLayout(Serializer &dest, UIElement *element) | File: ../UI/UI.h
-bool UISaveLayout(File* file, UIElement* element, UI* ptr)
-{
-    return file && ptr->SaveLayout(*file, element);
-}
+bool UISaveLayout(File* file, UIElement* element, UI* ptr) { return file && ptr->SaveLayout(*file, element); }
 
 // bool UI::SaveLayout(Serializer &dest, UIElement *element) | File: ../UI/UI.h
 bool UISaveLayoutVectorBuffer(VectorBuffer& buffer, UIElement* element, UI* ptr)
@@ -139,24 +134,15 @@ CScriptArray* UIGetDragElements(UI* ptr)
 }
 
 // void UI::SetFocusElement(UIElement *element, bool byKey=false) | File: ../UI/UI.h
-void UISetFocusElement(UIElement* element, UI* ptr)
-{
-    ptr->SetFocusElement(element);
-}
+void UISetFocusElement(UIElement* element, UI* ptr) { ptr->SetFocusElement(element); }
 
 // ========================================================================================
 
 // bool UIElement::LoadXML(Deserializer &source) | File: ../UI/UIElement.h
-bool UIElementLoadXML(File* file, UIElement* ptr)
-{
-    return file && ptr->LoadXML(*file);
-}
+bool UIElementLoadXML(File* file, UIElement* ptr) { return file && ptr->LoadXML(*file); }
 
 // bool UIElement::LoadXML(Deserializer &source) | File: ../UI/UIElement.h
-bool UIElementLoadXMLVectorBuffer(VectorBuffer& buffer, UIElement* ptr)
-{
-    return ptr->LoadXML(buffer);
-}
+bool UIElementLoadXMLVectorBuffer(VectorBuffer& buffer, UIElement* ptr) { return ptr->LoadXML(buffer); }
 
 // bool UIElement::LoadXML(Deserializer &source) | File: ../UI/UIElement.h
 bool UIElementLoadXML(XMLFile* file, XMLFile* styleFile, UIElement* ptr)
@@ -184,10 +170,7 @@ UIElement* UIElementLoadChildXML(XMLFile* file, XMLFile* styleFile, UIElement* p
 }
 
 // bool UIElement::SaveXML(Serializer &dest, const String &indentation="\t") const | File: ../UI/UIElement.h
-bool UIElementSaveXML(File* file, const String& indentation, UIElement* ptr)
-{
-    return file && ptr->SaveXML(*file);
-}
+bool UIElementSaveXML(File* file, const String& indentation, UIElement* ptr) { return file && ptr->SaveXML(*file); }
 
 // bool UIElement::SaveXML(Serializer &dest, const String &indentation="\t") const | File: ../UI/UIElement.h
 bool UIElementSaveXMLVectorBuffer(VectorBuffer& buffer, const String& indentation, UIElement* ptr)
@@ -196,10 +179,7 @@ bool UIElementSaveXMLVectorBuffer(VectorBuffer& buffer, const String& indentatio
 }
 
 // void UIElement::RemoveChildAtIndex(unsigned index) | File: ../UI/UIElement.h
-void UIElementRemoveChild(unsigned index, UIElement* ptr)
-{
-    ptr->RemoveChildAtIndex(index);
-}
+void UIElementRemoveChild(unsigned index, UIElement* ptr) { ptr->RemoveChildAtIndex(index); }
 
 // bool UIElement::SetStyle(const String &styleName, XMLFile *file=nullptr) | File: ../UI/UIElement.h
 void UIElementSetStyle(const String& styleName, UIElement* ptr)
@@ -211,33 +191,18 @@ void UIElementSetStyle(const String& styleName, UIElement* ptr)
 }
 
 // unsigned UIElement::GetNumChildren(bool recursive=false) const | File: ../UI/UIElement.h
-unsigned UIElementGetNumChildrenNonRecursive(UIElement* ptr)
-{
-    return ptr->GetNumChildren(false);
-}
+unsigned UIElementGetNumChildrenNonRecursive(UIElement* ptr) { return ptr->GetNumChildren(false); }
 
 // unsigned UIElement::GetNumChildren(bool recursive=false) const | File: ../UI/UIElement.h
-unsigned UIElementGetNumChildrenRecursive(UIElement* ptr)
-{
-    return ptr->GetNumChildren(true);
-}
+unsigned UIElementGetNumChildrenRecursive(UIElement* ptr) { return ptr->GetNumChildren(true); }
 
 // void UIElement::SetParent(UIElement *parent, unsigned index=M_MAX_UNSIGNED) | File: ../UI/UIElement.h
-void UIElementSetParent(UIElement* parent, UIElement* ptr)
-{
-    ptr->SetParent(parent);
-}
+void UIElementSetParent(UIElement* parent, UIElement* ptr) { ptr->SetParent(parent); }
 
 // XMLFile* UIElement::GetDefaultStyle(bool recursiveUp=true) const | File: ../UI/UIElement.h
-XMLFile* UIElementGetDefaultStyle(UIElement* ptr)
-{
-    return ptr->GetDefaultStyle();
-}
+XMLFile* UIElementGetDefaultStyle(UIElement* ptr) { return ptr->GetDefaultStyle(); }
 
 // const VariantMap& UIElement::GetVars() const | File: ../UI/UIElement.h
-VariantMap& UIElementGetVars(UIElement* ptr)
-{
-    return const_cast<VariantMap&>(ptr->GetVars());
-}
+VariantMap& UIElementGetVars(UIElement* ptr) { return const_cast<VariantMap&>(ptr->GetVars()); }
 
-}
+} // namespace Urho3D

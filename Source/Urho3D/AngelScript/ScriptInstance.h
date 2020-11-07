@@ -112,8 +112,8 @@ public:
     /// Execute a method.
     bool Execute(asIScriptFunction* method, const VariantVector& parameters = Variant::emptyVariantVector);
     /// Add a delay-executed method call, optionally repeating.
-    void DelayedExecute
-        (float delay, bool repeat, const String& declaration, const VariantVector& parameters = Variant::emptyVariantVector);
+    void DelayedExecute(float delay, bool repeat, const String& declaration,
+                        const VariantVector& parameters = Variant::emptyVariantVector);
     /// Clear pending delay-executed method calls. If empty declaration given, clears all.
     void ClearDelayedExecute(const String& declaration = String::EMPTY);
 
@@ -212,7 +212,8 @@ private:
     bool subscribedPostFixed_{};
 };
 
-/// Return the active AngelScript context. Provided as a wrapper to the AngelScript API function to avoid undefined symbol error in shared library Urho3D builds.
+/// Return the active AngelScript context. Provided as a wrapper to the AngelScript API function to avoid undefined
+/// symbol error in shared library Urho3D builds.
 URHO3D_API asIScriptContext* GetActiveASContext();
 /// Return the Urho3D context of the active AngelScript context.
 URHO3D_API Context* GetScriptContext();
@@ -227,4 +228,4 @@ URHO3D_API ScriptEventListener* GetScriptContextEventListener();
 /// Return the event listener of the active AngelScript context as an Object pointer.
 URHO3D_API Object* GetScriptContextEventListenerObject();
 
-}
+} // namespace Urho3D

@@ -38,5 +38,4 @@ enum WrapMode
     WM_CLAMP,
 };
 
-}
-
+} // namespace Urho3D

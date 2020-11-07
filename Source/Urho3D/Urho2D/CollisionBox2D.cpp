@@ -34,11 +34,11 @@ namespace Urho3D
 extern const char* URHO2D_CATEGORY;
 static const Vector2 DEFAULT_BOX_SIZE(0.01f, 0.01f);
 
-CollisionBox2D::CollisionBox2D(Context* context) :
-    CollisionShape2D(context),
-    size_(DEFAULT_BOX_SIZE),
-    center_(Vector2::ZERO),
-    angle_(0.0f)
+CollisionBox2D::CollisionBox2D(Context* context)
+    : CollisionShape2D(context)
+    , size_(DEFAULT_BOX_SIZE)
+    , center_(Vector2::ZERO)
+    , angle_(0.0f)
 {
     float halfWidth = size_.x_ * 0.5f * cachedWorldScale_.x_;
     float halfHeight = size_.y_ * 0.5f * cachedWorldScale_.y_;
@@ -70,10 +70,7 @@ void CollisionBox2D::SetSize(const Vector2& size)
     RecreateFixture();
 }
 
-void CollisionBox2D::SetSize(float width, float height)
-{
-    SetSize(Vector2(width, height));
-}
+void CollisionBox2D::SetSize(float width, float height) { SetSize(Vector2(width, height)); }
 
 void CollisionBox2D::SetCenter(const Vector2& center)
 {
@@ -86,10 +83,7 @@ void CollisionBox2D::SetCenter(const Vector2& center)
     RecreateFixture();
 }
 
-void CollisionBox2D::SetCenter(float x, float y)
-{
-    SetCenter(Vector2(x, y));
-}
+void CollisionBox2D::SetCenter(float x, float y) { SetCenter(Vector2(x, y)); }
 
 void CollisionBox2D::SetAngle(float angle)
 {
@@ -102,10 +96,7 @@ void CollisionBox2D::SetAngle(float angle)
     RecreateFixture();
 }
 
-void CollisionBox2D::ApplyNodeWorldScale()
-{
-    RecreateFixture();
-}
+void CollisionBox2D::ApplyNodeWorldScale() { RecreateFixture(); }
 
 void CollisionBox2D::RecreateFixture()
 {
@@ -125,4 +116,4 @@ void CollisionBox2D::RecreateFixture()
     CreateFixture();
 }
 
-}
+} // namespace Urho3D

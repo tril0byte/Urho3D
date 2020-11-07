@@ -78,8 +78,8 @@ void Color::FromUInt(unsigned color)
 {
     a_ = ((color >> 24u) & 0xffu) / 255.0f;
     b_ = ((color >> 16u) & 0xffu) / 255.0f;
-    g_ = ((color >> 8u)  & 0xffu) / 255.0f;
-    r_ = ((color >> 0u)  & 0xffu) / 255.0f;
+    g_ = ((color >> 8u) & 0xffu) / 255.0f;
+    r_ = ((color >> 0u) & 0xffu) / 255.0f;
 }
 
 void Color::FromUIntMask(unsigned color, const ChannelMask& mask)
@@ -240,12 +240,7 @@ void Color::Invert(bool invertAlpha)
 Color Color::Lerp(const Color& rhs, float t) const
 {
     float invT = 1.0f - t;
-    return Color(
-        r_ * invT + rhs.r_ * t,
-        g_ * invT + rhs.g_ * t,
-        b_ * invT + rhs.b_ * t,
-        a_ * invT + rhs.a_ * t
-    );
+    return Color(r_ * invT + rhs.r_ * t, g_ * invT + rhs.g_ * t, b_ * invT + rhs.b_ * t, a_ * invT + rhs.a_ * t);
 }
 
 String Color::ToString() const
@@ -273,7 +268,6 @@ float Color::Hue(float min, float max) const
         float r = (g_ - b_) / (6.0f * chroma);
         return (r < 0.0f) ? 1.0f + r : ((r >= 1.0f) ? r - 1.0f : r);
     }
-
 }
 
 float Color::SaturationHSV(float min, float max) const
@@ -298,7 +292,6 @@ float Color::SaturationHSL(float min, float max) const
         return (max - min) / hl;
     else
         return (min - max) / (hl - 2.0f);
-
 }
 
 void Color::FromHCM(float h, float c, float m)
@@ -358,9 +351,8 @@ void Color::FromHCM(float h, float c, float m)
     b_ += m;
 }
 
-
-const Color::ChannelMask Color::ABGR{ 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 };
-const Color::ChannelMask Color::ARGB{ 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000 };
+const Color::ChannelMask Color::ABGR{0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000};
+const Color::ChannelMask Color::ARGB{0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000};
 const Color Color::WHITE;
 const Color Color::GRAY(0.5f, 0.5f, 0.5f);
 const Color Color::BLACK(0.0f, 0.0f, 0.0f);
@@ -371,4 +363,4 @@ const Color Color::CYAN(0.0f, 1.0f, 1.0f);
 const Color Color::MAGENTA(1.0f, 0.0f, 1.0f);
 const Color Color::YELLOW(1.0f, 1.0f, 0.0f);
 const Color Color::TRANSPARENT_BLACK(0.0f, 0.0f, 0.0f, 0.0f);
-}
+} // namespace Urho3D

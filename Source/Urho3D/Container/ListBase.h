@@ -38,9 +38,9 @@ namespace Urho3D
 struct ListNodeBase
 {
     /// Construct.
-    ListNodeBase() :
-        prev_(nullptr),
-        next_(nullptr)
+    ListNodeBase()
+        : prev_(nullptr)
+        , next_(nullptr)
     {
     }
 
@@ -54,22 +54,22 @@ struct ListNodeBase
 struct ListIteratorBase
 {
     /// Construct.
-    ListIteratorBase() :
-        ptr_(nullptr)
+    ListIteratorBase()
+        : ptr_(nullptr)
     {
     }
 
     /// Construct with a node pointer.
-    explicit ListIteratorBase(ListNodeBase* ptr) :
-        ptr_(ptr)
+    explicit ListIteratorBase(ListNodeBase* ptr)
+        : ptr_(ptr)
     {
     }
 
     /// Test for equality with another iterator.
-    bool operator ==(const ListIteratorBase& rhs) const { return ptr_ == rhs.ptr_; }
+    bool operator==(const ListIteratorBase& rhs) const { return ptr_ == rhs.ptr_; }
 
     /// Test for inequality with another iterator.
-    bool operator !=(const ListIteratorBase& rhs) const { return ptr_ != rhs.ptr_; }
+    bool operator!=(const ListIteratorBase& rhs) const { return ptr_ != rhs.ptr_; }
 
     /// Go to the next node.
     void GotoNext()
@@ -94,11 +94,11 @@ class URHO3D_API ListBase
 {
 public:
     /// Construct.
-    ListBase() :
-        head_(nullptr),
-        tail_(nullptr),
-        allocator_(nullptr),
-        size_(0)
+    ListBase()
+        : head_(nullptr)
+        , tail_(nullptr)
+        , allocator_(nullptr)
+        , size_(0)
     {
     }
 
@@ -122,4 +122,4 @@ protected:
     unsigned size_;
 };
 
-}
+} // namespace Urho3D

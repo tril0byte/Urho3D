@@ -35,10 +35,10 @@
 namespace Urho3D
 {
 
-ShaderPrecache::ShaderPrecache(Context* context, const String& fileName) :
-    Object(context),
-    fileName_(fileName),
-    xmlFile_(context)
+ShaderPrecache::ShaderPrecache(Context* context, const String& fileName)
+    : Object(context)
+    , fileName_(fileName)
+    , xmlFile_(context)
 {
     if (GetSubsystem<FileSystem>()->FileExists(fileName))
     {
@@ -141,4 +141,4 @@ void ShaderPrecache::LoadShaders(Graphics* graphics, Deserializer& source)
     URHO3D_LOGDEBUG("End precaching shaders");
 }
 
-}
+} // namespace Urho3D

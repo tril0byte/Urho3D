@@ -174,7 +174,8 @@ public:
     /// Visualize the component as debug geometry.
     void DrawDebugGeometry(DebugRenderer* debug, bool depthTest) override;
 
-    /// Set size and maximum subdivision levels. If octree is not empty, drawable objects will be temporarily moved to the root.
+    /// Set size and maximum subdivision levels. If octree is not empty, drawable objects will be temporarily moved to
+    /// the root.
     void SetSize(const BoundingBox& box, unsigned numLevels);
     /// Update and reinsert drawable objects.
     void Update(const FrameInfo& frame);
@@ -220,4 +221,4 @@ private:
     unsigned numLevels_;
 };
 
-}
+} // namespace Urho3D

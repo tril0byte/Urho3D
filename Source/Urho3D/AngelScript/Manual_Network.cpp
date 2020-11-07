@@ -22,8 +22,8 @@
 
 #ifdef URHO3D_NETWORK
 
-#include "../Precompiled.h"
 #include "../AngelScript/APITemplates.h"
+#include "../Precompiled.h"
 
 #include "../AngelScript/Manual_Network.h"
 
@@ -31,17 +31,12 @@ namespace Urho3D
 {
 
 // This function is called before ASRegisterGenerated()
-void ASRegisterManualFirst_Network(asIScriptEngine* engine)
-{
-}
+void ASRegisterManualFirst_Network(asIScriptEngine* engine) {}
 
 // ========================================================================================
 
 // template<class T> T * Object::GetSubsystem() const | File: ../Core/Object.h
-static Network* GetNetwork()
-{
-    return GetScriptContext()->GetSubsystem<Network>();
-}
+static Network* GetNetwork() { return GetScriptContext()->GetSubsystem<Network>(); }
 
 // This function is called after ASRegisterGenerated()
 void ASRegisterManualLast_Network(asIScriptEngine* engine)

@@ -22,11 +22,11 @@
 
 #include "../Precompiled.h"
 
+#include "../AngelScript/APITemplates.h"
+#include "../AngelScript/Addons.h"
 #include "../AngelScript/Script.h"
 #include "../AngelScript/ScriptFile.h"
 #include "../AngelScript/ScriptInstance.h"
-#include "../AngelScript/Addons.h"
-#include "../AngelScript/APITemplates.h"
 #include "../Core/Context.h"
 #include "../Core/Profiler.h"
 #include "../IO/Log.h"
@@ -46,47 +46,42 @@
 namespace Urho3D
 {
 
-static const char* methodDeclarations[] = {
-    "void Start()",
-    "void Stop()",
-    "void DelayedStart()",
-    "void Update(float)",
-    "void PostUpdate(float)",
-    "void FixedUpdate(float)",
-    "void FixedPostUpdate(float)",
-    "void Load(Deserializer&)",
-    "void Save(Serializer&)",
-    "void ReadNetworkUpdate(Deserializer&)",
-    "void WriteNetworkUpdate(Serializer&)",
-    "void ApplyAttributes()",
-    "void TransformChanged()"
-};
+static const char* methodDeclarations[] = {"void Start()",
+                                           "void Stop()",
+                                           "void DelayedStart()",
+                                           "void Update(float)",
+                                           "void PostUpdate(float)",
+                                           "void FixedUpdate(float)",
+                                           "void FixedPostUpdate(float)",
+                                           "void Load(Deserializer&)",
+                                           "void Save(Serializer&)",
+                                           "void ReadNetworkUpdate(Deserializer&)",
+                                           "void WriteNetworkUpdate(Serializer&)",
+                                           "void ApplyAttributes()",
+                                           "void TransformChanged()"};
 
-ScriptInstance::ScriptInstance(Context* context) :
-    Component(context)
+ScriptInstance::ScriptInstance(Context* context)
+    : Component(context)
 {
     ClearScriptAttributes();
 }
 
-ScriptInstance::~ScriptInstance()
-{
-    ReleaseObject();
-}
+ScriptInstance::~ScriptInstance() { ReleaseObject(); }
 
 void ScriptInstance::RegisterObject(Context* context)
 {
     context->RegisterFactory<ScriptInstance>(LOGIC_CATEGORY);
 
     URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AM_DEFAULT);
-    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Delayed Method Calls", GetDelayedCallsAttr, SetDelayedCallsAttr, PODVector<unsigned char>,
-        Variant::emptyBuffer, AM_FILE | AM_NOEDIT);
+    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Delayed Method Calls", GetDelayedCallsAttr, SetDelayedCallsAttr,
+                                    PODVector<unsigned char>, Variant::emptyBuffer, AM_FILE | AM_NOEDIT);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Script File", GetScriptFileAttr, SetScriptFileAttr, ResourceRef,
-        ResourceRef(ScriptFile::GetTypeStatic()), AM_DEFAULT);
+                                    ResourceRef(ScriptFile::GetTypeStatic()), AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Class Name", GetClassName, SetClassName, String, String::EMPTY, AM_DEFAULT);
-    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Script Data", GetScriptDataAttr, SetScriptDataAttr, PODVector<unsigned char>, Variant::emptyBuffer,
-        AM_FILE | AM_NOEDIT);
-    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Script Network Data", GetScriptNetworkDataAttr, SetScriptNetworkDataAttr, PODVector<unsigned char>,
-        Variant::emptyBuffer, AM_NET | AM_NOEDIT);
+    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Script Data", GetScriptDataAttr, SetScriptDataAttr, PODVector<unsigned char>,
+                                    Variant::emptyBuffer, AM_FILE | AM_NOEDIT);
+    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Script Network Data", GetScriptNetworkDataAttr, SetScriptNetworkDataAttr,
+                                    PODVector<unsigned char>, Variant::emptyBuffer, AM_NET | AM_NOEDIT);
 }
 
 void ScriptInstance::OnSetAttribute(const AttributeInfo& attr, const Variant& src)
@@ -101,8 +96,8 @@ void ScriptInstance::OnSetAttribute(const AttributeInfo& attr, const Variant& sr
 
     if (attr.mode_ & (AM_NODEID | AM_COMPONENTID))
     {
-        // The component / node to which the ID refers to may not be in the scene yet, and furthermore the ID must go through the
-        // SceneResolver first. Delay searching for the object to ApplyAttributes
+        // The component / node to which the ID refers to may not be in the scene yet, and furthermore the ID must go
+        // through the SceneResolver first. Delay searching for the object to ApplyAttributes
         auto* attrPtr = const_cast<AttributeInfo*>(&attr);
         idAttributes_[attrPtr] = src.GetUInt();
     }
@@ -187,7 +182,8 @@ void ScriptInstance::OnGetAttribute(const AttributeInfo& attr, Variant& dest) co
         auto* arr = reinterpret_cast<CScriptArray*>(attr.ptr_);
         if (arr)
             dest = ArrayToVector<String>(arr);
-    } else
+    }
+    else
         Serializable::OnGetAttribute(attr, dest);
 }
 
@@ -224,10 +220,7 @@ void ScriptInstance::ApplyAttributes()
         scriptFile_->Execute(scriptObject_, methods_[METHOD_APPLYATTRIBUTES]);
 }
 
-void ScriptInstance::OnSetEnabled()
-{
-    UpdateEventSubscription();
-}
+void ScriptInstance::OnSetEnabled() { UpdateEventSubscription(); }
 
 bool ScriptInstance::CreateObject(ScriptFile* scriptFile, const String& className)
 {
@@ -297,7 +290,8 @@ bool ScriptInstance::Execute(asIScriptFunction* method, const VariantVector& par
     return scriptFile_->Execute(scriptObject_, method, parameters);
 }
 
-void ScriptInstance::DelayedExecute(float delay, bool repeat, const String& declaration, const VariantVector& parameters)
+void ScriptInstance::DelayedExecute(float delay, bool repeat, const String& declaration,
+                                    const VariantVector& parameters)
 {
     if (!scriptObject_)
         return;
@@ -378,35 +372,23 @@ void ScriptInstance::AddEventHandler(Object* sender, StringHash eventType, const
     SubscribeToEvent(sender, eventType, URHO3D_HANDLER_USERDATA(ScriptInstance, HandleScriptEvent, (void*)method));
 }
 
-void ScriptInstance::RemoveEventHandler(StringHash eventType)
-{
-    UnsubscribeFromEvent(eventType);
-}
+void ScriptInstance::RemoveEventHandler(StringHash eventType) { UnsubscribeFromEvent(eventType); }
 
 void ScriptInstance::RemoveEventHandler(Object* sender, StringHash eventType)
 {
     UnsubscribeFromEvent(sender, eventType);
 }
 
-void ScriptInstance::RemoveEventHandlers(Object* sender)
-{
-    UnsubscribeFromEvents(sender);
-}
+void ScriptInstance::RemoveEventHandlers(Object* sender) { UnsubscribeFromEvents(sender); }
 
-void ScriptInstance::RemoveEventHandlers()
-{
-    UnsubscribeFromAllEventsExcept(PODVector<StringHash>(), true);
-}
+void ScriptInstance::RemoveEventHandlers() { UnsubscribeFromAllEventsExcept(PODVector<StringHash>(), true); }
 
 void ScriptInstance::RemoveEventHandlersExcept(const PODVector<StringHash>& exceptions)
 {
     UnsubscribeFromAllEventsExcept(exceptions, true);
 }
 
-bool ScriptInstance::HasEventHandler(StringHash eventType) const
-{
-    return HasSubscribedToEvent(eventType);
-}
+bool ScriptInstance::HasEventHandler(StringHash eventType) const { return HasSubscribedToEvent(eventType); }
 
 bool ScriptInstance::HasEventHandler(Object* sender, StringHash eventType) const
 {
@@ -423,7 +405,7 @@ bool ScriptInstance::IsA(const String& className) const
         asITypeInfo* myType = scriptObject_->GetObjectType();
         asITypeInfo* searchType = myType->GetModule()->GetTypeInfoByName(className.CString());
         return searchType && (searchType->GetTypeId() & asTYPEID_MASK_OBJECT) != 0 &&
-            (myType->DerivesFrom(searchType) || myType->Implements(searchType));
+               (myType->DerivesFrom(searchType) || myType->Implements(searchType));
     }
     return false;
 }
@@ -639,7 +621,7 @@ void ScriptInstance::GetScriptAttributes()
     {
         const char* name = nullptr;
         int typeId = 0; // AngelScript void typeid
-        bool isPrivate=false, isProtected=false, isHandle=false, isEnum=false;
+        bool isPrivate = false, isProtected = false, isHandle = false, isEnum = false;
 
         scriptObject_->GetObjectType()->GetProperty(i, &name, &typeId, &isPrivate, &isProtected);
 
@@ -696,11 +678,12 @@ void ScriptInstance::GetScriptAttributes()
         {
             // For a handle type, check if it's an Object subclass with a registered factory
             StringHash typeHash(typeName);
-            const HashMap<StringHash, SharedPtr<ObjectFactory> >& factories = context_->GetObjectFactories();
-            HashMap<StringHash, SharedPtr<ObjectFactory> >::ConstIterator j = factories.Find(typeHash);
+            const HashMap<StringHash, SharedPtr<ObjectFactory>>& factories = context_->GetObjectFactories();
+            HashMap<StringHash, SharedPtr<ObjectFactory>>::ConstIterator j = factories.Find(typeHash);
             if (j != factories.End())
             {
-                // Check base class type. Node & Component are supported as ID attributes, Resource as a resource reference
+                // Check base class type. Node & Component are supported as ID attributes, Resource as a resource
+                // reference
                 const TypeInfo* typeInfo = j->second_->GetTypeInfo();
                 if (typeInfo->IsTypeOf<Node>())
                 {
@@ -756,7 +739,8 @@ void ScriptInstance::RestoreScriptAttributes()
         }
     }
 
-    // Clear after restoring once. If the attributes are no longer in use (script code has changed) they are forgotten now
+    // Clear after restoring once. If the attributes are no longer in use (script code has changed) they are forgotten
+    // now
     storedAttributes_.Clear();
 }
 
@@ -794,7 +778,8 @@ void ScriptInstance::UpdateEventSubscription()
                     if (methods_[METHOD_FIXEDUPDATE])
                         SubscribeToEvent(world, E_PHYSICSPRESTEP, URHO3D_HANDLER(ScriptInstance, HandlePhysicsPreStep));
                     if (methods_[METHOD_FIXEDPOSTUPDATE])
-                        SubscribeToEvent(world, E_PHYSICSPOSTSTEP, URHO3D_HANDLER(ScriptInstance, HandlePhysicsPostStep));
+                        SubscribeToEvent(world, E_PHYSICSPOSTSTEP,
+                                         URHO3D_HANDLER(ScriptInstance, HandlePhysicsPostStep));
                 }
                 else
                     URHO3D_LOGERROR("No physics world, can not subscribe script object to fixed update events");
@@ -871,7 +856,7 @@ void ScriptInstance::HandleSceneUpdate(StringHash eventType, VariantMap& eventDa
     if (methods_[METHOD_DELAYEDSTART])
     {
         scriptFile_->Execute(scriptObject_, methods_[METHOD_DELAYEDSTART]);
-        methods_[METHOD_DELAYEDSTART] = nullptr;  // Only execute once
+        methods_[METHOD_DELAYEDSTART] = nullptr; // Only execute once
     }
 
     if (methods_[METHOD_UPDATE])
@@ -905,7 +890,7 @@ void ScriptInstance::HandlePhysicsPreStep(StringHash eventType, VariantMap& even
     if (methods_[METHOD_DELAYEDSTART])
     {
         scriptFile_->Execute(scriptObject_, methods_[METHOD_DELAYEDSTART]);
-        methods_[METHOD_DELAYEDSTART] = nullptr;  // Only execute once
+        methods_[METHOD_DELAYEDSTART] = nullptr; // Only execute once
     }
 
     using namespace PhysicsPreStep;
@@ -961,10 +946,7 @@ void ScriptInstance::HandleScriptFileReloadFinished(StringHash eventType, Varian
     }
 }
 
-asIScriptContext* GetActiveASContext()
-{
-    return asGetActiveContext();
-}
+asIScriptContext* GetActiveASContext() { return asGetActiveContext(); }
 
 Context* GetScriptContext()
 {
@@ -1006,7 +988,8 @@ Scene* GetScriptContextScene()
 
 ScriptEventListener* GetScriptContextEventListener()
 {
-    // If the context has an object and that object has user data set, try and get the ScriptInstance, otherwise try and get a ScriptFile.
+    // If the context has an object and that object has user data set, try and get the ScriptInstance, otherwise try and
+    // get a ScriptFile.
     asIScriptContext* context = asGetActiveContext();
     if (context)
     {
@@ -1020,10 +1003,6 @@ ScriptEventListener* GetScriptContextEventListener()
         return nullptr;
 }
 
-Object* GetScriptContextEventListenerObject()
-{
-    return dynamic_cast<Object*>(GetScriptContextEventListener());
-}
+Object* GetScriptContextEventListenerObject() { return dynamic_cast<Object*>(GetScriptContextEventListener()); }
 
-
-}
+} // namespace Urho3D

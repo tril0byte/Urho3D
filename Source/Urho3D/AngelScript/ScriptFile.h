@@ -81,23 +81,26 @@ public:
 
     /// Query for a function by declaration and execute if found.
     bool Execute(const String& declaration, const VariantVector& parameters = Variant::emptyVariantVector,
-        Variant* functionReturn = nullptr, bool unprepare = true);
+                 Variant* functionReturn = nullptr, bool unprepare = true);
     /// Execute a function.
     bool Execute(asIScriptFunction* function, const VariantVector& parameters = Variant::emptyVariantVector,
-        Variant* functionReturn = nullptr, bool unprepare = true);
+                 Variant* functionReturn = nullptr, bool unprepare = true);
     /// Query for an object method by declaration and execute if found.
-    bool Execute(asIScriptObject* object, const String& declaration, const VariantVector& parameters = Variant::emptyVariantVector,
-        Variant* functionReturn = nullptr, bool unprepare = true);
+    bool Execute(asIScriptObject* object, const String& declaration,
+                 const VariantVector& parameters = Variant::emptyVariantVector, Variant* functionReturn = nullptr,
+                 bool unprepare = true);
     /// Execute an object method.
-    bool Execute(asIScriptObject* object, asIScriptFunction* method, const VariantVector& parameters = Variant::emptyVariantVector,
-        Variant* functionReturn = nullptr, bool unprepare = true);
+    bool Execute(asIScriptObject* object, asIScriptFunction* method,
+                 const VariantVector& parameters = Variant::emptyVariantVector, Variant* functionReturn = nullptr,
+                 bool unprepare = true);
 
     /// Add a delay-executed function call, optionally repeating.
-    void DelayedExecute
-        (float delay, bool repeat, const String& declaration, const VariantVector& parameters = Variant::emptyVariantVector);
+    void DelayedExecute(float delay, bool repeat, const String& declaration,
+                        const VariantVector& parameters = Variant::emptyVariantVector);
     /// Clear pending delay-executed function calls. If empty declaration given, clears all.
     void ClearDelayedExecute(const String& declaration = String::EMPTY);
-    /// Create a script object. Optionally search for the first class in the module that implements the specified interface.
+    /// Create a script object. Optionally search for the first class in the module that implements the specified
+    /// interface.
     asIScriptObject* CreateObject(const String& className, bool useInterface = false);
     /// Save the script bytecode. Return true if successful.
     bool SaveByteCode(Serializer& dest);
@@ -143,11 +146,11 @@ private:
     /// Search cache for functions.
     HashMap<String, asIScriptFunction*> functions_;
     /// Search cache for methods.
-    HashMap<asITypeInfo*, HashMap<String, asIScriptFunction*> > methods_;
+    HashMap<asITypeInfo*, HashMap<String, asIScriptFunction*>> methods_;
     /// Delayed function calls.
     Vector<DelayedCall> delayedCalls_;
     /// Event helper objects for handling procedural or non-ScriptInstance script events.
-    HashMap<asIScriptObject*, SharedPtr<ScriptEventInvoker> > eventInvokers_;
+    HashMap<asIScriptObject*, SharedPtr<ScriptEventInvoker>> eventInvokers_;
     /// Byte code for asynchronous loading.
     SharedArrayPtr<unsigned char> loadByteCode_;
     /// Byte code size for asynchronous loading.
@@ -185,4 +188,4 @@ private:
 /// Get currently executing script file.
 URHO3D_API ScriptFile* GetScriptContextFile();
 
-}
+} // namespace Urho3D

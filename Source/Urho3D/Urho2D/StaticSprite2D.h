@@ -47,10 +47,10 @@ public:
     void SetSprite(Sprite2D* sprite);
     /// Set draw rectangle.
     /// @property
-    void SetDrawRect(const Rect &rect);
+    void SetDrawRect(const Rect& rect);
     /// Set texture rectangle.
     /// @property
-    void SetTextureRect(const Rect &rect);
+    void SetTextureRect(const Rect& rect);
     /// Set blend mode.
     /// @property
     void SetBlendMode(BlendMode blendMode);
@@ -152,9 +152,7 @@ public:
     /// Return custom material attribute.
     ResourceRef GetCustomMaterialAttr() const;
 
-
 protected:
-
     /// Handle scene being assigned.
     void OnSceneSet(Scene* scene) override;
     /// Recalculate the world-space bounding box.
@@ -196,4 +194,4 @@ protected:
     SharedPtr<Material> customMaterial_;
 };
 
-}
+} // namespace Urho3D

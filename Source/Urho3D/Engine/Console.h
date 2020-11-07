@@ -75,7 +75,8 @@ public:
     /// Set command history maximum size, 0 disables history.
     /// @property
     void SetNumHistoryRows(unsigned rows);
-    /// Set whether to automatically focus the line edit when showing. Default true on desktops and false on mobile devices, as on mobiles it would pop up the screen keyboard.
+    /// Set whether to automatically focus the line edit when showing. Default true on desktops and false on mobile
+    /// devices, as on mobiles it would pop up the screen keyboard.
     /// @property
     void SetFocusOnShow(bool enable);
     /// Add auto complete option.
@@ -180,7 +181,7 @@ private:
     /// Command history.
     Vector<String> history_;
     /// Pending log message rows.
-    Vector<Pair<int, String> > pendingRows_;
+    Vector<Pair<int, String>> pendingRows_;
     /// Current row being edited.
     String currentRow_;
     /// Maximum displayed rows.
@@ -214,4 +215,4 @@ private:
     bool historyOrAutoCompleteChange_;
 };
 
-}
+} // namespace Urho3D

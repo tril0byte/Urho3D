@@ -33,28 +33,25 @@
 namespace Urho3D
 {
 
-IndexBuffer::IndexBuffer(Context* context, bool forceHeadless) :
-    Object(context),
-    GPUObject(forceHeadless ? nullptr : GetSubsystem<Graphics>()),
-    indexCount_(0),
-    indexSize_(0),
-    lockState_(LOCK_NONE),
-    lockStart_(0),
-    lockCount_(0),
-    lockScratchData_(nullptr),
-    shadowed_(false),
-    dynamic_(false),
-    discardLock_(false)
+IndexBuffer::IndexBuffer(Context* context, bool forceHeadless)
+    : Object(context)
+    , GPUObject(forceHeadless ? nullptr : GetSubsystem<Graphics>())
+    , indexCount_(0)
+    , indexSize_(0)
+    , lockState_(LOCK_NONE)
+    , lockStart_(0)
+    , lockCount_(0)
+    , lockScratchData_(nullptr)
+    , shadowed_(false)
+    , dynamic_(false)
+    , discardLock_(false)
 {
     // Force shadowing mode if graphics subsystem does not exist
     if (!graphics_)
         shadowed_ = true;
 }
 
-IndexBuffer::~IndexBuffer()
-{
-    Release();
-}
+IndexBuffer::~IndexBuffer() { Release(); }
 
 void IndexBuffer::SetShadowed(bool enable)
 {
@@ -135,4 +132,4 @@ bool IndexBuffer::GetUsedVertexRange(unsigned start, unsigned count, unsigned& m
     return true;
 }
 
-}
+} // namespace Urho3D

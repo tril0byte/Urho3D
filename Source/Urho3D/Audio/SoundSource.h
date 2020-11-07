@@ -35,7 +35,8 @@ class SoundStream;
 /// Compressed audio decode buffer length in milliseconds.
 static const int STREAM_BUFFER_LENGTH = 100;
 
-/// %Sound source component with stereo position. A sound source needs to be created to a node to be considered "enabled" and be able to play, however that node does not need to belong to a scene.
+/// %Sound source component with stereo position. A sound source needs to be created to a node to be considered
+/// "enabled" and be able to play, however that node does not need to belong to a scene.
 class URHO3D_API SoundSource : public Component
 {
     URHO3D_OBJECT(SoundSource, Component);
@@ -76,7 +77,8 @@ public:
     /// Set stereo panning. -1.0 is full left and 1.0 is full right.
     /// @property
     void SetPanning(float panning);
-    /// Set to remove either the sound source component or its owner node from the scene automatically on sound playback completion. Disabled by default.
+    /// Set to remove either the sound source component or its owner node from the scene automatically on sound playback
+    /// completion. Disabled by default.
     /// @property
     void SetAutoRemoveMode(AutoRemoveMode mode);
     /// Set new playback position.
@@ -207,4 +209,4 @@ private:
     int unusedStreamSize_;
 };
 
-}
+} // namespace Urho3D

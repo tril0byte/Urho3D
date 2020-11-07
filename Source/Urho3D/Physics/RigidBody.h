@@ -171,9 +171,11 @@ public:
     void Activate();
     /// Readd rigid body to the physics world to clean up internal state like stale contacts.
     void ReAddBodyToWorld();
-    /// Disable mass update. Call this to optimize performance when adding or editing multiple collision shapes in the same node.
+    /// Disable mass update. Call this to optimize performance when adding or editing multiple collision shapes in the
+    /// same node.
     void DisableMassUpdate();
-    /// Re-enable mass update and recalculate the mass/inertia by calling UpdateMass(). Call when collision shape changes are finished.
+    /// Re-enable mass update and recalculate the mass/inertia by calling UpdateMass(). Call when collision shape
+    /// changes are finished.
     void EnableMassUpdate();
 
     /// Return physics world.
@@ -279,12 +281,14 @@ public:
     /// @property
     CollisionEventMode GetCollisionEventMode() const { return collisionEventMode_; }
 
-    /// Return colliding rigid bodies from the last simulation step. Only returns collisions that were sent as events (depends on collision event mode) and excludes e.g. static-static collisions.
+    /// Return colliding rigid bodies from the last simulation step. Only returns collisions that were sent as events
+    /// (depends on collision event mode) and excludes e.g. static-static collisions.
     void GetCollidingBodies(PODVector<RigidBody*>& result) const;
 
     /// Apply new world transform after a simulation step. Called internally.
     void ApplyWorldTransform(const Vector3& newWorldPosition, const Quaternion& newWorldRotation);
-    /// Update mass and inertia to the Bullet rigid body. Readd body to world if necessary: if was in world and the Bullet collision shape to use changed.
+    /// Update mass and inertia to the Bullet rigid body. Readd body to world if necessary: if was in world and the
+    /// Bullet collision shape to use changed.
     void UpdateMass();
     /// Update gravity parameters to the Bullet rigid body.
     void UpdateGravity();
@@ -365,4 +369,4 @@ private:
     mutable bool hasSimulated_;
 };
 
-}
+} // namespace Urho3D

@@ -40,16 +40,17 @@ struct DecalVertex
     DecalVertex() = default;
 
     /// Construct with position and normal.
-    DecalVertex(const Vector3& position, const Vector3& normal) :
-        position_(position),
-        normal_(normal)
+    DecalVertex(const Vector3& position, const Vector3& normal)
+        : position_(position)
+        , normal_(normal)
     {
     }
 
     /// Construct with position, normal and skinning information.
-    DecalVertex(const Vector3& position, const Vector3& normal, const float* blendWeights, const unsigned char* blendIndices) :
-        position_(position),
-        normal_(normal)
+    DecalVertex(const Vector3& position, const Vector3& normal, const float* blendWeights,
+                const unsigned char* blendIndices)
+        : position_(position)
+        , normal_(normal)
     {
         for (unsigned i = 0; i < 4; ++i)
         {
@@ -76,9 +77,9 @@ struct DecalVertex
 struct Decal
 {
     /// Construct with defaults.
-    Decal() :
-        timer_(0.0f),
-        timeToLive_(0.0f)
+    Decal()
+        : timer_(0.0f)
+        , timeToLive_(0.0f)
     {
     }
 
@@ -118,7 +119,8 @@ public:
     void OnSetEnabled() override;
     /// Process octree raycast. May be called from a worker thread.
     void ProcessRayQuery(const RayOctreeQuery& query, PODVector<RayQueryResult>& results) override;
-    /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly re-entrantly.
+    /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly
+    /// re-entrantly.
     void UpdateBatches(const FrameInfo& frame) override;
     /// Prepare geometry for rendering. Called from a worker thread if possible (no GPU update).
     void UpdateGeometry(const FrameInfo& frame) override;
@@ -134,13 +136,16 @@ public:
     /// Set maximum number of decal vertex indices.
     /// @property
     void SetMaxIndices(unsigned num);
-    /// Set whether to optimize GPU buffer sizes according to current amount of decals. Default false, which will size the buffers according to the maximum vertices/indices. When true, buffers will be reallocated whenever decals are added/removed, which can be worse for performance.
+    /// Set whether to optimize GPU buffer sizes according to current amount of decals. Default false, which will size
+    /// the buffers according to the maximum vertices/indices. When true, buffers will be reallocated whenever decals
+    /// are added/removed, which can be worse for performance.
     /// @property
     void SetOptimizeBufferSize(bool enable);
-    /// Add a decal at world coordinates, using a target drawable's geometry for reference. If the decal needs to move with the target, the decal component should be created to the target's node. Return true if successful.
-    bool AddDecal(Drawable* target, const Vector3& worldPosition, const Quaternion& worldRotation, float size, float aspectRatio,
-        float depth, const Vector2& topLeftUV, const Vector2& bottomRightUV, float timeToLive = 0.0f, float normalCutoff = 0.1f,
-        unsigned subGeometry = M_MAX_UNSIGNED);
+    /// Add a decal at world coordinates, using a target drawable's geometry for reference. If the decal needs to move
+    /// with the target, the decal component should be created to the target's node. Return true if successful.
+    bool AddDecal(Drawable* target, const Vector3& worldPosition, const Quaternion& worldRotation, float size,
+                  float aspectRatio, float depth, const Vector2& topLeftUV, const Vector2& bottomRightUV,
+                  float timeToLive = 0.0f, float normalCutoff = 0.1f, unsigned subGeometry = M_MAX_UNSIGNED);
     /// Remove n oldest decals.
     void RemoveDecals(unsigned num);
     /// Remove all decals.
@@ -191,20 +196,19 @@ protected:
 
 private:
     /// Get triangle faces from the target geometry.
-    void GetFaces(Vector<PODVector<DecalVertex> >& faces, Drawable* target, unsigned batchIndex, const Frustum& frustum,
-        const Vector3& decalNormal, float normalCutoff);
+    void GetFaces(Vector<PODVector<DecalVertex>>& faces, Drawable* target, unsigned batchIndex, const Frustum& frustum,
+                  const Vector3& decalNormal, float normalCutoff);
     /// Get triangle face from the target geometry.
-    void GetFace
-        (Vector<PODVector<DecalVertex> >& faces, Drawable* target, unsigned batchIndex, unsigned i0, unsigned i1, unsigned i2,
-            const unsigned char* positionData, const unsigned char* normalData, const unsigned char* skinningData,
-            unsigned positionStride, unsigned normalStride, unsigned skinningStride, const Frustum& frustum,
-            const Vector3& decalNormal, float normalCutoff);
+    void GetFace(Vector<PODVector<DecalVertex>>& faces, Drawable* target, unsigned batchIndex, unsigned i0, unsigned i1,
+                 unsigned i2, const unsigned char* positionData, const unsigned char* normalData,
+                 const unsigned char* skinningData, unsigned positionStride, unsigned normalStride,
+                 unsigned skinningStride, const Frustum& frustum, const Vector3& decalNormal, float normalCutoff);
     /// Get bones referenced by skinning data and remap the skinning indices. Return true if successful.
     bool GetBones(Drawable* target, unsigned batchIndex, const float* blendWeights, const unsigned char* blendIndices,
-        unsigned char* newBlendIndices);
+                  unsigned char* newBlendIndices);
     /// Calculate UV coordinates for the decal.
-    void CalculateUVs
-        (Decal& decal, const Matrix3x4& view, const Matrix4& projection, const Vector2& topLeftUV, const Vector2& bottomRightUV);
+    void CalculateUVs(Decal& decal, const Matrix3x4& view, const Matrix4& projection, const Vector2& topLeftUV,
+                      const Vector2& bottomRightUV);
     /// Transform decal's vertices from the target geometry to the decal set local space.
     void TransformVertices(Decal& decal, const Matrix3x4& transform);
     /// Remove a decal by iterator and return iterator to the next decal.
@@ -262,4 +266,4 @@ private:
     bool subscribed_;
 };
 
-}
+} // namespace Urho3D

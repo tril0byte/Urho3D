@@ -31,31 +31,16 @@
 #include "../DebugNew.h"
 
 #ifdef _MSC_VER
-#pragma warning(disable:6293)
+#pragma warning(disable : 6293)
 #endif
 
 namespace Urho3D
 {
 
-static const char* commandTypeNames[] =
-{
-    "none",
-    "clear",
-    "scenepass",
-    "quad",
-    "forwardlights",
-    "lightvolumes",
-    "renderui",
-    "sendevent",
-    nullptr
-};
+static const char* commandTypeNames[] = {"none",         "clear",    "scenepass", "quad", "forwardlights",
+                                         "lightvolumes", "renderui", "sendevent", nullptr};
 
-static const char* sortModeNames[] =
-{
-    "fronttoback",
-    "backtofront",
-    nullptr
-};
+static const char* sortModeNames[] = {"fronttoback", "backtofront", nullptr};
 
 extern const char* blendModeNames[];
 
@@ -115,7 +100,8 @@ void RenderTargetInfo::Load(const XMLElement& element)
 
 void RenderPathCommand::Load(const XMLElement& element)
 {
-    type_ = (RenderCommandType)GetStringListIndex(element.GetAttributeLower("type").CString(), commandTypeNames, CMD_NONE);
+    type_ =
+        (RenderCommandType)GetStringListIndex(element.GetAttributeLower("type").CString(), commandTypeNames, CMD_NONE);
     tag_ = element.GetAttribute("tag");
     if (element.HasAttribute("enabled"))
         enabled_ = element.GetBool("enabled");
@@ -147,8 +133,8 @@ void RenderPathCommand::Load(const XMLElement& element)
 
     case CMD_SCENEPASS:
         pass_ = element.GetAttribute("pass");
-        sortMode_ =
-            (RenderCommandSortMode)GetStringListIndex(element.GetAttributeLower("sort").CString(), sortModeNames, SORT_FRONTTOBACK);
+        sortMode_ = (RenderCommandSortMode)GetStringListIndex(element.GetAttributeLower("sort").CString(),
+                                                              sortModeNames, SORT_FRONTTOBACK);
         if (element.HasAttribute("marktostencil"))
             markToStencil_ = element.GetBool("marktostencil");
         if (element.HasAttribute("vertexlights"))
@@ -200,7 +186,8 @@ void RenderPathCommand::Load(const XMLElement& element)
             if (index >= outputs_.Size())
                 outputs_.Resize(index + 1);
             outputs_[index].first_ = outputElem.GetAttribute("name");
-            outputs_[index].second_ = outputElem.HasAttribute("face") ? (CubeMapFace)outputElem.GetInt("face") : FACE_POSITIVE_X;
+            outputs_[index].second_ =
+                outputElem.HasAttribute("face") ? (CubeMapFace)outputElem.GetInt("face") : FACE_POSITIVE_X;
         }
         outputElem = outputElem.GetNext("output");
     }
@@ -244,10 +231,7 @@ void RenderPathCommand::SetShaderParameter(const String& name, const Variant& va
     shaderParameters_[name] = value;
 }
 
-void RenderPathCommand::RemoveShaderParameter(const String& name)
-{
-    shaderParameters_.Erase(name);
-}
+void RenderPathCommand::RemoveShaderParameter(const String& name) { shaderParameters_.Erase(name); }
 
 void RenderPathCommand::SetNumOutputs(unsigned num)
 {
@@ -279,11 +263,7 @@ void RenderPathCommand::SetOutputFace(unsigned index, CubeMapFace face)
         outputs_.Push(MakePair(String::EMPTY, face));
 }
 
-
-void RenderPathCommand::SetDepthStencilName(const String& name)
-{
-    depthStencilName_ = name;
-}
+void RenderPathCommand::SetDepthStencilName(const String& name) { depthStencilName_ = name; }
 
 const String& RenderPathCommand::GetTextureName(TextureUnit unit) const
 {
@@ -432,15 +412,9 @@ void RenderPath::SetRenderTarget(unsigned index, const RenderTargetInfo& info)
         AddRenderTarget(info);
 }
 
-void RenderPath::AddRenderTarget(const RenderTargetInfo& info)
-{
-    renderTargets_.Push(info);
-}
+void RenderPath::AddRenderTarget(const RenderTargetInfo& info) { renderTargets_.Push(info); }
 
-void RenderPath::RemoveRenderTarget(unsigned index)
-{
-    renderTargets_.Erase(index);
-}
+void RenderPath::RemoveRenderTarget(unsigned index) { renderTargets_.Erase(index); }
 
 void RenderPath::RemoveRenderTarget(const String& name)
 {
@@ -471,20 +445,11 @@ void RenderPath::SetCommand(unsigned index, const RenderPathCommand& command)
         AddCommand(command);
 }
 
-void RenderPath::AddCommand(const RenderPathCommand& command)
-{
-    commands_.Push(command);
-}
+void RenderPath::AddCommand(const RenderPathCommand& command) { commands_.Push(command); }
 
-void RenderPath::InsertCommand(unsigned index, const RenderPathCommand& command)
-{
-    commands_.Insert(index, command);
-}
+void RenderPath::InsertCommand(unsigned index, const RenderPathCommand& command) { commands_.Insert(index, command); }
 
-void RenderPath::RemoveCommand(unsigned index)
-{
-    commands_.Erase(index);
-}
+void RenderPath::RemoveCommand(unsigned index) { commands_.Erase(index); }
 
 void RenderPath::RemoveCommands(const String& tag)
 {
@@ -521,4 +486,4 @@ const Variant& RenderPath::GetShaderParameter(const String& name) const
     return Variant::EMPTY;
 }
 
-}
+} // namespace Urho3D

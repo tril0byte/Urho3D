@@ -39,9 +39,8 @@ class AttributeAnimationInfo : public ValueAnimationInfo
 {
 public:
     /// Construct.
-    AttributeAnimationInfo
-        (Animatable* animatable, const AttributeInfo& attributeInfo, ValueAnimation* attributeAnimation, WrapMode wrapMode,
-            float speed);
+    AttributeAnimationInfo(Animatable* animatable, const AttributeInfo& attributeInfo,
+                           ValueAnimation* attributeAnimation, WrapMode wrapMode, float speed);
     /// Copy construct.
     AttributeAnimationInfo(const AttributeAnimationInfo& other);
     /// Destruct.
@@ -59,7 +58,8 @@ private:
     const AttributeInfo& attributeInfo_;
 };
 
-/// Base class for animatable object, an animatable object can be set animation on it's attributes, or can be set an object animation to it.
+/// Base class for animatable object, an animatable object can be set animation on it's attributes, or can be set an
+/// object animation to it.
 class URHO3D_API Animatable : public Serializable
 {
     URHO3D_OBJECT(Animatable, Serializable);
@@ -84,15 +84,16 @@ public:
     /// Set automatic update of animation, default true.
     /// @property
     void SetAnimationEnabled(bool enable);
-    /// Set time position of all attribute animations or an object animation manually. Automatic update should be disabled in this case.
+    /// Set time position of all attribute animations or an object animation manually. Automatic update should be
+    /// disabled in this case.
     void SetAnimationTime(float time);
 
     /// Set object animation.
     /// @property
     void SetObjectAnimation(ObjectAnimation* objectAnimation);
     /// Set attribute animation.
-    void SetAttributeAnimation
-        (const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode = WM_LOOP, float speed = 1.0f);
+    void SetAttributeAnimation(const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode = WM_LOOP,
+                               float speed = 1.0f);
     /// Set attribute animation wrap mode.
     void SetAttributeAnimationWrapMode(const String& name, WrapMode wrapMode);
     /// Set attribute animation speed.
@@ -133,7 +134,8 @@ protected:
     /// Find target of an attribute animation from object hierarchy by name.
     virtual Animatable* FindAttributeAnimationTarget(const String& name, String& outName);
     /// Set object attribute animation internal.
-    void SetObjectAttributeAnimation(const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode, float speed);
+    void SetObjectAttributeAnimation(const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode,
+                                     float speed);
     /// Handle object animation added.
     void OnObjectAnimationAdded(ObjectAnimation* objectAnimation);
     /// Handle object animation removed.
@@ -156,7 +158,7 @@ protected:
     /// Animated network attribute set.
     HashSet<const AttributeInfo*> animatedNetworkAttributes_;
     /// Attribute animation infos.
-    HashMap<String, SharedPtr<AttributeAnimationInfo> > attributeAnimationInfos_;
+    HashMap<String, SharedPtr<AttributeAnimationInfo>> attributeAnimationInfos_;
 };
 
-}
+} // namespace Urho3D

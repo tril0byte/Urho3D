@@ -31,11 +31,8 @@ namespace Urho3D
 
 inline Vector3 ClipEdgeZ(const Vector3& v0, const Vector3& v1, float clipZ)
 {
-    return Vector3(
-        v1.x_ + (v0.x_ - v1.x_) * ((clipZ - v1.z_) / (v0.z_ - v1.z_)),
-        v1.y_ + (v0.y_ - v1.y_) * ((clipZ - v1.z_) / (v0.z_ - v1.z_)),
-        clipZ
-    );
+    return Vector3(v1.x_ + (v0.x_ - v1.x_) * ((clipZ - v1.z_) / (v0.z_ - v1.z_)),
+                   v1.y_ + (v0.y_ - v1.y_) * ((clipZ - v1.z_) / (v0.z_ - v1.z_)), clipZ);
 }
 
 void ProjectAndMergeEdge(Vector3 v0, Vector3 v1, Rect& rect, const Matrix4& projection)
@@ -57,12 +54,9 @@ void ProjectAndMergeEdge(Vector3 v0, Vector3 v1, Rect& rect, const Matrix4& proj
     rect.Merge(Vector2(tV1.x_, tV1.y_));
 }
 
-Frustum::Frustum(const Frustum& frustum) noexcept
-{
-    *this = frustum;
-}
+Frustum::Frustum(const Frustum& frustum) noexcept { *this = frustum; }
 
-Frustum& Frustum::operator =(const Frustum& rhs) noexcept
+Frustum& Frustum::operator=(const Frustum& rhs) noexcept
 {
     for (unsigned i = 0; i < NUM_FRUSTUM_PLANES; ++i)
         planes_[i] = rhs.planes_[i];
@@ -133,7 +127,8 @@ void Frustum::Define(const Matrix4& projection)
     UpdatePlanes();
 }
 
-void Frustum::DefineOrtho(float orthoSize, float aspectRatio, float zoom, float nearZ, float farZ, const Matrix3x4& transform)
+void Frustum::DefineOrtho(float orthoSize, float aspectRatio, float zoom, float nearZ, float farZ,
+                          const Matrix3x4& transform)
 {
     nearZ = Max(nearZ, 0.0f);
     farZ = Max(farZ, nearZ);
@@ -240,7 +235,6 @@ void Frustum::UpdatePlanes()
             plane.d_ = -plane.d_;
         }
     }
-
 }
 
-}
+} // namespace Urho3D

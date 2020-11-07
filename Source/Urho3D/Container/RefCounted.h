@@ -35,9 +35,9 @@ namespace Urho3D
 struct RefCount
 {
     /// Construct.
-    RefCount() :
-        refs_(0),
-        weakRefs_(0)
+    RefCount()
+        : refs_(0)
+        , weakRefs_(0)
     {
     }
 
@@ -67,11 +67,12 @@ public:
     /// Prevent copy construction.
     RefCounted(const RefCounted& rhs) = delete;
     /// Prevent assignment.
-    RefCounted& operator =(const RefCounted& rhs) = delete;
+    RefCounted& operator=(const RefCounted& rhs) = delete;
 
     /// Increment reference count. Can also be called outside of a SharedPtr for traditional reference counting.
     void AddRef();
-    /// Decrement reference count and delete self if no more references. Can also be called outside of a SharedPtr for traditional reference counting.
+    /// Decrement reference count and delete self if no more references. Can also be called outside of a SharedPtr for
+    /// traditional reference counting.
     void ReleaseRef();
     /// Return reference count.
     /// @property
@@ -88,4 +89,4 @@ private:
     RefCount* refCount_;
 };
 
-}
+} // namespace Urho3D

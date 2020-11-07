@@ -20,8 +20,8 @@
 // THE SOFTWARE.
 //
 
-#include "Utils.h"
 #include "XmlAnalyzer.h"
+#include "Utils.h"
 #include "XmlSourceData.h"
 
 #include <cassert>
@@ -209,7 +209,7 @@ vector<string> ExtractTemplateParams(xml_node memberdef)
         string type = param.child_value("type");
         type = CutStart(type, "class ");
         type = CutStart(type, "typename ");
-        
+
         result.push_back(type);
     }
 
@@ -532,7 +532,7 @@ vector<xml_node> ClassAnalyzer::GetMemberdefs() const
 vector<ClassFunctionAnalyzer> ClassAnalyzer::GetFunctions() const
 {
     vector<ClassFunctionAnalyzer> result;
-   
+
     vector<xml_node> memberdefs = GetMemberdefs();
     for (xml_node memberdef : memberdefs)
     {
@@ -817,7 +817,7 @@ static string GetFunctionLocation(xml_node memberdef)
 
         result = "template<" + t + "> " + result;
     }
-    
+
     result = RemoveFirst(result, "URHO3D_API ");
 
     result = ReplaceAll(result, " **", "** ");
@@ -833,10 +833,7 @@ static string GetFunctionLocation(xml_node memberdef)
     return result;
 }
 
-string ClassFunctionAnalyzer::GetLocation() const
-{
-    return GetFunctionLocation(memberdef_);
-}
+string ClassFunctionAnalyzer::GetLocation() const { return GetFunctionLocation(memberdef_); }
 
 bool ClassFunctionAnalyzer::IsConst() const
 {
@@ -877,7 +874,7 @@ bool ClassFunctionAnalyzer::IsParentDestructor() const
     string functionName = GetName();
     if (!StartsWith(functionName, "~"))
         return false;
-    
+
     return !IsThisDestructor();
 }
 
@@ -923,12 +920,12 @@ string ClassVariableAnalyzer::GetLocation() const
 {
     string definition = ExtractDefinition(memberdef_);
     assert(!definition.empty());
-    
+
     // Remove Urho3D::
     smatch match;
     regex_match(definition, match, regex("(.*)Urho3D::(.+)"));
     assert(match.size() == 3);
-    string result =  match[1].str() + match[2].str();
+    string result = match[1].str() + match[2].str();
 
     result += " | File: " + GetHeaderFile();
 
@@ -1022,10 +1019,7 @@ GlobalFunctionAnalyzer::GlobalFunctionAnalyzer(xml_node memberdef)
     assert(ExtractKind(memberdef) == "function");
 }
 
-string GlobalFunctionAnalyzer::GetLocation() const
-{
-    return GetFunctionLocation(memberdef_);
-}
+string GlobalFunctionAnalyzer::GetLocation() const { return GetFunctionLocation(memberdef_); }
 
 // ============================================================================
 
@@ -1038,7 +1032,4 @@ ClassStaticFunctionAnalyzer::ClassStaticFunctionAnalyzer(ClassAnalyzer classAnal
     assert(IsStatic(memberdef));
 }
 
-string ClassStaticFunctionAnalyzer::GetLocation() const
-{
-    return GetFunctionLocation(memberdef_);
-}
+string ClassStaticFunctionAnalyzer::GetLocation() const { return GetFunctionLocation(memberdef_); }

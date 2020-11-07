@@ -76,7 +76,6 @@ public:
     /// @property
     float GetRatio() const { return jointDef_.ratio; }
 
-
 private:
     /// Return Joint def.
     b2JointDef* GetJointDef() override;
@@ -93,4 +92,4 @@ private:
     Vector2 otherBodyAnchor_;
 };
 
-}
+} // namespace Urho3D

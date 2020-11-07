@@ -41,33 +41,26 @@
 namespace Urho3D
 {
 
-static const char* typeNames[] =
-{
-    "Point",
-    "Hinge",
-    "Slider",
-    "ConeTwist",
-    nullptr
-};
+static const char* typeNames[] = {"Point", "Hinge", "Slider", "ConeTwist", nullptr};
 
 extern const char* PHYSICS_CATEGORY;
 
-Constraint::Constraint(Context* context) :
-    Component(context),
-    constraintType_(CONSTRAINT_POINT),
-    position_(Vector3::ZERO),
-    rotation_(Quaternion::IDENTITY),
-    otherPosition_(Vector3::ZERO),
-    otherRotation_(Quaternion::IDENTITY),
-    highLimit_(Vector2::ZERO),
-    lowLimit_(Vector2::ZERO),
-    erp_(0.0f),
-    cfm_(0.0f),
-    otherBodyNodeID_(0),
-    disableCollision_(false),
-    recreateConstraint_(true),
-    framesDirty_(false),
-    retryCreation_(false)
+Constraint::Constraint(Context* context)
+    : Component(context)
+    , constraintType_(CONSTRAINT_POINT)
+    , position_(Vector3::ZERO)
+    , rotation_(Quaternion::IDENTITY)
+    , otherPosition_(Vector3::ZERO)
+    , otherRotation_(Quaternion::IDENTITY)
+    , highLimit_(Vector2::ZERO)
+    , lowLimit_(Vector2::ZERO)
+    , erp_(0.0f)
+    , cfm_(0.0f)
+    , otherBodyNodeID_(0)
+    , disableCollision_(false)
+    , recreateConstraint_(true)
+    , framesDirty_(false)
+    , retryCreation_(false)
 {
 }
 
@@ -84,12 +77,15 @@ void Constraint::RegisterObject(Context* context)
     context->RegisterFactory<Constraint>(PHYSICS_CATEGORY);
 
     URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AM_DEFAULT);
-    URHO3D_ENUM_ATTRIBUTE_EX("Constraint Type", constraintType_, MarkConstraintDirty, typeNames, CONSTRAINT_POINT, AM_DEFAULT);
+    URHO3D_ENUM_ATTRIBUTE_EX("Constraint Type", constraintType_, MarkConstraintDirty, typeNames, CONSTRAINT_POINT,
+                             AM_DEFAULT);
     URHO3D_ATTRIBUTE_EX("Position", Vector3, position_, AdjustOtherBodyPosition, Vector3::ZERO, AM_DEFAULT);
     URHO3D_ATTRIBUTE_EX("Rotation", Quaternion, rotation_, MarkFramesDirty, Quaternion::IDENTITY, AM_DEFAULT);
     URHO3D_ATTRIBUTE_EX("Other Body Position", Vector3, otherPosition_, MarkFramesDirty, Vector3::ZERO, AM_DEFAULT);
-    URHO3D_ATTRIBUTE_EX("Other Body Rotation", Quaternion, otherRotation_, MarkFramesDirty, Quaternion::IDENTITY, AM_DEFAULT);
-    URHO3D_ATTRIBUTE_EX("Other Body NodeID", unsigned, otherBodyNodeID_, MarkConstraintDirty, 0, AM_DEFAULT | AM_NODEID);
+    URHO3D_ATTRIBUTE_EX("Other Body Rotation", Quaternion, otherRotation_, MarkFramesDirty, Quaternion::IDENTITY,
+                        AM_DEFAULT);
+    URHO3D_ATTRIBUTE_EX("Other Body NodeID", unsigned, otherBodyNodeID_, MarkConstraintDirty, 0,
+                        AM_DEFAULT | AM_NODEID);
     URHO3D_ACCESSOR_ATTRIBUTE("High Limit", GetHighLimit, SetHighLimit, Vector2, Vector2::ZERO, AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Low Limit", GetLowLimit, SetLowLimit, Vector2, Vector2::ZERO, AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("ERP Parameter", GetERP, SetERP, float, 0.0f, AM_DEFAULT);
@@ -369,44 +365,45 @@ void Constraint::ApplyFrames()
 
     Vector3 ownBodyScaledPosition = position_ * cachedWorldScale_ - ownBody_->GetCenterOfMass();
     Vector3 otherBodyScaledPosition =
-        otherBody_ ? otherPosition_ * otherBody_->GetNode()->GetWorldScale() - otherBody_->GetCenterOfMass() : otherPosition_;
+        otherBody_ ? otherPosition_ * otherBody_->GetNode()->GetWorldScale() - otherBody_->GetCenterOfMass()
+                   : otherPosition_;
 
     switch (constraint_->getConstraintType())
     {
     case POINT2POINT_CONSTRAINT_TYPE:
-        {
-            auto* pointConstraint = static_cast<btPoint2PointConstraint*>(constraint_.Get());
-            pointConstraint->setPivotA(ToBtVector3(ownBodyScaledPosition));
-            pointConstraint->setPivotB(ToBtVector3(otherBodyScaledPosition));
-        }
-        break;
+    {
+        auto* pointConstraint = static_cast<btPoint2PointConstraint*>(constraint_.Get());
+        pointConstraint->setPivotA(ToBtVector3(ownBodyScaledPosition));
+        pointConstraint->setPivotB(ToBtVector3(otherBodyScaledPosition));
+    }
+    break;
 
     case HINGE_CONSTRAINT_TYPE:
-        {
-            auto* hingeConstraint = static_cast<btHingeConstraint*>(constraint_.Get());
-            btTransform ownFrame(ToBtQuaternion(rotation_), ToBtVector3(ownBodyScaledPosition));
-            btTransform otherFrame(ToBtQuaternion(otherRotation_), ToBtVector3(otherBodyScaledPosition));
-            hingeConstraint->setFrames(ownFrame, otherFrame);
-        }
-        break;
+    {
+        auto* hingeConstraint = static_cast<btHingeConstraint*>(constraint_.Get());
+        btTransform ownFrame(ToBtQuaternion(rotation_), ToBtVector3(ownBodyScaledPosition));
+        btTransform otherFrame(ToBtQuaternion(otherRotation_), ToBtVector3(otherBodyScaledPosition));
+        hingeConstraint->setFrames(ownFrame, otherFrame);
+    }
+    break;
 
     case SLIDER_CONSTRAINT_TYPE:
-        {
-            auto* sliderConstraint = static_cast<btSliderConstraint*>(constraint_.Get());
-            btTransform ownFrame(ToBtQuaternion(rotation_), ToBtVector3(ownBodyScaledPosition));
-            btTransform otherFrame(ToBtQuaternion(otherRotation_), ToBtVector3(otherBodyScaledPosition));
-            sliderConstraint->setFrames(ownFrame, otherFrame);
-        }
-        break;
+    {
+        auto* sliderConstraint = static_cast<btSliderConstraint*>(constraint_.Get());
+        btTransform ownFrame(ToBtQuaternion(rotation_), ToBtVector3(ownBodyScaledPosition));
+        btTransform otherFrame(ToBtQuaternion(otherRotation_), ToBtVector3(otherBodyScaledPosition));
+        sliderConstraint->setFrames(ownFrame, otherFrame);
+    }
+    break;
 
     case CONETWIST_CONSTRAINT_TYPE:
-        {
-            auto* coneTwistConstraint = static_cast<btConeTwistConstraint*>(constraint_.Get());
-            btTransform ownFrame(ToBtQuaternion(rotation_), ToBtVector3(ownBodyScaledPosition));
-            btTransform otherFrame(ToBtQuaternion(otherRotation_), ToBtVector3(otherBodyScaledPosition));
-            coneTwistConstraint->setFrames(ownFrame, otherFrame);
-        }
-        break;
+    {
+        auto* coneTwistConstraint = static_cast<btConeTwistConstraint*>(constraint_.Get());
+        btTransform ownFrame(ToBtQuaternion(rotation_), ToBtVector3(ownBodyScaledPosition));
+        btTransform otherFrame(ToBtQuaternion(otherRotation_), ToBtVector3(otherBodyScaledPosition));
+        coneTwistConstraint->setFrames(ownFrame, otherFrame);
+    }
+    break;
 
     default:
         break;
@@ -478,41 +475,42 @@ void Constraint::CreateConstraint()
         otherBody = &btTypedConstraint::getFixedBody();
 
     Vector3 ownBodyScaledPosition = position_ * cachedWorldScale_ - ownBody_->GetCenterOfMass();
-    Vector3 otherBodyScaledPosition = otherBody_ ? otherPosition_ * otherBody_->GetNode()->GetWorldScale() -
-                                                   otherBody_->GetCenterOfMass() : otherPosition_;
+    Vector3 otherBodyScaledPosition =
+        otherBody_ ? otherPosition_ * otherBody_->GetNode()->GetWorldScale() - otherBody_->GetCenterOfMass()
+                   : otherPosition_;
 
     switch (constraintType_)
     {
     case CONSTRAINT_POINT:
-        {
-            constraint_ = new btPoint2PointConstraint(*ownBody, *otherBody, ToBtVector3(ownBodyScaledPosition),
-                ToBtVector3(otherBodyScaledPosition));
-        }
-        break;
+    {
+        constraint_ = new btPoint2PointConstraint(*ownBody, *otherBody, ToBtVector3(ownBodyScaledPosition),
+                                                  ToBtVector3(otherBodyScaledPosition));
+    }
+    break;
 
     case CONSTRAINT_HINGE:
-        {
-            btTransform ownFrame(ToBtQuaternion(rotation_), ToBtVector3(ownBodyScaledPosition));
-            btTransform otherFrame(ToBtQuaternion(otherRotation_), ToBtVector3(otherBodyScaledPosition));
-            constraint_ = new btHingeConstraint(*ownBody, *otherBody, ownFrame, otherFrame);
-        }
-        break;
+    {
+        btTransform ownFrame(ToBtQuaternion(rotation_), ToBtVector3(ownBodyScaledPosition));
+        btTransform otherFrame(ToBtQuaternion(otherRotation_), ToBtVector3(otherBodyScaledPosition));
+        constraint_ = new btHingeConstraint(*ownBody, *otherBody, ownFrame, otherFrame);
+    }
+    break;
 
     case CONSTRAINT_SLIDER:
-        {
-            btTransform ownFrame(ToBtQuaternion(rotation_), ToBtVector3(ownBodyScaledPosition));
-            btTransform otherFrame(ToBtQuaternion(otherRotation_), ToBtVector3(otherBodyScaledPosition));
-            constraint_ = new btSliderConstraint(*ownBody, *otherBody, ownFrame, otherFrame, false);
-        }
-        break;
+    {
+        btTransform ownFrame(ToBtQuaternion(rotation_), ToBtVector3(ownBodyScaledPosition));
+        btTransform otherFrame(ToBtQuaternion(otherRotation_), ToBtVector3(otherBodyScaledPosition));
+        constraint_ = new btSliderConstraint(*ownBody, *otherBody, ownFrame, otherFrame, false);
+    }
+    break;
 
     case CONSTRAINT_CONETWIST:
-        {
-            btTransform ownFrame(ToBtQuaternion(rotation_), ToBtVector3(ownBodyScaledPosition));
-            btTransform otherFrame(ToBtQuaternion(otherRotation_), ToBtVector3(otherBodyScaledPosition));
-            constraint_ = new btConeTwistConstraint(*ownBody, *otherBody, ownFrame, otherFrame);
-        }
-        break;
+    {
+        btTransform ownFrame(ToBtQuaternion(rotation_), ToBtVector3(ownBodyScaledPosition));
+        btTransform otherFrame(ToBtQuaternion(otherRotation_), ToBtVector3(otherBodyScaledPosition));
+        constraint_ = new btConeTwistConstraint(*ownBody, *otherBody, ownFrame, otherFrame);
+    }
+    break;
 
     default:
         break;
@@ -544,28 +542,29 @@ void Constraint::ApplyLimits()
     switch (constraint_->getConstraintType())
     {
     case HINGE_CONSTRAINT_TYPE:
-        {
-            auto* hingeConstraint = static_cast<btHingeConstraint*>(constraint_.Get());
-            hingeConstraint->setLimit(lowLimit_.x_ * M_DEGTORAD, highLimit_.x_ * M_DEGTORAD);
-        }
-        break;
+    {
+        auto* hingeConstraint = static_cast<btHingeConstraint*>(constraint_.Get());
+        hingeConstraint->setLimit(lowLimit_.x_ * M_DEGTORAD, highLimit_.x_ * M_DEGTORAD);
+    }
+    break;
 
     case SLIDER_CONSTRAINT_TYPE:
-        {
-            auto* sliderConstraint = static_cast<btSliderConstraint*>(constraint_.Get());
-            sliderConstraint->setUpperLinLimit(highLimit_.x_);
-            sliderConstraint->setUpperAngLimit(highLimit_.y_ * M_DEGTORAD);
-            sliderConstraint->setLowerLinLimit(lowLimit_.x_);
-            sliderConstraint->setLowerAngLimit(lowLimit_.y_ * M_DEGTORAD);
-        }
-        break;
+    {
+        auto* sliderConstraint = static_cast<btSliderConstraint*>(constraint_.Get());
+        sliderConstraint->setUpperLinLimit(highLimit_.x_);
+        sliderConstraint->setUpperAngLimit(highLimit_.y_ * M_DEGTORAD);
+        sliderConstraint->setLowerLinLimit(lowLimit_.x_);
+        sliderConstraint->setLowerAngLimit(lowLimit_.y_ * M_DEGTORAD);
+    }
+    break;
 
     case CONETWIST_CONSTRAINT_TYPE:
-        {
-            auto* coneTwistConstraint = static_cast<btConeTwistConstraint*>(constraint_.Get());
-            coneTwistConstraint->setLimit(highLimit_.y_ * M_DEGTORAD, highLimit_.y_ * M_DEGTORAD, highLimit_.x_ * M_DEGTORAD);
-        }
-        break;
+    {
+        auto* coneTwistConstraint = static_cast<btConeTwistConstraint*>(constraint_.Get());
+        coneTwistConstraint->setLimit(highLimit_.y_ * M_DEGTORAD, highLimit_.y_ * M_DEGTORAD,
+                                      highLimit_.x_ * M_DEGTORAD);
+    }
+    break;
 
     default:
         break;
@@ -579,9 +578,9 @@ void Constraint::ApplyLimits()
 
 void Constraint::AdjustOtherBodyPosition()
 {
-    // Convenience for editing static constraints: if not connected to another body, adjust world position to match local
-    // (when deserializing, the proper other body position will be read after own position, so this calculation is safely
-    // overridden and does not accumulate constraint error
+    // Convenience for editing static constraints: if not connected to another body, adjust world position to match
+    // local (when deserializing, the proper other body position will be read after own position, so this calculation is
+    // safely overridden and does not accumulate constraint error
     if (constraint_ && !otherBody_)
     {
         btTransform ownBody = constraint_->getRigidBodyA().getWorldTransform();
@@ -592,4 +591,4 @@ void Constraint::AdjustOtherBodyPosition()
     MarkFramesDirty();
 }
 
-}
+} // namespace Urho3D

@@ -34,7 +34,8 @@
 
 #include <AngelScript/angelscript.h>
 
-// Adapted from Angelscript's scriptarray, scriptdictionary & scriptstdstring add-ons, but with garbage collection disabled
+// Adapted from Angelscript's scriptarray, scriptdictionary & scriptstdstring add-ons, but with garbage collection
+// disabled
 
 namespace Urho3D
 {
@@ -50,52 +51,52 @@ public:
     static void SetMemoryFunctions(asALLOCFUNC_t allocFunc, asFREEFUNC_t freeFunc);
 
     // Factory functions
-    static CScriptArray *Create(asITypeInfo *ot);
-    static CScriptArray *Create(asITypeInfo *ot, asUINT length);
-    static CScriptArray *Create(asITypeInfo *ot, asUINT length, void *defVal);
-    static CScriptArray *Create(asITypeInfo *ot, void *initList);
+    static CScriptArray* Create(asITypeInfo* ot);
+    static CScriptArray* Create(asITypeInfo* ot, asUINT length);
+    static CScriptArray* Create(asITypeInfo* ot, asUINT length, void* defVal);
+    static CScriptArray* Create(asITypeInfo* ot, void* initList);
 
     // Memory management
     void AddRef() const;
     void Release() const;
 
     // Type information
-    asITypeInfo *GetArrayObjectType() const;
-    int          GetArrayTypeId() const;
-    int          GetElementTypeId() const;
+    asITypeInfo* GetArrayObjectType() const;
+    int GetArrayTypeId() const;
+    int GetElementTypeId() const;
 
     // Get the current size
     asUINT GetSize() const;
 
     // Returns true if the array is empty
-    bool   IsEmpty() const;
+    bool IsEmpty() const;
 
     // Pre-allocates memory for elements
-    void   Reserve(asUINT maxElements);
+    void Reserve(asUINT maxElements);
 
     // Resize the array
-    void   Resize(asUINT numElements);
+    void Resize(asUINT numElements);
 
     // Get a pointer to an element. Returns 0 if out of bounds
-    void       *At(asUINT index);
-    const void *At(asUINT index) const;
+    void* At(asUINT index);
+    const void* At(asUINT index) const;
 
     // Set value of an element.
     // The value arg should be a pointer to the value that will be copied to the element.
     // Remember, if the array holds handles the value parameter should be the
     // address of the handle. The refCount of the object will also be incremented
-    void  SetValue(asUINT index, void *value);
+    void SetValue(asUINT index, void* value);
 
     // Copy the contents of one array to another (only if the types are the same)
-    CScriptArray &operator=(const CScriptArray&);
+    CScriptArray& operator=(const CScriptArray&);
 
     // Compare two arrays
-    bool operator==(const CScriptArray &) const;
+    bool operator==(const CScriptArray&) const;
 
     // Array manipulation
-    void InsertAt(asUINT index, void *value);
+    void InsertAt(asUINT index, void* value);
     void RemoveAt(asUINT index);
-    void InsertLast(void *value);
+    void InsertLast(void* value);
     void RemoveLast();
     void SortAsc();
     void SortDesc();
@@ -103,48 +104,48 @@ public:
     void SortDesc(asUINT startAt, asUINT count);
     void Sort(asUINT startAt, asUINT count, bool asc);
     void Reverse();
-    int  Find(void *value) const;
-    int  Find(asUINT startAt, void *value) const;
-    int  FindByRef(void *ref) const;
-    int  FindByRef(asUINT startAt, void *ref) const;
+    int Find(void* value) const;
+    int Find(asUINT startAt, void* value) const;
+    int FindByRef(void* ref) const;
+    int FindByRef(asUINT startAt, void* ref) const;
     // Swap content of two arrays for avoid copy
     bool Swap(CScriptArray& other);
 
     // GC methods
-    int  GetRefCount();
+    int GetRefCount();
     void SetFlag();
     bool GetFlag();
-    void EnumReferences(asIScriptEngine *engine);
-    void ReleaseAllHandles(asIScriptEngine *engine);
+    void EnumReferences(asIScriptEngine* engine);
+    void ReleaseAllHandles(asIScriptEngine* engine);
 
 protected:
-    mutable int       refCount;
-    mutable bool      gcFlag;
-    asITypeInfo      *objType;
-    SArrayBuffer     *buffer;
-    size_t            elementSize;
-    int               subTypeId{};
+    mutable int refCount;
+    mutable bool gcFlag;
+    asITypeInfo* objType;
+    SArrayBuffer* buffer;
+    size_t elementSize;
+    int subTypeId{};
 
     // Constructors
-    CScriptArray(asITypeInfo *ot, void *buf); // Called from script when initialized with list
-    CScriptArray(asUINT length, asITypeInfo *ot);
-    CScriptArray(asUINT length, void *defVal, asITypeInfo *ot);
-    CScriptArray(const CScriptArray &other);
+    CScriptArray(asITypeInfo* ot, void* buf); // Called from script when initialized with list
+    CScriptArray(asUINT length, asITypeInfo* ot);
+    CScriptArray(asUINT length, void* defVal, asITypeInfo* ot);
+    CScriptArray(const CScriptArray& other);
     virtual ~CScriptArray();
 
-    bool  Less(const void *a, const void *b, bool asc, asIScriptContext *ctx, SArrayCache *cache);
-    void *GetArrayItemPointer(int index);
-    void *GetDataPointer(void *buffer);
-    void  Copy(void *dst, void *src);
-    void  Precache();
-    bool  CheckMaxSize(asUINT numElements);
-    void  Resize(int delta, asUINT at);
-    void  CreateBuffer(SArrayBuffer **buf, asUINT numElements);
-    void  DeleteBuffer(SArrayBuffer *buf);
-    void  CopyBuffer(SArrayBuffer *dst, SArrayBuffer *src);
-    void  Construct(SArrayBuffer *buf, asUINT start, asUINT end);
-    void  Destruct(SArrayBuffer *buf, asUINT start, asUINT end);
-    bool  Equals(const void *a, const void *b, asIScriptContext *ctx, SArrayCache *cache) const;
+    bool Less(const void* a, const void* b, bool asc, asIScriptContext* ctx, SArrayCache* cache);
+    void* GetArrayItemPointer(int index);
+    void* GetDataPointer(void* buffer);
+    void Copy(void* dst, void* src);
+    void Precache();
+    bool CheckMaxSize(asUINT numElements);
+    void Resize(int delta, asUINT at);
+    void CreateBuffer(SArrayBuffer** buf, asUINT numElements);
+    void DeleteBuffer(SArrayBuffer* buf);
+    void CopyBuffer(SArrayBuffer* dst, SArrayBuffer* src);
+    void Construct(SArrayBuffer* buf, asUINT start, asUINT end);
+    void Destruct(SArrayBuffer* buf, asUINT start, asUINT end);
+    bool Equals(const void* a, const void* b, asIScriptContext* ctx, SArrayCache* cache) const;
 };
 
 class CScriptDictionary;
@@ -157,26 +158,26 @@ public:
     // to receive the script engine pointer in all operations. The engine pointer
     // is not kept as member in order to keep the size down
     CScriptDictValue();
-    CScriptDictValue(asIScriptEngine *engine, void *value, int typeId);
+    CScriptDictValue(asIScriptEngine* engine, void* value, int typeId);
 
     // Destructor must not be called without first calling FreeValue, otherwise a memory leak will occur
     ~CScriptDictValue();
 
     // Replace the stored value
-    void Set(asIScriptEngine *engine, void *value, int typeId);
-    void Set(asIScriptEngine *engine, const asINT64 &value);
-    void Set(asIScriptEngine *engine, const double &value);
+    void Set(asIScriptEngine* engine, void* value, int typeId);
+    void Set(asIScriptEngine* engine, const asINT64& value);
+    void Set(asIScriptEngine* engine, const double& value);
 
     // Gets the stored value. Returns false if the value isn't compatible with the informed typeId
-    bool Get(asIScriptEngine *engine, void *value, int typeId) const;
-    bool Get(asIScriptEngine *engine, asINT64 &value) const;
-    bool Get(asIScriptEngine *engine, double &value) const;
+    bool Get(asIScriptEngine* engine, void* value, int typeId) const;
+    bool Get(asIScriptEngine* engine, asINT64& value) const;
+    bool Get(asIScriptEngine* engine, double& value) const;
 
     // Returns the type id of the stored value
-    int  GetTypeId() const;
+    int GetTypeId() const;
 
     // Free the stored value
-    void FreeValue(asIScriptEngine *engine);
+    void FreeValue(asIScriptEngine* engine);
 
 protected:
     friend class CScriptDictionary;
@@ -184,8 +185,8 @@ protected:
     union
     {
         asINT64 m_valueInt;
-        double  m_valueFlt;
-        void   *m_valueObj;
+        double m_valueFlt;
+        void* m_valueObj;
     };
     int m_typeId;
 };
@@ -195,38 +196,38 @@ class URHO3D_API CScriptDictionary
 {
 public:
     // Factory functions
-    static CScriptDictionary *Create(asIScriptEngine *engine);
+    static CScriptDictionary* Create(asIScriptEngine* engine);
 
     // Called from the script to instantiate a dictionary from an initialization list
-    static CScriptDictionary *Create(asBYTE *buffer);
+    static CScriptDictionary* Create(asBYTE* buffer);
 
     // Reference counting
     void AddRef() const;
     void Release() const;
 
     // Reassign the dictionary
-    CScriptDictionary &operator =(const CScriptDictionary &other);
+    CScriptDictionary& operator=(const CScriptDictionary& other);
 
     // Sets a key/value pair
-    void Set(const String &key, void *value, int typeId);
-    void Set(const String &key, const asINT64 &value);
-    void Set(const String &key, const double &value);
+    void Set(const String& key, void* value, int typeId);
+    void Set(const String& key, const asINT64& value);
+    void Set(const String& key, const double& value);
 
     // Gets the stored value. Returns false if the value isn't compatible with the informed typeId
-    bool Get(const String &key, void *value, int typeId) const;
-    bool Get(const String &key, asINT64 &value) const;
-    bool Get(const String &key, double &value) const;
+    bool Get(const String& key, void* value, int typeId) const;
+    bool Get(const String& key, asINT64& value) const;
+    bool Get(const String& key, double& value) const;
 
     // Index accessors. If the dictionary is not const it inserts the value if it doesn't already exist
     // If the dictionary is const then a script exception is set if it doesn't exist and a null pointer is returned
-    CScriptDictValue *operator[](const String &key);
-    const CScriptDictValue *operator[](const String &key) const;
+    CScriptDictValue* operator[](const String& key);
+    const CScriptDictValue* operator[](const String& key) const;
 
     // Returns the type id of the stored value, or negative if it doesn't exist
-    int GetTypeId(const String &key) const;
+    int GetTypeId(const String& key) const;
 
     // Returns true if the key is set
-    bool Exists(const String &key) const;
+    bool Exists(const String& key) const;
 
     // Returns true if there are no key/value pairs in the dictionary
     bool IsEmpty() const;
@@ -235,13 +236,13 @@ public:
     asUINT GetSize() const;
 
     // Deletes the key
-    void Delete(const String &key);
+    void Delete(const String& key);
 
     // Deletes all keys
     void DeleteAll();
 
     // Get an array of all keys
-    CScriptArray *GetKeys() const;
+    CScriptArray* GetKeys() const;
 
 public:
     /// STL style iterator for %Script dictionary class.
@@ -252,29 +253,28 @@ public:
         void operator++(int); // Post-increment
 
         // This is needed to support C++11 range-for
-        CIterator &operator*();
+        CIterator& operator*();
 
-        bool operator==(const CIterator &other) const;
-        bool operator!=(const CIterator &other) const;
+        bool operator==(const CIterator& other) const;
+        bool operator!=(const CIterator& other) const;
 
         // Accessors
-        const String &GetKey() const;
-        int                GetTypeId() const;
-        bool               GetValue(asINT64 &value) const;
-        bool               GetValue(double &value) const;
-        bool               GetValue(void *value, int typeId) const;
+        const String& GetKey() const;
+        int GetTypeId() const;
+        bool GetValue(asINT64& value) const;
+        bool GetValue(double& value) const;
+        bool GetValue(void* value, int typeId) const;
 
     protected:
         friend class CScriptDictionary;
 
         CIterator();
-        CIterator(const CScriptDictionary &dict,
-                  HashMap<String, CScriptDictValue>::ConstIterator it);
+        CIterator(const CScriptDictionary& dict, HashMap<String, CScriptDictValue>::ConstIterator it);
 
-        CIterator &operator=(const CIterator &) {return *this;} // Not used
+        CIterator& operator=(const CIterator&) { return *this; } // Not used
 
         HashMap<String, CScriptDictValue>::ConstIterator m_it;
-        const CScriptDictionary &m_dict;
+        const CScriptDictionary& m_dict;
     };
 
     CIterator begin() const;
@@ -284,21 +284,21 @@ public:
     int GetRefCount();
     void SetGCFlag();
     bool GetGCFlag();
-    void EnumReferences(asIScriptEngine *engine);
-    void ReleaseAllReferences(asIScriptEngine *engine);
+    void EnumReferences(asIScriptEngine* engine);
+    void ReleaseAllReferences(asIScriptEngine* engine);
 
 protected:
     // Since the dictionary uses the asAllocMem and asFreeMem functions to allocate memory
     // the constructors are made protected so that the application cannot allocate it
     // manually in a different way
-    explicit CScriptDictionary(asIScriptEngine *engine);
-    explicit CScriptDictionary(asBYTE *buffer);
+    explicit CScriptDictionary(asIScriptEngine* engine);
+    explicit CScriptDictionary(asBYTE* buffer);
 
     // We don't want anyone to call the destructor directly, it should be called through the Release method
     virtual ~CScriptDictionary();
 
     // Our properties
-    asIScriptEngine *engine;
+    asIScriptEngine* engine;
     mutable int refCount;
     mutable bool gcFlag;
 
@@ -318,4 +318,4 @@ private:
     StringMap map_;
 };
 
-}
+} // namespace Urho3D

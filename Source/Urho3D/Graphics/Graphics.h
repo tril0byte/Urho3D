@@ -63,9 +63,9 @@ struct ShaderParameter;
 /// CPU-side scratch buffer for vertex data updates.
 struct ScratchBuffer
 {
-    ScratchBuffer() :
-        size_(0),
-        reserved_(false)
+    ScratchBuffer()
+        : size_(0)
+        , reserved_(false)
     {
     }
 
@@ -94,7 +94,7 @@ struct ScreenModeParams
     /// Whether the triple bufferization is used.
     bool tripleBuffer_{};
     /// Level of multisampling.
-    int multiSample_{ 1 };
+    int multiSample_{1};
     /// Monitor for fullscreen mode. Has no effect in windowed mode.
     int monitor_{};
     /// Refresh rate. 0 to pick automatically.
@@ -103,25 +103,18 @@ struct ScreenModeParams
     /// Compare contents except vsync flag.
     bool EqualsExceptVSync(const ScreenModeParams& rhs) const
     {
-        return fullscreen_ == rhs.fullscreen_
-            && borderless_ == rhs.borderless_
-            && resizable_ == rhs.resizable_
-            && highDPI_ == rhs.highDPI_
-            // && vsync_ == rhs.vsync_
-            && tripleBuffer_ == rhs.tripleBuffer_
-            && multiSample_ == rhs.multiSample_
-            && monitor_ == rhs.monitor_
-            && refreshRate_ == rhs.refreshRate_;
+        return fullscreen_ == rhs.fullscreen_ && borderless_ == rhs.borderless_ && resizable_ == rhs.resizable_ &&
+               highDPI_ == rhs.highDPI_
+               // && vsync_ == rhs.vsync_
+               && tripleBuffer_ == rhs.tripleBuffer_ && multiSample_ == rhs.multiSample_ && monitor_ == rhs.monitor_ &&
+               refreshRate_ == rhs.refreshRate_;
     }
 
     /// Compare for equality with another parameter set.
-    bool operator ==(const ScreenModeParams& rhs) const
-    {
-        return vsync_ == rhs.vsync_ && EqualsExceptVSync(rhs);
-    }
+    bool operator==(const ScreenModeParams& rhs) const { return vsync_ == rhs.vsync_ && EqualsExceptVSync(rhs); }
 
     /// Compare for inequality with another parameter set.
-    bool operator !=(const ScreenModeParams& rhs) const { return !(*this == rhs); }
+    bool operator!=(const ScreenModeParams& rhs) const { return !(*this == rhs); }
 };
 
 /// Window mode parameters.
@@ -167,12 +160,13 @@ public:
     bool SetScreenMode(int width, int height);
     /// Set window modes to be rotated by ToggleFullscreen. Apply primary window settings immeditally.
     /// Window may be maximized if requested and possible. Return true if successful.
-    bool SetWindowModes(const WindowModeParams& windowMode, const WindowModeParams& secondaryWindowMode, bool maximize = false);
+    bool SetWindowModes(const WindowModeParams& windowMode, const WindowModeParams& secondaryWindowMode,
+                        bool maximize = false);
     /// Set default window modes. Return true if successful.
     bool SetDefaultWindowModes(int width, int height, const ScreenModeParams& params);
     /// Set default window modes. Deprecated. Return true if successful.
-    bool SetMode(int width, int height, bool fullscreen, bool borderless, bool resizable,
-        bool highDPI, bool vsync, bool tripleBuffer, int multiSample, int monitor, int refreshRate);
+    bool SetMode(int width, int height, bool fullscreen, bool borderless, bool resizable, bool highDPI, bool vsync,
+                 bool tripleBuffer, int multiSample, int monitor, int refreshRate);
     /// Set screen resolution only. Deprecated. Return true if successful.
     bool SetMode(int width, int height);
     /// Set whether the main window uses sRGB conversion on write.
@@ -181,12 +175,15 @@ public:
     /// Set whether rendering output is dithered. Default true on OpenGL. No effect on Direct3D.
     /// @property
     void SetDither(bool enable);
-    /// Set whether to flush the GPU command buffer to prevent multiple frames being queued and uneven frame timesteps. Default off, may decrease performance if enabled. Not currently implemented on OpenGL.
+    /// Set whether to flush the GPU command buffer to prevent multiple frames being queued and uneven frame timesteps.
+    /// Default off, may decrease performance if enabled. Not currently implemented on OpenGL.
     /// @property
     void SetFlushGPU(bool enable);
-    /// Set forced use of OpenGL 2 even if OpenGL 3 is available. Must be called before setting the screen mode for the first time. Default false. No effect on Direct3D9 & 11.
+    /// Set forced use of OpenGL 2 even if OpenGL 3 is available. Must be called before setting the screen mode for the
+    /// first time. Default false. No effect on Direct3D9 & 11.
     void SetForceGL2(bool enable);
-    /// Set allowed screen orientations as a space-separated list of "LandscapeLeft", "LandscapeRight", "Portrait" and "PortraitUpsideDown". Affects currently only iOS platform.
+    /// Set allowed screen orientations as a space-separated list of "LandscapeLeft", "LandscapeRight", "Portrait" and
+    /// "PortraitUpsideDown". Affects currently only iOS platform.
     /// @property
     void SetOrientations(const String& orientations);
     /// Toggle between full screen and windowed mode. Return true if successful.
@@ -200,7 +197,8 @@ public:
     /// End frame rendering and swap buffers.
     void EndFrame();
     /// Clear any or all of rendertarget, depth buffer and stencil buffer.
-    void Clear(ClearTargetFlags flags, const Color& color = Color(0.0f, 0.0f, 0.0f, 0.0f), float depth = 1.0f, unsigned stencil = 0);
+    void Clear(ClearTargetFlags flags, const Color& color = Color(0.0f, 0.0f, 0.0f, 0.0f), float depth = 1.0f,
+               unsigned stencil = 0);
     /// Resolve multisampled backbuffer to a texture rendertarget. The texture's size should match the viewport size.
     bool ResolveToTexture(Texture2D* destination, const IntRect& viewport);
     /// Resolve a multisampled texture on itself.
@@ -212,20 +210,21 @@ public:
     /// Draw indexed geometry.
     void Draw(PrimitiveType type, unsigned indexStart, unsigned indexCount, unsigned minVertex, unsigned vertexCount);
     /// Draw indexed geometry with vertex index offset.
-    void Draw(PrimitiveType type, unsigned indexStart, unsigned indexCount, unsigned baseVertexIndex, unsigned minVertex, unsigned vertexCount);
+    void Draw(PrimitiveType type, unsigned indexStart, unsigned indexCount, unsigned baseVertexIndex,
+              unsigned minVertex, unsigned vertexCount);
     /// Draw indexed, instanced geometry. An instancing vertex buffer must be set.
-    void DrawInstanced(PrimitiveType type, unsigned indexStart, unsigned indexCount, unsigned minVertex, unsigned vertexCount,
-        unsigned instanceCount);
+    void DrawInstanced(PrimitiveType type, unsigned indexStart, unsigned indexCount, unsigned minVertex,
+                       unsigned vertexCount, unsigned instanceCount);
     /// Draw indexed, instanced geometry with vertex index offset.
-    void DrawInstanced(PrimitiveType type, unsigned indexStart, unsigned indexCount, unsigned baseVertexIndex, unsigned minVertex,
-        unsigned vertexCount, unsigned instanceCount);
+    void DrawInstanced(PrimitiveType type, unsigned indexStart, unsigned indexCount, unsigned baseVertexIndex,
+                       unsigned minVertex, unsigned vertexCount, unsigned instanceCount);
     /// Set vertex buffer.
     void SetVertexBuffer(VertexBuffer* buffer);
     /// Set multiple vertex buffers.
     /// @nobind
     bool SetVertexBuffers(const PODVector<VertexBuffer*>& buffers, unsigned instanceOffset = 0);
     /// Set multiple vertex buffers.
-    bool SetVertexBuffers(const Vector<SharedPtr<VertexBuffer> >& buffers, unsigned instanceOffset = 0);
+    bool SetVertexBuffers(const Vector<SharedPtr<VertexBuffer>>& buffers, unsigned instanceOffset = 0);
     /// Set index buffer.
     void SetIndexBuffer(IndexBuffer* buffer);
     /// Set shaders.
@@ -254,7 +253,8 @@ public:
     void SetShaderParameter(StringHash param, const Matrix3x4& matrix);
     /// Set shader constant from a variant. Supported variant types: bool, float, vector2, vector3, vector4, color.
     void SetShaderParameter(StringHash param, const Variant& value);
-    /// Check whether a shader parameter group needs update. Does not actually check whether parameters exist in the shaders.
+    /// Check whether a shader parameter group needs update. Does not actually check whether parameters exist in the
+    /// shaders.
     bool NeedParameterUpdate(ShaderParameterGroup group, const void* source);
     /// Check whether a shader parameter exists on the currently set shaders.
     bool HasShaderParameter(StringHash param);
@@ -315,19 +315,21 @@ public:
     /// Set scissor test.
     void SetScissorTest(bool enable, const IntRect& rect);
     /// Set stencil test.
-    void SetStencilTest
-        (bool enable, CompareMode mode = CMP_ALWAYS, StencilOp pass = OP_KEEP, StencilOp fail = OP_KEEP, StencilOp zFail = OP_KEEP,
-            unsigned stencilRef = 0, unsigned compareMask = M_MAX_UNSIGNED, unsigned writeMask = M_MAX_UNSIGNED);
-    /// Set a custom clipping plane. The plane is specified in world space, but is dependent on the view and projection matrices.
+    void SetStencilTest(bool enable, CompareMode mode = CMP_ALWAYS, StencilOp pass = OP_KEEP, StencilOp fail = OP_KEEP,
+                        StencilOp zFail = OP_KEEP, unsigned stencilRef = 0, unsigned compareMask = M_MAX_UNSIGNED,
+                        unsigned writeMask = M_MAX_UNSIGNED);
+    /// Set a custom clipping plane. The plane is specified in world space, but is dependent on the view and projection
+    /// matrices.
     void SetClipPlane(bool enable, const Plane& clipPlane = Plane::UP, const Matrix3x4& view = Matrix3x4::IDENTITY,
-        const Matrix4& projection = Matrix4::IDENTITY);
+                      const Matrix4& projection = Matrix4::IDENTITY);
     /// Begin dumping shader variation names to an XML file for precaching.
     void BeginDumpShaders(const String& fileName);
     /// End dumping shader variations names.
     void EndDumpShaders();
     /// Precache shader variations from an XML file generated with BeginDumpShaders().
     void PrecacheShaders(Deserializer& source);
-    /// Set shader cache directory, Direct3D only. This can either be an absolute path or a path within the resource system.
+    /// Set shader cache directory, Direct3D only. This can either be an absolute path or a path within the resource
+    /// system.
     /// @property
     void SetShaderCacheDir(const String& path);
 
@@ -475,7 +477,8 @@ public:
     /// @property
     bool GetSRGBWriteSupport() const { return sRGBWriteSupport_; }
 
-    /// Return supported fullscreen resolutions (third component is refreshRate). Will be empty if listing the resolutions is not supported on the platform (e.g. Web).
+    /// Return supported fullscreen resolutions (third component is refreshRate). Will be empty if listing the
+    /// resolutions is not supported on the platform (e.g. Web).
     /// @property
     PODVector<IntVector3> GetResolutions(int monitor) const;
     /// Return index of the best resolution for requested width, height and refresh rate.
@@ -489,7 +492,8 @@ public:
     /// Return the number of currently connected monitors.
     /// @property
     int GetMonitorCount() const;
-    /// Returns the index of the display containing the center of the window on success or a negative error code on failure.
+    /// Returns the index of the display containing the center of the window on success or a negative error code on
+    /// failure.
     /// @property
     int GetCurrentMonitor() const;
     /// Returns true if window is maximized or runs in full screen mode.
@@ -497,7 +501,7 @@ public:
     bool GetMaximized() const;
     /// Return display dpi information: (hdpi, vdpi, ddpi). On failure returns zero vector.
     /// @property
-    Vector3 GetDisplayDPI(int monitor=0) const;
+    Vector3 GetDisplayDPI(int monitor = 0) const;
 
     /// Return hardware format for a compressed image format, or 0 if unsupported.
     unsigned GetFormat(CompressedFormat format) const;
@@ -708,9 +712,11 @@ private:
     void OnScreenModeChanged();
     /// Adjust the window for new resolution and fullscreen mode.
     void AdjustWindow(int& newWidth, int& newHeight, bool& newFullscreen, bool& newBorderless, int& monitor);
-    /// Create the Direct3D11 device and swap chain. Requires an open window. Can also be called again to recreate swap chain. Return true on success.
+    /// Create the Direct3D11 device and swap chain. Requires an open window. Can also be called again to recreate swap
+    /// chain. Return true on success.
     bool CreateDevice(int width, int height);
-    /// Update Direct3D11 swap chain state for a new mode and create views for the backbuffer & default depth buffer. Return true on success.
+    /// Update Direct3D11 swap chain state for a new mode and create views for the backbuffer & default depth buffer.
+    /// Return true on success.
     bool UpdateSwapChain(int width, int height);
     /// Create the Direct3D9 interface.
     bool CreateInterface();
@@ -924,4 +930,4 @@ private:
 /// Register Graphics library objects.
 void URHO3D_API RegisterGraphicsLibrary(Context* context);
 
-}
+} // namespace Urho3D

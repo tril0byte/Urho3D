@@ -69,13 +69,10 @@ public:
 
         // Optimize shader parameter lookup by rehashing to next power of two
         parameters_.Rehash(NextPowerOfTwo(parameters_.Size()));
-
     }
 
     /// Destruct.
-    virtual ~ShaderProgram() override
-    {
-    }
+    virtual ~ShaderProgram() override {}
 
     /// Combined parameters from the vertex and pixel shader.
     HashMap<StringHash, ShaderParameter> parameters_;
@@ -85,4 +82,4 @@ public:
     SharedPtr<ConstantBuffer> psConstantBuffers_[MAX_SHADER_PARAMETER_GROUPS];
 };
 
-}
+} // namespace Urho3D

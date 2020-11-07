@@ -36,9 +36,9 @@
 namespace Urho3D
 {
 
-DbConnection::DbConnection(Context* context, const String& connectionString) :
-    Object(context),
-    connectionString_(connectionString)
+DbConnection::DbConnection(Context* context, const String& connectionString)
+    : Object(context)
+    , connectionString_(connectionString)
 {
     try
     {
@@ -157,8 +157,8 @@ DbResult DbConnection::Execute(const String& sql, bool useCursorEvent)
 
 void DbConnection::HandleRuntimeError(const char* message, const char* cause)
 {
-    StringVector tokens = (String(cause) + "::").Split(':');      // Added "::" as sentinels against unexpected cause format
+    StringVector tokens = (String(cause) + "::").Split(':'); // Added "::" as sentinels against unexpected cause format
     URHO3D_LOGERRORF("%s: nanodbc:%s:%s", message, tokens[1].CString(), tokens[2].CString());
 }
 
-}
+} // namespace Urho3D

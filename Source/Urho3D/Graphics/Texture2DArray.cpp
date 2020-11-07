@@ -37,14 +37,14 @@
 #include "../DebugNew.h"
 
 #ifdef _MSC_VER
-#pragma warning(disable:4355)
+#pragma warning(disable : 4355)
 #endif
 
 namespace Urho3D
 {
 
-Texture2DArray::Texture2DArray(Context* context) :
-    Texture(context)
+Texture2DArray::Texture2DArray(Context* context)
+    : Texture(context)
 {
 #ifdef URHO3D_OPENGL
 #ifndef GL_ES_VERSION_2_0
@@ -53,15 +53,9 @@ Texture2DArray::Texture2DArray(Context* context) :
 #endif
 }
 
-Texture2DArray::~Texture2DArray()
-{
-    Release();
-}
+Texture2DArray::~Texture2DArray() { Release(); }
 
-void Texture2DArray::RegisterObject(Context* context)
-{
-    context->RegisterFactory<Texture2DArray>();
-}
+void Texture2DArray::RegisterObject(Context* context) { context->RegisterFactory<Texture2DArray>(); }
 
 bool Texture2DArray::BeginLoad(Deserializer& source)
 {
@@ -206,4 +200,4 @@ void Texture2DArray::HandleRenderSurfaceUpdate(StringHash eventType, VariantMap&
     }
 }
 
-}
+} // namespace Urho3D

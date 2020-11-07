@@ -30,9 +30,7 @@ namespace Urho3D
 {
 
 // This function is called before ASRegisterGenerated()
-void ASRegisterManualFirst_Physics(asIScriptEngine* engine)
-{
-}
+void ASRegisterManualFirst_Physics(asIScriptEngine* engine) {}
 
 // ========================================================================================
 
@@ -53,10 +51,7 @@ void ASRegisterManualLast_Physics(asIScriptEngine* engine)
 // ========================================================================================
 
 // RigidBody* PhysicsRaycastResult::body_ | File: ../Physics/PhysicsWorld.h
-RigidBody* PhysicsRaycastResultGetRigidBody(PhysicsRaycastResult* ptr)
-{
-    return ptr->body_;
-}
+RigidBody* PhysicsRaycastResultGetRigidBody(PhysicsRaycastResult* ptr) { return ptr->body_; }
 
 // ========================================================================================
 
@@ -70,7 +65,8 @@ CScriptArray* RigidBodyGetCollidingBodies(RigidBody* ptr)
 
 // ========================================================================================
 
-// void PhysicsWorld::Raycast(PODVector< PhysicsRaycastResult > &result, const Ray &ray, float maxDistance, unsigned collisionMask=M_MAX_UNSIGNED) | File: ../Physics/PhysicsWorld.h
+// void PhysicsWorld::Raycast(PODVector< PhysicsRaycastResult > &result, const Ray &ray, float maxDistance, unsigned
+// collisionMask=M_MAX_UNSIGNED) | File: ../Physics/PhysicsWorld.h
 CScriptArray* PhysicsWorldRaycast(const Ray& ray, float maxDistance, unsigned collisionMask, PhysicsWorld* ptr)
 {
     PODVector<PhysicsRaycastResult> result;
@@ -78,32 +74,43 @@ CScriptArray* PhysicsWorldRaycast(const Ray& ray, float maxDistance, unsigned co
     return VectorToArray<PhysicsRaycastResult>(result, "Array<PhysicsRaycastResult>");
 }
 
-// void PhysicsWorld::RaycastSingle(PhysicsRaycastResult &result, const Ray &ray, float maxDistance, unsigned collisionMask=M_MAX_UNSIGNED) | File: ../Physics/PhysicsWorld.h
-PhysicsRaycastResult PhysicsWorldRaycastSingle(const Ray& ray, float maxDistance, unsigned collisionMask, PhysicsWorld* ptr)
+// void PhysicsWorld::RaycastSingle(PhysicsRaycastResult &result, const Ray &ray, float maxDistance, unsigned
+// collisionMask=M_MAX_UNSIGNED) | File: ../Physics/PhysicsWorld.h
+PhysicsRaycastResult PhysicsWorldRaycastSingle(const Ray& ray, float maxDistance, unsigned collisionMask,
+                                               PhysicsWorld* ptr)
 {
     PhysicsRaycastResult result;
     ptr->RaycastSingle(result, ray, maxDistance, collisionMask);
     return result;
 }
 
-// void PhysicsWorld::RaycastSingleSegmented(PhysicsRaycastResult &result, const Ray &ray, float maxDistance, float segmentDistance, unsigned collisionMask=M_MAX_UNSIGNED, float overlapDistance=0.1f) | File: ../Physics/PhysicsWorld.h
-PhysicsRaycastResult PhysicsWorldRaycastSingleSegmented(const Ray& ray, float maxDistance, float segmentDistance, unsigned collisionMask, float overlapDistance, PhysicsWorld* ptr)
+// void PhysicsWorld::RaycastSingleSegmented(PhysicsRaycastResult &result, const Ray &ray, float maxDistance, float
+// segmentDistance, unsigned collisionMask=M_MAX_UNSIGNED, float overlapDistance=0.1f) | File: ../Physics/PhysicsWorld.h
+PhysicsRaycastResult PhysicsWorldRaycastSingleSegmented(const Ray& ray, float maxDistance, float segmentDistance,
+                                                        unsigned collisionMask, float overlapDistance,
+                                                        PhysicsWorld* ptr)
 {
     PhysicsRaycastResult result;
     ptr->RaycastSingleSegmented(result, ray, maxDistance, segmentDistance, collisionMask, overlapDistance);
     return result;
 }
 
-// void PhysicsWorld::SphereCast(PhysicsRaycastResult &result, const Ray &ray, float radius, float maxDistance, unsigned collisionMask=M_MAX_UNSIGNED) | File: ../Physics/PhysicsWorld.h
-PhysicsRaycastResult PhysicsWorldSphereCast(const Ray& ray, float radius, float maxDistance, unsigned collisionMask, PhysicsWorld* ptr)
+// void PhysicsWorld::SphereCast(PhysicsRaycastResult &result, const Ray &ray, float radius, float maxDistance, unsigned
+// collisionMask=M_MAX_UNSIGNED) | File: ../Physics/PhysicsWorld.h
+PhysicsRaycastResult PhysicsWorldSphereCast(const Ray& ray, float radius, float maxDistance, unsigned collisionMask,
+                                            PhysicsWorld* ptr)
 {
     PhysicsRaycastResult result;
     ptr->SphereCast(result, ray, radius, maxDistance, collisionMask);
     return result;
 }
 
-// void PhysicsWorld::ConvexCast(PhysicsRaycastResult &result, CollisionShape *shape, const Vector3 &startPos, const Quaternion &startRot, const Vector3 &endPos, const Quaternion &endRot, unsigned collisionMask=M_MAX_UNSIGNED) | File: ../Physics/PhysicsWorld.h
-PhysicsRaycastResult PhysicsWorldConvexCast(CollisionShape* shape, const Vector3& startPos, const Quaternion& startRot, const Vector3& endPos, const Quaternion& endRot, unsigned collisionMask, PhysicsWorld* ptr)
+// void PhysicsWorld::ConvexCast(PhysicsRaycastResult &result, CollisionShape *shape, const Vector3 &startPos, const
+// Quaternion &startRot, const Vector3 &endPos, const Quaternion &endRot, unsigned collisionMask=M_MAX_UNSIGNED) | File:
+// ../Physics/PhysicsWorld.h
+PhysicsRaycastResult PhysicsWorldConvexCast(CollisionShape* shape, const Vector3& startPos, const Quaternion& startRot,
+                                            const Vector3& endPos, const Quaternion& endRot, unsigned collisionMask,
+                                            PhysicsWorld* ptr)
 {
     PhysicsRaycastResult result;
     ptr->ConvexCast(result, shape, startPos, startRot, endPos, endRot, collisionMask);
@@ -113,7 +120,8 @@ PhysicsRaycastResult PhysicsWorldConvexCast(CollisionShape* shape, const Vector3
     return result;
 }
 
-// void PhysicsWorld::GetRigidBodies(PODVector< RigidBody * > &result, const Sphere &sphere, unsigned collisionMask=M_MAX_UNSIGNED) | File: ../Physics/PhysicsWorld.h
+// void PhysicsWorld::GetRigidBodies(PODVector< RigidBody * > &result, const Sphere &sphere, unsigned
+// collisionMask=M_MAX_UNSIGNED) | File: ../Physics/PhysicsWorld.h
 CScriptArray* PhysicsWorldGetRigidBodiesSphere(const Sphere& sphere, unsigned collisionMask, PhysicsWorld* ptr)
 {
     PODVector<RigidBody*> result;
@@ -121,7 +129,8 @@ CScriptArray* PhysicsWorldGetRigidBodiesSphere(const Sphere& sphere, unsigned co
     return VectorToHandleArray<RigidBody>(result, "Array<RigidBody@>");
 }
 
-// void PhysicsWorld::GetRigidBodies(PODVector< RigidBody * > &result, const BoundingBox &box, unsigned collisionMask=M_MAX_UNSIGNED) | File: ../Physics/PhysicsWorld.h
+// void PhysicsWorld::GetRigidBodies(PODVector< RigidBody * > &result, const BoundingBox &box, unsigned
+// collisionMask=M_MAX_UNSIGNED) | File: ../Physics/PhysicsWorld.h
 CScriptArray* PhysicsWorldGetRigidBodiesBox(const BoundingBox& box, unsigned collisionMask, PhysicsWorld* ptr)
 {
     PODVector<RigidBody*> result;
@@ -129,7 +138,8 @@ CScriptArray* PhysicsWorldGetRigidBodiesBox(const BoundingBox& box, unsigned col
     return VectorToHandleArray<RigidBody>(result, "Array<RigidBody@>");
 }
 
-// void PhysicsWorld::GetRigidBodies(PODVector< RigidBody * > &result, const RigidBody *body) | File: ../Physics/PhysicsWorld.h
+// void PhysicsWorld::GetRigidBodies(PODVector< RigidBody * > &result, const RigidBody *body) | File:
+// ../Physics/PhysicsWorld.h
 CScriptArray* PhysicsWorldGetRigidBodiesBody(RigidBody* body, PhysicsWorld* ptr)
 {
     PODVector<RigidBody*> result;
@@ -137,7 +147,8 @@ CScriptArray* PhysicsWorldGetRigidBodiesBody(RigidBody* body, PhysicsWorld* ptr)
     return VectorToHandleArray<RigidBody>(result, "Array<RigidBody@>");
 }
 
-// void PhysicsWorld::GetCollidingBodies(PODVector< RigidBody * > &result, const RigidBody *body) | File: ../Physics/PhysicsWorld.h
+// void PhysicsWorld::GetCollidingBodies(PODVector< RigidBody * > &result, const RigidBody *body) | File:
+// ../Physics/PhysicsWorld.h
 CScriptArray* PhysicsWorldGetCollidingBodies(RigidBody* body, PhysicsWorld* ptr)
 {
     PODVector<RigidBody*> result;
@@ -145,6 +156,6 @@ CScriptArray* PhysicsWorldGetCollidingBodies(RigidBody* body, PhysicsWorld* ptr)
     return VectorToHandleArray<RigidBody>(result, "Array<RigidBody@>");
 }
 
-}
+} // namespace Urho3D
 
 #endif // def URHO3D_PHYSICS

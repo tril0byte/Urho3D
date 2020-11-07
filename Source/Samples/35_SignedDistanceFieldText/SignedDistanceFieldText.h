@@ -30,7 +30,7 @@ namespace Urho3D
 class Node;
 class Scene;
 
-}
+} // namespace Urho3D
 
 /// Signed distance field text example.
 /// This sample demonstrates:

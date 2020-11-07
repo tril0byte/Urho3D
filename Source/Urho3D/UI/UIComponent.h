@@ -63,7 +63,8 @@ public:
 protected:
     /// Handle component being added to Node or removed from it.
     void OnNodeSet(Node* node) override;
-    /// Handle resizing of element. Setting size of element will automatically resize texture. UIElement size matches size of texture.
+    /// Handle resizing of element. Setting size of element will automatically resize texture. UIElement size matches
+    /// size of texture.
     void OnElementResized(StringHash eventType, VariantMap& args);
 
     /// Material that is set to the model.
@@ -78,4 +79,4 @@ protected:
     unsigned viewportIndex_;
 };
 
-}
+} // namespace Urho3D

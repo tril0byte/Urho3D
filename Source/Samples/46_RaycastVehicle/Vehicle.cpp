@@ -51,8 +51,8 @@ void Vehicle::RegisterObject(Context* context)
 }
 
 Vehicle::Vehicle(Urho3D::Context* context)
-    : LogicComponent(context),
-      steering_(0.0f)
+    : LogicComponent(context)
+    , steering_(0.0f)
 {
     SetUpdateEventMask(USE_FIXEDUPDATE | USE_POSTUPDATE);
     engineForce_ = 0.0f;
@@ -117,7 +117,8 @@ void Vehicle::Init()
         // back wheels are at z < 0
         // Setting rotation according to wheel position
         bool isFrontWheel = connectionPoints_[id].z_ > 0.0f;
-        wheelNode->SetRotation(connectionPoint.x_ >= 0.0 ? Quaternion(0.0f, 0.0f, -90.0f) : Quaternion(0.0f, 0.0f, 90.0f));
+        wheelNode->SetRotation(connectionPoint.x_ >= 0.0 ? Quaternion(0.0f, 0.0f, -90.0f)
+                                                         : Quaternion(0.0f, 0.0f, 90.0f));
         wheelNode->SetWorldPosition(node_->GetWorldPosition() + node_->GetWorldRotation() * connectionPoints_[id]);
         vehicle->AddWheel(wheelNode, wheelDirection, wheelAxle, suspensionRestLength_, wheelRadius_, isFrontWheel);
         vehicle->SetWheelSuspensionStiffness(id, suspensionStiffness_);
@@ -140,7 +141,8 @@ void Vehicle::CreateEmitter(Vector3 place)
 {
     auto* cache = GetSubsystem<ResourceCache>();
     Node* emitter = GetScene()->CreateChild();
-    emitter->SetWorldPosition(node_->GetWorldPosition() + node_->GetWorldRotation() * place + Vector3(0, -wheelRadius_, 0));
+    emitter->SetWorldPosition(node_->GetWorldPosition() + node_->GetWorldRotation() * place +
+                              Vector3(0, -wheelRadius_, 0));
     auto* particleEmitter = emitter->CreateComponent<ParticleEmitter>();
     particleEmitter->SetEffect(cache->GetResource<ParticleEffect>("Particle/Dust.xml"));
     particleEmitter->SetEmitting(false);
@@ -232,16 +234,15 @@ void Vehicle::PostUpdate(float timeStep)
     {
         Node* emitter = particleEmitterNodeList_[i];
         auto* particleEmitter = emitter->GetComponent<ParticleEmitter>();
-        if (vehicle->WheelIsGrounded(i) && (vehicle->GetWheelSkidInfoCumulative(i) < 0.9f || vehicle->GetBrake(i) > 2.0f ||
-            planeAccel > 15.0f))
+        if (vehicle->WheelIsGrounded(i) &&
+            (vehicle->GetWheelSkidInfoCumulative(i) < 0.9f || vehicle->GetBrake(i) > 2.0f || planeAccel > 15.0f))
         {
             particleEmitterNodeList_[i]->SetWorldPosition(vehicle->GetContactPosition(i));
             if (!particleEmitter->IsEmitting())
             {
                 particleEmitter->SetEmitting(true);
             }
-            URHO3D_LOGDEBUG("GetWheelSkidInfoCumulative() = " +
-                            String(vehicle->GetWheelSkidInfoCumulative(i)) + " " +
+            URHO3D_LOGDEBUG("GetWheelSkidInfoCumulative() = " + String(vehicle->GetWheelSkidInfoCumulative(i)) + " " +
                             String(vehicle->GetMaxSideSlipSpeed()));
             /* TODO: Add skid marks here */
         }

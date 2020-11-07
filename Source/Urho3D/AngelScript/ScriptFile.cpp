@@ -45,8 +45,8 @@ class ByteCodeSerializer : public asIBinaryStream
 {
 public:
     /// Construct.
-    explicit ByteCodeSerializer(Serializer& dest) :
-        dest_(dest)
+    explicit ByteCodeSerializer(Serializer& dest)
+        : dest_(dest)
     {
     }
 
@@ -58,10 +58,7 @@ public:
     }
 
     /// Write to stream.
-    int Write(const void* ptr, asUINT size) override
-    {
-        return dest_.Write(ptr, size);
-    }
+    int Write(const void* ptr, asUINT size) override { return dest_.Write(ptr, size); }
 
 private:
     /// Destination stream.
@@ -73,43 +70,31 @@ class ByteCodeDeserializer : public asIBinaryStream
 {
 public:
     /// Construct.
-    explicit ByteCodeDeserializer(MemoryBuffer& source) :
-        source_(source)
+    explicit ByteCodeDeserializer(MemoryBuffer& source)
+        : source_(source)
     {
     }
 
     /// Read from stream.
-    int Read(void* ptr, asUINT size) override
-    {
-        return source_.Read(ptr, size);
-    }
+    int Read(void* ptr, asUINT size) override { return source_.Read(ptr, size); }
 
     /// Write to stream (no-op).
-    int Write(const void* ptr, asUINT size) override
-    {
-        return 0;
-    }
+    int Write(const void* ptr, asUINT size) override { return 0; }
 
 private:
     /// Source stream.
     MemoryBuffer& source_;
 };
 
-ScriptFile::ScriptFile(Context* context) :
-    Resource(context),
-    script_(GetSubsystem<Script>())
+ScriptFile::ScriptFile(Context* context)
+    : Resource(context)
+    , script_(GetSubsystem<Script>())
 {
 }
 
-ScriptFile::~ScriptFile()
-{
-    ReleaseModule();
-}
+ScriptFile::~ScriptFile() { ReleaseModule(); }
 
-void ScriptFile::RegisterObject(Context* context)
-{
-    context->RegisterFactory<ScriptFile>();
-}
+void ScriptFile::RegisterObject(Context* context) { context->RegisterFactory<ScriptFile>(); }
 
 bool ScriptFile::BeginLoad(Deserializer& source)
 {
@@ -212,7 +197,7 @@ void ScriptFile::AddEventHandler(Object* sender, StringHash eventType, const Str
 void ScriptFile::RemoveEventHandler(StringHash eventType)
 {
     auto* receiver = static_cast<asIScriptObject*>(asGetActiveContext()->GetThisPointer());
-    HashMap<asIScriptObject*, SharedPtr<ScriptEventInvoker> >::Iterator i = eventInvokers_.Find(receiver);
+    HashMap<asIScriptObject*, SharedPtr<ScriptEventInvoker>>::Iterator i = eventInvokers_.Find(receiver);
     if (i != eventInvokers_.End())
     {
         i->second_->UnsubscribeFromEvent(eventType);
@@ -225,7 +210,7 @@ void ScriptFile::RemoveEventHandler(StringHash eventType)
 void ScriptFile::RemoveEventHandler(Object* sender, StringHash eventType)
 {
     auto* receiver = static_cast<asIScriptObject*>(asGetActiveContext()->GetThisPointer());
-    HashMap<asIScriptObject*, SharedPtr<ScriptEventInvoker> >::Iterator i = eventInvokers_.Find(receiver);
+    HashMap<asIScriptObject*, SharedPtr<ScriptEventInvoker>>::Iterator i = eventInvokers_.Find(receiver);
     if (i != eventInvokers_.End())
     {
         i->second_->UnsubscribeFromEvent(sender, eventType);
@@ -237,7 +222,7 @@ void ScriptFile::RemoveEventHandler(Object* sender, StringHash eventType)
 void ScriptFile::RemoveEventHandlers(Object* sender)
 {
     auto* receiver = static_cast<asIScriptObject*>(asGetActiveContext()->GetThisPointer());
-    HashMap<asIScriptObject*, SharedPtr<ScriptEventInvoker> >::Iterator i = eventInvokers_.Find(receiver);
+    HashMap<asIScriptObject*, SharedPtr<ScriptEventInvoker>>::Iterator i = eventInvokers_.Find(receiver);
     if (i != eventInvokers_.End())
     {
         i->second_->UnsubscribeFromEvents(sender);
@@ -249,7 +234,7 @@ void ScriptFile::RemoveEventHandlers(Object* sender)
 void ScriptFile::RemoveEventHandlers()
 {
     auto* receiver = static_cast<asIScriptObject*>(asGetActiveContext()->GetThisPointer());
-    HashMap<asIScriptObject*, SharedPtr<ScriptEventInvoker> >::Iterator i = eventInvokers_.Find(receiver);
+    HashMap<asIScriptObject*, SharedPtr<ScriptEventInvoker>>::Iterator i = eventInvokers_.Find(receiver);
     if (i != eventInvokers_.End())
     {
         i->second_->UnsubscribeFromAllEvents();
@@ -261,7 +246,7 @@ void ScriptFile::RemoveEventHandlers()
 void ScriptFile::RemoveEventHandlersExcept(const PODVector<StringHash>& exceptions)
 {
     auto* receiver = static_cast<asIScriptObject*>(asGetActiveContext()->GetThisPointer());
-    HashMap<asIScriptObject*, SharedPtr<ScriptEventInvoker> >::Iterator i = eventInvokers_.Find(receiver);
+    HashMap<asIScriptObject*, SharedPtr<ScriptEventInvoker>>::Iterator i = eventInvokers_.Find(receiver);
     if (i != eventInvokers_.End())
     {
         i->second_->UnsubscribeFromAllEventsExcept(exceptions, true);
@@ -273,7 +258,7 @@ void ScriptFile::RemoveEventHandlersExcept(const PODVector<StringHash>& exceptio
 bool ScriptFile::HasEventHandler(StringHash eventType) const
 {
     auto* receiver = static_cast<asIScriptObject*>(asGetActiveContext()->GetThisPointer());
-    HashMap<asIScriptObject*, SharedPtr<ScriptEventInvoker> >::ConstIterator i = eventInvokers_.Find(receiver);
+    HashMap<asIScriptObject*, SharedPtr<ScriptEventInvoker>>::ConstIterator i = eventInvokers_.Find(receiver);
     if (i != eventInvokers_.End())
         return i->second_->HasSubscribedToEvent(eventType);
     else
@@ -283,14 +268,15 @@ bool ScriptFile::HasEventHandler(StringHash eventType) const
 bool ScriptFile::HasEventHandler(Object* sender, StringHash eventType) const
 {
     auto* receiver = static_cast<asIScriptObject*>(asGetActiveContext()->GetThisPointer());
-    HashMap<asIScriptObject*, SharedPtr<ScriptEventInvoker> >::ConstIterator i = eventInvokers_.Find(receiver);
+    HashMap<asIScriptObject*, SharedPtr<ScriptEventInvoker>>::ConstIterator i = eventInvokers_.Find(receiver);
     if (i != eventInvokers_.End())
         return i->second_->HasSubscribedToEvent(sender, eventType);
     else
         return false;
 }
 
-bool ScriptFile::Execute(const String& declaration, const VariantVector& parameters, Variant* functionReturn, bool unprepare)
+bool ScriptFile::Execute(const String& declaration, const VariantVector& parameters, Variant* functionReturn,
+                         bool unprepare)
 {
     asIScriptFunction* function = GetFunction(declaration);
     if (!function)
@@ -302,7 +288,8 @@ bool ScriptFile::Execute(const String& declaration, const VariantVector& paramet
     return Execute(function, parameters, functionReturn, unprepare);
 }
 
-bool ScriptFile::Execute(asIScriptFunction* function, const VariantVector& parameters, Variant* functionReturn, bool unprepare)
+bool ScriptFile::Execute(asIScriptFunction* function, const VariantVector& parameters, Variant* functionReturn,
+                         bool unprepare)
 {
     URHO3D_PROFILE(ExecuteFunction);
 
@@ -444,8 +431,8 @@ bool ScriptFile::Execute(asIScriptFunction* function, const VariantVector& param
     return success;
 }
 
-bool ScriptFile::Execute(asIScriptObject* object, const String& declaration, const VariantVector& parameters, Variant* functionReturn,
-    bool unprepare)
+bool ScriptFile::Execute(asIScriptObject* object, const String& declaration, const VariantVector& parameters,
+                         Variant* functionReturn, bool unprepare)
 {
     if (!object)
         return false;
@@ -460,8 +447,8 @@ bool ScriptFile::Execute(asIScriptObject* object, const String& declaration, con
     return Execute(object, method, parameters, functionReturn, unprepare);
 }
 
-bool ScriptFile::Execute(asIScriptObject* object, asIScriptFunction* method, const VariantVector& parameters, Variant* functionReturn,
-    bool unprepare)
+bool ScriptFile::Execute(asIScriptObject* object, asIScriptFunction* method, const VariantVector& parameters,
+                         Variant* functionReturn, bool unprepare)
 {
     URHO3D_PROFILE(ExecuteMethod);
 
@@ -636,7 +623,7 @@ asIScriptFunction* ScriptFile::GetMethod(asIScriptObject* object, const String& 
     if (!type)
         return nullptr;
 
-    HashMap<asITypeInfo*, HashMap<String, asIScriptFunction*> >::ConstIterator i = methods_.Find(type);
+    HashMap<asITypeInfo*, HashMap<String, asIScriptFunction*>>::ConstIterator i = methods_.Find(type);
     if (i != methods_.End())
     {
         HashMap<String, asIScriptFunction*>::ConstIterator j = i->second_.Find(trimDecl);
@@ -649,10 +636,7 @@ asIScriptFunction* ScriptFile::GetMethod(asIScriptObject* object, const String& 
     return function;
 }
 
-void ScriptFile::CleanupEventInvoker(asIScriptObject* object)
-{
-    eventInvokers_.Erase(object);
-}
+void ScriptFile::CleanupEventInvoker(asIScriptObject* object) { eventInvokers_.Erase(object); }
 
 void ScriptFile::AddEventHandlerInternal(Object* sender, StringHash eventType, const String& handlerName)
 {
@@ -680,7 +664,7 @@ void ScriptFile::AddEventHandlerInternal(Object* sender, StringHash eventType, c
         }
     }
 
-    HashMap<asIScriptObject*, SharedPtr<ScriptEventInvoker> >::Iterator i = eventInvokers_.Find(receiver);
+    HashMap<asIScriptObject*, SharedPtr<ScriptEventInvoker>>::Iterator i = eventInvokers_.Find(receiver);
     // Remove previous handler in case an object pointer gets reused
     if (i != eventInvokers_.End() && !i->second_->IsObjectAlive())
     {
@@ -688,17 +672,20 @@ void ScriptFile::AddEventHandlerInternal(Object* sender, StringHash eventType, c
         i = eventInvokers_.End();
     }
     if (i == eventInvokers_.End())
-        i = eventInvokers_.Insert(MakePair(receiver, SharedPtr<ScriptEventInvoker>(new ScriptEventInvoker(this, receiver))));
+        i = eventInvokers_.Insert(
+            MakePair(receiver, SharedPtr<ScriptEventInvoker>(new ScriptEventInvoker(this, receiver))));
 
     if (!sender)
     {
-        i->second_->SubscribeToEvent(eventType, new EventHandlerImpl<ScriptEventInvoker>
-            (i->second_, &ScriptEventInvoker::HandleScriptEvent, (void*)function));
+        i->second_->SubscribeToEvent(
+            eventType, new EventHandlerImpl<ScriptEventInvoker>(i->second_, &ScriptEventInvoker::HandleScriptEvent,
+                                                                (void*)function));
     }
     else
     {
-        i->second_->SubscribeToEvent(sender, eventType, new EventHandlerImpl<ScriptEventInvoker>
-            (i->second_, &ScriptEventInvoker::HandleScriptEvent, (void*)function));
+        i->second_->SubscribeToEvent(sender, eventType,
+                                     new EventHandlerImpl<ScriptEventInvoker>(
+                                         i->second_, &ScriptEventInvoker::HandleScriptEvent, (void*)function));
     }
 }
 
@@ -816,7 +803,8 @@ bool ScriptFile::AddScriptSection(asIScriptEngine* engine, Deserializer& source)
         }
         else
         {
-            URHO3D_LOGERROR("Could not process all the include directives in " + GetName() + ": missing " + includeFiles[i]);
+            URHO3D_LOGERROR("Could not process all the include directives in " + GetName() + ": missing " +
+                            includeFiles[i]);
             return false;
         }
     }
@@ -1018,11 +1006,11 @@ void ScriptFile::HandleUpdate(StringHash eventType, VariantMap& eventData)
     }
 }
 
-ScriptEventInvoker::ScriptEventInvoker(ScriptFile* file, asIScriptObject* object) :
-    Object(file->GetContext()),
-    file_(file),
-    sharedBool_(nullptr),
-    object_(object)
+ScriptEventInvoker::ScriptEventInvoker(ScriptFile* file, asIScriptObject* object)
+    : Object(file->GetContext())
+    , file_(file)
+    , sharedBool_(nullptr)
+    , object_(object)
 {
     if (object_)
     {
@@ -1089,4 +1077,4 @@ ScriptFile* GetScriptContextFile()
         return nullptr;
 }
 
-}
+} // namespace Urho3D

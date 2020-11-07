@@ -30,24 +30,18 @@
 #include "../IO/FileSystem.h"
 #include "../IO/Log.h"
 #include "../IO/Serializer.h"
+#include "../Resource/JSONFile.h"
 #include "../Resource/ResourceCache.h"
 #include "../Resource/XMLFile.h"
-#include "../Resource/JSONFile.h"
 
 #include "../DebugNew.h"
 
 namespace Urho3D
 {
 
-inline bool CompareTriggers(AnimationTriggerPoint& lhs, AnimationTriggerPoint& rhs)
-{
-    return lhs.time_ < rhs.time_;
-}
+inline bool CompareTriggers(AnimationTriggerPoint& lhs, AnimationTriggerPoint& rhs) { return lhs.time_ < rhs.time_; }
 
-inline bool CompareKeyFrames(AnimationKeyFrame& lhs, AnimationKeyFrame& rhs)
-{
-    return lhs.time_ < rhs.time_;
-}
+inline bool CompareKeyFrames(AnimationKeyFrame& lhs, AnimationKeyFrame& rhs) { return lhs.time_ < rhs.time_; }
 
 void AnimationTrack::SetKeyFrame(unsigned index, const AnimationKeyFrame& keyFrame)
 {
@@ -74,15 +68,9 @@ void AnimationTrack::InsertKeyFrame(unsigned index, const AnimationKeyFrame& key
     Urho3D::Sort(keyFrames_.Begin(), keyFrames_.End(), CompareKeyFrames);
 }
 
-void AnimationTrack::RemoveKeyFrame(unsigned index)
-{
-    keyFrames_.Erase(index);
-}
+void AnimationTrack::RemoveKeyFrame(unsigned index) { keyFrames_.Erase(index); }
 
-void AnimationTrack::RemoveAllKeyFrames()
-{
-    keyFrames_.Clear();
-}
+void AnimationTrack::RemoveAllKeyFrames() { keyFrames_.Clear(); }
 
 AnimationKeyFrame* AnimationTrack::GetKeyFrame(unsigned index)
 {
@@ -111,18 +99,15 @@ bool AnimationTrack::GetKeyFrameIndex(float time, unsigned& index) const
     return true;
 }
 
-Animation::Animation(Context* context) :
-    ResourceWithMetadata(context),
-    length_(0.f)
+Animation::Animation(Context* context)
+    : ResourceWithMetadata(context)
+    , length_(0.f)
 {
 }
 
 Animation::~Animation() = default;
 
-void Animation::RegisterObject(Context* context)
-{
-    context->RegisterFactory<Animation>();
-}
+void Animation::RegisterObject(Context* context) { context->RegisterFactory<Animation>(); }
 
 bool Animation::BeginLoad(Deserializer& source)
 {
@@ -176,7 +161,8 @@ bool Animation::BeginLoad(Deserializer& source)
     if (file)
     {
         XMLElement rootElem = file->GetRoot();
-        for (XMLElement triggerElem = rootElem.GetChild("trigger"); triggerElem; triggerElem = triggerElem.GetNext("trigger"))
+        for (XMLElement triggerElem = rootElem.GetChild("trigger"); triggerElem;
+             triggerElem = triggerElem.GetNext("trigger"))
         {
             if (triggerElem.HasAttribute("normalizedtime"))
                 AddTrigger(triggerElem.GetFloat("normalizedtime"), true, triggerElem.GetVariant());
@@ -292,10 +278,7 @@ void Animation::SetAnimationName(const String& name)
     animationNameHash_ = StringHash(name);
 }
 
-void Animation::SetLength(float length)
-{
-    length_ = Max(length, 0.0f);
-}
+void Animation::SetLength(float length) { length_ = Max(length, 0.0f); }
 
 AnimationTrack* Animation::CreateTrack(const String& name)
 {
@@ -323,10 +306,7 @@ bool Animation::RemoveTrack(const String& name)
         return false;
 }
 
-void Animation::RemoveAllTracks()
-{
-    tracks_.Clear();
-}
+void Animation::RemoveAllTracks() { tracks_.Clear(); }
 
 void Animation::SetTrigger(unsigned index, const AnimationTriggerPoint& trigger)
 {
@@ -361,15 +341,9 @@ void Animation::RemoveTrigger(unsigned index)
         triggers_.Erase(index);
 }
 
-void Animation::RemoveAllTriggers()
-{
-    triggers_.Clear();
-}
+void Animation::RemoveAllTriggers() { triggers_.Clear(); }
 
-void Animation::SetNumTriggers(unsigned num)
-{
-    triggers_.Resize(num);
-}
+void Animation::SetNumTriggers(unsigned num) { triggers_.Resize(num); }
 
 SharedPtr<Animation> Animation::Clone(const String& cloneName) const
 {
@@ -392,7 +366,7 @@ AnimationTrack* Animation::GetTrack(unsigned index)
         return nullptr;
 
     int j = 0;
-    for(HashMap<StringHash, AnimationTrack>::Iterator i = tracks_.Begin(); i != tracks_.End(); ++i)
+    for (HashMap<StringHash, AnimationTrack>::Iterator i = tracks_.Begin(); i != tracks_.End(); ++i)
     {
         if (j == index)
             return &i->second_;
@@ -420,4 +394,4 @@ AnimationTriggerPoint* Animation::GetTrigger(unsigned index)
     return index < triggers_.Size() ? &triggers_[index] : nullptr;
 }
 
-}
+} // namespace Urho3D

@@ -31,15 +31,15 @@ namespace Urho3D
 
 bool EventProfiler::active = false;
 
-EventProfiler::EventProfiler(Context* context) :
-    Profiler(context)
+EventProfiler::EventProfiler(Context* context)
+    : Profiler(context)
 {
     // FIXME: Is there a cleaner way?
     delete root_;
     current_ = root_ = new EventProfilerBlock(nullptr, "RunFrame");
-    delete [] root_->name_;
+    delete[] root_->name_;
     root_->name_ = new char[sizeof("RunFrame")];
     memcpy(root_->name_, "RunFrame", sizeof("RunFrame"));
 }
 
-}
+} // namespace Urho3D

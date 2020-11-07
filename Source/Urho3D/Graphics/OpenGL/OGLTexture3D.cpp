@@ -122,8 +122,8 @@ bool Texture3D::SetData(unsigned level, int x, int y, int z, int width, int heig
     int levelWidth = GetLevelWidth(level);
     int levelHeight = GetLevelHeight(level);
     int levelDepth = GetLevelDepth(level);
-    if (x < 0 || x + width > levelWidth || y < 0 || y + height > levelHeight || z < 0 || z + depth > levelDepth || width <= 0 ||
-        height <= 0 || depth <= 0)
+    if (x < 0 || x + width > levelWidth || y < 0 || y + height > levelHeight || z < 0 || z + depth > levelDepth ||
+        width <= 0 || height <= 0 || depth <= 0)
     {
         URHO3D_LOGERROR("Illegal dimensions for setting data");
         return false;
@@ -138,17 +138,20 @@ bool Texture3D::SetData(unsigned level, int x, int y, int z, int width, int heig
     if (!IsCompressed())
     {
         if (wholeLevel)
-            glTexImage3D(target_, level, format, width, height, depth, 0, GetExternalFormat(format_), GetDataType(format_), data);
+            glTexImage3D(target_, level, format, width, height, depth, 0, GetExternalFormat(format_),
+                         GetDataType(format_), data);
         else
-            glTexSubImage3D(target_, level, x, y, z, width, height, depth, GetExternalFormat(format_), GetDataType(format_), data);
+            glTexSubImage3D(target_, level, x, y, z, width, height, depth, GetExternalFormat(format_),
+                            GetDataType(format_), data);
     }
     else
     {
         if (wholeLevel)
-            glCompressedTexImage3D(target_, level, format, width, height, depth, 0, GetDataSize(width, height, depth), data);
+            glCompressedTexImage3D(target_, level, format, width, height, depth, 0, GetDataSize(width, height, depth),
+                                   data);
         else
-            glCompressedTexSubImage3D(target_, level, x, y, z, width, height, depth, format, GetDataSize(width, height, depth),
-                data);
+            glCompressedTexSubImage3D(target_, level, x, y, z, width, height, depth, format,
+                                      GetDataSize(width, height, depth), data);
     }
 #endif
 
@@ -178,7 +181,8 @@ bool Texture3D::SetData(Image* image, bool useAlpha)
         unsigned components = image->GetComponents();
         if (Graphics::GetGL3Support() && ((components == 1 && !useAlpha) || components == 2))
         {
-            mipImage = image->ConvertToRGBA(); image = mipImage;
+            mipImage = image->ConvertToRGBA();
+            image = mipImage;
             if (!image)
                 return false;
             components = image->GetComponents();
@@ -193,7 +197,8 @@ bool Texture3D::SetData(Image* image, bool useAlpha)
         // Discard unnecessary mip levels
         for (unsigned i = 0; i < mipsToSkip_[quality]; ++i)
         {
-            mipImage = image->GetNextLevel(); image = mipImage;
+            mipImage = image->GetNextLevel();
+            image = mipImage;
             levelData = image->GetData();
             levelWidth = image->GetWidth();
             levelHeight = image->GetHeight();
@@ -219,11 +224,12 @@ bool Texture3D::SetData(Image* image, bool useAlpha)
             break;
 
         default:
-            assert(false);  // Should not reach here
+            assert(false); // Should not reach here
             break;
         }
 
-        // If image was previously compressed, reset number of requested levels to avoid error if level count is too high for new size
+        // If image was previously compressed, reset number of requested levels to avoid error if level count is too
+        // high for new size
         if (IsCompressed() && requestedLevels_ > 1)
             requestedLevels_ = 0;
         SetSize(levelWidth, levelHeight, levelDepth, format);
@@ -237,7 +243,8 @@ bool Texture3D::SetData(Image* image, bool useAlpha)
 
             if (i < levels_ - 1)
             {
-                mipImage = image->GetNextLevel(); image = mipImage;
+                mipImage = image->GetNextLevel();
+                image = mipImage;
                 levelData = image->GetData();
                 levelWidth = image->GetWidth();
                 levelHeight = image->GetHeight();
@@ -263,7 +270,8 @@ bool Texture3D::SetData(Image* image, bool useAlpha)
         unsigned mipsToSkip = mipsToSkip_[quality];
         if (mipsToSkip >= levels)
             mipsToSkip = levels - 1;
-        while (mipsToSkip && (width / (1u << mipsToSkip) < 4 || height / (1u << mipsToSkip) < 4 || depth / (1u << mipsToSkip) < 4))
+        while (mipsToSkip &&
+               (width / (1u << mipsToSkip) < 4 || height / (1u << mipsToSkip) < 4 || depth / (1u << mipsToSkip) < 4))
             --mipsToSkip;
         width /= (1u << mipsToSkip);
         height /= (1u << mipsToSkip);
@@ -390,4 +398,4 @@ bool Texture3D::Create()
 #endif
 }
 
-}
+} // namespace Urho3D

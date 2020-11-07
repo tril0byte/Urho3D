@@ -36,8 +36,8 @@ class URHO3D_API DbResult
 
 public:
     /// Default constructor constructs an empty result object.
-    DbResult() :
-        numAffectedRows_(-1)
+    DbResult()
+        : numAffectedRows_(-1)
     {
     }
 
@@ -65,4 +65,4 @@ private:
     long numAffectedRows_;
 };
 
-}
+} // namespace Urho3D

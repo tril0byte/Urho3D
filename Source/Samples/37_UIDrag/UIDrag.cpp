@@ -32,8 +32,8 @@
 
 URHO3D_DEFINE_APPLICATION_MAIN(UIDrag)
 
-UIDrag::UIDrag(Context* context) :
-    Sample(context)
+UIDrag::UIDrag(Context* context)
+    : Sample(context)
 {
 }
 
@@ -67,14 +67,14 @@ void UIDrag::CreateGUI()
     // Load the style sheet from xml
     root->SetDefaultStyle(cache->GetResource<XMLFile>("UI/DefaultStyle.xml"));
 
-    for (int i=0; i < 10; i++)
+    for (int i = 0; i < 10; i++)
     {
         auto* b = new Button(context_);
         root->AddChild(b);
         // Reference a style from the style sheet loaded earlier:
         b->SetStyleAuto();
         b->SetMinWidth(250);
-        b->SetPosition(IntVector2(50*i, 50*i));
+        b->SetPosition(IntVector2(50 * i, 50 * i));
 
         // Enable the bring-to-front flag and set the initial priority
         b->SetBringToFront(true);
@@ -83,7 +83,7 @@ void UIDrag::CreateGUI()
         // Set the layout mode to make the child text elements aligned vertically
         b->SetLayout(LM_VERTICAL, 20, {40, 40, 40, 40});
         auto dragInfos = {"Num Touch", "Text", "Event Touch"};
-        for (auto name: dragInfos)
+        for (auto name : dragInfos)
             b->CreateChild<Text>(name)->SetStyleAuto();
 
         if (i % 2 == 0)
@@ -100,9 +100,9 @@ void UIDrag::CreateGUI()
         auto* t = new Text(context_);
         root->AddChild(t);
         t->SetStyleAuto();
-        t->SetName("Touch "+ String(i));
+        t->SetName("Touch " + String(i));
         t->SetVisible(false);
-        t->SetPriority(100);     // Make sure it has higher priority than the buttons
+        t->SetPriority(100); // Make sure it has higher priority than the buttons
     }
 }
 
@@ -125,10 +125,7 @@ void UIDrag::CreateInstructions()
     instructionText->SetPosition(0, ui->GetRoot()->GetHeight() / 4);
 }
 
-void UIDrag::SubscribeToEvents()
-{
-    SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(UIDrag, HandleUpdate));
-}
+void UIDrag::SubscribeToEvents() { SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(UIDrag, HandleUpdate)); }
 
 void UIDrag::HandleClick(StringHash eventType, VariantMap& eventData)
 {

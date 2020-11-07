@@ -20,16 +20,14 @@
 // THE SOFTWARE.
 //
 
-#include "../Precompiled.h"
 #include "../AngelScript/APITemplates.h"
+#include "../Precompiled.h"
 
 namespace Urho3D
 {
 
 // This function is called before ASRegisterGenerated()
-void ASRegisterManualFirst_Container(asIScriptEngine* engine)
-{
-}
+void ASRegisterManualFirst_Container(asIScriptEngine* engine) {}
 
 // ========================================================================================
 
@@ -41,14 +39,9 @@ const unsigned HashBase::MAX_LOAD_FACTOR;
 
 // ========================================================================================
 
+void FakeAddRef(void* ptr) {}
 
-void FakeAddRef(void* ptr)
-{
-}
-
-void FakeReleaseRef(void* ptr)
-{
-}
+void FakeReleaseRef(void* ptr) {}
 
 // ========================================================================================
 
@@ -58,15 +51,9 @@ static String& StringAssignInt(int value, String& str)
     return str;
 }
 
-static String StringAddInt(int value, const String& str)
-{
-    return str + String(value);
-}
+static String StringAddInt(int value, const String& str) { return str + String(value); }
 
-static String StringAddIntReverse(int value, const String& str)
-{
-    return String(value) + str;
-}
+static String StringAddIntReverse(int value, const String& str) { return String(value) + str; }
 
 static String& StringAssignUInt(unsigned value, String& str)
 {
@@ -74,15 +61,9 @@ static String& StringAssignUInt(unsigned value, String& str)
     return str;
 }
 
-static String StringAddUInt(unsigned value, const String& str)
-{
-    return str + String(value);
-}
+static String StringAddUInt(unsigned value, const String& str) { return str + String(value); }
 
-static String StringAddUIntReverse(unsigned value, const String& str)
-{
-    return String(value) + str;
-}
+static String StringAddUIntReverse(unsigned value, const String& str) { return String(value) + str; }
 
 static String& StringAssignFloat(float value, String& str)
 {
@@ -90,15 +71,9 @@ static String& StringAssignFloat(float value, String& str)
     return str;
 }
 
-static String StringAddFloat(float value, const String& str)
-{
-    return str + String(value);
-}
+static String StringAddFloat(float value, const String& str) { return str + String(value); }
 
-static String StringAddFloatReverse(float value, const String& str)
-{
-    return String(value) + str;
-}
+static String StringAddFloatReverse(float value, const String& str) { return String(value) + str; }
 
 static String& StringAssignDouble(double value, String& str)
 {
@@ -112,15 +87,9 @@ static String& StringAddAssignDouble(double value, String& str)
     return str;
 }
 
-static String StringAddDouble(double value, const String& str)
-{
-    return str + String(value);
-}
+static String StringAddDouble(double value, const String& str) { return str + String(value); }
 
-static String StringAddDoubleReverse(double value, const String& str)
-{
-    return String(value) + str;
-}
+static String StringAddDoubleReverse(double value, const String& str) { return String(value) + str; }
 
 static String& StringAssignBool(bool value, String& str)
 {
@@ -128,38 +97,44 @@ static String& StringAssignBool(bool value, String& str)
     return str;
 }
 
-static String StringAddBool(bool value, const String& str)
-{
-    return str + String(value);
-}
+static String StringAddBool(bool value, const String& str) { return str + String(value); }
 
-static String StringAddBoolReverse(bool value, const String& str)
-{
-    return String(value) + str;
-}
+static String StringAddBoolReverse(bool value, const String& str) { return String(value) + str; }
 
 // This function is called after ASRegisterGenerated()
 void ASRegisterManualLast_Container(asIScriptEngine* engine)
 {
     static StringFactory stringFactory;
     engine->RegisterStringFactory("String", &stringFactory);
-    
+
     engine->RegisterObjectMethod("String", "String& opAssign(int)", asFUNCTION(StringAssignInt), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("String", "String opAdd(int) const", asFUNCTION(StringAddInt), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("String", "String opAdd_r(int) const", asFUNCTION(StringAddIntReverse), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("String", "String& opAssign(uint)", asFUNCTION(StringAssignUInt), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("String", "String opAdd_r(int) const", asFUNCTION(StringAddIntReverse),
+                                 asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("String", "String& opAssign(uint)", asFUNCTION(StringAssignUInt),
+                                 asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("String", "String opAdd(uint) const", asFUNCTION(StringAddUInt), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("String", "String opAdd_r(uint) const", asFUNCTION(StringAddUIntReverse), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("String", "String& opAssign(float)", asFUNCTION(StringAssignFloat), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("String", "String opAdd(float) const", asFUNCTION(StringAddFloat), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("String", "String opAdd_r(float) const", asFUNCTION(StringAddFloatReverse), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("String", "String& opAssign(double)", asFUNCTION(StringAssignDouble), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("String", "String& opAddAssign(double)", asFUNCTION(StringAddAssignDouble), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("String", "String opAdd(double) const", asFUNCTION(StringAddDouble), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("String", "String opAdd_r(double) const", asFUNCTION(StringAddDoubleReverse), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("String", "String& opAssign(bool)", asFUNCTION(StringAssignBool), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("String", "String opAdd_r(uint) const", asFUNCTION(StringAddUIntReverse),
+                                 asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("String", "String& opAssign(float)", asFUNCTION(StringAssignFloat),
+                                 asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("String", "String opAdd(float) const", asFUNCTION(StringAddFloat),
+                                 asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("String", "String opAdd_r(float) const", asFUNCTION(StringAddFloatReverse),
+                                 asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("String", "String& opAssign(double)", asFUNCTION(StringAssignDouble),
+                                 asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("String", "String& opAddAssign(double)", asFUNCTION(StringAddAssignDouble),
+                                 asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("String", "String opAdd(double) const", asFUNCTION(StringAddDouble),
+                                 asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("String", "String opAdd_r(double) const", asFUNCTION(StringAddDoubleReverse),
+                                 asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("String", "String& opAssign(bool)", asFUNCTION(StringAssignBool),
+                                 asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("String", "String opAdd(bool) const", asFUNCTION(StringAddBool), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("String", "String opAdd_r(bool) const", asFUNCTION(StringAddBoolReverse), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("String", "String opAdd_r(bool) const", asFUNCTION(StringAddBoolReverse),
+                                 asCALL_CDECL_OBJLAST);
 }
 
-}
+} // namespace Urho3D

@@ -25,8 +25,8 @@
 #include "../../Graphics/Camera.h"
 #include "../../Graphics/Graphics.h"
 #include "../../Graphics/GraphicsImpl.h"
-#include "../../Graphics/Renderer.h"
 #include "../../Graphics/RenderSurface.h"
+#include "../../Graphics/Renderer.h"
 #include "../../Graphics/Texture.h"
 
 #include "../../DebugNew.h"
@@ -42,10 +42,11 @@
 namespace Urho3D
 {
 
-RenderSurface::RenderSurface(Texture* parentTexture) :      // NOLINT(hicpp-member-init)
-    parentTexture_(parentTexture),
-    target_(GL_TEXTURE_2D),
-    renderBuffer_(0)
+RenderSurface::RenderSurface(Texture* parentTexture)
+    : // NOLINT(hicpp-member-init)
+    parentTexture_(parentTexture)
+    , target_(GL_TEXTURE_2D)
+    , renderBuffer_(0)
 {
 }
 
@@ -136,4 +137,4 @@ void RenderSurface::Release()
     renderBuffer_ = 0;
 }
 
-}
+} // namespace Urho3D

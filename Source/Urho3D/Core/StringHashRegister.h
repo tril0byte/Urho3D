@@ -49,7 +49,8 @@ public:
     /// Return whether the string in contained in the register.
     bool Contains(const StringHash& hash) const;
 
-    /// Return String for given StringHash. Return value is unsafe to use if RegisterString is called from other threads.
+    /// Return String for given StringHash. Return value is unsafe to use if RegisterString is called from other
+    /// threads.
     const String& GetString(const StringHash& hash) const;
     /// Return map of hashes. Return value is unsafe to use if RegisterString is called from other threads.
     const StringMap& GetInternalMap() const { return map_; }
@@ -61,4 +62,4 @@ private:
     UniquePtr<Mutex> mutex_;
 };
 
-}
+} // namespace Urho3D

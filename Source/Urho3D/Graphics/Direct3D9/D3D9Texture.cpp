@@ -48,10 +48,7 @@ void Texture::UpdateParameters()
     // No-op on Direct3D9, handled by Graphics instead by modifying the sampler settings as necessary
 }
 
-bool Texture::GetParametersDirty() const
-{
-    return false;
-}
+bool Texture::GetParametersDirty() const { return false; }
 
 bool Texture::IsCompressed() const
 {
@@ -110,4 +107,4 @@ void Texture::RegenerateLevels()
     levelsDirty_ = false;
 }
 
-}
+} // namespace Urho3D

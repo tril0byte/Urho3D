@@ -72,4 +72,4 @@ private:
     PODVector<unsigned char> buffer_;
 };
 
-}
+} // namespace Urho3D

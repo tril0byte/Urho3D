@@ -70,4 +70,4 @@ private:
     unsigned char areaID_;
 };
 
-}
+} // namespace Urho3D

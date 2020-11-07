@@ -36,9 +36,9 @@ class WorkerThread : public Thread, public RefCounted
 {
 public:
     /// Construct.
-    WorkerThread(WorkQueue* owner, unsigned index) :
-        owner_(owner),
-        index_(index)
+    WorkerThread(WorkQueue* owner, unsigned index)
+        : owner_(owner)
+        , index_(index)
     {
     }
 
@@ -60,15 +60,15 @@ private:
     unsigned index_;
 };
 
-WorkQueue::WorkQueue(Context* context) :
-    Object(context),
-    shutDown_(false),
-    pausing_(false),
-    paused_(false),
-    completing_(false),
-    tolerance_(10),
-    lastSize_(0),
-    maxNonThreadedWorkMs_(5)
+WorkQueue::WorkQueue(Context* context)
+    : Object(context)
+    , shutDown_(false)
+    , pausing_(false)
+    , paused_(false)
+    , completing_(false)
+    , tolerance_(10)
+    , lastSize_(0)
+    , maxNonThreadedWorkMs_(5)
 {
     SubscribeToEvent(E_BEGINFRAME, URHO3D_HANDLER(WorkQueue, HandleBeginFrame));
 }
@@ -181,7 +181,7 @@ bool WorkQueue::RemoveWorkItem(SharedPtr<WorkItem> item)
     List<WorkItem*>::Iterator i = queue_.Find(item.Get());
     if (i != queue_.End())
     {
-        List<SharedPtr<WorkItem> >::Iterator j = workItems_.Find(item);
+        List<SharedPtr<WorkItem>>::Iterator j = workItems_.Find(item);
         if (j != workItems_.End())
         {
             queue_.Erase(i);
@@ -194,17 +194,17 @@ bool WorkQueue::RemoveWorkItem(SharedPtr<WorkItem> item)
     return false;
 }
 
-unsigned WorkQueue::RemoveWorkItems(const Vector<SharedPtr<WorkItem> >& items)
+unsigned WorkQueue::RemoveWorkItems(const Vector<SharedPtr<WorkItem>>& items)
 {
     MutexLock lock(queueMutex_);
     unsigned removed = 0;
 
-    for (Vector<SharedPtr<WorkItem> >::ConstIterator i = items.Begin(); i != items.End(); ++i)
+    for (Vector<SharedPtr<WorkItem>>::ConstIterator i = items.Begin(); i != items.End(); ++i)
     {
         List<WorkItem*>::Iterator j = queue_.Find(i->Get());
         if (j != queue_.End())
         {
-            List<SharedPtr<WorkItem> >::Iterator k = workItems_.Find(*i);
+            List<SharedPtr<WorkItem>>::Iterator k = workItems_.Find(*i);
             if (k != workItems_.End())
             {
                 queue_.Erase(j);
@@ -239,7 +239,6 @@ void WorkQueue::Resume()
         paused_ = false;
     }
 }
-
 
 void WorkQueue::Complete(unsigned priority)
 {
@@ -295,7 +294,7 @@ void WorkQueue::Complete(unsigned priority)
 
 bool WorkQueue::IsCompleted(unsigned priority) const
 {
-    for (List<SharedPtr<WorkItem> >::ConstIterator i = workItems_.Begin(); i != workItems_.End(); ++i)
+    for (List<SharedPtr<WorkItem>>::ConstIterator i = workItems_.Begin(); i != workItems_.End(); ++i)
     {
         if ((*i)->priority_ >= priority && !(*i)->completed_)
             return false;
@@ -344,7 +343,7 @@ void WorkQueue::PurgeCompleted(unsigned priority)
     // Purge completed work items and send completion events. Do not signal items lower than priority threshold,
     // as those may be user submitted and lead to eg. scene manipulation that could happen in the middle of the
     // render update, which is not allowed
-    for (List<SharedPtr<WorkItem> >::Iterator i = workItems_.Begin(); i != workItems_.End();)
+    for (List<SharedPtr<WorkItem>>::Iterator i = workItems_.Begin(); i != workItems_.End();)
     {
         if ((*i)->completed_ && (*i)->priority_ >= priority)
         {
@@ -421,4 +420,4 @@ void WorkQueue::HandleBeginFrame(StringHash eventType, VariantMap& eventData)
     PurgePool();
 }
 
-}
+} // namespace Urho3D

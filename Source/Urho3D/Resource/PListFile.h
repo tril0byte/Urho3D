@@ -76,7 +76,7 @@ public:
     ~PListValue();
 
     /// Assign operator.
-    PListValue& operator =(const PListValue& rhs);
+    PListValue& operator=(const PListValue& rhs);
 
     /// Return true if is valid.
     explicit operator bool() const { return type_ != PLVT_NONE; }
@@ -170,4 +170,4 @@ private:
     PListValueMap root_;
 };
 
-}
+} // namespace Urho3D

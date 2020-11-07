@@ -31,7 +31,7 @@ class Node;
 class Scene;
 class RibbonTrail;
 
-}
+} // namespace Urho3D
 
 /// Ribbon trail demo.
 /// This sample demonstrates how to use both trail types of RibbonTrail component.
@@ -75,5 +75,4 @@ private:
     void SubscribeToEvents();
     /// Handle the logic update event.
     void HandleUpdate(StringHash eventType, VariantMap& eventData);
-
 };

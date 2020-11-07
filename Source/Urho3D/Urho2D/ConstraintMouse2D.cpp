@@ -34,9 +34,9 @@ namespace Urho3D
 
 extern const char* URHO2D_CATEGORY;
 
-ConstraintMouse2D::ConstraintMouse2D(Context* context) :
-    Constraint2D(context),
-    target_(Vector2::ZERO)
+ConstraintMouse2D::ConstraintMouse2D(Context* context)
+    : Constraint2D(context)
+    , target_(Vector2::ZERO)
 {
 }
 
@@ -133,4 +133,4 @@ b2JointDef* ConstraintMouse2D::GetJointDef()
     return &jointDef_;
 }
 
-}
+} // namespace Urho3D

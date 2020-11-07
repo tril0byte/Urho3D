@@ -73,7 +73,8 @@ public:
     void SetDefaultScene(Scene* scene);
     /// Set whether to execute engine console commands as script code.
     void SetExecuteConsoleCommands(bool enable);
-    /// Print the whole script API (all registered classes, methods and properties) to the log. No-ops when URHO3D_LOGGING not defined.
+    /// Print the whole script API (all registered classes, methods and properties) to the log. No-ops when
+    /// URHO3D_LOGGING not defined.
     void DumpAPI(DumpMode mode = DOXYGEN, const String& sourceTree = String::EMPTY);
     /// Log a message from the script engine.
     void MessageCallback(const asSMessageInfo* msg);
@@ -106,7 +107,6 @@ public:
 
     /// Returns an array of strings of enum value names for Enum Attributes.
     const char** GetEnumValues(int asTypeID);
-
 
 private:
     /// Increase script nesting level.
@@ -152,4 +152,4 @@ private:
 /// Register Script library objects.
 void URHO3D_API RegisterScriptLibrary(Context* context);
 
-}
+} // namespace Urho3D

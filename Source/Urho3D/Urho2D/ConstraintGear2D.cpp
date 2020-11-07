@@ -34,8 +34,8 @@ namespace Urho3D
 
 extern const char* URHO2D_CATEGORY;
 
-ConstraintGear2D::ConstraintGear2D(Context* context) :
-    Constraint2D(context)
+ConstraintGear2D::ConstraintGear2D(Context* context)
+    : Constraint2D(context)
 {
 }
 
@@ -125,4 +125,4 @@ b2JointDef* ConstraintGear2D::GetJointDef()
     return &jointDef_;
 }
 
-}
+} // namespace Urho3D

@@ -26,14 +26,14 @@
 
 #ifdef _MSC_VER
 #pragma warning(push)
-#pragma warning(disable:4244) // Conversion from 'double' to 'float'
-#pragma warning(disable:4702) // unreachable code
+#pragma warning(disable : 4244) // Conversion from 'double' to 'float'
+#pragma warning(disable : 4702) // unreachable code
 #endif
 
 #include "../Math/Random.h"
 
-#include <cstdlib>
 #include <cmath>
+#include <cstdlib>
 #include <limits>
 #include <type_traits>
 
@@ -55,7 +55,7 @@ static const float M_MAX_FOV = 160.0f;
 static const float M_LARGE_VALUE = 100000000.0f;
 static const float M_INFINITY = (float)HUGE_VAL;
 static const float M_DEGTORAD = M_PI / 180.0f;
-static const float M_DEGTORAD_2 = M_PI / 360.0f;    // M_DEGTORAD / 2.f
+static const float M_DEGTORAD_2 = M_PI / 360.0f; // M_DEGTORAD / 2.f
 static const float M_RADTODEG = 1.0f / M_DEGTORAD;
 
 /// Intersection test result.
@@ -68,46 +68,40 @@ enum Intersection
 
 /// Check whether two floating point values are equal within accuracy.
 /// @specialization{float}
-template <class T>
-inline bool Equals(T lhs, T rhs) { return lhs + std::numeric_limits<T>::epsilon() >= rhs && lhs - std::numeric_limits<T>::epsilon() <= rhs; }
+template <class T> inline bool Equals(T lhs, T rhs)
+{
+    return lhs + std::numeric_limits<T>::epsilon() >= rhs && lhs - std::numeric_limits<T>::epsilon() <= rhs;
+}
 
 /// Linear interpolation between two values.
 /// @specialization{float,float}
-template <class T, class U>
-inline T Lerp(T lhs, T rhs, U t) { return lhs * (1.0 - t) + rhs * t; }
+template <class T, class U> inline T Lerp(T lhs, T rhs, U t) { return lhs * (1.0 - t) + rhs * t; }
 
 /// Inverse linear interpolation between two values.
 /// @specialization{float}
-template <class T>
-inline T InverseLerp(T lhs, T rhs, T x) { return (x - lhs) / (rhs - lhs); }
+template <class T> inline T InverseLerp(T lhs, T rhs, T x) { return (x - lhs) / (rhs - lhs); }
 
 /// Return the smaller of two values.
 /// @specialization{float,float} @specialization{int,int}
-template <class T, class U>
-inline T Min(T lhs, U rhs) { return lhs < rhs ? lhs : rhs; }
+template <class T, class U> inline T Min(T lhs, U rhs) { return lhs < rhs ? lhs : rhs; }
 
 /// Return the larger of two values.
 /// @specialization{float,float} @specialization{int,int}
-template <class T, class U>
-inline T Max(T lhs, U rhs) { return lhs > rhs ? lhs : rhs; }
+template <class T, class U> inline T Max(T lhs, U rhs) { return lhs > rhs ? lhs : rhs; }
 
 /// Return absolute value of a value.
 /// @specialization{float}
-template <class T>
-inline T Abs(T value) { return value >= 0.0 ? value : -value; }
+template <class T> inline T Abs(T value) { return value >= 0.0 ? value : -value; }
 
 /// Return the sign of a float (-1, 0 or 1).
 /// @specialization{float}
-template <class T>
-inline T Sign(T value) { return value > 0.0 ? 1.0 : (value < 0.0 ? -1.0 : 0.0); }
+template <class T> inline T Sign(T value) { return value > 0.0 ? 1.0 : (value < 0.0 ? -1.0 : 0.0); }
 
 /// Convert degrees to radians.
-template <class T>
-inline T ToRadians(const T degrees) { return M_DEGTORAD * degrees; }
+template <class T> inline T ToRadians(const T degrees) { return M_DEGTORAD * degrees; }
 
 /// Convert radians to degrees.
-template <class T>
-inline T ToDegrees(const T radians) { return M_RADTODEG * radians; }
+template <class T> inline T ToDegrees(const T radians) { return M_RADTODEG * radians; }
 
 /// Return a representation of the specified floating-point value as a single format bit layout.
 inline unsigned FloatToRawIntBits(float value)
@@ -125,8 +119,7 @@ template <class T> inline bool IsInf(T value) { return std::isinf(value); }
 
 /// Clamp a number to a range.
 /// @specialization{float} @specialization{int}
-template <class T>
-inline T Clamp(T value, T min, T max)
+template <class T> inline T Clamp(T value, T min, T max)
 {
     if (value < min)
         return min;
@@ -138,8 +131,7 @@ inline T Clamp(T value, T min, T max)
 
 /// Smoothly damp between values.
 /// @specialization{float}
-template <class T>
-inline T SmoothStep(T lhs, T rhs, T t)
+template <class T> inline T SmoothStep(T lhs, T rhs, T t)
 {
     t = Clamp((t - lhs) / (rhs - lhs), T(0.0), T(1.0)); // Saturate t
     return t * t * (3.0 - 2.0 * t);
@@ -186,16 +178,19 @@ template <class T> inline T Ln(T x) { return log(x); }
 template <class T> inline T Sqrt(T x) { return sqrt(x); }
 
 /// Return remainder of X/Y for float values.
-template <class T, typename std::enable_if<std::is_floating_point<T>::value>::type* = nullptr>
-inline T Mod(T x, T y) { return fmod(x, y); }
+template <class T, typename std::enable_if<std::is_floating_point<T>::value>::type* = nullptr> inline T Mod(T x, T y)
+{
+    return fmod(x, y);
+}
 
 /// Return remainder of X/Y for integer values.
-template <class T, typename std::enable_if<std::is_integral<T>::value>::type* = nullptr>
-inline T Mod(T x, T y) { return x % y; }
+template <class T, typename std::enable_if<std::is_integral<T>::value>::type* = nullptr> inline T Mod(T x, T y)
+{
+    return x % y;
+}
 
 /// Return always positive remainder of X/Y.
-template <class T>
-inline T AbsMod(T x, T y)
+template <class T> inline T AbsMod(T x, T y)
 {
     const T result = Mod(x, y);
     return result < 0 ? result + y : result;
@@ -218,7 +213,8 @@ template <class T> inline int FloorToInt(T x) { return static_cast<int>(floor(x)
 template <class T> inline T Round(T x) { return round(x); }
 
 /// Compute average value of the range.
-template <class Iterator> inline auto Average(Iterator begin, Iterator end) -> typename std::decay<decltype(*begin)>::type
+template <class Iterator>
+inline auto Average(Iterator begin, Iterator end) -> typename std::decay<decltype(*begin)>::type
 {
     using T = typename std::decay<decltype(*begin)>::type;
 
@@ -258,10 +254,7 @@ template <class T> inline T Ceil(T x) { return ceil(x); }
 template <class T> inline int CeilToInt(T x) { return static_cast<int>(ceil(x)); }
 
 /// Check whether an unsigned integer is a power of two.
-inline bool IsPowerOfTwo(unsigned value)
-{
-    return !(value & (value - 1)) && value;
-}
+inline bool IsPowerOfTwo(unsigned value) { return !(value & (value - 1)) && value; }
 
 /// Round up to next power of two.
 inline unsigned NextPowerOfTwo(unsigned value)
@@ -289,7 +282,7 @@ inline unsigned LogBaseTwo(unsigned value)
 {
     // http://graphics.stanford.edu/~seander/bithacks.html#IntegerLogObvious
     unsigned ret = 0;
-    while (value >>= 1)     // Unroll for more speed...
+    while (value >>= 1) // Unroll for more speed...
         ++ret;
     return ret;
 }
@@ -322,29 +315,36 @@ inline int Random(int range) { return (int)(Random() * range); }
 
 /// Return a random integer between min and max - 1.
 /// @alias{RandomInt}
-inline int Random(int min, int max) { auto range = (float)(max - min); return (int)(Random() * range) + min; }
+inline int Random(int min, int max)
+{
+    auto range = (float)(max - min);
+    return (int)(Random() * range) + min;
+}
 
 /// Return a random normal distributed number with the given mean value and variance.
-inline float RandomNormal(float meanValue, float variance) { return RandStandardNormal() * sqrtf(variance) + meanValue; }
+inline float RandomNormal(float meanValue, float variance)
+{
+    return RandStandardNormal() * sqrtf(variance) + meanValue;
+}
 
 /// Convert float to half float. From https://gist.github.com/martinkallman/5049614
 inline unsigned short FloatToHalf(float value)
 {
     unsigned inu = FloatToRawIntBits(value);
-    unsigned t1 = inu & 0x7fffffffu;         // Non-sign bits
-    unsigned t2 = inu & 0x80000000u;         // Sign bit
-    unsigned t3 = inu & 0x7f800000u;         // Exponent
+    unsigned t1 = inu & 0x7fffffffu; // Non-sign bits
+    unsigned t2 = inu & 0x80000000u; // Sign bit
+    unsigned t3 = inu & 0x7f800000u; // Exponent
 
-    t1 >>= 13;                              // Align mantissa on MSB
-    t2 >>= 16;                              // Shift sign bit into position
+    t1 >>= 13; // Align mantissa on MSB
+    t2 >>= 16; // Shift sign bit into position
 
-    t1 -= 0x1c000;                          // Adjust bias
+    t1 -= 0x1c000; // Adjust bias
 
-    t1 = (t3 < 0x38800000) ? 0 : t1;        // Flush-to-zero
-    t1 = (t3 > 0x47000000) ? 0x7bff : t1;   // Clamp-to-max
-    t1 = (t3 == 0 ? 0 : t1);                // Denormals-as-zero
+    t1 = (t3 < 0x38800000) ? 0 : t1;      // Flush-to-zero
+    t1 = (t3 > 0x47000000) ? 0x7bff : t1; // Clamp-to-max
+    t1 = (t3 == 0 ? 0 : t1);              // Denormals-as-zero
 
-    t1 |= t2;                               // Re-insert sign bit
+    t1 |= t2; // Re-insert sign bit
 
     return (unsigned short)t1;
 }
@@ -352,18 +352,18 @@ inline unsigned short FloatToHalf(float value)
 /// Convert half float to float. From https://gist.github.com/martinkallman/5049614
 inline float HalfToFloat(unsigned short value)
 {
-    unsigned t1 = value & 0x7fffu;           // Non-sign bits
-    unsigned t2 = value & 0x8000u;           // Sign bit
-    unsigned t3 = value & 0x7c00u;           // Exponent
+    unsigned t1 = value & 0x7fffu; // Non-sign bits
+    unsigned t2 = value & 0x8000u; // Sign bit
+    unsigned t3 = value & 0x7c00u; // Exponent
 
-    t1 <<= 13;                              // Align mantissa on MSB
-    t2 <<= 16;                              // Shift sign bit into position
+    t1 <<= 13; // Align mantissa on MSB
+    t2 <<= 16; // Shift sign bit into position
 
-    t1 += 0x38000000;                       // Adjust bias
+    t1 += 0x38000000; // Adjust bias
 
-    t1 = (t3 == 0 ? 0 : t1);                // Denormals-as-zero
+    t1 = (t3 == 0 ? 0 : t1); // Denormals-as-zero
 
-    t1 |= t2;                               // Re-insert sign bit
+    t1 |= t2; // Re-insert sign bit
 
     float out;
     *((unsigned*)&out) = t1;
@@ -373,7 +373,7 @@ inline float HalfToFloat(unsigned short value)
 /// Calculate both sine and cosine, with angle in degrees.
 URHO3D_API void SinCos(float angle, float& sin, float& cos);
 
-}
+} // namespace Urho3D
 
 #ifdef _MSC_VER
 #pragma warning(pop)

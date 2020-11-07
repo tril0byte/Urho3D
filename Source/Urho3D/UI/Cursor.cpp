@@ -24,8 +24,8 @@
 
 #include "../Core/Context.h"
 #include "../Graphics/Texture2D.h"
-#include "../Input/Input.h"
 #include "../IO/Log.h"
+#include "../Input/Input.h"
 #include "../Resource/ResourceCache.h"
 #include "../UI/UI.h"
 
@@ -36,48 +36,44 @@
 namespace Urho3D
 {
 
-static const char* shapeNames[] =
-{
-    "Normal",
-    "IBeam",
-    "Cross",
-    "ResizeVertical",
-    "ResizeDiagonalTopRight",
-    "ResizeHorizontal",
-    "ResizeDiagonalTopLeft",
-    "ResizeAll",
-    "AcceptDrop",
-    "RejectDrop",
-    "Busy",
-    "BusyArrow"
-};
+static const char* shapeNames[] = {"Normal",
+                                   "IBeam",
+                                   "Cross",
+                                   "ResizeVertical",
+                                   "ResizeDiagonalTopRight",
+                                   "ResizeHorizontal",
+                                   "ResizeDiagonalTopLeft",
+                                   "ResizeAll",
+                                   "AcceptDrop",
+                                   "RejectDrop",
+                                   "Busy",
+                                   "BusyArrow"};
 
 #if !defined(__ANDROID__) && !defined(IOS) && !defined(TVOS)
 // OS cursor shape lookup table matching cursor shape enumeration
-static const int osCursorLookup[CS_MAX_SHAPES] =
-{
-    SDL_SYSTEM_CURSOR_ARROW,    // CS_NORMAL
+static const int osCursorLookup[CS_MAX_SHAPES] = {
+    SDL_SYSTEM_CURSOR_ARROW,     // CS_NORMAL
     SDL_SYSTEM_CURSOR_IBEAM,     // CS_IBEAM
     SDL_SYSTEM_CURSOR_CROSSHAIR, // CS_CROSS
-    SDL_SYSTEM_CURSOR_SIZENS,   // CS_RESIZEVERTICAL
-    SDL_SYSTEM_CURSOR_SIZENESW, // CS_RESIZEDIAGONAL_TOPRIGHT
-    SDL_SYSTEM_CURSOR_SIZEWE,   // CS_RESIZEHORIZONTAL
-    SDL_SYSTEM_CURSOR_SIZENWSE, // CS_RESIZEDIAGONAL_TOPLEFT
+    SDL_SYSTEM_CURSOR_SIZENS,    // CS_RESIZEVERTICAL
+    SDL_SYSTEM_CURSOR_SIZENESW,  // CS_RESIZEDIAGONAL_TOPRIGHT
+    SDL_SYSTEM_CURSOR_SIZEWE,    // CS_RESIZEHORIZONTAL
+    SDL_SYSTEM_CURSOR_SIZENWSE,  // CS_RESIZEDIAGONAL_TOPLEFT
     SDL_SYSTEM_CURSOR_SIZEALL,   // CS_RESIZE_ALL
-    SDL_SYSTEM_CURSOR_HAND,     // CS_ACCEPTDROP
-    SDL_SYSTEM_CURSOR_NO,       // CS_REJECTDROP
-    SDL_SYSTEM_CURSOR_WAIT,   // CS_BUSY
-    SDL_SYSTEM_CURSOR_WAITARROW // CS_BUSY_ARROW
+    SDL_SYSTEM_CURSOR_HAND,      // CS_ACCEPTDROP
+    SDL_SYSTEM_CURSOR_NO,        // CS_REJECTDROP
+    SDL_SYSTEM_CURSOR_WAIT,      // CS_BUSY
+    SDL_SYSTEM_CURSOR_WAITARROW  // CS_BUSY_ARROW
 };
 #endif
 
 extern const char* UI_CATEGORY;
 
-Cursor::Cursor(Context* context) :
-    BorderImage(context),
-    shape_(shapeNames[CS_NORMAL]),
-    useSystemShapes_(false),
-    osShapeDirty_(false)
+Cursor::Cursor(Context* context)
+    : BorderImage(context)
+    , shape_(shapeNames[CS_NORMAL])
+    , useSystemShapes_(false)
+    , osShapeDirty_(false)
 {
     // Define the defaults for system cursor usage.
     for (unsigned i = 0; i < CS_MAX_SHAPES; i++)
@@ -106,7 +102,8 @@ void Cursor::RegisterObject(Context* context)
     URHO3D_COPY_BASE_ATTRIBUTES(BorderImage);
     URHO3D_UPDATE_ATTRIBUTE_DEFAULT_VALUE("Priority", M_MAX_INT);
     URHO3D_ACCESSOR_ATTRIBUTE("Use System Shapes", GetUseSystemShapes, SetUseSystemShapes, bool, false, AM_FILE);
-    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Shapes", GetShapesAttr, SetShapesAttr, VariantVector, Variant::emptyVariantVector, AM_FILE);
+    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Shapes", GetShapesAttr, SetShapesAttr, VariantVector, Variant::emptyVariantVector,
+                                    AM_FILE);
 }
 
 void Cursor::GetBatches(PODVector<UIBatch>& batches, PODVector<float>& vertexData, const IntRect& currentScissor)
@@ -173,7 +170,6 @@ void Cursor::DefineShape(const String& shape, Image* image, const IntRect& image
         SetShape(shape);
     }
 }
-
 
 void Cursor::SetShape(const String& shape)
 {
@@ -303,9 +299,6 @@ void Cursor::ApplyOSCursorShape()
 #endif
 }
 
-void Cursor::HandleMouseVisibleChanged(StringHash eventType, VariantMap& eventData)
-{
-    ApplyOSCursorShape();
-}
+void Cursor::HandleMouseVisibleChanged(StringHash eventType, VariantMap& eventData) { ApplyOSCursorShape(); }
 
-}
+} // namespace Urho3D

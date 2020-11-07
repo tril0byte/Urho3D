@@ -26,9 +26,9 @@
 
 namespace Urho3D
 {
-    class Node;
-    class Scene;
-}
+class Node;
+class Scene;
+} // namespace Urho3D
 
 class Vehicle;
 

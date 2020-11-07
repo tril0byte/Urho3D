@@ -22,16 +22,16 @@
 
 #include "../Precompiled.h"
 
-#include "../Graphics/Graphics.h"
 #include "../Graphics/GPUObject.h"
+#include "../Graphics/Graphics.h"
 
 #include "../DebugNew.h"
 
 namespace Urho3D
 {
 
-GPUObject::GPUObject(Graphics* graphics) :
-    graphics_(graphics)
+GPUObject::GPUObject(Graphics* graphics)
+    : graphics_(graphics)
 {
 #ifdef URHO3D_OPENGL
     object_.name_ = 0;
@@ -57,22 +57,12 @@ void GPUObject::OnDeviceLost()
 #endif
 }
 
-void GPUObject::OnDeviceReset()
-{
-}
+void GPUObject::OnDeviceReset() {}
 
-void GPUObject::Release()
-{
-}
+void GPUObject::Release() {}
 
-void GPUObject::ClearDataLost()
-{
-    dataLost_ = false;
-}
+void GPUObject::ClearDataLost() { dataLost_ = false; }
 
-Graphics* GPUObject::GetGraphics() const
-{
-    return graphics_;
-}
+Graphics* GPUObject::GetGraphics() const { return graphics_; }
 
-}
+} // namespace Urho3D

@@ -56,21 +56,22 @@
 #include "../../Input/Input.h"
 #include "../../UI/Cursor.h"
 #include "../../UI/UI.h"
-#include <emscripten/emscripten.h>
 #include <emscripten/bind.h>
+#include <emscripten/emscripten.h>
 
 // Emscripten provides even all GL extension functions via static linking. However there is
 // no GLES2-specific extension header at the moment to include instanced rendering declarations,
 // so declare them manually from GLES3 gl2ext.h. Emscripten will provide these when linking final output.
 extern "C"
 {
-    GL_APICALL void GL_APIENTRY glDrawArraysInstancedANGLE (GLenum mode, GLint first, GLsizei count, GLsizei primcount);
-    GL_APICALL void GL_APIENTRY glDrawElementsInstancedANGLE (GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei primcount);
-    GL_APICALL void GL_APIENTRY glVertexAttribDivisorANGLE (GLuint index, GLuint divisor);
+    GL_APICALL void GL_APIENTRY glDrawArraysInstancedANGLE(GLenum mode, GLint first, GLsizei count, GLsizei primcount);
+    GL_APICALL void GL_APIENTRY glDrawElementsInstancedANGLE(GLenum mode, GLsizei count, GLenum type,
+                                                             const void* indices, GLsizei primcount);
+    GL_APICALL void GL_APIENTRY glVertexAttribDivisorANGLE(GLuint index, GLuint divisor);
 }
 
 // Helper functions to support emscripten canvas resolution change
-static const Urho3D::Context *appContext;
+static const Urho3D::Context* appContext;
 
 static void JSCanvasSize(int width, int height, bool fullscreen, float scale)
 {
@@ -130,9 +131,7 @@ static void JSCanvasSize(int width, int height, bool fullscreen, float scale)
 }
 
 using namespace emscripten;
-EMSCRIPTEN_BINDINGS(Module) {
-    function("JSCanvasSize", &JSCanvasSize);
-}
+EMSCRIPTEN_BINDINGS(Module) { function("JSCanvasSize", &JSCanvasSize); }
 #endif
 
 #ifdef _WIN32
@@ -148,95 +147,34 @@ extern "C"
 namespace Urho3D
 {
 
-static const unsigned glCmpFunc[] =
-{
-    GL_ALWAYS,
-    GL_EQUAL,
-    GL_NOTEQUAL,
-    GL_LESS,
-    GL_LEQUAL,
-    GL_GREATER,
-    GL_GEQUAL
-};
+static const unsigned glCmpFunc[] = {GL_ALWAYS, GL_EQUAL, GL_NOTEQUAL, GL_LESS, GL_LEQUAL, GL_GREATER, GL_GEQUAL};
 
-static const unsigned glSrcBlend[] =
-{
-    GL_ONE,
-    GL_ONE,
-    GL_DST_COLOR,
-    GL_SRC_ALPHA,
-    GL_SRC_ALPHA,
-    GL_ONE,
-    GL_ONE_MINUS_DST_ALPHA,
-    GL_ONE,
-    GL_SRC_ALPHA
-};
+static const unsigned glSrcBlend[] = {
+    GL_ONE, GL_ONE, GL_DST_COLOR, GL_SRC_ALPHA, GL_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_DST_ALPHA, GL_ONE, GL_SRC_ALPHA};
 
-static const unsigned glDestBlend[] =
-{
-    GL_ZERO,
-    GL_ONE,
-    GL_ZERO,
-    GL_ONE_MINUS_SRC_ALPHA,
-    GL_ONE,
-    GL_ONE_MINUS_SRC_ALPHA,
-    GL_DST_ALPHA,
-    GL_ONE,
-    GL_ONE
-};
+static const unsigned glDestBlend[] = {
+    GL_ZERO, GL_ONE, GL_ZERO, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_DST_ALPHA, GL_ONE, GL_ONE};
 
-static const unsigned glBlendOp[] =
-{
-    GL_FUNC_ADD,
-    GL_FUNC_ADD,
-    GL_FUNC_ADD,
-    GL_FUNC_ADD,
-    GL_FUNC_ADD,
-    GL_FUNC_ADD,
-    GL_FUNC_ADD,
-    GL_FUNC_REVERSE_SUBTRACT,
-    GL_FUNC_REVERSE_SUBTRACT
-};
+static const unsigned glBlendOp[] = {GL_FUNC_ADD,
+                                     GL_FUNC_ADD,
+                                     GL_FUNC_ADD,
+                                     GL_FUNC_ADD,
+                                     GL_FUNC_ADD,
+                                     GL_FUNC_ADD,
+                                     GL_FUNC_ADD,
+                                     GL_FUNC_REVERSE_SUBTRACT,
+                                     GL_FUNC_REVERSE_SUBTRACT};
 
 #ifndef GL_ES_VERSION_2_0
-static const unsigned glFillMode[] =
-{
-    GL_FILL,
-    GL_LINE,
-    GL_POINT
-};
+static const unsigned glFillMode[] = {GL_FILL, GL_LINE, GL_POINT};
 
-static const unsigned glStencilOps[] =
-{
-    GL_KEEP,
-    GL_ZERO,
-    GL_REPLACE,
-    GL_INCR_WRAP,
-    GL_DECR_WRAP
-};
+static const unsigned glStencilOps[] = {GL_KEEP, GL_ZERO, GL_REPLACE, GL_INCR_WRAP, GL_DECR_WRAP};
 #endif
 
-static const unsigned glElementTypes[] =
-{
-    GL_INT,
-    GL_FLOAT,
-    GL_FLOAT,
-    GL_FLOAT,
-    GL_FLOAT,
-    GL_UNSIGNED_BYTE,
-    GL_UNSIGNED_BYTE
-};
+static const unsigned glElementTypes[] = {GL_INT,   GL_FLOAT,         GL_FLOAT,        GL_FLOAT,
+                                          GL_FLOAT, GL_UNSIGNED_BYTE, GL_UNSIGNED_BYTE};
 
-static const unsigned glElementComponents[] =
-{
-    1,
-    1,
-    2,
-    3,
-    4,
-    4,
-    4
-};
+static const unsigned glElementComponents[] = {1, 1, 2, 3, 4, 4, 4};
 
 #ifdef GL_ES_VERSION_2_0
 static unsigned glesDepthStencilFormat = GL_DEPTH_COMPONENT16;
@@ -252,7 +190,8 @@ bool CheckExtension(const String& name)
     return extensions.Contains(name);
 }
 
-static void GetGLPrimitiveType(unsigned elementCount, PrimitiveType type, unsigned& primitiveCount, GLenum& glPrimitiveType)
+static void GetGLPrimitiveType(unsigned elementCount, PrimitiveType type, unsigned& primitiveCount,
+                               GLenum& glPrimitiveType)
 {
     switch (type)
     {
@@ -291,15 +230,16 @@ static void GetGLPrimitiveType(unsigned elementCount, PrimitiveType type, unsign
 const Vector2 Graphics::pixelUVOffset(0.0f, 0.0f);
 bool Graphics::gl3Support = false;
 
-Graphics::Graphics(Context* context) :
-    Object(context),
-    impl_(new GraphicsImpl()),
-    position_(SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED),
-    shadowMapFormat_(GL_DEPTH_COMPONENT16),
-    hiresShadowMapFormat_(GL_DEPTH_COMPONENT24),
-    shaderPath_("Shaders/GLSL/"),
-    shaderExtension_(".glsl"),
-    orientations_("LandscapeLeft LandscapeRight"),
+Graphics::Graphics(Context* context)
+    : Object(context)
+    , impl_(new GraphicsImpl())
+    , position_(SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED)
+    , shadowMapFormat_(GL_DEPTH_COMPONENT16)
+    , hiresShadowMapFormat_(GL_DEPTH_COMPONENT24)
+    , shaderPath_("Shaders/GLSL/")
+    , shaderExtension_(".glsl")
+    , orientations_("LandscapeLeft LandscapeRight")
+    ,
 #ifndef GL_ES_VERSION_2_0
     apiName_("GL2")
 #else
@@ -341,8 +281,8 @@ bool Graphics::SetScreenMode(int width, int height, const ScreenModeParams& para
         return true;
 
     // If only vsync changes, do not destroy/recreate the context
-    if (IsInitialized() && width == width_ && height == height_
-        && screenParams_.EqualsExceptVSync(newParams) && screenParams_.vsync_ != newParams.vsync_)
+    if (IsInitialized() && width == width_ && height == height_ && screenParams_.EqualsExceptVSync(newParams) &&
+        screenParams_.vsync_ != newParams.vsync_)
     {
         SDL_GL_SetSwapInterval(newParams.vsync_ ? 1 : 0);
         screenParams_.vsync_ = newParams.vsync_;
@@ -403,7 +343,8 @@ bool Graphics::SetScreenMode(int width, int height, const ScreenModeParams& para
 
         SDL_Rect display_rect;
         SDL_GetDisplayBounds(newParams.monitor_, &display_rect);
-        reposition = newParams.fullscreen_ || (newParams.borderless_ && width >= display_rect.w && height >= display_rect.h);
+        reposition =
+            newParams.fullscreen_ || (newParams.borderless_ && width >= display_rect.w && height >= display_rect.h);
 
         const int x = reposition ? display_rect.x : position_.x_;
         const int y = reposition ? display_rect.y : position_.y_;
@@ -503,7 +444,7 @@ bool Graphics::SetScreenMode(int width, int height, const ScreenModeParams& para
     CheckFeatureSupport();
 
 #ifdef URHO3D_LOGGING
-    URHO3D_LOGINFOF("Adapter used %s %s", (const char *) glGetString(GL_VENDOR), (const char *) glGetString(GL_RENDERER));
+    URHO3D_LOGINFOF("Adapter used %s %s", (const char*)glGetString(GL_VENDOR), (const char*)glGetString(GL_RENDERER));
 #endif
 
     OnScreenModeChanged();
@@ -675,7 +616,8 @@ void Graphics::Clear(ClearTargetFlags flags, const Color& color, float depth, un
     // If viewport is less than full screen, set a scissor to limit the clear
     /// \todo Any user-set scissor test will be lost
     IntVector2 viewSize = GetRenderTargetDimensions();
-    if (viewport_.left_ != 0 || viewport_.top_ != 0 || viewport_.right_ != viewSize.x_ || viewport_.bottom_ != viewSize.y_)
+    if (viewport_.left_ != 0 || viewport_.top_ != 0 || viewport_.right_ != viewSize.x_ ||
+        viewport_.bottom_ != viewSize.y_)
         SetScissorTest(true, IntRect(0, 0, viewport_.Width(), viewport_.Height()));
     else
         SetScissorTest(false);
@@ -711,7 +653,8 @@ bool Graphics::ResolveToTexture(Texture2D* destination, const IntRect& viewport)
 
     // Use Direct3D convention with the vertical coordinates ie. 0 is top
     SetTextureForUpdate(destination);
-    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, vpCopy.left_, height_ - vpCopy.bottom_, vpCopy.Width(), vpCopy.Height());
+    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, vpCopy.left_, height_ - vpCopy.bottom_, vpCopy.Width(),
+                        vpCopy.Height());
     SetTexture(0, nullptr);
 
     return true;
@@ -741,23 +684,25 @@ bool Graphics::ResolveToTexture(Texture2D* texture)
     {
         glBindFramebufferEXT(GL_READ_FRAMEBUFFER_EXT, impl_->resolveSrcFBO_);
         glFramebufferRenderbufferEXT(GL_READ_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_RENDERBUFFER_EXT,
-            surface->GetRenderBuffer());
+                                     surface->GetRenderBuffer());
         glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER_EXT, impl_->resolveDestFBO_);
-        glFramebufferTexture2DEXT(GL_DRAW_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texture->GetGPUObjectName(),
-            0);
-        glBlitFramebufferEXT(0, 0, texture->GetWidth(), texture->GetHeight(), 0, 0, texture->GetWidth(), texture->GetHeight(),
-            GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        glFramebufferTexture2DEXT(GL_DRAW_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D,
+                                  texture->GetGPUObjectName(), 0);
+        glBlitFramebufferEXT(0, 0, texture->GetWidth(), texture->GetHeight(), 0, 0, texture->GetWidth(),
+                             texture->GetHeight(), GL_COLOR_BUFFER_BIT, GL_NEAREST);
         glBindFramebufferEXT(GL_READ_FRAMEBUFFER_EXT, 0);
         glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER_EXT, 0);
     }
     else
     {
         glBindFramebuffer(GL_READ_FRAMEBUFFER, impl_->resolveSrcFBO_);
-        glFramebufferRenderbuffer(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, surface->GetRenderBuffer());
+        glFramebufferRenderbuffer(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+                                  surface->GetRenderBuffer());
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, impl_->resolveDestFBO_);
-        glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture->GetGPUObjectName(), 0);
-        glBlitFramebuffer(0, 0, texture->GetWidth(), texture->GetHeight(), 0, 0, texture->GetWidth(), texture->GetHeight(),
-            GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture->GetGPUObjectName(),
+                               0);
+        glBlitFramebuffer(0, 0, texture->GetWidth(), texture->GetHeight(), 0, 0, texture->GetWidth(),
+                          texture->GetHeight(), GL_COLOR_BUFFER_BIT, GL_NEAREST);
         glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
     }
@@ -799,12 +744,12 @@ bool Graphics::ResolveToTexture(TextureCube* texture)
             surface->SetResolveDirty(false);
             glBindFramebufferEXT(GL_READ_FRAMEBUFFER_EXT, impl_->resolveSrcFBO_);
             glFramebufferRenderbufferEXT(GL_READ_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_RENDERBUFFER_EXT,
-                surface->GetRenderBuffer());
+                                         surface->GetRenderBuffer());
             glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER_EXT, impl_->resolveDestFBO_);
-            glFramebufferTexture2DEXT(GL_DRAW_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-                texture->GetGPUObjectName(), 0);
-            glBlitFramebufferEXT(0, 0, texture->GetWidth(), texture->GetHeight(), 0, 0, texture->GetWidth(), texture->GetHeight(),
-                GL_COLOR_BUFFER_BIT, GL_NEAREST);
+            glFramebufferTexture2DEXT(GL_DRAW_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
+                                      GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, texture->GetGPUObjectName(), 0);
+            glBlitFramebufferEXT(0, 0, texture->GetWidth(), texture->GetHeight(), 0, 0, texture->GetWidth(),
+                                 texture->GetHeight(), GL_COLOR_BUFFER_BIT, GL_NEAREST);
         }
 
         glBindFramebufferEXT(GL_READ_FRAMEBUFFER_EXT, 0);
@@ -820,12 +765,13 @@ bool Graphics::ResolveToTexture(TextureCube* texture)
 
             surface->SetResolveDirty(false);
             glBindFramebuffer(GL_READ_FRAMEBUFFER, impl_->resolveSrcFBO_);
-            glFramebufferRenderbuffer(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, surface->GetRenderBuffer());
+            glFramebufferRenderbuffer(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+                                      surface->GetRenderBuffer());
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, impl_->resolveDestFBO_);
             glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-                texture->GetGPUObjectName(), 0);
-            glBlitFramebuffer(0, 0, texture->GetWidth(), texture->GetHeight(), 0, 0, texture->GetWidth(), texture->GetHeight(),
-                GL_COLOR_BUFFER_BIT, GL_NEAREST);
+                                   texture->GetGPUObjectName(), 0);
+            glBlitFramebuffer(0, 0, texture->GetWidth(), texture->GetHeight(), 0, 0, texture->GetWidth(),
+                              texture->GetHeight(), GL_COLOR_BUFFER_BIT, GL_NEAREST);
         }
 
         glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
@@ -858,7 +804,8 @@ void Graphics::Draw(PrimitiveType type, unsigned vertexStart, unsigned vertexCou
     ++numBatches_;
 }
 
-void Graphics::Draw(PrimitiveType type, unsigned indexStart, unsigned indexCount, unsigned minVertex, unsigned vertexCount)
+void Graphics::Draw(PrimitiveType type, unsigned indexStart, unsigned indexCount, unsigned minVertex,
+                    unsigned vertexCount)
 {
     if (!indexCount || !indexBuffer_ || !indexBuffer_->GetGPUObjectName())
         return;
@@ -877,7 +824,8 @@ void Graphics::Draw(PrimitiveType type, unsigned indexStart, unsigned indexCount
     ++numBatches_;
 }
 
-void Graphics::Draw(PrimitiveType type, unsigned indexStart, unsigned indexCount, unsigned baseVertexIndex, unsigned minVertex, unsigned vertexCount)
+void Graphics::Draw(PrimitiveType type, unsigned indexStart, unsigned indexCount, unsigned baseVertexIndex,
+                    unsigned minVertex, unsigned vertexCount)
 {
 #ifndef GL_ES_VERSION_2_0
     if (!gl3Support || !indexCount || !indexBuffer_ || !indexBuffer_->GetGPUObjectName())
@@ -891,15 +839,16 @@ void Graphics::Draw(PrimitiveType type, unsigned indexStart, unsigned indexCount
 
     GetGLPrimitiveType(indexCount, type, primitiveCount, glPrimitiveType);
     GLenum indexType = indexSize == sizeof(unsigned short) ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT;
-    glDrawElementsBaseVertex(glPrimitiveType, indexCount, indexType, reinterpret_cast<GLvoid*>(indexStart * indexSize), baseVertexIndex);
+    glDrawElementsBaseVertex(glPrimitiveType, indexCount, indexType, reinterpret_cast<GLvoid*>(indexStart * indexSize),
+                             baseVertexIndex);
 
     numPrimitives_ += primitiveCount;
     ++numBatches_;
 #endif
 }
 
-void Graphics::DrawInstanced(PrimitiveType type, unsigned indexStart, unsigned indexCount, unsigned minVertex, unsigned vertexCount,
-    unsigned instanceCount)
+void Graphics::DrawInstanced(PrimitiveType type, unsigned indexStart, unsigned indexCount, unsigned minVertex,
+                             unsigned vertexCount, unsigned instanceCount)
 {
 #if !defined(GL_ES_VERSION_2_0) || defined(__EMSCRIPTEN__)
     if (!indexCount || !indexBuffer_ || !indexBuffer_->GetGPUObjectName() || !instancingSupport_)
@@ -914,18 +863,18 @@ void Graphics::DrawInstanced(PrimitiveType type, unsigned indexStart, unsigned i
     GetGLPrimitiveType(indexCount, type, primitiveCount, glPrimitiveType);
     GLenum indexType = indexSize == sizeof(unsigned short) ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT;
 #ifdef __EMSCRIPTEN__
-    glDrawElementsInstancedANGLE(glPrimitiveType, indexCount, indexType, reinterpret_cast<const GLvoid*>(indexStart * indexSize),
-        instanceCount);
+    glDrawElementsInstancedANGLE(glPrimitiveType, indexCount, indexType,
+                                 reinterpret_cast<const GLvoid*>(indexStart * indexSize), instanceCount);
 #else
     if (gl3Support)
     {
-        glDrawElementsInstanced(glPrimitiveType, indexCount, indexType, reinterpret_cast<const GLvoid*>(indexStart * indexSize),
-            instanceCount);
+        glDrawElementsInstanced(glPrimitiveType, indexCount, indexType,
+                                reinterpret_cast<const GLvoid*>(indexStart * indexSize), instanceCount);
     }
     else
     {
-        glDrawElementsInstancedARB(glPrimitiveType, indexCount, indexType, reinterpret_cast<const GLvoid*>(indexStart * indexSize),
-            instanceCount);
+        glDrawElementsInstancedARB(glPrimitiveType, indexCount, indexType,
+                                   reinterpret_cast<const GLvoid*>(indexStart * indexSize), instanceCount);
     }
 #endif
 
@@ -934,8 +883,8 @@ void Graphics::DrawInstanced(PrimitiveType type, unsigned indexStart, unsigned i
 #endif
 }
 
-void Graphics::DrawInstanced(PrimitiveType type, unsigned indexStart, unsigned indexCount, unsigned baseVertexIndex, unsigned minVertex,
-        unsigned vertexCount, unsigned instanceCount)
+void Graphics::DrawInstanced(PrimitiveType type, unsigned indexStart, unsigned indexCount, unsigned baseVertexIndex,
+                             unsigned minVertex, unsigned vertexCount, unsigned instanceCount)
 {
 #ifndef GL_ES_VERSION_2_0
     if (!gl3Support || !indexCount || !indexBuffer_ || !indexBuffer_->GetGPUObjectName() || !instancingSupport_)
@@ -950,8 +899,9 @@ void Graphics::DrawInstanced(PrimitiveType type, unsigned indexStart, unsigned i
     GetGLPrimitiveType(indexCount, type, primitiveCount, glPrimitiveType);
     GLenum indexType = indexSize == sizeof(unsigned short) ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT;
 
-    glDrawElementsInstancedBaseVertex(glPrimitiveType, indexCount, indexType, reinterpret_cast<const GLvoid*>(indexStart * indexSize),
-        instanceCount, baseVertexIndex);
+    glDrawElementsInstancedBaseVertex(glPrimitiveType, indexCount, indexType,
+                                      reinterpret_cast<const GLvoid*>(indexStart * indexSize), instanceCount,
+                                      baseVertexIndex);
 
     numPrimitives_ += instanceCount * primitiveCount;
     ++numBatches_;
@@ -995,7 +945,7 @@ bool Graphics::SetVertexBuffers(const PODVector<VertexBuffer*>& buffers, unsigne
     return true;
 }
 
-bool Graphics::SetVertexBuffers(const Vector<SharedPtr<VertexBuffer> >& buffers, unsigned instanceOffset)
+bool Graphics::SetVertexBuffers(const Vector<SharedPtr<VertexBuffer>>& buffers, unsigned instanceOffset)
 {
     return SetVertexBuffers(reinterpret_cast<const PODVector<VertexBuffer*>&>(buffers), instanceOffset);
 }
@@ -1026,7 +976,8 @@ void Graphics::SetShaders(ShaderVariation* vs, ShaderVariation* ps)
                 URHO3D_LOGDEBUG("Compiled vertex shader " + vs->GetFullName());
             else
             {
-                URHO3D_LOGERROR("Failed to compile vertex shader " + vs->GetFullName() + ":\n" + vs->GetCompilerOutput());
+                URHO3D_LOGERROR("Failed to compile vertex shader " + vs->GetFullName() + ":\n" +
+                                vs->GetCompilerOutput());
                 vs = nullptr;
             }
         }
@@ -1045,7 +996,8 @@ void Graphics::SetShaders(ShaderVariation* vs, ShaderVariation* ps)
                 URHO3D_LOGDEBUG("Compiled pixel shader " + ps->GetFullName());
             else
             {
-                URHO3D_LOGERROR("Failed to compile pixel shader " + ps->GetFullName() + ":\n" + ps->GetCompilerOutput());
+                URHO3D_LOGERROR("Failed to compile pixel shader " + ps->GetFullName() + ":\n" +
+                                ps->GetCompilerOutput());
                 ps = nullptr;
             }
         }
@@ -1097,8 +1049,8 @@ void Graphics::SetShaders(ShaderVariation* vs, ShaderVariation* ps)
             }
             else
             {
-                URHO3D_LOGERROR("Failed to link vertex shader " + vs->GetFullName() + " and pixel shader " + ps->GetFullName() + ":\n" +
-                         newProgram->GetLinkerOutput());
+                URHO3D_LOGERROR("Failed to link vertex shader " + vs->GetFullName() + " and pixel shader " +
+                                ps->GetFullName() + ":\n" + newProgram->GetLinkerOutput());
                 glUseProgram(0);
                 impl_->shaderProgram_ = nullptr;
             }
@@ -1190,7 +1142,8 @@ void Graphics::SetShaderParameter(StringHash param, const float* data, unsigned 
                 glUniformMatrix4fv(info->location_, count / 16, GL_FALSE, data);
                 break;
 
-            default: break;
+            default:
+                break;
             }
         }
     }
@@ -1260,10 +1213,7 @@ void Graphics::SetShaderParameter(StringHash param, bool value)
     }
 }
 
-void Graphics::SetShaderParameter(StringHash param, const Color& color)
-{
-    SetShaderParameter(param, color.Data(), 4);
-}
+void Graphics::SetShaderParameter(StringHash param, const Color& color) { SetShaderParameter(param, color.Data(), 4); }
 
 void Graphics::SetShaderParameter(StringHash param, const Vector2& vector)
 {
@@ -1292,7 +1242,8 @@ void Graphics::SetShaderParameter(StringHash param, const Vector2& vector)
                 glUniform2fv(info->location_, 1, vector.Data());
                 break;
 
-            default: break;
+            default:
+                break;
             }
         }
     }
@@ -1350,7 +1301,8 @@ void Graphics::SetShaderParameter(StringHash param, const Vector3& vector)
                 glUniform3fv(info->location_, 1, vector.Data());
                 break;
 
-            default: break;
+            default:
+                break;
             }
         }
     }
@@ -1412,7 +1364,8 @@ void Graphics::SetShaderParameter(StringHash param, const Vector4& vector)
                 glUniform4fv(info->location_, 1, vector.Data());
                 break;
 
-            default: break;
+            default:
+                break;
             }
         }
     }
@@ -1475,10 +1428,7 @@ void Graphics::ClearParameterSource(ShaderParameterGroup group)
         impl_->shaderProgram_->ClearParameterSource(group);
 }
 
-void Graphics::ClearParameterSources()
-{
-    ShaderProgram::ClearParameterSources();
-}
+void Graphics::ClearParameterSources() { ShaderProgram::ClearParameterSources(); }
 
 void Graphics::ClearTransformSources()
 {
@@ -1494,7 +1444,8 @@ void Graphics::SetTexture(unsigned index, Texture* texture)
     if (index >= MAX_TEXTURE_UNITS)
         return;
 
-    // Check if texture is currently bound as a rendertarget. In that case, use its backup texture, or blank if not defined
+    // Check if texture is currently bound as a rendertarget. In that case, use its backup texture, or blank if not
+    // defined
     if (texture)
     {
         if (renderTargets_[0] && renderTargets_[0]->GetParentTexture() == texture)
@@ -1618,15 +1569,9 @@ void Graphics::ResetRenderTargets()
     SetViewport(IntRect(0, 0, width_, height_));
 }
 
-void Graphics::ResetRenderTarget(unsigned index)
-{
-    SetRenderTarget(index, (RenderSurface*)nullptr);
-}
+void Graphics::ResetRenderTarget(unsigned index) { SetRenderTarget(index, (RenderSurface*)nullptr); }
 
-void Graphics::ResetDepthStencil()
-{
-    SetDepthStencil((RenderSurface*)nullptr);
-}
+void Graphics::ResetDepthStencil() { SetDepthStencil((RenderSurface*)nullptr); }
 
 void Graphics::SetRenderTarget(unsigned index, RenderSurface* renderTarget)
 {
@@ -1689,7 +1634,7 @@ void Graphics::SetDepthStencil(RenderSurface* depthStencil)
         if (width <= width_ && height <= height_)
         {
             unsigned searchKey = (width << 16u) | height;
-            HashMap<unsigned, SharedPtr<Texture2D> >::Iterator i = impl_->depthTextures_.Find(searchKey);
+            HashMap<unsigned, SharedPtr<Texture2D>>::Iterator i = impl_->depthTextures_.Find(searchKey);
             if (i != impl_->depthTextures_.End())
                 depthStencil = i->second_->GetRenderSurface();
             else
@@ -1807,7 +1752,8 @@ void Graphics::SetDepthBias(float constantBias, float slopeScaledBias)
 #ifndef GL_ES_VERSION_2_0
         if (slopeScaledBias != 0.0f)
         {
-            // OpenGL constant bias is unreliable and dependent on depth buffer bitdepth, apply in the projection matrix instead
+            // OpenGL constant bias is unreliable and dependent on depth buffer bitdepth, apply in the projection matrix
+            // instead
             glEnable(GL_POLYGON_OFFSET_FILL);
             glPolygonOffset(slopeScaledBias, 0.0f);
         }
@@ -1986,8 +1932,8 @@ void Graphics::SetClipPlane(bool enable, const Plane& clipPlane, const Matrix3x4
 #endif
 }
 
-void Graphics::SetStencilTest(bool enable, CompareMode mode, StencilOp pass, StencilOp fail, StencilOp zFail, unsigned stencilRef,
-    unsigned compareMask, unsigned writeMask)
+void Graphics::SetStencilTest(bool enable, CompareMode mode, StencilOp pass, StencilOp fail, StencilOp zFail,
+                              unsigned stencilRef, unsigned compareMask, unsigned writeMask)
 {
 #ifndef GL_ES_VERSION_2_0
     if (enable != stencilTest_)
@@ -2024,15 +1970,9 @@ void Graphics::SetStencilTest(bool enable, CompareMode mode, StencilOp pass, Ste
 #endif
 }
 
-bool Graphics::IsInitialized() const
-{
-    return window_ != nullptr;
-}
+bool Graphics::IsInitialized() const { return window_ != nullptr; }
 
-bool Graphics::GetDither() const
-{
-    return glIsEnabled(GL_DITHER) ? true : false;
-}
+bool Graphics::GetDither() const { return glIsEnabled(GL_DITHER) ? true : false; }
 
 bool Graphics::IsDeviceLost() const
 {
@@ -2116,10 +2056,7 @@ unsigned Graphics::GetMaxBones()
 #endif
 }
 
-bool Graphics::GetGL3Support()
-{
-    return gl3Support;
-}
+bool Graphics::GetGL3Support() { return gl3Support; }
 
 ShaderVariation* Graphics::GetShader(ShaderType type, const String& name, const String& defines) const
 {
@@ -2149,10 +2086,7 @@ VertexBuffer* Graphics::GetVertexBuffer(unsigned index) const
     return index < MAX_VERTEX_STREAMS ? vertexBuffers_[index] : nullptr;
 }
 
-ShaderProgram* Graphics::GetShaderProgram() const
-{
-    return impl_->shaderProgram_;
-}
+ShaderProgram* Graphics::GetShaderProgram() const { return impl_->shaderProgram_; }
 
 TextureUnit Graphics::GetTextureUnit(const String& name)
 {
@@ -2173,10 +2107,7 @@ const String& Graphics::GetTextureUnitName(TextureUnit unit)
     return String::EMPTY;
 }
 
-Texture* Graphics::GetTexture(unsigned index) const
-{
-    return index < MAX_TEXTURE_UNITS ? textures_[index] : nullptr;
-}
+Texture* Graphics::GetTexture(unsigned index) const { return index < MAX_TEXTURE_UNITS ? textures_[index] : nullptr; }
 
 RenderSurface* Graphics::GetRenderTarget(unsigned index) const
 {
@@ -2224,16 +2155,15 @@ void Graphics::OnWindowResized()
     SDL_GetWindowSize(window_, &logicalWidth, &logicalHeight);
     screenParams_.highDPI_ = (width_ != logicalWidth) || (height_ != logicalHeight);
 
-    // Reset rendertargets and viewport for the new screen size. Also clean up any FBO's, as they may be screen size dependent
+    // Reset rendertargets and viewport for the new screen size. Also clean up any FBO's, as they may be screen size
+    // dependent
     CleanupFramebuffers();
     ResetRenderTargets();
 
     URHO3D_LOGDEBUGF("Window was resized to %dx%d", width_, height_);
 
 #ifdef __EMSCRIPTEN__
-    EM_ASM({
-        Module.SetRendererSize($0, $1);
-    }, width_, height_);
+    EM_ASM({ Module.SetRendererSize($0, $1); }, width_, height_);
 #endif
 
     using namespace ScreenMode;
@@ -2333,13 +2263,13 @@ void Graphics::CleanupShaderPrograms(ShaderVariation* variation)
         impl_->shaderProgram_ = nullptr;
 }
 
-ConstantBuffer* Graphics::GetOrCreateConstantBuffer(ShaderType /*type*/,  unsigned index, unsigned size)
+ConstantBuffer* Graphics::GetOrCreateConstantBuffer(ShaderType /*type*/, unsigned index, unsigned size)
 {
     // Note: shaderType parameter is not used on OpenGL, instead binding index should already use the PS range
     // for PS constant buffers
 
     unsigned key = (index << 16u) | size;
-    HashMap<unsigned, SharedPtr<ConstantBuffer> >::Iterator i = impl_->allConstantBuffers_.Find(key);
+    HashMap<unsigned, SharedPtr<ConstantBuffer>>::Iterator i = impl_->allConstantBuffers_.Find(key);
     if (i == impl_->allConstantBuffers_.End())
     {
         i = impl_->allConstantBuffers_.Insert(MakePair(key, SharedPtr<ConstantBuffer>(new ConstantBuffer(context_))));
@@ -2519,10 +2449,7 @@ void Graphics::Restore()
     SendEvent(E_DEVICERESET);
 }
 
-void Graphics::MarkFBODirty()
-{
-    impl_->fboDirty_ = true;
-}
+void Graphics::MarkFBODirty() { impl_->fboDirty_ = true; }
 
 void Graphics::SetVBO(unsigned object)
 {
@@ -2576,15 +2503,9 @@ unsigned Graphics::GetLuminanceAlphaFormat()
     return GL_LUMINANCE_ALPHA;
 }
 
-unsigned Graphics::GetRGBFormat()
-{
-    return GL_RGB;
-}
+unsigned Graphics::GetRGBFormat() { return GL_RGB; }
 
-unsigned Graphics::GetRGBAFormat()
-{
-    return GL_RGBA;
-}
+unsigned Graphics::GetRGBAFormat() { return GL_RGBA; }
 
 unsigned Graphics::GetRGBA16Format()
 {
@@ -2775,13 +2696,22 @@ void Graphics::CheckFeatureSupport()
 #else
     // Check for supported compressed texture formats
 #ifdef __EMSCRIPTEN__
-    dxtTextureSupport_ = CheckExtension("WEBGL_compressed_texture_s3tc"); // https://www.khronos.org/registry/webgl/extensions/WEBGL_compressed_texture_s3tc/
-    etcTextureSupport_ = CheckExtension("WEBGL_compressed_texture_etc1"); // https://www.khronos.org/registry/webgl/extensions/WEBGL_compressed_texture_etc1/
-    pvrtcTextureSupport_ = CheckExtension("WEBGL_compressed_texture_pvrtc"); // https://www.khronos.org/registry/webgl/extensions/WEBGL_compressed_texture_pvrtc/
-    etc2TextureSupport_ = gl3Support || CheckExtension("WEBGL_compressed_texture_etc"); // https://www.khronos.org/registry/webgl/extensions/WEBGL_compressed_texture_etc/
-    // Instancing is in core in WebGL 2, so the extension may not be present anymore. In WebGL 1, find https://www.khronos.org/registry/webgl/extensions/ANGLE_instanced_arrays/
-    // TODO: In the distant future, this may break if WebGL 3 is introduced, so either improve the GL_VERSION parsing here, or keep track of which WebGL version we attempted to initialize.
-    instancingSupport_ = (strstr((const char *)glGetString(GL_VERSION), "WebGL 2.") != 0) || CheckExtension("ANGLE_instanced_arrays");
+    dxtTextureSupport_ = CheckExtension(
+        "WEBGL_compressed_texture_s3tc"); // https://www.khronos.org/registry/webgl/extensions/WEBGL_compressed_texture_s3tc/
+    etcTextureSupport_ = CheckExtension(
+        "WEBGL_compressed_texture_etc1"); // https://www.khronos.org/registry/webgl/extensions/WEBGL_compressed_texture_etc1/
+    pvrtcTextureSupport_ = CheckExtension(
+        "WEBGL_compressed_texture_pvrtc"); // https://www.khronos.org/registry/webgl/extensions/WEBGL_compressed_texture_pvrtc/
+    etc2TextureSupport_ =
+        gl3Support ||
+        CheckExtension(
+            "WEBGL_compressed_texture_etc"); // https://www.khronos.org/registry/webgl/extensions/WEBGL_compressed_texture_etc/
+    // Instancing is in core in WebGL 2, so the extension may not be present anymore. In WebGL 1, find
+    // https://www.khronos.org/registry/webgl/extensions/ANGLE_instanced_arrays/
+    // TODO: In the distant future, this may break if WebGL 3 is introduced, so either improve the GL_VERSION parsing
+    // here, or keep track of which WebGL version we attempted to initialize.
+    instancingSupport_ =
+        (strstr((const char*)glGetString(GL_VERSION), "WebGL 2.") != 0) || CheckExtension("ANGLE_instanced_arrays");
 #else
     dxtTextureSupport_ = CheckExtension("EXT_texture_compression_dxt1");
     etcTextureSupport_ = CheckExtension("OES_compressed_ETC1_RGB8_texture");
@@ -2794,7 +2724,7 @@ void Graphics::CheckFeatureSupport()
         glesDepthStencilFormat = GL_DEPTH_COMPONENT24_OES;
     if (CheckExtension("GL_OES_packed_depth_stencil"))
         glesDepthStencilFormat = GL_DEPTH24_STENCIL8_OES;
-    #ifdef __EMSCRIPTEN__
+#ifdef __EMSCRIPTEN__
     if (!CheckExtension("WEBGL_depth_texture"))
 #else
     if (!CheckExtension("GL_OES_depth_texture"))
@@ -2812,8 +2742,8 @@ void Graphics::CheckFeatureSupport()
 #endif
         shadowMapFormat_ = GL_DEPTH_COMPONENT;
         hiresShadowMapFormat_ = 0;
-        // WebGL shadow map rendering seems to be extremely slow without an attached dummy color texture
-        #ifdef __EMSCRIPTEN__
+// WebGL shadow map rendering seems to be extremely slow without an attached dummy color texture
+#ifdef __EMSCRIPTEN__
         dummyColorFormat_ = GetRGBAFormat();
 #endif
     }
@@ -2828,7 +2758,8 @@ void Graphics::PrepareDraw()
 #ifndef GL_ES_VERSION_2_0
     if (gl3Support)
     {
-        for (PODVector<ConstantBuffer*>::Iterator i = impl_->dirtyConstantBuffers_.Begin(); i != impl_->dirtyConstantBuffers_.End(); ++i)
+        for (PODVector<ConstantBuffer*>::Iterator i = impl_->dirtyConstantBuffers_.Begin();
+             i != impl_->dirtyConstantBuffers_.End(); ++i)
             (*i)->Apply();
         impl_->dirtyConstantBuffers_.Clear();
     }
@@ -3061,8 +2992,8 @@ void Graphics::PrepareDraw()
         for (unsigned i = MAX_VERTEX_STREAMS - 1; i < MAX_VERTEX_STREAMS; --i)
         {
             VertexBuffer* buffer = vertexBuffers_[i];
-            // Beware buffers with missing OpenGL objects, as binding a zero buffer object means accessing CPU memory for vertex data,
-            // in which case the pointer will be invalid and cause a crash
+            // Beware buffers with missing OpenGL objects, as binding a zero buffer object means accessing CPU memory
+            // for vertex data, in which case the pointer will be invalid and cause a crash
             if (!buffer || !buffer->GetGPUObjectName() || !impl_->vertexAttributes_)
                 continue;
 
@@ -3111,8 +3042,8 @@ void Graphics::PrepareDraw()
 
                     SetVBO(buffer->GetGPUObjectName());
                     glVertexAttribPointer(location, glElementComponents[element.type_], glElementTypes[element.type_],
-                        element.type_ == TYPE_UBYTE4_NORM ? GL_TRUE : GL_FALSE, (unsigned)buffer->GetVertexSize(),
-                        (const void *)(size_t)dataStart);
+                                          element.type_ == TYPE_UBYTE4_NORM ? GL_TRUE : GL_FALSE,
+                                          (unsigned)buffer->GetVertexSize(), (const void*)(size_t)dataStart);
                 }
             }
         }
@@ -3295,7 +3226,8 @@ void Graphics::BindColorAttachment(unsigned index, unsigned target, unsigned obj
         if (!isRenderBuffer)
             glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT + index, target, object, 0);
         else
-            glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT + index, GL_RENDERBUFFER_EXT, object);
+            glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT + index, GL_RENDERBUFFER_EXT,
+                                         object);
     }
     else
 #endif
@@ -3378,4 +3310,4 @@ void Graphics::SetVertexAttribDivisor(unsigned location, unsigned divisor)
 #endif
 }
 
-}
+} // namespace Urho3D

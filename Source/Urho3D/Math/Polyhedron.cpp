@@ -28,7 +28,7 @@
 #include "../DebugNew.h"
 
 #ifdef _MSC_VER
-#pragma warning(disable:6293)
+#pragma warning(disable : 6293)
 #endif
 
 namespace Urho3D
@@ -89,10 +89,7 @@ void Polyhedron::AddFace(const Vector3& v0, const Vector3& v1, const Vector3& v2
     face[3] = v3;
 }
 
-void Polyhedron::AddFace(const PODVector<Vector3>& face)
-{
-    faces_.Push(face);
-}
+void Polyhedron::AddFace(const PODVector<Vector3>& face) { faces_.Push(face); }
 
 void Polyhedron::Clip(const Plane& plane)
 {
@@ -229,10 +226,7 @@ void Polyhedron::Clip(const BoundingBox& box)
     Clip(Plane(vertices[1], vertices[3], vertices[2]));
 }
 
-void Polyhedron::Clear()
-{
-    faces_.Clear();
-}
+void Polyhedron::Clear() { faces_.Clear(); }
 
 void Polyhedron::Transform(const Matrix3& transform)
 {
@@ -309,4 +303,4 @@ void Polyhedron::SetFace(unsigned index, const Vector3& v0, const Vector3& v1, c
     face[3] = v3;
 }
 
-}
+} // namespace Urho3D

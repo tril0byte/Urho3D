@@ -131,4 +131,4 @@ private:
     unsigned timerPeriod_;
 };
 
-}
+} // namespace Urho3D

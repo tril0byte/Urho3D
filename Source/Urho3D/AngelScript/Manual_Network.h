@@ -24,8 +24,8 @@
 
 #ifdef URHO3D_NETWORK
 
-#include "../Network/Network.h"
 #include "../Network/HttpRequest.h"
+#include "../Network/Network.h"
 
 namespace Urho3D
 {

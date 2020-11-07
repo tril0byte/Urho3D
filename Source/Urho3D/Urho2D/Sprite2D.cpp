@@ -35,21 +35,17 @@
 namespace Urho3D
 {
 
-Sprite2D::Sprite2D(Context* context) :
-    Resource(context),
-    hotSpot_(0.5f, 0.5f),
-    offset_(0, 0),
-    edgeOffset_(M_LARGE_EPSILON)
+Sprite2D::Sprite2D(Context* context)
+    : Resource(context)
+    , hotSpot_(0.5f, 0.5f)
+    , offset_(0, 0)
+    , edgeOffset_(M_LARGE_EPSILON)
 {
-
 }
 
 Sprite2D::~Sprite2D() = default;
 
-void Sprite2D::RegisterObject(Context* context)
-{
-    context->RegisterFactory<Sprite2D>();
-}
+void Sprite2D::RegisterObject(Context* context) { context->RegisterFactory<Sprite2D>(); }
 
 bool Sprite2D::BeginLoad(Deserializer& source)
 {
@@ -115,30 +111,15 @@ void Sprite2D::SetTexture(Texture2D* texture)
     }
 }
 
-void Sprite2D::SetRectangle(const IntRect& rectangle)
-{
-    rectangle_ = rectangle;
-}
+void Sprite2D::SetRectangle(const IntRect& rectangle) { rectangle_ = rectangle; }
 
-void Sprite2D::SetHotSpot(const Vector2& hotSpot)
-{
-    hotSpot_ = hotSpot;
-}
+void Sprite2D::SetHotSpot(const Vector2& hotSpot) { hotSpot_ = hotSpot; }
 
-void Sprite2D::SetOffset(const IntVector2& offset)
-{
-    offset_ = offset;
-}
+void Sprite2D::SetOffset(const IntVector2& offset) { offset_ = offset; }
 
-void Sprite2D::SetTextureEdgeOffset(float offset)
-{
-    edgeOffset_ = offset;
-}
+void Sprite2D::SetTextureEdgeOffset(float offset) { edgeOffset_ = offset; }
 
-void Sprite2D::SetSpriteSheet(SpriteSheet2D* spriteSheet)
-{
-    spriteSheet_ = spriteSheet;
-}
+void Sprite2D::SetSpriteSheet(SpriteSheet2D* spriteSheet) { spriteSheet_ = spriteSheet; }
 
 bool Sprite2D::GetDrawRectangle(Rect& rect, bool flipX, bool flipY) const
 {
@@ -230,4 +211,4 @@ Sprite2D* Sprite2D::LoadFromResourceRef(Object* object, const ResourceRef& value
     return nullptr;
 }
 
-}
+} // namespace Urho3D

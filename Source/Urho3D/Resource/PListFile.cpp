@@ -39,59 +39,64 @@ static PListValue EMPTY_VALUE;
 static PListValueMap EMPTY_VALUEMAP;
 static PListValueVector EMPTY_VALUEVECTOR;
 
-PListValue::PListValue() :                                  // NOLINT(hicpp-member-init)
+PListValue::PListValue()
+    : // NOLINT(hicpp-member-init)
     type_(PLVT_NONE)
 {
 }
 
-PListValue::PListValue(int value) :                         // NOLINT(hicpp-member-init)
+PListValue::PListValue(int value)
+    : // NOLINT(hicpp-member-init)
     type_(PLVT_NONE)
 {
     SetInt(value);
 }
 
-PListValue::PListValue(bool value) :                        // NOLINT(hicpp-member-init)
+PListValue::PListValue(bool value)
+    : // NOLINT(hicpp-member-init)
     type_(PLVT_NONE)
 {
     SetBool(value);
 }
 
-PListValue::PListValue(float value) :                       // NOLINT(hicpp-member-init)
+PListValue::PListValue(float value)
+    : // NOLINT(hicpp-member-init)
     type_(PLVT_NONE)
 {
     SetFloat(value);
 }
 
-PListValue::PListValue(const String& value) :               // NOLINT(hicpp-member-init)
+PListValue::PListValue(const String& value)
+    : // NOLINT(hicpp-member-init)
     type_(PLVT_NONE)
 {
     SetString(value);
 }
 
-PListValue::PListValue(PListValueMap& valueMap) :           // NOLINT(hicpp-member-init)
+PListValue::PListValue(PListValueMap& valueMap)
+    : // NOLINT(hicpp-member-init)
     type_(PLVT_NONE)
 {
     SetValueMap(valueMap);
 }
 
-PListValue::PListValue(PListValueVector& valueVector) :     // NOLINT(hicpp-member-init)
+PListValue::PListValue(PListValueVector& valueVector)
+    : // NOLINT(hicpp-member-init)
     type_(PLVT_NONE)
 {
     SetValueVector(valueVector);
 }
 
-PListValue::PListValue(const PListValue& value) :           // NOLINT(hicpp-member-init)
+PListValue::PListValue(const PListValue& value)
+    : // NOLINT(hicpp-member-init)
     type_(PLVT_NONE)
 {
     *this = value;
 }
 
-PListValue::~PListValue()
-{
-    Reset();
-}
+PListValue::~PListValue() { Reset(); }
 
-PListValue& PListValue::operator =(const PListValue& rhs)
+PListValue& PListValue::operator=(const PListValue& rhs)
 {
     switch (rhs.type_)
     {
@@ -189,25 +194,13 @@ void PListValue::SetValueVector(const PListValueVector& valueVector)
     *valueVector_ = valueVector;
 }
 
-int PListValue::GetInt() const
-{
-    return type_ == PLVT_INT ? int_ : 0;
-}
+int PListValue::GetInt() const { return type_ == PLVT_INT ? int_ : 0; }
 
-bool PListValue::GetBool() const
-{
-    return type_ == PLVT_BOOL ? bool_ : false;
-}
+bool PListValue::GetBool() const { return type_ == PLVT_BOOL ? bool_ : false; }
 
-float PListValue::GetFloat() const
-{
-    return type_ == PLVT_FLOAT ? float_ : 0.0f;
-}
+float PListValue::GetFloat() const { return type_ == PLVT_FLOAT ? float_ : 0.0f; }
 
-const String& PListValue::GetString() const
-{
-    return type_ == PLVT_STRING ? *string_ : String::EMPTY;
-}
+const String& PListValue::GetString() const { return type_ == PLVT_STRING ? *string_ : String::EMPTY; }
 
 IntRect PListValue::GetIntRect() const
 {
@@ -215,7 +208,7 @@ IntRect PListValue::GetIntRect() const
         return IntRect::ZERO;
 
     int x, y, w, h;
-    sscanf(string_->CString(), "{{%d,%d},{%d,%d}}", &x, &y, &w, &h);    // NOLINT(cert-err34-c)
+    sscanf(string_->CString(), "{{%d,%d},{%d,%d}}", &x, &y, &w, &h); // NOLINT(cert-err34-c)
     return {x, y, x + w, y + h};
 }
 
@@ -225,7 +218,7 @@ IntVector2 PListValue::GetIntVector2() const
         return IntVector2::ZERO;
 
     int x, y;
-    sscanf(string_->CString(), "{%d,%d}", &x, &y);                      // NOLINT(cert-err34-c)
+    sscanf(string_->CString(), "{%d,%d}", &x, &y); // NOLINT(cert-err34-c)
     return IntVector2(x, y);
 }
 
@@ -235,14 +228,11 @@ IntVector3 PListValue::GetIntVector3() const
         return IntVector3::ZERO;
 
     int x, y, z;
-    sscanf(string_->CString(), "{%d,%d,%d}", &x, &y, &z);               // NOLINT(cert-err34-c)
+    sscanf(string_->CString(), "{%d,%d,%d}", &x, &y, &z); // NOLINT(cert-err34-c)
     return IntVector3(x, y, z);
 }
 
-const PListValueMap& PListValue::GetValueMap() const
-{
-    return type_ == PLVT_VALUEMAP ? *valueMap_ : EMPTY_VALUEMAP;
-}
+const PListValueMap& PListValue::GetValueMap() const { return type_ == PLVT_VALUEMAP ? *valueMap_ : EMPTY_VALUEMAP; }
 
 const PListValueVector& PListValue::GetValueVector() const
 {
@@ -296,17 +286,14 @@ void PListValue::Reset()
     type_ = PLVT_NONE;
 }
 
-PListFile::PListFile(Context* context) :
-    Resource(context)
+PListFile::PListFile(Context* context)
+    : Resource(context)
 {
 }
 
 PListFile::~PListFile() = default;
 
-void PListFile::RegisterObject(Context* context)
-{
-    context->RegisterFactory<PListFile>();
-}
+void PListFile::RegisterObject(Context* context) { context->RegisterFactory<PListFile>(); }
 
 bool PListFile::BeginLoad(Deserializer& source)
 {
@@ -414,5 +401,4 @@ bool PListFile::LoadValue(PListValue& value, const XMLElement& valueElem)
     return true;
 }
 
-
-}
+} // namespace Urho3D

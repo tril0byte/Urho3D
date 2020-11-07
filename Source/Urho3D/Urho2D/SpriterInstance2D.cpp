@@ -35,10 +35,10 @@ namespace Urho3D
 namespace Spriter
 {
 
-SpriterInstance::SpriterInstance(Component* owner, SpriterData* spriteData) :
-    owner_(owner),
-    spriterData_(spriteData),
-    spatialInfo_(0.f, 0.f, 0.f, 1.f, 1.f)
+SpriterInstance::SpriterInstance(Component* owner, SpriterData* spriteData)
+    : owner_(owner)
+    , spriterData_(spriteData)
+    , spatialInfo_(0.f, 0.f, 0.f, 1.f, 1.f)
 {
 }
 
@@ -112,10 +112,7 @@ bool SpriterInstance::SetAnimation(const String& animationName, LoopMode loopMod
     return false;
 }
 
-void SpriterInstance::setSpatialInfo(const SpatialInfo& spatialInfo)
-{
-    this->spatialInfo_ = spatialInfo;
-}
+void SpriterInstance::setSpatialInfo(const SpatialInfo& spatialInfo) { this->spatialInfo_ = spatialInfo; }
 
 void SpriterInstance::setSpatialInfo(float x, float y, float angle, float scaleX, float scaleY)
 {
@@ -307,6 +304,6 @@ void SpriterInstance::Clear()
     }
 }
 
-}
+} // namespace Spriter
 
-}
+} // namespace Urho3D

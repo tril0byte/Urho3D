@@ -33,8 +33,8 @@
 #include <SDL/SDL_rwops.h>
 #endif
 
-#include <cstdio>
 #include <LZ4/lz4.h>
+#include <cstdio>
 
 #include "../DebugNew.h"
 
@@ -42,21 +42,9 @@ namespace Urho3D
 {
 
 #ifdef _WIN32
-static const wchar_t* openMode[] =
-{
-    L"rb",
-    L"wb",
-    L"r+b",
-    L"w+b"
-};
+static const wchar_t* openMode[] = {L"rb", L"wb", L"r+b", L"w+b"};
 #else
-static const char* openMode[] =
-{
-    "rb",
-    "wb",
-    "r+b",
-    "w+b"
-};
+static const char* openMode[] = {"rb", "wb", "r+b", "w+b"};
 #endif
 
 #ifdef __ANDROID__
@@ -65,68 +53,68 @@ static const unsigned READ_BUFFER_SIZE = 32768;
 #endif
 static const unsigned SKIP_BUFFER_SIZE = 1024;
 
-File::File(Context* context) :
-    Object(context),
-    mode_(FILE_READ),
-    handle_(nullptr),
+File::File(Context* context)
+    : Object(context)
+    , mode_(FILE_READ)
+    , handle_(nullptr)
+    ,
 #ifdef __ANDROID__
-    assetHandle_(0),
+    assetHandle_(0)
+    ,
 #endif
-    readBufferOffset_(0),
-    readBufferSize_(0),
-    offset_(0),
-    checksum_(0),
-    compressed_(false),
-    readSyncNeeded_(false),
-    writeSyncNeeded_(false)
+    readBufferOffset_(0)
+    , readBufferSize_(0)
+    , offset_(0)
+    , checksum_(0)
+    , compressed_(false)
+    , readSyncNeeded_(false)
+    , writeSyncNeeded_(false)
 {
 }
 
-File::File(Context* context, const String& fileName, FileMode mode) :
-    Object(context),
-    mode_(FILE_READ),
-    handle_(nullptr),
+File::File(Context* context, const String& fileName, FileMode mode)
+    : Object(context)
+    , mode_(FILE_READ)
+    , handle_(nullptr)
+    ,
 #ifdef __ANDROID__
-    assetHandle_(0),
+    assetHandle_(0)
+    ,
 #endif
-    readBufferOffset_(0),
-    readBufferSize_(0),
-    offset_(0),
-    checksum_(0),
-    compressed_(false),
-    readSyncNeeded_(false),
-    writeSyncNeeded_(false)
+    readBufferOffset_(0)
+    , readBufferSize_(0)
+    , offset_(0)
+    , checksum_(0)
+    , compressed_(false)
+    , readSyncNeeded_(false)
+    , writeSyncNeeded_(false)
 {
     Open(fileName, mode);
 }
 
-File::File(Context* context, PackageFile* package, const String& fileName) :
-    Object(context),
-    mode_(FILE_READ),
-    handle_(nullptr),
+File::File(Context* context, PackageFile* package, const String& fileName)
+    : Object(context)
+    , mode_(FILE_READ)
+    , handle_(nullptr)
+    ,
 #ifdef __ANDROID__
-    assetHandle_(0),
+    assetHandle_(0)
+    ,
 #endif
-    readBufferOffset_(0),
-    readBufferSize_(0),
-    offset_(0),
-    checksum_(0),
-    compressed_(false),
-    readSyncNeeded_(false),
-    writeSyncNeeded_(false)
+    readBufferOffset_(0)
+    , readBufferSize_(0)
+    , offset_(0)
+    , checksum_(0)
+    , compressed_(false)
+    , readSyncNeeded_(false)
+    , writeSyncNeeded_(false)
 {
     Open(package, fileName);
 }
 
-File::~File()
-{
-    Close();
-}
+File::~File() { Close(); }
 
-bool File::Open(const String& fileName, FileMode mode)
-{
-    return OpenInternal(fileName, mode);
-}
+bool File::Open(const String& fileName, FileMode mode) { return OpenInternal(fileName, mode); }
 
 bool File::Open(PackageFile* package, const String& fileName)
 {
@@ -545,4 +533,4 @@ void File::SeekInternal(unsigned newPosition)
         fseek((FILE*)handle_, newPosition, SEEK_SET);
 }
 
-}
+} // namespace Urho3D

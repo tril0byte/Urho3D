@@ -22,8 +22,8 @@
 
 #pragma once
 
-#include "../IO/Serializer.h"
 #include "../IO/Deserializer.h"
+#include "../IO/Serializer.h"
 
 namespace Urho3D
 {
@@ -34,9 +34,15 @@ class URHO3D_API AbstractFile : public Deserializer, public Serializer
 {
 public:
     /// Construct.
-    AbstractFile() : Deserializer() { }
+    AbstractFile()
+        : Deserializer()
+    {
+    }
     /// Construct.
-    explicit AbstractFile(unsigned int size) : Deserializer(size) { }
+    explicit AbstractFile(unsigned int size)
+        : Deserializer(size)
+    {
+    }
     /// Destruct.
     ~AbstractFile() override = default;
     /// Change the file name. Used by the resource system.
@@ -50,4 +56,4 @@ protected:
     String name_;
 };
 
-}
+} // namespace Urho3D

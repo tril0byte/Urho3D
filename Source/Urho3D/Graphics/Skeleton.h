@@ -47,13 +47,13 @@ class Serializer;
 struct Bone
 {
     /// Construct with defaults.
-    Bone() :
-        parentIndex_(0),
-        initialPosition_(Vector3::ZERO),
-        initialRotation_(Quaternion::IDENTITY),
-        initialScale_(Vector3::ONE),
-        animated_(true),
-        radius_(0.0f)
+    Bone()
+        : parentIndex_(0)
+        , initialPosition_(Vector3::ZERO)
+        , initialRotation_(Quaternion::IDENTITY)
+        , initialScale_(Vector3::ONE)
+        , animated_(true)
+        , radius_(0.0f)
     {
     }
 
@@ -137,7 +137,8 @@ public:
     /// Return bone by name hash.
     Bone* GetBone(const StringHash& boneNameHash);
 
-    /// Reset all animating bones to initial positions without marking the nodes dirty. Requires the node dirtying to be performed later.
+    /// Reset all animating bones to initial positions without marking the nodes dirty. Requires the node dirtying to be
+    /// performed later.
     void ResetSilent();
 
 private:
@@ -147,4 +148,4 @@ private:
     unsigned rootBoneIndex_;
 };
 
-}
+} // namespace Urho3D

@@ -26,48 +26,42 @@
 #include "../Core/Profiler.h"
 #include "../Graphics/Texture2D.h"
 #include "../IO/Log.h"
+#include "../Resource/Localization.h"
 #include "../Resource/ResourceCache.h"
+#include "../Resource/ResourceEvents.h"
 #include "../UI/Font.h"
 #include "../UI/FontFace.h"
 #include "../UI/Text.h"
-#include "../Resource/Localization.h"
-#include "../Resource/ResourceEvents.h"
 
 #include "../DebugNew.h"
 
 namespace Urho3D
 {
 
-const char* textEffects[] =
-{
-    "None",
-    "Shadow",
-    "Stroke",
-    nullptr
-};
+const char* textEffects[] = {"None", "Shadow", "Stroke", nullptr};
 
 static const float MIN_ROW_SPACING = 0.5f;
 
 extern const char* horizontalAlignments[];
 extern const char* UI_CATEGORY;
 
-Text::Text(Context* context) :
-    UISelectable(context),
-    fontSize_(DEFAULT_FONT_SIZE),
-    textAlignment_(HA_LEFT),
-    rowSpacing_(1.0f),
-    wordWrap_(false),
-    autoLocalizable_(false),
-    charLocationsDirty_(true),
-    selectionStart_(0),
-    selectionLength_(0),
-    textEffect_(TE_NONE),
-    shadowOffset_(IntVector2(1, 1)),
-    strokeThickness_(1),
-    roundStroke_(false),
-    effectColor_(Color::BLACK),
-    effectDepthBias_(0.0f),
-    rowHeight_(0)
+Text::Text(Context* context)
+    : UISelectable(context)
+    , fontSize_(DEFAULT_FONT_SIZE)
+    , textAlignment_(HA_LEFT)
+    , rowSpacing_(1.0f)
+    , wordWrap_(false)
+    , autoLocalizable_(false)
+    , charLocationsDirty_(true)
+    , selectionStart_(0)
+    , selectionLength_(0)
+    , textEffect_(TE_NONE)
+    , shadowOffset_(IntVector2(1, 1))
+    , strokeThickness_(1)
+    , roundStroke_(false)
+    , effectColor_(Color::BLACK)
+    , effectDepthBias_(0.0f)
+    , rowHeight_(0)
 {
     // By default Text does not derive opacity from parent elements
     useDerivedOpacity_ = false;
@@ -81,7 +75,8 @@ void Text::RegisterObject(Context* context)
 
     URHO3D_COPY_BASE_ATTRIBUTES(UISelectable);
     URHO3D_UPDATE_ATTRIBUTE_DEFAULT_VALUE("Use Derived Opacity", false);
-    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Font", GetFontAttr, SetFontAttr, ResourceRef, ResourceRef(Font::GetTypeStatic()), AM_FILE);
+    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Font", GetFontAttr, SetFontAttr, ResourceRef, ResourceRef(Font::GetTypeStatic()),
+                                    AM_FILE);
     URHO3D_ATTRIBUTE("Font Size", float, fontSize_, DEFAULT_FONT_SIZE, AM_FILE);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Text", GetTextAttr, SetTextAttr, String, String::EMPTY, AM_FILE);
     URHO3D_ENUM_ATTRIBUTE("Text Alignment", textAlignment_, horizontalAlignments, HA_LEFT, AM_FILE);
@@ -140,7 +135,8 @@ void Text::GetBatches(PODVector<UIBatch>& batches, PODVector<float>& vertexData,
     UISelectable::GetBatches(batches, vertexData, currentScissor);
 
     // Partial selection batch
-    if (!selected_ && selectionLength_ && charLocations_.Size() >= selectionStart_ + selectionLength_ && selectionColor_.a_ > 0.0f)
+    if (!selected_ && selectionLength_ && charLocations_.Size() >= selectionStart_ + selectionLength_ &&
+        selectionColor_.a_ > 0.0f)
     {
         UIBatch batch(this, BLEND_ALPHA, currentScissor, nullptr, &vertexData);
         batch.SetColor(selectionColor_);
@@ -155,7 +151,7 @@ void Text::GetBatches(PODVector<UIBatch>& batches, PODVector<float>& vertexData,
                 if (charLocations_[i].position_.y_ != currentStart.y_)
                 {
                     batch.AddQuad(currentStart.x_, currentStart.y_, currentEnd.x_ - currentStart.x_,
-                        currentEnd.y_ - currentStart.y_, 0, 0);
+                                  currentEnd.y_ - currentStart.y_, 0, 0);
                     currentStart = charLocations_[i].position_;
                     currentEnd = currentStart + charLocations_[i].size_;
                 }
@@ -168,7 +164,8 @@ void Text::GetBatches(PODVector<UIBatch>& batches, PODVector<float>& vertexData,
         }
         if (currentEnd != currentStart)
         {
-            batch.AddQuad(currentStart.x_, currentStart.y_, currentEnd.x_ - currentStart.x_, currentEnd.y_ - currentStart.y_, 0, 0);
+            batch.AddQuad(currentStart.x_, currentStart.y_, currentEnd.x_ - currentStart.x_,
+                          currentEnd.y_ - currentStart.y_, 0, 0);
         }
 
         UIBatch::AddOrMerge(batch, batches);
@@ -176,7 +173,7 @@ void Text::GetBatches(PODVector<UIBatch>& batches, PODVector<float>& vertexData,
 
     // Text batch
     TextEffect textEffect = font_->IsSDFFont() ? TE_NONE : textEffect_;
-    const Vector<SharedPtr<Texture2D> >& textures = face->GetTextures();
+    const Vector<SharedPtr<Texture2D>>& textures = face->GetTextures();
     for (unsigned n = 0; n < textures.Size() && n < pageGlyphLocations_.Size(); ++n)
     {
         // One batch per texture/page
@@ -191,7 +188,8 @@ void Text::GetBatches(PODVector<UIBatch>& batches, PODVector<float>& vertexData,
             break;
 
         case TE_SHADOW:
-            ConstructBatch(pageBatch, pageGlyphLocation, shadowOffset_.x_, shadowOffset_.y_, &effectColor_, effectDepthBias_);
+            ConstructBatch(pageBatch, pageGlyphLocation, shadowOffset_.x_, shadowOffset_.y_, &effectColor_,
+                           effectDepthBias_);
             ConstructBatch(pageBatch, pageGlyphLocation, 0, 0);
             break;
 
@@ -221,8 +219,7 @@ void Text::GetBatches(PODVector<UIBatch>& batches, PODVector<float>& vertexData,
                     for (y = -thickness; y <= thickness; ++y)
                     {
                         // Don't draw glyphs that aren't on the edges
-                        if (x > -thickness && x < thickness &&
-                            y > -thickness && y < thickness)
+                        if (x > -thickness && x < thickness && y > -thickness && y < thickness)
                             continue;
 
                         ConstructBatch(pageBatch, pageGlyphLocation, x, y, &effectColor_, effectDepthBias_);
@@ -245,10 +242,7 @@ void Text::OnResize(const IntVector2& newSize, const IntVector2& delta)
         charLocationsDirty_ = true;
 }
 
-void Text::OnIndentSet()
-{
-    charLocationsDirty_ = true;
-}
+void Text::OnIndentSet() { charLocationsDirty_ = true; }
 
 bool Text::SetFont(const String& fontName, float size)
 {
@@ -381,40 +375,19 @@ void Text::ClearSelection()
     selectionLength_ = 0;
 }
 
-void Text::SetTextEffect(TextEffect textEffect)
-{
-    textEffect_ = textEffect;
-}
+void Text::SetTextEffect(TextEffect textEffect) { textEffect_ = textEffect; }
 
-void Text::SetEffectShadowOffset(const IntVector2& offset)
-{
-    shadowOffset_ = offset;
-}
+void Text::SetEffectShadowOffset(const IntVector2& offset) { shadowOffset_ = offset; }
 
-void Text::SetEffectStrokeThickness(int thickness)
-{
-    strokeThickness_ = Abs(thickness);
-}
+void Text::SetEffectStrokeThickness(int thickness) { strokeThickness_ = Abs(thickness); }
 
-void Text::SetEffectRoundStroke(bool roundStroke)
-{
-    roundStroke_ = roundStroke;
-}
+void Text::SetEffectRoundStroke(bool roundStroke) { roundStroke_ = roundStroke; }
 
-void Text::SetEffectColor(const Color& effectColor)
-{
-    effectColor_ = effectColor;
-}
+void Text::SetEffectColor(const Color& effectColor) { effectColor_ = effectColor; }
 
-void Text::SetEffectDepthBias(float bias)
-{
-    effectDepthBias_ = bias;
-}
+void Text::SetEffectDepthBias(float bias) { effectDepthBias_ = bias; }
 
-float Text::GetRowWidth(unsigned index) const
-{
-    return index < rowWidths_.Size() ? rowWidths_[index] : 0;
-}
+float Text::GetRowWidth(unsigned index) const { return index < rowWidths_.Size() ? rowWidths_[index] : 0; }
 
 Vector2 Text::GetCharPosition(unsigned index)
 {
@@ -446,10 +419,7 @@ void Text::SetFontAttr(const ResourceRef& value)
     font_ = cache->GetResource<Font>(value.name_);
 }
 
-ResourceRef Text::GetFontAttr() const
-{
-    return GetResourceRef(font_, Font::GetTypeStatic());
-}
+ResourceRef Text::GetFontAttr() const { return GetResourceRef(font_, Font::GetTypeStatic()); }
 
 void Text::SetTextAttr(const String& value)
 {
@@ -559,7 +529,8 @@ void Text::UpdateText(bool onResize)
 
                     if (!ok)
                     {
-                        // If did not find any breaks on the line, copy until j, or at least 1 char, to prevent infinite loop
+                        // If did not find any breaks on the line, copy until j, or at least 1 char, to prevent infinite
+                        // loop
                         if (nextBreak == lineStart)
                         {
                             while (i < j)
@@ -666,8 +637,8 @@ void Text::UpdateText(bool onResize)
         pageGlyphLocations_.Clear();
     }
 
-    // If wordwrap is on, parent may need layout update to correct for overshoot in size. However, do not do this when the
-    // update is a response to resize, as that could cause infinite recursion
+    // If wordwrap is on, parent may need layout update to correct for overshoot in size. However, do not do this when
+    // the update is a response to resize, as that could cause infinite recursion
     if (wordWrap_ && !onResize)
     {
         UIElement* parent = GetParent();
@@ -786,8 +757,8 @@ int Text::GetRowStartPosition(unsigned rowIndex) const
     return ret;
 }
 
-void Text::ConstructBatch(UIBatch& pageBatch, const PODVector<GlyphLocation>& pageGlyphLocation, float dx, float dy, Color* color,
-    float depthBias)
+void Text::ConstructBatch(UIBatch& pageBatch, const PODVector<GlyphLocation>& pageGlyphLocation, float dx, float dy,
+                          Color* color, float depthBias)
 {
     unsigned startDataSize = pageBatch.vertexData_->Size();
 
@@ -801,7 +772,7 @@ void Text::ConstructBatch(UIBatch& pageBatch, const PODVector<GlyphLocation>& pa
         const GlyphLocation& glyphLocation = pageGlyphLocation[i];
         const FontGlyph& glyph = *glyphLocation.glyph_;
         pageBatch.AddQuad(dx + glyphLocation.x_ + glyph.offsetX_, dy + glyphLocation.y_ + glyph.offsetY_, glyph.width_,
-            glyph.height_, glyph.x_, glyph.y_, glyph.texWidth_, glyph.texHeight_);
+                          glyph.height_, glyph.x_, glyph.y_, glyph.texWidth_, glyph.texHeight_);
     }
 
     if (depthBias != 0.0f)
@@ -812,4 +783,4 @@ void Text::ConstructBatch(UIBatch& pageBatch, const PODVector<GlyphLocation>& pa
     }
 }
 
-}
+} // namespace Urho3D

@@ -53,9 +53,11 @@ public:
 
     /// Open the package file. Return true if successful.
     bool Open(const String& fileName, unsigned startOffset = 0);
-    /// Check if a file exists within the package file. This will be case-insensitive on Windows and case-sensitive on other platforms.
+    /// Check if a file exists within the package file. This will be case-insensitive on Windows and case-sensitive on
+    /// other platforms.
     bool Exists(const String& fileName) const;
-    /// Return the file entry corresponding to the name, or null if not found. This will be case-insensitive on Windows and case-sensitive on other platforms.
+    /// Return the file entry corresponding to the name, or null if not found. This will be case-insensitive on Windows
+    /// and case-sensitive on other platforms.
     const PackageEntry* GetEntry(const String& fileName) const;
 
     /// Return all file entries.
@@ -108,4 +110,4 @@ private:
     bool compressed_;
 };
 
-}
+} // namespace Urho3D

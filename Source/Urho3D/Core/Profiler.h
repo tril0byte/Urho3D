@@ -35,21 +35,21 @@ class URHO3D_API ProfilerBlock
 {
 public:
     /// Construct with the specified parent block and name.
-    ProfilerBlock(ProfilerBlock* parent, const char* name) :
-        name_(nullptr),
-        time_(0),
-        maxTime_(0),
-        count_(0),
-        parent_(parent),
-        frameTime_(0),
-        frameMaxTime_(0),
-        frameCount_(0),
-        intervalTime_(0),
-        intervalMaxTime_(0),
-        intervalCount_(0),
-        totalTime_(0),
-        totalMaxTime_(0),
-        totalCount_(0)
+    ProfilerBlock(ProfilerBlock* parent, const char* name)
+        : name_(nullptr)
+        , time_(0)
+        , maxTime_(0)
+        , count_(0)
+        , parent_(parent)
+        , frameTime_(0)
+        , frameMaxTime_(0)
+        , frameCount_(0)
+        , intervalTime_(0)
+        , intervalMaxTime_(0)
+        , intervalCount_(0)
+        , totalTime_(0)
+        , totalMaxTime_(0)
+        , totalCount_(0)
     {
         if (name)
         {
@@ -68,7 +68,7 @@ public:
             *i = nullptr;
         }
 
-        delete [] name_;
+        delete[] name_;
     }
 
     /// Begin timing.
@@ -218,7 +218,8 @@ public:
 
 protected:
     /// Return profiling data as text output for a specified profiling block.
-    void PrintData(ProfilerBlock* block, String& output, unsigned depth, unsigned maxDepth, bool showUnused, bool showTotal) const;
+    void PrintData(ProfilerBlock* block, String& output, unsigned depth, unsigned maxDepth, bool showUnused,
+                   bool showTotal) const;
 
     /// Current profiling block.
     ProfilerBlock* current_;
@@ -234,8 +235,8 @@ class URHO3D_API AutoProfileBlock
 {
 public:
     /// Construct. Begin a profiling block with the specified name and optional call count.
-    AutoProfileBlock(Profiler* profiler, const char* name) :
-        profiler_(profiler)
+    AutoProfileBlock(Profiler* profiler, const char* name)
+        : profiler_(profiler)
     {
         if (profiler_)
             profiler_->BeginBlock(name);
@@ -254,9 +255,9 @@ private:
 };
 
 #ifdef URHO3D_PROFILING
-#define URHO3D_PROFILE(name) Urho3D::AutoProfileBlock profile_ ## name (GetSubsystem<Urho3D::Profiler>(), #name)
+#define URHO3D_PROFILE(name) Urho3D::AutoProfileBlock profile_##name(GetSubsystem<Urho3D::Profiler>(), #name)
 #else
 #define URHO3D_PROFILE(name)
 #endif
 
-}
+} // namespace Urho3D

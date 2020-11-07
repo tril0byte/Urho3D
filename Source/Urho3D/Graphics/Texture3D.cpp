@@ -39,8 +39,8 @@
 namespace Urho3D
 {
 
-Texture3D::Texture3D(Context* context) :
-    Texture(context)
+Texture3D::Texture3D(Context* context)
+    : Texture(context)
 {
 #ifdef URHO3D_OPENGL
 #ifndef GL_ES_VERSION_2_0
@@ -49,15 +49,9 @@ Texture3D::Texture3D(Context* context) :
 #endif
 }
 
-Texture3D::~Texture3D()
-{
-    Release();
-}
+Texture3D::~Texture3D() { Release(); }
 
-void Texture3D::RegisterObject(Context* context)
-{
-    context->RegisterFactory<Texture3D>();
-}
+void Texture3D::RegisterObject(Context* context) { context->RegisterFactory<Texture3D>(); }
 
 bool Texture3D::BeginLoad(Deserializer& source)
 {
@@ -137,7 +131,6 @@ bool Texture3D::BeginLoad(Deserializer& source)
     return false;
 }
 
-
 bool Texture3D::EndLoad()
 {
     // In headless mode, do not actually load the texture, just return success
@@ -179,4 +172,4 @@ bool Texture3D::SetSize(int width, int height, int depth, unsigned format, Textu
     return Create();
 }
 
-}
+} // namespace Urho3D

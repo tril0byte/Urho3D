@@ -22,15 +22,15 @@
 
 #include "../Precompiled.h"
 
-#include "../Core/Context.h"
 #include "../Base/Algorithm.h"
+#include "../Core/Context.h"
 #include "../Core/CoreEvents.h"
 #include "../Engine/Console.h"
 #include "../Engine/EngineEvents.h"
 #include "../Graphics/Graphics.h"
-#include "../Input/Input.h"
 #include "../IO/IOEvents.h"
 #include "../IO/Log.h"
+#include "../Input/Input.h"
 #include "../Resource/ResourceCache.h"
 #include "../UI/DropDownList.h"
 #include "../UI/Font.h"
@@ -49,24 +49,17 @@ namespace Urho3D
 static const int DEFAULT_CONSOLE_ROWS = 16;
 static const int DEFAULT_HISTORY_SIZE = 16;
 
-const char* logStyles[] =
-{
-    "ConsoleTraceText",
-    "ConsoleDebugText",
-    "ConsoleInfoText",
-    "ConsoleWarningText",
-    "ConsoleErrorText",
-    "ConsoleText"
-};
+const char* logStyles[] = {"ConsoleTraceText",   "ConsoleDebugText", "ConsoleInfoText",
+                           "ConsoleWarningText", "ConsoleErrorText", "ConsoleText"};
 
-Console::Console(Context* context) :
-    Object(context),
-    autoVisibleOnError_(false),
-    historyRows_(DEFAULT_HISTORY_SIZE),
-    historyPosition_(0),
-    autoCompletePosition_(0),
-    historyOrAutoCompleteChange_(false),
-    printing_(false)
+Console::Console(Context* context)
+    : Object(context)
+    , autoVisibleOnError_(false)
+    , historyRows_(DEFAULT_HISTORY_SIZE)
+    , historyPosition_(0)
+    , autoCompletePosition_(0)
+    , historyOrAutoCompleteChange_(false)
+    , printing_(false)
 {
     auto* ui = GetSubsystem<UI>();
     UIElement* uiRoot = ui->GetRoot();
@@ -79,7 +72,7 @@ Console::Console(Context* context) :
     background_->SetClipChildren(true);
     background_->SetEnabled(true);
     background_->SetVisible(false); // Hide by default
-    background_->SetPriority(200); // Show on top of the debug HUD
+    background_->SetPriority(200);  // Show on top of the debug HUD
     background_->SetBringToBack(false);
     background_->SetLayout(LM_VERTICAL);
 
@@ -92,11 +85,11 @@ Console::Console(Context* context) :
     commandLine_->SetLayoutSpacing(1);
     interpreters_ = commandLine_->CreateChild<DropDownList>();
     lineEdit_ = commandLine_->CreateChild<LineEdit>();
-    lineEdit_->SetFocusMode(FM_FOCUSABLE);  // Do not allow defocus with ESC
+    lineEdit_->SetFocusMode(FM_FOCUSABLE); // Do not allow defocus with ESC
 
     closeButton_ = uiRoot->CreateChild<Button>();
     closeButton_->SetVisible(false);
-    closeButton_->SetPriority(background_->GetPriority() + 1);  // Show on top of console's background
+    closeButton_->SetPriority(background_->GetPriority() + 1); // Show on top of console's background
     closeButton_->SetBringToBack(false);
 
     SetNumRows(DEFAULT_CONSOLE_ROWS);
@@ -149,7 +142,8 @@ void Console::SetVisible(bool enable)
 
     if (enable)
     {
-        // Check if we have receivers for E_CONSOLECOMMAND every time here in case the handler is being added later dynamically
+        // Check if we have receivers for E_CONSOLECOMMAND every time here in case the handler is being added later
+        // dynamically
         bool hasInterpreter = PopulateInterpreter();
         commandLine_->SetVisible(hasInterpreter);
         if (hasInterpreter && focusOnShow_)
@@ -184,10 +178,7 @@ void Console::SetVisible(bool enable)
     }
 }
 
-void Console::Toggle()
-{
-    SetVisible(!IsVisible());
-}
+void Console::Toggle() { SetVisible(!IsVisible()); }
 
 void Console::SetNumBufferedRows(unsigned rows)
 {
@@ -245,10 +236,7 @@ void Console::SetNumHistoryRows(unsigned rows)
         historyPosition_ = rows;
 }
 
-void Console::SetFocusOnShow(bool enable)
-{
-    focusOnShow_ = enable;
-}
+void Console::SetFocusOnShow(bool enable) { focusOnShow_ = enable; }
 
 void Console::AddAutoComplete(const String& option)
 {
@@ -277,30 +265,19 @@ void Console::UpdateElements()
     rowContainer_->SetFixedWidth(width - border.left_ - border.right_);
     rowContainer_->SetFixedHeight(
         displayedRows_ * rowContainer_->GetItem((unsigned)0)->GetHeight() + panelBorder.top_ + panelBorder.bottom_ +
-        (rowContainer_->GetHorizontalScrollBar()->IsVisible() ? rowContainer_->GetHorizontalScrollBar()->GetHeight() : 0));
+        (rowContainer_->GetHorizontalScrollBar()->IsVisible() ? rowContainer_->GetHorizontalScrollBar()->GetHeight()
+                                                              : 0));
     background_->SetFixedWidth(width);
     background_->SetHeight(background_->GetMinHeight());
 }
 
-XMLFile* Console::GetDefaultStyle() const
-{
-    return background_->GetDefaultStyle(false);
-}
+XMLFile* Console::GetDefaultStyle() const { return background_->GetDefaultStyle(false); }
 
-bool Console::IsVisible() const
-{
-    return background_ && background_->IsVisible();
-}
+bool Console::IsVisible() const { return background_ && background_->IsVisible(); }
 
-unsigned Console::GetNumBufferedRows() const
-{
-    return rowContainer_->GetNumItems();
-}
+unsigned Console::GetNumBufferedRows() const { return rowContainer_->GetNumItems(); }
 
-void Console::CopySelectedRows() const
-{
-    rowContainer_->CopySelectedItemsToClipboard();
-}
+void Console::CopySelectedRows() const { rowContainer_->CopySelectedItemsToClipboard(); }
 
 const String& Console::GetHistoryRow(unsigned index) const
 {
@@ -337,7 +314,8 @@ bool Console::PopulateInterpreter()
     }
 
     const IntRect& border = interpreters_->GetPopup()->GetLayoutBorder();
-    interpreters_->SetMaxWidth(interpreters_->GetListView()->GetContentElement()->GetWidth() + border.left_ + border.right_);
+    interpreters_->SetMaxWidth(interpreters_->GetListView()->GetContentElement()->GetWidth() + border.left_ +
+                               border.right_);
     bool enabled = interpreters_->GetNumItems() > 1;
     interpreters_->SetEnabled(enabled);
     interpreters_->SetFocusMode(enabled ? FM_FOCUSABLE_DEFOCUSABLE : FM_NOTFOCUSABLE);
@@ -358,7 +336,7 @@ void Console::HandleInterpreterSelected(StringHash eventType, VariantMap& eventD
     lineEdit_->SetFocus(true);
 }
 
-void Console::HandleTextChanged(StringHash eventType, VariantMap & eventData)
+void Console::HandleTextChanged(StringHash eventType, VariantMap& eventData)
 {
     // Save the original line
     // Make sure the change isn't caused by auto complete or history
@@ -378,9 +356,8 @@ void Console::HandleTextFinished(StringHash eventType, VariantMap& eventData)
         // Send the command as an event for script subsystem
         using namespace ConsoleCommand;
 
-        SendEvent(E_CONSOLECOMMAND,
-            P_COMMAND, line,
-            P_ID, static_cast<Text*>(interpreters_->GetSelectedItem())->GetText());
+        SendEvent(E_CONSOLECOMMAND, P_COMMAND, line, P_ID,
+                  static_cast<Text*>(interpreters_->GetSelectedItem())->GetText());
 
         // Make sure the line isn't the same as the last one
         if (history_.Empty() || line != history_.Back())
@@ -391,7 +368,7 @@ void Console::HandleTextFinished(StringHash eventType, VariantMap& eventData)
                 history_.Erase(history_.Begin());
         }
 
-        historyPosition_ = history_.Size(); // Reset
+        historyPosition_ = history_.Size();           // Reset
         autoCompletePosition_ = autoComplete_.Size(); // Reset
 
         currentRow_.Clear();
@@ -497,7 +474,8 @@ void Console::HandleLineEditKey(StringHash eventType, VariantMap& eventData)
         }
         break;
 
-    default: break;
+    default:
+        break;
     }
 
     if (changed)
@@ -517,15 +495,9 @@ void Console::HandleLineEditKey(StringHash eventType, VariantMap& eventData)
     }
 }
 
-void Console::HandleCloseButtonPressed(StringHash eventType, VariantMap& eventData)
-{
-    SetVisible(false);
-}
+void Console::HandleCloseButtonPressed(StringHash eventType, VariantMap& eventData) { SetVisible(false); }
 
-void Console::HandleRootElementResized(StringHash eventType, VariantMap& eventData)
-{
-    UpdateElements();
-}
+void Console::HandleRootElementResized(StringHash eventType, VariantMap& eventData) { UpdateElements(); }
 
 void Console::HandleLogMessage(StringHash eventType, VariantMap& eventData)
 {
@@ -581,8 +553,8 @@ void Console::HandlePostUpdate(StringHash eventType, VariantMap& eventData)
     rowContainer_->EnsureItemVisibility(text);
     rowContainer_->EnableLayoutUpdate();
     rowContainer_->UpdateLayout();
-    UpdateElements();   // May need to readjust the height due to scrollbar visibility changes
+    UpdateElements(); // May need to readjust the height due to scrollbar visibility changes
     printing_ = false;
 }
 
-}
+} // namespace Urho3D

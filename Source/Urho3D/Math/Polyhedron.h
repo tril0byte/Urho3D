@@ -43,31 +43,25 @@ public:
     ~Polyhedron() noexcept = default;
 
     /// Copy-construct from another polyhedron.
-    Polyhedron(const Polyhedron& polyhedron) :
-        faces_(polyhedron.faces_)
+    Polyhedron(const Polyhedron& polyhedron)
+        : faces_(polyhedron.faces_)
     {
     }
 
     /// Construct from a list of faces.
-    explicit Polyhedron(const Vector<PODVector<Vector3> >& faces) :
-        faces_(faces)
+    explicit Polyhedron(const Vector<PODVector<Vector3>>& faces)
+        : faces_(faces)
     {
     }
 
     /// Construct from a bounding box.
-    explicit Polyhedron(const BoundingBox& box)
-    {
-        Define(box);
-    }
+    explicit Polyhedron(const BoundingBox& box) { Define(box); }
 
     /// Construct from a frustum.
-    explicit Polyhedron(const Frustum& frustum)
-    {
-        Define(frustum);
-    }
+    explicit Polyhedron(const Frustum& frustum) { Define(frustum); }
 
     /// Assign from another polyhedron.
-    Polyhedron& operator =(const Polyhedron& rhs)
+    Polyhedron& operator=(const Polyhedron& rhs)
     {
         faces_ = rhs.faces_;
         return *this;
@@ -105,7 +99,7 @@ public:
     bool Empty() const { return faces_.Empty(); }
 
     /// Polygon faces.
-    Vector<PODVector<Vector3> > faces_;
+    Vector<PODVector<Vector3>> faces_;
 
 private:
     /// Set a triangle face by index.
@@ -118,4 +112,4 @@ private:
     PODVector<Vector3> outFace_;
 };
 
-}
+} // namespace Urho3D

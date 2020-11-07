@@ -75,13 +75,14 @@ struct AttributeInfo
     AttributeInfo() = default;
 
     /// Construct attribute.
-    AttributeInfo(VariantType type, const char* name, const SharedPtr<AttributeAccessor>& accessor, const char** enumNames, const Variant& defaultValue, AttributeModeFlags mode) :
-        type_(type),
-        name_(name),
-        enumNames_(enumNames),
-        accessor_(accessor),
-        defaultValue_(defaultValue),
-        mode_(mode)
+    AttributeInfo(VariantType type, const char* name, const SharedPtr<AttributeAccessor>& accessor,
+                  const char** enumNames, const Variant& defaultValue, AttributeModeFlags mode)
+        : type_(type)
+        , name_(name)
+        , enumNames_(enumNames)
+        , accessor_(accessor)
+        , defaultValue_(defaultValue)
+        , mode_(mode)
     {
     }
 
@@ -93,10 +94,7 @@ struct AttributeInfo
     }
 
     /// Get attribute metadata of specified type.
-    template <class T> T GetMetadata(const StringHash& key) const
-    {
-        return GetMetadata(key).Get<T>();
-    }
+    template <class T> T GetMetadata(const StringHash& key) const { return GetMetadata(key).Get<T>(); }
 
     /// Attribute type.
     VariantType type_ = VAR_NONE;
@@ -121,6 +119,7 @@ struct AttributeInfo
 struct AttributeHandle
 {
     friend class Context;
+
 private:
     /// Construct default.
     AttributeHandle() = default;
@@ -130,6 +129,7 @@ private:
     AttributeInfo* attributeInfo_ = nullptr;
     /// Network attribute info.
     AttributeInfo* networkAttributeInfo_ = nullptr;
+
 public:
     /// Set metadata.
     AttributeHandle& SetMetadata(StringHash key, const Variant& value)
@@ -142,4 +142,4 @@ public:
     }
 };
 
-}
+} // namespace Urho3D

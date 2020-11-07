@@ -28,7 +28,8 @@
 namespace Urho3D
 {
 
-/// %UI element which allows sub-pixel positioning and size, as well as rotation. Only other Sprites should be added as child elements.
+/// %UI element which allows sub-pixel positioning and size, as well as rotation. Only other Sprites should be added as
+/// child elements.
 class URHO3D_API Sprite : public UIElement
 {
     URHO3D_OBJECT(Sprite, UIElement);
@@ -140,4 +141,4 @@ protected:
     mutable Matrix3x4 transform_;
 };
 
-}
+} // namespace Urho3D

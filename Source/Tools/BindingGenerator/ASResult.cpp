@@ -83,7 +83,8 @@ void ASGeneratedFile_Base::WriteHeaders(ofstream& out)
 
 // ============================================================================
 
-ASGeneratedFile_WithRegistrationFunction::ASGeneratedFile_WithRegistrationFunction(const string& outputFilePath, const string& functionName)
+ASGeneratedFile_WithRegistrationFunction::ASGeneratedFile_WithRegistrationFunction(const string& outputFilePath,
+                                                                                   const string& functionName)
 {
     outputFilePath_ = outputFilePath;
     functionName_ = functionName;
@@ -95,28 +96,26 @@ void ASGeneratedFile_Enums::Save()
 {
     ofstream out(outputFilePath_);
 
-    out <<
-        "// DO NOT EDIT. This file is generated\n"
-        "\n"
-        "// We need register all enums before registration of any members because members can use any enums\n"
-        "\n"
-        "#include \"../Precompiled.h\"\n"
-        "#include \"../AngelScript/APITemplates.h\"\n"
-        "\n";
+    out << "// DO NOT EDIT. This file is generated\n"
+           "\n"
+           "// We need register all enums before registration of any members because members can use any enums\n"
+           "\n"
+           "#include \"../Precompiled.h\"\n"
+           "#include \"../AngelScript/APITemplates.h\"\n"
+           "\n";
 
     WriteHeaders(out);
 
-    out <<
-        "namespace Urho3D\n"
-        "{\n"
-        "\n"
-        << glue_.str() <<
-        "void " << functionName_ << "(asIScriptEngine* engine)\n"
-        "{\n"
-        << reg_.str() <<
-        "}\n"
-        "\n"
-        "}\n";
+    out << "namespace Urho3D\n"
+           "{\n"
+           "\n"
+        << glue_.str() << "void " << functionName_
+        << "(asIScriptEngine* engine)\n"
+           "{\n"
+        << reg_.str()
+        << "}\n"
+           "\n"
+           "}\n";
 }
 
 // ============================================================================
@@ -125,27 +124,27 @@ void ASGeneratedFile_Classes::Save()
 {
     ofstream out(outputFilePath_);
 
-    out <<
-        "// DO NOT EDIT. This file is generated\n"
-        "\n"
-        "// We need register all types before registration of any members because members can use any types\n"
-        "\n"
-        "#include \"../Precompiled.h\"\n"
-        "#include \"../AngelScript/APITemplates.h\"\n"
-        "\n";
+    out << "// DO NOT EDIT. This file is generated\n"
+           "\n"
+           "// We need register all types before registration of any members because members can use any types\n"
+           "\n"
+           "#include \"../Precompiled.h\"\n"
+           "#include \"../AngelScript/APITemplates.h\"\n"
+           "\n";
 
     WriteHeaders(out);
 
-    out <<
-        "namespace Urho3D\n"
-        "{\n"
-        "\n"
-        "void " << functionName_ << "(asIScriptEngine* engine)\n"
-        "{\n"
-        << reg_.str() <<
-        "}\n"
-        "\n"
-        "}\n";
+    out << "namespace Urho3D\n"
+           "{\n"
+           "\n"
+           "void "
+        << functionName_
+        << "(asIScriptEngine* engine)\n"
+           "{\n"
+        << reg_.str()
+        << "}\n"
+           "\n"
+           "}\n";
 }
 
 // ============================================================================
@@ -154,31 +153,29 @@ void ASGeneratedFile_Members_HighPriority::Save()
 {
     ofstream out(outputFilePath_);
 
-    out <<
-        "// DO NOT EDIT. This file is generated\n"
-        "\n"
-        "// We need register default constructors before any members to allow using in Array<type>\n"
-        "\n"
-        "#include \"../Precompiled.h\"\n"
-        "#include \"../AngelScript/APITemplates.h\"\n"
-        "\n";
+    out << "// DO NOT EDIT. This file is generated\n"
+           "\n"
+           "// We need register default constructors before any members to allow using in Array<type>\n"
+           "\n"
+           "#include \"../Precompiled.h\"\n"
+           "#include \"../AngelScript/APITemplates.h\"\n"
+           "\n";
 
     WriteHeaders(out);
 
-    out <<
-        "namespace Urho3D\n"
-        "{\n"
-        "\n"
-        "void FakeAddRef(void* ptr);\n"
-        "void FakeReleaseRef(void* ptr);\n"
-        "\n"
-        << glue_.str() <<
-        "void " << functionName_ << "(asIScriptEngine* engine)\n"
-        "{\n"
-        << reg_.str() <<
-        "}\n"
-        "\n"
-        "}\n";
+    out << "namespace Urho3D\n"
+           "{\n"
+           "\n"
+           "void FakeAddRef(void* ptr);\n"
+           "void FakeReleaseRef(void* ptr);\n"
+           "\n"
+        << glue_.str() << "void " << functionName_
+        << "(asIScriptEngine* engine)\n"
+           "{\n"
+        << reg_.str()
+        << "}\n"
+           "\n"
+           "}\n";
 }
 
 // ============================================================================
@@ -187,31 +184,29 @@ void ASGeneratedFile_Members::Save()
 {
     ofstream out(outputFilePath_);
 
-    out <<
-        "// DO NOT EDIT. This file is generated\n"
-        "\n"
-        "#include \"../Precompiled.h\"\n"
-        "#include \"../AngelScript/APITemplates.h\"\n"
-        "\n";
+    out << "// DO NOT EDIT. This file is generated\n"
+           "\n"
+           "#include \"../Precompiled.h\"\n"
+           "#include \"../AngelScript/APITemplates.h\"\n"
+           "\n";
 
     WriteHeaders(out);
 
-    out <<
-        "#include \"../AngelScript/Manual.h\"\n"
-        "\n"
-        "namespace Urho3D\n"
-        "{\n"
-        "\n"
-        "void FakeAddRef(void* ptr);\n"
-        "void FakeReleaseRef(void* ptr);\n"
-        "\n"
-        << glue_.str() <<
-        "void " << functionName_ << "(asIScriptEngine* engine)\n"
-        "{\n"
-        << reg_.str() <<
-        "}\n"
-        "\n"
-        "}\n";
+    out << "#include \"../AngelScript/Manual.h\"\n"
+           "\n"
+           "namespace Urho3D\n"
+           "{\n"
+           "\n"
+           "void FakeAddRef(void* ptr);\n"
+           "void FakeReleaseRef(void* ptr);\n"
+           "\n"
+        << glue_.str() << "void " << functionName_
+        << "(asIScriptEngine* engine)\n"
+           "{\n"
+        << reg_.str()
+        << "}\n"
+           "\n"
+           "}\n";
 }
 
 // ============================================================================
@@ -220,31 +215,28 @@ void ASGeneratedFile_GlobalVariables::Save()
 {
     ofstream out(outputFilePath_);
 
-    out <<
-        "// DO NOT EDIT. This file is generated\n"
-        "\n"
-        "#include \"../Precompiled.h\"\n"
-        "#include \"../AngelScript/APITemplates.h\"\n"
-        "\n";
+    out << "// DO NOT EDIT. This file is generated\n"
+           "\n"
+           "#include \"../Precompiled.h\"\n"
+           "#include \"../AngelScript/APITemplates.h\"\n"
+           "\n";
 
     WriteHeaders(out);
 
-    out <<
-        "// Some headers could re-define M_PI, ensure that it's undefined\n"
-        "#undef M_PI\n"
-        "\n";
+    out << "// Some headers could re-define M_PI, ensure that it's undefined\n"
+           "#undef M_PI\n"
+           "\n";
 
-    out <<
-        "namespace Urho3D\n"
-        "{\n"
-        "\n"
-        << glue_.str() <<
-        "void " << functionName_ << "(asIScriptEngine* engine)\n"
-        "{\n"
-        << reg_.str() <<
-        "}\n"
-        "\n"
-        "}\n";
+    out << "namespace Urho3D\n"
+           "{\n"
+           "\n"
+        << glue_.str() << "void " << functionName_
+        << "(asIScriptEngine* engine)\n"
+           "{\n"
+        << reg_.str()
+        << "}\n"
+           "\n"
+           "}\n";
 }
 
 // ============================================================================
@@ -253,62 +245,53 @@ void ASGeneratedFile_GlobalFunctions::Save()
 {
     ofstream out(outputFilePath_);
 
-    out <<
-        "// DO NOT EDIT. This file is generated\n"
-        "\n"
-        "#include \"../Precompiled.h\"\n"
-        "#include \"../AngelScript/APITemplates.h\"\n"
-        "\n";
+    out << "// DO NOT EDIT. This file is generated\n"
+           "\n"
+           "#include \"../Precompiled.h\"\n"
+           "#include \"../AngelScript/APITemplates.h\"\n"
+           "\n";
 
     WriteHeaders(out);
 
-    out <<
-        "namespace Urho3D\n"
-        "{\n"
-        "\n"
-        << glue_.str() <<
-        "void " << functionName_ << "(asIScriptEngine* engine)\n"
-        "{\n"
-        << reg_.str() <<
-        "}\n"
-        "\n"
-        "}\n";
+    out << "namespace Urho3D\n"
+           "{\n"
+           "\n"
+        << glue_.str() << "void " << functionName_
+        << "(asIScriptEngine* engine)\n"
+           "{\n"
+        << reg_.str()
+        << "}\n"
+           "\n"
+           "}\n";
 }
 
 // ============================================================================
 
-ASGeneratedFile_Templates::ASGeneratedFile_Templates(const string& outputFilePath)
-{
-    outputFilePath_ = outputFilePath;
-}
+ASGeneratedFile_Templates::ASGeneratedFile_Templates(const string& outputFilePath) { outputFilePath_ = outputFilePath; }
 
 void ASGeneratedFile_Templates::Save()
 {
     ofstream out(outputFilePath_);
 
-    out <<
-        "// DO NOT EDIT. This file is generated\n"
-        "\n"
-        "#pragma once\n"
-        "\n"
-        "#include \"../Precompiled.h\"\n"
-        "#include \"../AngelScript/APITemplates.h\"\n"
-        "\n";
+    out << "// DO NOT EDIT. This file is generated\n"
+           "\n"
+           "#pragma once\n"
+           "\n"
+           "#include \"../Precompiled.h\"\n"
+           "#include \"../AngelScript/APITemplates.h\"\n"
+           "\n";
 
     WriteHeaders(out);
 
-    out <<
-        "#include \"../AngelScript/Manual.h\"\n"
-        "\n"
-        "namespace Urho3D\n"
-        "{\n"
-        "\n"
-        "void FakeAddRef(void* ptr);\n"
-        "void FakeReleaseRef(void* ptr);\n"
-        "\n"
-        << glue_.str()
-        << reg_.str() <<
-        "}\n";
+    out << "#include \"../AngelScript/Manual.h\"\n"
+           "\n"
+           "namespace Urho3D\n"
+           "{\n"
+           "\n"
+           "void FakeAddRef(void* ptr);\n"
+           "void FakeReleaseRef(void* ptr);\n"
+           "\n"
+        << glue_.str() << reg_.str() << "}\n";
 }
 
-}
+} // namespace ASBindingGenerator

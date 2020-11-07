@@ -22,9 +22,9 @@
 
 #include "../../Precompiled.h"
 
+#include "../../Graphics/ConstantBuffer.h"
 #include "../../Graphics/Graphics.h"
 #include "../../Graphics/GraphicsImpl.h"
-#include "../../Graphics/ConstantBuffer.h"
 #include "../../IO/Log.h"
 
 #include "../../DebugNew.h"
@@ -90,9 +90,10 @@ void ConstantBuffer::Apply()
 {
     if (dirty_ && object_.ptr_)
     {
-        graphics_->GetImpl()->GetDeviceContext()->UpdateSubresource((ID3D11Buffer*)object_.ptr_, 0, 0, shadowData_.Get(), 0, 0);
+        graphics_->GetImpl()->GetDeviceContext()->UpdateSubresource((ID3D11Buffer*)object_.ptr_, 0, 0,
+                                                                    shadowData_.Get(), 0, 0);
         dirty_ = false;
     }
 }
 
-}
+} // namespace Urho3D

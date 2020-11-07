@@ -133,4 +133,4 @@ public:
     bool WriteLine(const String& value);
 };
 
-}
+} // namespace Urho3D

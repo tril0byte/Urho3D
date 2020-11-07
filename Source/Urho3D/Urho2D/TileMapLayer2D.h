@@ -133,7 +133,7 @@ private:
     /// Visible.
     bool visible_{true};
     /// Tile node or image nodes.
-    Vector<SharedPtr<Node> > nodes_;
+    Vector<SharedPtr<Node>> nodes_;
 };
 
-}
+} // namespace Urho3D

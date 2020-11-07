@@ -55,7 +55,8 @@ public:
     /// Disconnect a database connection. The connection object pointer should not be used anymore after this.
     void Disconnect(DbConnection* connection);
 
-    /// Return true when using internal database connection pool. The internal database pool is managed by the Database subsystem itself and should not be confused with ODBC connection pool option when ODBC is being used.
+    /// Return true when using internal database connection pool. The internal database pool is managed by the Database
+    /// subsystem itself and should not be confused with ODBC connection pool option when ODBC is being used.
     /// @property
     bool IsPooling() const { return (bool)poolSize_; }
 
@@ -68,12 +69,13 @@ public:
     void SetPoolSize(unsigned poolSize) { poolSize_ = poolSize; }
 
 private:
-    /// %Database connection pool size. Default to 0 when using ODBC 3.0 or later as ODBC 3.0 driver manager could manage its own database connection pool.
+    /// %Database connection pool size. Default to 0 when using ODBC 3.0 or later as ODBC 3.0 driver manager could
+    /// manage its own database connection pool.
     unsigned poolSize_;
     /// Active database connections.
-    Vector<SharedPtr<DbConnection> > connections_;
+    Vector<SharedPtr<DbConnection>> connections_;
     ///%Database connections pool.
-    HashMap<String, Vector<SharedPtr<DbConnection> > > connectionsPool_;
+    HashMap<String, Vector<SharedPtr<DbConnection>>> connectionsPool_;
 };
 
-}
+} // namespace Urho3D

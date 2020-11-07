@@ -55,22 +55,22 @@ enum CursorShape
 struct URHO3D_API CursorShapeInfo
 {
     /// Construct with defaults.
-    CursorShapeInfo() :
-        imageRect_(IntRect::ZERO),
-        hotSpot_(IntVector2::ZERO),
-        osCursor_(nullptr),
-        systemDefined_(false),
-        systemCursor_(-1)
+    CursorShapeInfo()
+        : imageRect_(IntRect::ZERO)
+        , hotSpot_(IntVector2::ZERO)
+        , osCursor_(nullptr)
+        , systemDefined_(false)
+        , systemCursor_(-1)
     {
     }
 
     /// Construct with system cursor.
-    explicit CursorShapeInfo(int systemCursor) :
-        imageRect_(IntRect::ZERO),
-        hotSpot_(IntVector2::ZERO),
-        osCursor_(nullptr),
-        systemDefined_(false),
-        systemCursor_(systemCursor)
+    explicit CursorShapeInfo(int systemCursor)
+        : imageRect_(IntRect::ZERO)
+        , hotSpot_(IntVector2::ZERO)
+        , osCursor_(nullptr)
+        , systemDefined_(false)
+        , systemCursor_(systemCursor)
     {
     }
 
@@ -115,7 +115,8 @@ public:
     void SetShape(const String& shape);
     /// Set current shape.
     void SetShape(CursorShape shape);
-    /// Set whether to use system default shapes. Is only possible when the OS mouse cursor has been set visible from the Input subsystem.
+    /// Set whether to use system default shapes. Is only possible when the OS mouse cursor has been set visible from
+    /// the Input subsystem.
     /// @property
     void SetUseSystemShapes(bool enable);
 
@@ -148,4 +149,4 @@ protected:
     bool osShapeDirty_;
 };
 
-}
+} // namespace Urho3D

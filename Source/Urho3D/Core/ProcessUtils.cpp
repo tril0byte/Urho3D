@@ -42,11 +42,11 @@ extern "C" unsigned SDL_TVOS_GetActiveProcessorCount();
 #endif
 
 #if defined(_WIN32)
-#include <windows.h>
 #include <io.h>
+#include <windows.h>
 #if defined(_MSC_VER)
-#include <float.h>
 #include <Lmcons.h> // For UNLEN.
+#include <float.h>
 #elif defined(__MINGW32__)
 #include <lmcons.h> // For UNLEN. Apparently MSVC defines "<Lmcons.h>" (with an upperscore 'L' but MinGW uses an underscore 'l').
 #include <ntdef.h>
@@ -56,8 +56,8 @@ extern "C" unsigned SDL_TVOS_GetActiveProcessorCount();
 #include <sys/sysinfo.h>
 #include <sys/utsname.h>
 #elif defined(__APPLE__)
-#include <sys/sysctl.h>
 #include <SystemConfiguration/SystemConfiguration.h> // For the detection functions inside GetLoginName().
+#include <sys/sysctl.h>
 #endif
 #ifndef _WIN32
 #include <unistd.h>
@@ -70,27 +70,24 @@ extern "C" unsigned SDL_TVOS_GetActiveProcessorCount();
 #if defined(__i386__)
 // From http://stereopsis.com/FPU.html
 
-#define FPU_CW_PREC_MASK        0x0300
-#define FPU_CW_PREC_SINGLE      0x0000
-#define FPU_CW_PREC_DOUBLE      0x0200
-#define FPU_CW_PREC_EXTENDED    0x0300
-#define FPU_CW_ROUND_MASK       0x0c00
-#define FPU_CW_ROUND_NEAR       0x0000
-#define FPU_CW_ROUND_DOWN       0x0400
-#define FPU_CW_ROUND_UP         0x0800
-#define FPU_CW_ROUND_CHOP       0x0c00
+#define FPU_CW_PREC_MASK 0x0300
+#define FPU_CW_PREC_SINGLE 0x0000
+#define FPU_CW_PREC_DOUBLE 0x0200
+#define FPU_CW_PREC_EXTENDED 0x0300
+#define FPU_CW_ROUND_MASK 0x0c00
+#define FPU_CW_ROUND_NEAR 0x0000
+#define FPU_CW_ROUND_DOWN 0x0400
+#define FPU_CW_ROUND_UP 0x0800
+#define FPU_CW_ROUND_CHOP 0x0c00
 
 inline unsigned GetFPUState()
 {
     unsigned control = 0;
-    __asm__ __volatile__ ("fnstcw %0" : "=m" (control));
+    __asm__ __volatile__("fnstcw %0" : "=m"(control));
     return control;
 }
 
-inline void SetFPUState(unsigned control)
-{
-    __asm__ __volatile__ ("fldcw %0" : : "m" (control));
-}
+inline void SetFPUState(unsigned control) { __asm__ __volatile__("fldcw %0" : : "m"(control)); }
 #endif
 
 #ifndef MINI_URHO
@@ -138,7 +135,7 @@ static void GetCPUData(struct CpuCoreCount* data)
     fp = fopen("/sys/devices/system/cpu/present", "r");
     if (fp)
     {
-        res = fscanf(fp, "%d-%d", &i, &j);                          // NOLINT(cert-err34-c)
+        res = fscanf(fp, "%d-%d", &i, &j); // NOLINT(cert-err34-c)
         fclose(fp);
 
         if (res == 2 && i == 0)
@@ -148,7 +145,7 @@ static void GetCPUData(struct CpuCoreCount* data)
             fp = fopen("/sys/devices/system/cpu/cpu0/topology/thread_siblings_list", "r");
             if (fp)
             {
-                res = fscanf(fp, "%d,%d,%d,%d", &i, &j, &i, &j);    // NOLINT(cert-err34-c)
+                res = fscanf(fp, "%d,%d,%d,%d", &i, &j, &i, &j); // NOLINT(cert-err34-c)
                 fclose(fp);
 
                 // Having sibling thread(s) indicates the CPU is using HT/SMT technology
@@ -238,15 +235,9 @@ void PrintUnicode(const String& str, bool error)
 #endif
 }
 
-void PrintUnicodeLine(const String& str, bool error)
-{
-    PrintUnicode(str + "\n", error);
-}
+void PrintUnicodeLine(const String& str, bool error) { PrintUnicode(str + "\n", error); }
 
-void PrintLine(const String& str, bool error)
-{
-    PrintLine(str.CString(), error);
-}
+void PrintLine(const String& str, bool error) { PrintLine(str.CString(), error); }
 
 void PrintLine(const char* str, bool error)
 {
@@ -302,20 +293,11 @@ const Vector<String>& ParseArguments(const String& cmdLine, bool skipFirstArgume
     return arguments;
 }
 
-const Vector<String>& ParseArguments(const char* cmdLine)
-{
-    return ParseArguments(String(cmdLine));
-}
+const Vector<String>& ParseArguments(const char* cmdLine) { return ParseArguments(String(cmdLine)); }
 
-const Vector<String>& ParseArguments(const WString& cmdLine)
-{
-    return ParseArguments(String(cmdLine));
-}
+const Vector<String>& ParseArguments(const WString& cmdLine) { return ParseArguments(String(cmdLine)); }
 
-const Vector<String>& ParseArguments(const wchar_t* cmdLine)
-{
-    return ParseArguments(String(cmdLine));
-}
+const Vector<String>& ParseArguments(const wchar_t* cmdLine) { return ParseArguments(String(cmdLine)); }
 
 const Vector<String>& ParseArguments(int argc, char** argv)
 {
@@ -327,10 +309,7 @@ const Vector<String>& ParseArguments(int argc, char** argv)
     return ParseArguments(cmdLine);
 }
 
-const Vector<String>& GetArguments()
-{
-    return arguments;
-}
+const Vector<String>& GetArguments() { return arguments; }
 
 String GetConsoleInput()
 {
@@ -446,7 +425,9 @@ unsigned GetNumPhysicalCPUs()
     return SDL_TVOS_GetActiveProcessorCount();
 #endif
 #elif defined(__linux__)
-    struct CpuCoreCount data{};
+    struct CpuCoreCount data
+    {
+    };
     GetCPUData(&data);
     return data.numPhysicalCores_;
 #elif defined(__EMSCRIPTEN__)
@@ -479,7 +460,9 @@ unsigned GetNumLogicalCPUs()
     return SDL_TVOS_GetActiveProcessorCount();
 #endif
 #elif defined(__linux__)
-    struct CpuCoreCount data{};
+    struct CpuCoreCount data
+    {
+    };
     GetCPUData(&data);
     return data.numLogicalCores_;
 #elif defined(__EMSCRIPTEN__)
@@ -495,10 +478,7 @@ unsigned GetNumLogicalCPUs()
 #endif
 }
 
-void SetMiniDumpDir(const String& pathName)
-{
-    miniDumpDir = AddTrailingSlash(pathName);
-}
+void SetMiniDumpDir(const String& pathName) { miniDumpDir = AddTrailingSlash(pathName); }
 
 String GetMiniDumpDir()
 {
@@ -521,7 +501,9 @@ String GetMiniDumpDir()
 unsigned long long GetTotalMemory()
 {
 #if defined(__linux__) && !defined(__ANDROID__)
-    struct sysinfo s{};
+    struct sysinfo s
+    {
+    };
     if (sysinfo(&s) != -1)
         return s.totalram;
 #elif defined(_WIN32)
@@ -544,7 +526,7 @@ unsigned long long GetTotalMemory()
 String GetLoginName()
 {
 #if defined(__linux__) && !defined(__ANDROID__)
-    struct passwd *p = getpwuid(getuid());
+    struct passwd* p = getpwuid(getuid());
     if (p != nullptr)
         return p->pw_name;
 #elif defined(_WIN32)
@@ -588,16 +570,17 @@ String GetHostName()
     return "(?)";
 }
 
-// Disable Windows OS version functionality when compiling mini version for Web, see https://github.com/urho3d/Urho3D/issues/1998
+// Disable Windows OS version functionality when compiling mini version for Web, see
+// https://github.com/urho3d/Urho3D/issues/1998
 #if defined(_WIN32) && defined(HAVE_RTL_OSVERSIONINFOW) && !defined(MINI_URHO)
-using RtlGetVersionPtr = NTSTATUS (WINAPI *)(PRTL_OSVERSIONINFOW);
+using RtlGetVersionPtr = NTSTATUS(WINAPI*)(PRTL_OSVERSIONINFOW);
 
-static void GetOS(RTL_OSVERSIONINFOW *r)
+static void GetOS(RTL_OSVERSIONINFOW* r)
 {
     HMODULE m = GetModuleHandle("ntdll.dll");
     if (m)
     {
-        RtlGetVersionPtr fPtr = (RtlGetVersionPtr) GetProcAddress(m, "RtlGetVersion");
+        RtlGetVersionPtr fPtr = (RtlGetVersionPtr)GetProcAddress(m, "RtlGetVersion");
         if (r && fPtr && fPtr(r) == 0)
             r->dwOSVersionInfoSize = sizeof *r;
     }
@@ -607,7 +590,9 @@ static void GetOS(RTL_OSVERSIONINFOW *r)
 String GetOSVersion()
 {
 #if defined(__linux__) && !defined(__ANDROID__)
-    struct utsname u{};
+    struct utsname u
+    {
+    };
     if (uname(&u) == 0)
         return String(u.sysname) + " " + u.release;
 #elif defined(_WIN32) && defined(HAVE_RTL_OSVERSIONINFOW) && !defined(MINI_URHO)
@@ -647,86 +632,144 @@ String GetOSVersion()
         if (major == 18) // macOS Mojave
         {
             version += "Mojave ";
-            switch(minor)
+            switch (minor)
             {
-                case 0: version += "10.14.0 "; break;
+            case 0:
+                version += "10.14.0 ";
+                break;
             }
         }
         else if (major == 17) // macOS High Sierra
         {
             version += "High Sierra ";
-            switch(minor)
+            switch (minor)
             {
-                case 0: version += "10.13.0 "; break;
-                case 2: version += "10.13.1 "; break;
-                case 3: version += "10.13.2 "; break;
-                case 4: version += "10.13.3 "; break;
-                case 5: version += "10.13.4 "; break;
-                case 6: version += "10.13.5 "; break;
-                case 7: version += "10.13.6 "; break;
+            case 0:
+                version += "10.13.0 ";
+                break;
+            case 2:
+                version += "10.13.1 ";
+                break;
+            case 3:
+                version += "10.13.2 ";
+                break;
+            case 4:
+                version += "10.13.3 ";
+                break;
+            case 5:
+                version += "10.13.4 ";
+                break;
+            case 6:
+                version += "10.13.5 ";
+                break;
+            case 7:
+                version += "10.13.6 ";
+                break;
             }
         }
         else if (major == 16) // macOS Sierra
         {
             version += "Sierra ";
-            switch(minor)
+            switch (minor)
             {
-                case 0: version += "10.12.0 "; break;
-                case 1: version += "10.12.1 "; break;
-                case 3: version += "10.12.2 "; break;
-                case 4: version += "10.12.3 "; break;
-                case 5: version += "10.12.4 "; break;
-                case 6: version += "10.12.5 "; break;
-                case 7: version += "10.12.6 "; break;
+            case 0:
+                version += "10.12.0 ";
+                break;
+            case 1:
+                version += "10.12.1 ";
+                break;
+            case 3:
+                version += "10.12.2 ";
+                break;
+            case 4:
+                version += "10.12.3 ";
+                break;
+            case 5:
+                version += "10.12.4 ";
+                break;
+            case 6:
+                version += "10.12.5 ";
+                break;
+            case 7:
+                version += "10.12.6 ";
+                break;
             }
         }
         else if (major == 15) // OS X El Capitan
         {
             version += "El Capitan ";
-            switch(minor)
+            switch (minor)
             {
-                case 0: version += "10.11.0/10.11.1 "; break;
-                case 2: version += "10.11.2 "; break;
-                case 3: version += "10.11.3 "; break;
-                case 4: version += "10.11.4 "; break;
-                case 5: version += "10.11.5 "; break;
-                case 6: version += "10.11.6 "; break;
+            case 0:
+                version += "10.11.0/10.11.1 ";
+                break;
+            case 2:
+                version += "10.11.2 ";
+                break;
+            case 3:
+                version += "10.11.3 ";
+                break;
+            case 4:
+                version += "10.11.4 ";
+                break;
+            case 5:
+                version += "10.11.5 ";
+                break;
+            case 6:
+                version += "10.11.6 ";
+                break;
             }
         }
         else if (major == 14) // OS X Yosemite
         {
             version += "Yosemite ";
-            switch(minor)
+            switch (minor)
             {
-                case 0: version += "10.10.0 "; break;
-                case 5: version += "10.10.5 "; break;
+            case 0:
+                version += "10.10.0 ";
+                break;
+            case 5:
+                version += "10.10.5 ";
+                break;
             }
         }
         else if (major == 13) // OS X Mavericks
         {
             version += "Mavericks ";
-            switch(minor)
+            switch (minor)
             {
-                case 0: version += "10.9.0 "; break;
-                case 4: version += "10.9.5 "; break;
+            case 0:
+                version += "10.9.0 ";
+                break;
+            case 4:
+                version += "10.9.5 ";
+                break;
             }
         }
         else if (major == 12) // OS X Mountain Lion
         {
             version += "Mountain Lion ";
-            switch(minor)
+            switch (minor)
             {
-                case 0: version += "10.8.0 "; break;
-                case 6: version += "10.8.5 "; break;
+            case 0:
+                version += "10.8.0 ";
+                break;
+            case 6:
+                version += "10.8.5 ";
+                break;
             }
         }
         else if (major == 11) // Mac OS X Lion
         {
             version += "Lion ";
-            switch(minor)
+            switch (minor)
             {
-                case 0: version += "10.7.0 "; break;
-                case 4: version += "10.7.5 "; break;
+            case 0:
+                version += "10.7.0 ";
+                break;
+            case 4:
+                version += "10.7.5 ";
+                break;
             }
         }
         else
@@ -734,10 +777,11 @@ String GetOSVersion()
             version += "Unknown ";
         }
 
-        return version + " (Darwin kernel " + kernel_version[0] + "." + kernel_version[1] + "." + kernel_version[2] + ")";
+        return version + " (Darwin kernel " + kernel_version[0] + "." + kernel_version[1] + "." + kernel_version[2] +
+               ")";
     }
 #endif
     return "(?)";
 }
 
-}
+} // namespace Urho3D

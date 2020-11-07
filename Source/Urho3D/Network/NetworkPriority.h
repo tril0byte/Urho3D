@@ -83,4 +83,4 @@ private:
     bool alwaysUpdateOwner_;
 };
 
-}
+} // namespace Urho3D

@@ -61,20 +61,20 @@ public:
     void GetBatches(PODVector<UIBatch>& batches, PODVector<float>& vertexData, const IntRect& currentScissor) override;
 
     /// React to mouse hover.
-    void OnHover(const IntVector2& position, const IntVector2& screenPosition, MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor) override;
+    void OnHover(const IntVector2& position, const IntVector2& screenPosition, MouseButtonFlags buttons,
+                 QualifierFlags qualifiers, Cursor* cursor) override;
     /// React to mouse drag begin.
-    void
-        OnDragBegin(const IntVector2& position, const IntVector2& screenPosition, MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor) override;
+    void OnDragBegin(const IntVector2& position, const IntVector2& screenPosition, MouseButtonFlags buttons,
+                     QualifierFlags qualifiers, Cursor* cursor) override;
     /// React to mouse drag motion.
-    void OnDragMove
-        (const IntVector2& position, const IntVector2& screenPosition, const IntVector2& deltaPos, MouseButtonFlags buttons, QualifierFlags qualifiers,
-            Cursor* cursor) override;
+    void OnDragMove(const IntVector2& position, const IntVector2& screenPosition, const IntVector2& deltaPos,
+                    MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor) override;
     /// React to mouse drag end.
-    void
-        OnDragEnd(const IntVector2& position, const IntVector2& screenPosition, MouseButtonFlags dragButtons, MouseButtonFlags releaseButtons, Cursor* cursor) override;
+    void OnDragEnd(const IntVector2& position, const IntVector2& screenPosition, MouseButtonFlags dragButtons,
+                   MouseButtonFlags releaseButtons, Cursor* cursor) override;
     /// React to mouse drag cancel.
-    void
-        OnDragCancel(const IntVector2& position, const IntVector2& screenPosition, MouseButtonFlags dragButtons, MouseButtonFlags cancelButtons, Cursor* cursor) override;
+    void OnDragCancel(const IntVector2& position, const IntVector2& screenPosition, MouseButtonFlags dragButtons,
+                      MouseButtonFlags cancelButtons, Cursor* cursor) override;
 
     /// Set whether can be moved.
     /// @property
@@ -91,7 +91,8 @@ public:
     /// Set resize area width at edges.
     /// @property
     void SetResizeBorder(const IntRect& rect);
-    /// Set modal flag. When the modal flag is set, the focused window needs to be dismissed first to allow other UI elements to gain focus.
+    /// Set modal flag. When the modal flag is set, the focused window needs to be dismissed first to allow other UI
+    /// elements to gain focus.
     /// @property
     void SetModal(bool modal);
     /// Set modal shade color.
@@ -187,4 +188,4 @@ protected:
     IntVector2 modalFrameSize_;
 };
 
-}
+} // namespace Urho3D

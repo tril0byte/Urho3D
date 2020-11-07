@@ -59,4 +59,4 @@ String IntVector2::ToString() const
     return String(tempBuffer);
 }
 
-}
+} // namespace Urho3D

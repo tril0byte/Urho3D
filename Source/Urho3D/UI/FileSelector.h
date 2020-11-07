@@ -209,4 +209,4 @@ private:
     bool ignoreEvents_;
 };
 
-}
+} // namespace Urho3D

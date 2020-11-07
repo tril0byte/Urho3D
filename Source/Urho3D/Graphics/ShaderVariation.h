@@ -22,9 +22,9 @@
 
 #pragma once
 
+#include "../Container/ArrayPtr.h"
 #include "../Container/HashMap.h"
 #include "../Container/RefCounted.h"
-#include "../Container/ArrayPtr.h"
 #include "../Graphics/GPUObject.h"
 #include "../Graphics/GraphicsDefs.h"
 
@@ -39,11 +39,14 @@ struct ShaderParameter
 {
     /// Construct with defaults.
     ShaderParameter() = default;
-    /// Construct with name, glType and location, leaving the remaining attributes zero-initialized (used only in OpenGL).
+    /// Construct with name, glType and location, leaving the remaining attributes zero-initialized (used only in
+    /// OpenGL).
     ShaderParameter(const String& name, unsigned glType, int location);
-    /// Construct with type, name, offset, size, and buffer, leaving the remaining attributes zero-initialized (used only in Direct3D11).
+    /// Construct with type, name, offset, size, and buffer, leaving the remaining attributes zero-initialized (used
+    /// only in Direct3D11).
     ShaderParameter(ShaderType type, const String& name, unsigned offset, unsigned size, unsigned buffer);
-    /// Construct with type, name, register, and register count, leaving the remaining attributes zero-initialized (used only in Direct3D9).
+    /// Construct with type, name, register, and register count, leaving the remaining attributes zero-initialized (used
+    /// only in Direct3D9).
     ShaderParameter(ShaderType type, const String& name, unsigned reg, unsigned regCount);
 
     /// %Shader type.
@@ -110,13 +113,16 @@ public:
     /// Return full shader name.
     String GetFullName() const { return name_ + "(" + defines_ + ")"; }
 
-    /// Return whether uses a parameter. Not applicable on OpenGL, where this information is contained in ShaderProgram instead.
+    /// Return whether uses a parameter. Not applicable on OpenGL, where this information is contained in ShaderProgram
+    /// instead.
     bool HasParameter(StringHash param) const { return parameters_.Contains(param); }
 
-    /// Return whether uses a texture unit (only for pixel shaders). Not applicable on OpenGL, where this information is contained in ShaderProgram instead.
+    /// Return whether uses a texture unit (only for pixel shaders). Not applicable on OpenGL, where this information is
+    /// contained in ShaderProgram instead.
     bool HasTextureUnit(TextureUnit unit) const { return useTextureUnits_[unit]; }
 
-    /// Return all parameter definitions. Not applicable on OpenGL, where this information is contained in ShaderProgram instead.
+    /// Return all parameter definitions. Not applicable on OpenGL, where this information is contained in ShaderProgram
+    /// instead.
     const HashMap<StringHash, ShaderParameter>& GetParameters() const { return parameters_; }
 
     /// Return vertex element hash.
@@ -134,7 +140,8 @@ public:
     /// Return constant buffer data sizes.
     const unsigned* GetConstantBufferSizes() const { return &constantBufferSizes_[0]; }
 
-    /// Return defines with the CLIPPLANE define appended. Used internally on Direct3D11 only, will be empty on other APIs.
+    /// Return defines with the CLIPPLANE define appended. Used internally on Direct3D11 only, will be empty on other
+    /// APIs.
     const String& GetDefinesClipPlane() { return definesClipPlane_; }
 
     /// D3D11 vertex semantic names. Used internally.
@@ -156,7 +163,8 @@ private:
     WeakPtr<Shader> owner_;
     /// Shader type.
     ShaderType type_;
-    /// Vertex element hash for vertex shaders. Zero for pixel shaders. Note that hashing is different than vertex buffers.
+    /// Vertex element hash for vertex shaders. Zero for pixel shaders. Note that hashing is different than vertex
+    /// buffers.
     unsigned long long elementHash_{};
     /// Shader parameters.
     HashMap<StringHash, ShaderParameter> parameters_;
@@ -176,4 +184,4 @@ private:
     String compilerOutput_;
 };
 
-}
+} // namespace Urho3D

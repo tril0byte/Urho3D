@@ -27,15 +27,9 @@
 
 static string _lastErrorMessage;
 
-string GetLastErrorMessage()
-{
-    return _lastErrorMessage;
-}
+string GetLastErrorMessage() { return _lastErrorMessage; }
 
-void SetLastErrorMessage(const string& message)
-{
-    _lastErrorMessage = message;
-}
+void SetLastErrorMessage(const string& message) { _lastErrorMessage = message; }
 
 string Trim(const string& str)
 {
@@ -88,10 +82,7 @@ string WithoutFileName(const string& path)
     return path.substr(0, pos);
 }
 
-bool StartsWith(const string& str, const string& value)
-{
-    return str.rfind(value, 0) == 0;
-}
+bool StartsWith(const string& str, const string& value) { return str.rfind(value, 0) == 0; }
 
 bool EndsWith(const string& str, const string& value)
 {
@@ -131,10 +122,7 @@ string ReplaceAll(const string& src, const string& from, const string& to)
     return ret;
 }
 
-string RemoveAll(const string& src, const string& value)
-{
-    return ReplaceAll(src, value, "");
-}
+string RemoveAll(const string& src, const string& value) { return ReplaceAll(src, value, ""); }
 
 string ReplaceFirst(const string& src, const string& from, const string& to)
 {
@@ -184,10 +172,7 @@ string CutEnd(const string& str, const string& value)
     return str.substr(0, str.length() - value.length());
 }
 
-bool Contains(const string& str, const string& substr)
-{
-    return str.find(substr) != string::npos;
-}
+bool Contains(const string& str, const string& substr) { return str.find(substr) != string::npos; }
 
 string FirstCharToLower(const string& str)
 {

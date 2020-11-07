@@ -47,7 +47,8 @@ public:
 
     /// Apply attribute changes that can not be applied immediately.
     void ApplyAttributes() override;
-    /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly re-entrantly.
+    /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly
+    /// re-entrantly.
     void UpdateBatches(const FrameInfo& frame) override;
     /// Prepare geometry for rendering. Called from a worker thread if possible (no GPU update).
     void UpdateGeometry(const FrameInfo& frame) override;
@@ -81,7 +82,8 @@ public:
     /// Set row spacing, 1.0 for original font spacing.
     /// @property
     void SetRowSpacing(float spacing);
-    /// Set wordwrap. In wordwrap mode the text element will respect its current width. Otherwise it resizes itself freely.
+    /// Set wordwrap. In wordwrap mode the text element will respect its current width. Otherwise it resizes itself
+    /// freely.
     /// @property
     void SetWordwrap(bool enable);
     /// Set text effect.
@@ -114,7 +116,8 @@ public:
     /// Set opacity.
     /// @property
     void SetOpacity(float opacity);
-    /// Set whether text has fixed size on screen (pixel-perfect) regardless of distance to camera. Works best when combined with face camera rotation. Default false.
+    /// Set whether text has fixed size on screen (pixel-perfect) regardless of distance to camera. Works best when
+    /// combined with face camera rotation. Default false.
     /// @property
     void SetFixedScreenSize(bool enable);
     /// Set how the text should rotate in relation to the camera. Default is to not rotate (FC_NONE).
@@ -228,7 +231,8 @@ protected:
     void MarkTextDirty();
     /// Update text %UI batches.
     void UpdateTextBatches();
-    /// Create materials for text rendering. May only be called from the main thread. Text %UI batches must be up-to-date.
+    /// Create materials for text rendering. May only be called from the main thread. Text %UI batches must be
+    /// up-to-date.
     void UpdateTextMaterials(bool forceUpdate = false);
     /// Recalculate camera facing and fixed screen size.
     void CalculateFixedScreenSize(const FrameInfo& frame);
@@ -236,7 +240,7 @@ protected:
     /// Internally used text element.
     Text text_;
     /// Geometries.
-    Vector<SharedPtr<Geometry> > geometries_;
+    Vector<SharedPtr<Geometry>> geometries_;
     /// Vertex buffer.
     SharedPtr<VertexBuffer> vertexBuffer_;
     /// Material to use as a base for the text material(s).
@@ -263,5 +267,4 @@ protected:
     bool fontDataLost_;
 };
 
-}
-
+} // namespace Urho3D

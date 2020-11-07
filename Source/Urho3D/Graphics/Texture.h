@@ -47,9 +47,9 @@ public:
     ~Texture() override;
 
     /// Set number of requested mip levels. Needs to be called before setting size.
-    /** The default value (0) allocates as many mip levels as necessary to reach 1x1 size. Set value 1 to disable mipmapping.
-        Note that rendertargets need to regenerate mips dynamically after rendering, which may cost performance. Screen buffers
-        and shadow maps allocated by Renderer will have mipmaps disabled.
+    /** The default value (0) allocates as many mip levels as necessary to reach 1x1 size. Set value 1 to disable
+       mipmapping. Note that rendertargets need to regenerate mips dynamically after rendering, which may cost
+       performance. Screen buffers and shadow maps allocated by Renderer will have mipmaps disabled.
      */
     void SetNumLevels(unsigned levels);
     /// Set filtering mode.
@@ -58,7 +58,8 @@ public:
     /// Set addressing mode by texture coordinate.
     /// @property
     void SetAddressMode(TextureCoordinate coord, TextureAddressMode mode);
-    /// Set texture max. anisotropy level. No effect if not using anisotropic filtering. Value 0 (default) uses the default setting from Renderer.
+    /// Set texture max. anisotropy level. No effect if not using anisotropic filtering. Value 0 (default) uses the
+    /// default setting from Renderer.
     /// @property
     void SetAnisotropy(unsigned level);
     /// Set shadow compare mode. Not used on Direct3D9.
@@ -126,7 +127,8 @@ public:
     /// @property
     int GetMultiSample() const { return multiSample_; }
 
-    /// Return texture multisampling autoresolve mode. When true, the texture is resolved before being sampled on SetTexture(). When false, the texture will not be resolved and must be read as individual samples in the shader.
+    /// Return texture multisampling autoresolve mode. When true, the texture is resolved before being sampled on
+    /// SetTexture(). When false, the texture will not be resolved and must be read as individual samples in the shader.
     /// @property
     bool GetAutoResolve() const { return autoResolve_; }
 
@@ -201,17 +203,20 @@ public:
 
     /// Set the mipmap levels dirty flag. Called internally by Graphics.
     void SetLevelsDirty();
-    /// Regenerate mipmap levels for a rendertarget after rendering and before sampling. Called internally by Graphics. No-op on Direct3D9. On OpenGL the texture must have been bound to work properly.
+    /// Regenerate mipmap levels for a rendertarget after rendering and before sampling. Called internally by Graphics.
+    /// No-op on Direct3D9. On OpenGL the texture must have been bound to work properly.
     void RegenerateLevels();
 
     /// Check maximum allowed mip levels for a specific texture size.
     static unsigned CheckMaxLevels(int width, int height, unsigned requestedLevels);
     /// Check maximum allowed mip levels for a specific 3D texture size.
     static unsigned CheckMaxLevels(int width, int height, int depth, unsigned requestedLevels);
-    /// Return the shader resource view format corresponding to a texture format. Handles conversion of typeless depth texture formats. Only used on Direct3D11.
+    /// Return the shader resource view format corresponding to a texture format. Handles conversion of typeless depth
+    /// texture formats. Only used on Direct3D11.
     /// @nobind
     static unsigned GetSRVFormat(unsigned format);
-    /// Return the depth-stencil view format corresponding to a texture format. Handles conversion of typeless depth texture formats. Only used on Direct3D11.
+    /// Return the depth-stencil view format corresponding to a texture format. Handles conversion of typeless depth
+    /// texture formats. Only used on Direct3D11.
     /// @nobind
     static unsigned GetDSVFormat(unsigned format);
     /// Return the non-internal texture format corresponding to an OpenGL internal format.
@@ -222,7 +227,8 @@ public:
     static unsigned GetDataType(unsigned format);
 
 protected:
-    /// Check whether texture memory budget has been exceeded. Free unused materials in that case to release the texture references.
+    /// Check whether texture memory budget has been exceeded. Free unused materials in that case to release the texture
+    /// references.
     void CheckTextureBudget(StringHash type);
     /// Create the GPU texture. Implemented in subclasses.
     virtual bool Create() { return true; }
@@ -279,4 +285,4 @@ protected:
     SharedPtr<Texture> backupTexture_;
 };
 
-}
+} // namespace Urho3D

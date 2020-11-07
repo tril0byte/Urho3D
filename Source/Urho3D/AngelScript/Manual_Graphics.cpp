@@ -20,12 +20,12 @@
 // THE SOFTWARE.
 //
 
-#include "../Precompiled.h"
 #include "../AngelScript/APITemplates.h"
+#include "../Precompiled.h"
 
 #include "../AngelScript/Manual_Graphics.h"
-#include "../Scene/Scene.h"
 #include "../Graphics/DebugRenderer.h"
+#include "../Scene/Scene.h"
 
 namespace Urho3D
 {
@@ -72,16 +72,10 @@ static void StaticModelSetModel(Model* model, StaticModel* ptr)
 }
 
 // template<class T> T * Object::GetSubsystem() const | File: ../Core/Object.h
-static Graphics* GetGraphics()
-{
-    return GetScriptContext()->GetSubsystem<Graphics>();
-}
+static Graphics* GetGraphics() { return GetScriptContext()->GetSubsystem<Graphics>(); }
 
 // template<class T> T * Object::GetSubsystem() const | File: ../Core/Object.h
-static Renderer* GetRenderer()
-{
-    return GetScriptContext()->GetSubsystem<Renderer>();
-}
+static Renderer* GetRenderer() { return GetScriptContext()->GetSubsystem<Renderer>(); }
 
 // template<class T> T * Object::GetSubsystem() const | File: ../Core/Object.h
 static DebugRenderer* GetDebugRenderer()
@@ -103,13 +97,19 @@ static Octree* GetOctree()
 // This function is called after ASRegisterGenerated()
 void ASRegisterManualLast_Graphics(asIScriptEngine* engine)
 {
-    engine->RegisterObjectMethod("StaticModel", "void SetModel(Model@+)", asFUNCTION(StaticModelSetModel), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("StaticModel", "void set_model(Model@+)", asFUNCTION(StaticModelSetModel), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("Skybox", "void SetModel(Model@+)", asFUNCTION(StaticModelSetModel), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("Skybox", "void set_model(Model@+)", asFUNCTION(StaticModelSetModel), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("StaticModelGroup", "void SetModel(Model@+)", asFUNCTION(StaticModelSetModel), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("StaticModelGroup", "void set_model(Model@+)", asFUNCTION(StaticModelSetModel), asCALL_CDECL_OBJLAST);
-    
+    engine->RegisterObjectMethod("StaticModel", "void SetModel(Model@+)", asFUNCTION(StaticModelSetModel),
+                                 asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("StaticModel", "void set_model(Model@+)", asFUNCTION(StaticModelSetModel),
+                                 asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("Skybox", "void SetModel(Model@+)", asFUNCTION(StaticModelSetModel),
+                                 asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("Skybox", "void set_model(Model@+)", asFUNCTION(StaticModelSetModel),
+                                 asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("StaticModelGroup", "void SetModel(Model@+)", asFUNCTION(StaticModelSetModel),
+                                 asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("StaticModelGroup", "void set_model(Model@+)", asFUNCTION(StaticModelSetModel),
+                                 asCALL_CDECL_OBJLAST);
+
     // template<class T> T * Object::GetSubsystem() const | File: ../Core/Object.h
     engine->RegisterGlobalFunction("Graphics@+ get_graphics()", asFUNCTION(GetGraphics), asCALL_CDECL);
     // template<class T> T * Object::GetSubsystem() const | File: ../Core/Object.h
@@ -153,16 +153,10 @@ RenderPathCommand* RenderPathGetCommand(unsigned index, RenderPath* ptr)
 // ========================================================================================
 
 // SharedPtr<Technique> TechniqueEntry::technique_ | File: ../Graphics/Material.h
-void TechniqueEntrySetTechnique(Technique* technique, TechniqueEntry* ptr)
-{
-    ptr->technique_ = technique;
-}
+void TechniqueEntrySetTechnique(Technique* technique, TechniqueEntry* ptr) { ptr->technique_ = technique; }
 
 // SharedPtr<Technique> TechniqueEntry::technique_ | File: ../Graphics/Material.h
-Technique* TechniqueEntryGetTechnique(TechniqueEntry* ptr)
-{
-    return ptr->technique_;
-}
+Technique* TechniqueEntryGetTechnique(TechniqueEntry* ptr) { return ptr->technique_; }
 
 // ========================================================================================
 
@@ -204,7 +198,8 @@ bool VertexBufferSetData(VectorBuffer& src, VertexBuffer* ptr)
         return false;
 }
 
-// bool VertexBuffer::SetDataRange(const void *data, unsigned start, unsigned count, bool discard=false) | File: ../Graphics/VertexBuffer.h
+// bool VertexBuffer::SetDataRange(const void *data, unsigned start, unsigned count, bool discard=false) | File:
+// ../Graphics/VertexBuffer.h
 bool VertexBufferSetDataRange(VectorBuffer& src, unsigned start, unsigned count, bool discard, VertexBuffer* ptr)
 {
     // Make sure there is enough data
@@ -241,7 +236,8 @@ bool IndexBufferSetData(VectorBuffer& src, IndexBuffer* ptr)
         return false;
 }
 
-// bool IndexBuffer::SetDataRange(const void *data, unsigned start, unsigned count, bool discard=false) | File: ../Graphics/IndexBuffer.h
+// bool IndexBuffer::SetDataRange(const void *data, unsigned start, unsigned count, bool discard=false) | File:
+// ../Graphics/IndexBuffer.h
 bool IndexBufferSetDataRange(VectorBuffer& src, unsigned start, unsigned count, bool discard, IndexBuffer* ptr)
 {
     // Make sure there is enough data
@@ -284,7 +280,8 @@ AnimationTriggerPoint* AnimationGetTrigger(unsigned index, Animation* ptr)
 
 // ========================================================================================
 
-// void AnimationState::SetBoneWeight(const String &name, float weight, bool recursive=false) | File: ../Graphics/AnimationState.h
+// void AnimationState::SetBoneWeight(const String &name, float weight, bool recursive=false) | File:
+// ../Graphics/AnimationState.h
 void AnimationStateSetBoneWeight(const String& name, float weight, AnimationState* ptr)
 {
     ptr->SetBoneWeight(name, weight);
@@ -293,10 +290,7 @@ void AnimationStateSetBoneWeight(const String& name, float weight, AnimationStat
 // ========================================================================================
 
 // void AnimatedModel::SetModel(Model *model, bool createBones=true) | File: ../Graphics/AnimatedModel.h
-void AnimatedModelSetModel(Model* model, AnimatedModel* ptr)
-{
-    ptr->SetModel(model);
-}
+void AnimatedModelSetModel(Model* model, AnimatedModel* ptr) { ptr->SetModel(model); }
 
 const String& AnimatedModelGetMorphName(unsigned index, AnimatedModel* ptr)
 {
@@ -329,29 +323,21 @@ void GraphicsPrecacheShaders(File* file, Graphics* ptr)
 }
 
 // void Graphics::PrecacheShaders(Deserializer &source) | File: ../Graphics/Graphics.h
-void GraphicsPrecacheShadersVectorBuffer(VectorBuffer& buffer, Graphics* ptr)
-{
-    ptr->PrecacheShaders(buffer);
-}
+void GraphicsPrecacheShadersVectorBuffer(VectorBuffer& buffer, Graphics* ptr) { ptr->PrecacheShaders(buffer); }
 
 // ========================================================================================
 
 // Drawable* RayQueryResult::drawable_ | File: ../Graphics/OctreeQuery.h
-Drawable* RayQueryResultGetDrawable(RayQueryResult* ptr)
-{
-    return ptr->drawable_;
-}
+Drawable* RayQueryResultGetDrawable(RayQueryResult* ptr) { return ptr->drawable_; }
 
 // Node* RayQueryResult::node_ | File: ../Graphics/OctreeQuery.h
-Node* RayQueryResultGetNode(RayQueryResult* ptr)
-{
-    return ptr->node_;
-}
+Node* RayQueryResultGetNode(RayQueryResult* ptr) { return ptr->node_; }
 
 // ========================================================================================
 
 // void Octree::Raycast(RayOctreeQuery &query) const | File: ../Graphics/Octree.h
-CScriptArray* OctreeRaycast(const Ray& ray, RayQueryLevel level, float maxDistance, unsigned char drawableFlags, unsigned viewMask, Octree* ptr)
+CScriptArray* OctreeRaycast(const Ray& ray, RayQueryLevel level, float maxDistance, unsigned char drawableFlags,
+                            unsigned viewMask, Octree* ptr)
 {
     PODVector<RayQueryResult> result;
     RayOctreeQuery query(result, ray, level, maxDistance, drawableFlags, viewMask);
@@ -360,7 +346,8 @@ CScriptArray* OctreeRaycast(const Ray& ray, RayQueryLevel level, float maxDistan
 }
 
 // void Octree::RaycastSingle(RayOctreeQuery &query) const | File: ../Graphics/Octree.h
-RayQueryResult OctreeRaycastSingle(const Ray& ray, RayQueryLevel level, float maxDistance, unsigned char drawableFlags, unsigned viewMask, Octree* ptr)
+RayQueryResult OctreeRaycastSingle(const Ray& ray, RayQueryLevel level, float maxDistance, unsigned char drawableFlags,
+                                   unsigned viewMask, Octree* ptr)
 {
     PODVector<RayQueryResult> result;
     RayOctreeQuery query(result, ray, level, maxDistance, drawableFlags, viewMask);
@@ -397,7 +384,8 @@ CScriptArray* OctreeGetDrawablesBox(const BoundingBox& box, unsigned char drawab
 }
 
 // void Octree::GetDrawables(OctreeQuery &query) const | File: ../Graphics/Octree.h
-CScriptArray* OctreeGetDrawablesFrustum(const Frustum& frustum, unsigned char drawableFlags, unsigned viewMask, Octree* ptr)
+CScriptArray* OctreeGetDrawablesFrustum(const Frustum& frustum, unsigned char drawableFlags, unsigned viewMask,
+                                        Octree* ptr)
 {
     PODVector<Drawable*> result;
     FrustumOctreeQuery query(result, frustum, drawableFlags, viewMask);
@@ -406,7 +394,8 @@ CScriptArray* OctreeGetDrawablesFrustum(const Frustum& frustum, unsigned char dr
 }
 
 // void Octree::GetDrawables(OctreeQuery &query) const | File: ../Graphics/Octree.h
-CScriptArray* OctreeGetDrawablesSphere(const Sphere& sphere, unsigned char drawableFlags, unsigned viewMask, Octree* ptr)
+CScriptArray* OctreeGetDrawablesSphere(const Sphere& sphere, unsigned char drawableFlags, unsigned viewMask,
+                                       Octree* ptr)
 {
     PODVector<Drawable*> result;
     SphereOctreeQuery query(result, sphere, drawableFlags, viewMask);
@@ -424,11 +413,11 @@ CScriptArray* OctreeGetAllDrawables(unsigned char drawableFlags, unsigned viewMa
 }
 
 // ========================================================================================
- 
-// void Renderer::SetVSMShadowParameters(float minVariance, float lightBleedingReduction) | File: ../Graphics/Renderer.h 
+
+// void Renderer::SetVSMShadowParameters(float minVariance, float lightBleedingReduction) | File: ../Graphics/Renderer.h
 void RendererSetVSMShadowParameters(const Vector2& parameters, Renderer* ptr)
 {
     ptr->SetVSMShadowParameters(parameters.x_, parameters.y_);
 }
 
-}
+} // namespace Urho3D

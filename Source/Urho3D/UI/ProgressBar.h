@@ -22,8 +22,8 @@
 
 #pragma once
 
-#include "BorderImage.h"
 #include "../Math/Vector2.h"
+#include "BorderImage.h"
 #include "Text.h"
 
 namespace Urho3D
@@ -36,13 +36,13 @@ class URHO3D_API ProgressBar : public BorderImage
 
 public:
     /// Construct.
-    explicit ProgressBar(Context *context);
+    explicit ProgressBar(Context* context);
 
     /// Destruct.
     ~ProgressBar() override;
 
     /// Register object factory.
-    static void RegisterObject(Context *context);
+    static void RegisterObject(Context* context);
 
     /// React to resize.
     void OnResize(const IntVector2& newSize, const IntVector2& delta) override;
@@ -76,10 +76,10 @@ public:
 
     /// Return knob element.
     /// @property
-    BorderImage *GetKnob() const { return knob_; }
+    BorderImage* GetKnob() const { return knob_; }
 
     /// Sets the loading percent style.
-    void SetLoadingPercentStyle(const String &style) { loadingPercentStyle_ = style; }
+    void SetLoadingPercentStyle(const String& style) { loadingPercentStyle_ = style; }
 
     /// Returns the loading percent style.
     const String& GetLoadingPercentStyle() const { return loadingPercentStyle_; }
@@ -94,7 +94,7 @@ public:
 
 protected:
     /// Filter implicit attributes in serialization process.
-    bool FilterImplicitAttributes(XMLElement &dest) const override;
+    bool FilterImplicitAttributes(XMLElement& dest) const override;
 
     /// Update ProgressBar knob position & size.
     void UpdateProgressBar();
@@ -115,4 +115,4 @@ protected:
     bool showPercentText_;
 };
 
-}
+} // namespace Urho3D

@@ -109,4 +109,4 @@ private:
     Vector2 axis_;
 };
 
-}
+} // namespace Urho3D

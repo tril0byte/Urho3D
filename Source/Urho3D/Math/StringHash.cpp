@@ -22,11 +22,11 @@
 
 #include "../Precompiled.h"
 
-#include "../Math/MathDefs.h"
-#include "../Math/StringHash.h"
 #include "../Container/HashMap.h"
 #include "../Core/StringHashRegister.h"
 #include "../IO/Log.h"
+#include "../Math/MathDefs.h"
+#include "../Math/StringHash.h"
 
 #include <cstdio>
 
@@ -43,7 +43,7 @@ const StringMap* hashReverseMap = nullptr;
 // Hide static global variables in functions to ensure initialization order.
 static StringHashRegister& GetGlobalStringHashRegister()
 {
-    static StringHashRegister stringHashRegister(true /*thread safe*/ );
+    static StringHashRegister stringHashRegister(true /*thread safe*/);
     hashReverseMap = &stringHashRegister.GetInternalMap();
     return stringHashRegister;
 }
@@ -52,16 +52,16 @@ static StringHashRegister& GetGlobalStringHashRegister()
 
 const StringHash StringHash::ZERO;
 
-StringHash::StringHash(const char* str) noexcept :
-    value_(Calculate(str))
+StringHash::StringHash(const char* str) noexcept
+    : value_(Calculate(str))
 {
 #ifdef URHO3D_HASH_DEBUG
     Urho3D::GetGlobalStringHashRegister().RegisterString(*this, str);
 #endif
 }
 
-StringHash::StringHash(const String& str) noexcept :
-    value_(Calculate(str.CString()))
+StringHash::StringHash(const String& str) noexcept
+    : value_(Calculate(str.CString()))
 {
 #ifdef URHO3D_HASH_DEBUG
     Urho3D::GetGlobalStringHashRegister().RegisterString(*this, str.CString());
@@ -106,4 +106,4 @@ String StringHash::Reverse() const
 #endif
 }
 
-}
+} // namespace Urho3D

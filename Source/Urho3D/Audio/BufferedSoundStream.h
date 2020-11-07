@@ -25,8 +25,8 @@
 #include "../Audio/SoundStream.h"
 #include "../Container/ArrayPtr.h"
 #include "../Container/List.h"
-#include "../Core/Mutex.h"
 #include "../Container/Pair.h"
+#include "../Core/Mutex.h"
 
 namespace Urho3D
 {
@@ -40,7 +40,8 @@ public:
     /// Destruct.
     ~BufferedSoundStream() override;
 
-    /// Produce sound data into destination. Return number of bytes produced. Called by SoundSource from the mixing thread.
+    /// Produce sound data into destination. Return number of bytes produced. Called by SoundSource from the mixing
+    /// thread.
     unsigned GetData(signed char* dest, unsigned numBytes) override;
 
     /// Buffer sound data. Makes a copy of it.
@@ -59,11 +60,11 @@ public:
 
 private:
     /// Buffers and their sizes.
-    List<Pair<SharedArrayPtr<signed char>, unsigned> > buffers_;
+    List<Pair<SharedArrayPtr<signed char>, unsigned>> buffers_;
     /// Byte position in the front most buffer.
     unsigned position_;
     /// Mutex for buffer data.
     mutable Mutex bufferMutex_;
 };
 
-}
+} // namespace Urho3D

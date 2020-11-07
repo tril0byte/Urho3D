@@ -50,12 +50,13 @@ public:
     /// Perform UI element update.
     void Update(float timeStep) override;
     /// React to mouse hover.
-    void OnHover(const IntVector2& position, const IntVector2& screenPosition, MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor) override;
+    void OnHover(const IntVector2& position, const IntVector2& screenPosition, MouseButtonFlags buttons,
+                 QualifierFlags qualifiers, Cursor* cursor) override;
     /// React to the popup being shown.
     virtual void OnShowPopup();
 
     /// React to the popup being hidden.
-    virtual void OnHidePopup() { }
+    virtual void OnHidePopup() {}
 
     /// Set popup element to show on selection.
     /// @property
@@ -116,4 +117,4 @@ private:
     bool autoPopup_;
 };
 
-}
+} // namespace Urho3D

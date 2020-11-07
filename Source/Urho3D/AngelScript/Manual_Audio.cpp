@@ -20,8 +20,8 @@
 // THE SOFTWARE.
 //
 
-#include "../Precompiled.h"
 #include "../AngelScript/APITemplates.h"
+#include "../Precompiled.h"
 
 #include "../Audio/Audio.h"
 
@@ -29,17 +29,12 @@ namespace Urho3D
 {
 
 // This function is called before ASRegisterGenerated()
-void ASRegisterManualFirst_Audio(asIScriptEngine* engine)
-{
-}
+void ASRegisterManualFirst_Audio(asIScriptEngine* engine) {}
 
 // ========================================================================================
 
 // template<class T> T * Object::GetSubsystem() const | File: ../Core/Object.h
-static Audio* GetAudio()
-{
-    return GetScriptContext()->GetSubsystem<Audio>();
-}
+static Audio* GetAudio() { return GetScriptContext()->GetSubsystem<Audio>(); }
 
 // This function is called after ASRegisterGenerated()
 void ASRegisterManualLast_Audio(asIScriptEngine* engine)
@@ -48,4 +43,4 @@ void ASRegisterManualLast_Audio(asIScriptEngine* engine)
     engine->RegisterGlobalFunction("Audio@+ get_audio()", asFUNCTION(GetAudio), asCALL_CDECL);
 }
 
-}
+} // namespace Urho3D

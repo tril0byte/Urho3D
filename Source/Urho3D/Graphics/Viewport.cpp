@@ -24,8 +24,8 @@
 
 #include "../Graphics/Camera.h"
 #include "../Graphics/Graphics.h"
-#include "../Graphics/Renderer.h"
 #include "../Graphics/RenderPath.h"
+#include "../Graphics/Renderer.h"
 #include "../Graphics/View.h"
 #include "../Resource/ResourceCache.h"
 #include "../Resource/XMLFile.h"
@@ -36,60 +36,46 @@
 namespace Urho3D
 {
 
-Viewport::Viewport(Context* context) :
-    Object(context),
-    rect_(IntRect::ZERO),
-    drawDebug_(true)
+Viewport::Viewport(Context* context)
+    : Object(context)
+    , rect_(IntRect::ZERO)
+    , drawDebug_(true)
 {
     SetRenderPath((RenderPath*)nullptr);
 }
 
-Viewport::Viewport(Context* context, Scene* scene, Camera* camera, RenderPath* renderPath) :
-    Object(context),
-    scene_(scene),
-    camera_(camera),
-    rect_(IntRect::ZERO),
-    drawDebug_(true)
+Viewport::Viewport(Context* context, Scene* scene, Camera* camera, RenderPath* renderPath)
+    : Object(context)
+    , scene_(scene)
+    , camera_(camera)
+    , rect_(IntRect::ZERO)
+    , drawDebug_(true)
 {
     SetRenderPath(renderPath);
 }
 
-Viewport::Viewport(Context* context, Scene* scene, Camera* camera, const IntRect& rect, RenderPath* renderPath) :   // NOLINT(modernize-pass-by-value)
-    Object(context),
-    scene_(scene),
-    camera_(camera),
-    rect_(rect),
-    drawDebug_(true)
+Viewport::Viewport(Context* context, Scene* scene, Camera* camera, const IntRect& rect, RenderPath* renderPath)
+    : // NOLINT(modernize-pass-by-value)
+    Object(context)
+    , scene_(scene)
+    , camera_(camera)
+    , rect_(rect)
+    , drawDebug_(true)
 {
     SetRenderPath(renderPath);
 }
 
 Viewport::~Viewport() = default;
 
-void Viewport::SetScene(Scene* scene)
-{
-    scene_ = scene;
-}
+void Viewport::SetScene(Scene* scene) { scene_ = scene; }
 
-void Viewport::SetCamera(Camera* camera)
-{
-    camera_ = camera;
-}
+void Viewport::SetCamera(Camera* camera) { camera_ = camera; }
 
-void Viewport::SetCullCamera(Camera* camera)
-{
-    cullCamera_ = camera;
-}
+void Viewport::SetCullCamera(Camera* camera) { cullCamera_ = camera; }
 
-void Viewport::SetRect(const IntRect& rect)
-{
-    rect_ = rect;
-}
+void Viewport::SetRect(const IntRect& rect) { rect_ = rect; }
 
-void Viewport::SetDrawDebug(bool enable)
-{
-    drawDebug_ = enable;
-}
+void Viewport::SetDrawDebug(bool enable) { drawDebug_ = enable; }
 
 void Viewport::SetRenderPath(RenderPath* renderPath)
 {
@@ -114,30 +100,15 @@ bool Viewport::SetRenderPath(XMLFile* file)
     return false;
 }
 
-Scene* Viewport::GetScene() const
-{
-    return scene_;
-}
+Scene* Viewport::GetScene() const { return scene_; }
 
-Camera* Viewport::GetCamera() const
-{
-    return camera_;
-}
+Camera* Viewport::GetCamera() const { return camera_; }
 
-Camera* Viewport::GetCullCamera() const
-{
-    return cullCamera_;
-}
+Camera* Viewport::GetCullCamera() const { return cullCamera_; }
 
-View* Viewport::GetView() const
-{
-    return view_;
-}
+View* Viewport::GetView() const { return view_; }
 
-RenderPath* Viewport::GetRenderPath() const
-{
-    return renderPath_;
-}
+RenderPath* Viewport::GetRenderPath() const { return renderPath_; }
 
 Ray Viewport::GetScreenRay(int x, int y) const
 {
@@ -173,7 +144,8 @@ IntVector2 Viewport::WorldToScreenPoint(const Vector3& worldPos) const
     int y;
     if (rect_ == IntRect::ZERO)
     {
-        /// \todo This is incorrect if the viewport is used on a texture rendertarget instead of the backbuffer, as it may have different dimensions.
+        /// \todo This is incorrect if the viewport is used on a texture rendertarget instead of the backbuffer, as it
+        /// may have different dimensions.
         auto* graphics = GetSubsystem<Graphics>();
         x = (int)(screenPoint.x_ * graphics->GetWidth());
         y = (int)(screenPoint.y_ * graphics->GetHeight());
@@ -197,7 +169,8 @@ Vector3 Viewport::ScreenToWorldPoint(int x, int y, float depth) const
 
     if (rect_ == IntRect::ZERO)
     {
-        /// \todo This is incorrect if the viewport is used on a texture rendertarget instead of the backbuffer, as it may have different dimensions.
+        /// \todo This is incorrect if the viewport is used on a texture rendertarget instead of the backbuffer, as it
+        /// may have different dimensions.
         auto* graphics = GetSubsystem<Graphics>();
         screenX = (float)x / (float)graphics->GetWidth();
         screenY = (float)y / (float)graphics->GetHeight();
@@ -211,9 +184,6 @@ Vector3 Viewport::ScreenToWorldPoint(int x, int y, float depth) const
     return camera_->ScreenToWorldPoint(Vector3(screenX, screenY, depth));
 }
 
-void Viewport::AllocateView()
-{
-    view_ = new View(context_);
-}
+void Viewport::AllocateView() { view_ = new View(context_); }
 
-}
+} // namespace Urho3D

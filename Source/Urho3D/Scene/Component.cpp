@@ -38,25 +38,20 @@
 #include "../DebugNew.h"
 
 #ifdef _MSC_VER
-#pragma warning(disable:6293)
+#pragma warning(disable : 6293)
 #endif
 
 namespace Urho3D
 {
 
-const char* autoRemoveModeNames[] = {
-    "Disabled",
-    "Component",
-    "Node",
-    nullptr
-};
+const char* autoRemoveModeNames[] = {"Disabled", "Component", "Node", nullptr};
 
-Component::Component(Context* context) :
-    Animatable(context),
-    node_(nullptr),
-    id_(0),
-    networkUpdate_(false),
-    enabled_(true)
+Component::Component(Context* context)
+    : Animatable(context)
+    , node_(nullptr)
+    , id_(0)
+    , networkUpdate_(false)
+    , enabled_(true)
 {
 }
 
@@ -109,13 +104,9 @@ void Component::MarkNetworkUpdate()
     }
 }
 
-void Component::GetDependencyNodes(PODVector<Node*>& dest)
-{
-}
+void Component::GetDependencyNodes(PODVector<Node*>& dest) {}
 
-void Component::DrawDebugGeometry(DebugRenderer* debug, bool depthTest)
-{
-}
+void Component::DrawDebugGeometry(DebugRenderer* debug, bool depthTest) {}
 
 void Component::SetEnabled(bool enable)
 {
@@ -147,15 +138,9 @@ void Component::Remove()
         node_->RemoveComponent(this);
 }
 
-bool Component::IsReplicated() const
-{
-    return Scene::IsReplicatedID(id_);
-}
+bool Component::IsReplicated() const { return Scene::IsReplicatedID(id_); }
 
-Scene* Component::GetScene() const
-{
-    return node_ ? node_->GetScene() : nullptr;
-}
+Scene* Component::GetScene() const { return node_ ? node_->GetScene() : nullptr; }
 
 void Component::AddReplicationState(ComponentReplicationState* state)
 {
@@ -215,7 +200,8 @@ void Component::CleanupConnection(Connection* connection)
 {
     if (networkState_)
     {
-        for (unsigned i = networkState_->replicationStates_.Size() - 1; i < networkState_->replicationStates_.Size(); --i)
+        for (unsigned i = networkState_->replicationStates_.Size() - 1; i < networkState_->replicationStates_.Size();
+             --i)
         {
             if (networkState_->replicationStates_[i]->connection_ == connection)
                 networkState_->replicationStates_.Erase(i);
@@ -226,7 +212,8 @@ void Component::CleanupConnection(Connection* connection)
 void Component::OnAttributeAnimationAdded()
 {
     if (attributeAnimationInfos_.Size() == 1)
-        SubscribeToEvent(GetScene(), E_ATTRIBUTEANIMATIONUPDATE, URHO3D_HANDLER(Component, HandleAttributeAnimationUpdate));
+        SubscribeToEvent(GetScene(), E_ATTRIBUTEANIMATIONUPDATE,
+                         URHO3D_HANDLER(Component, HandleAttributeAnimationUpdate));
 }
 
 void Component::OnAttributeAnimationRemoved()
@@ -235,26 +222,15 @@ void Component::OnAttributeAnimationRemoved()
         UnsubscribeFromEvent(GetScene(), E_ATTRIBUTEANIMATIONUPDATE);
 }
 
-void Component::OnNodeSet(Node* node)
-{
-}
+void Component::OnNodeSet(Node* node) {}
 
-void Component::OnSceneSet(Scene* scene)
-{
-}
+void Component::OnSceneSet(Scene* scene) {}
 
-void Component::OnMarkedDirty(Node* node)
-{
-}
+void Component::OnMarkedDirty(Node* node) {}
 
-void Component::OnNodeSetEnabled(Node* node)
-{
-}
+void Component::OnNodeSetEnabled(Node* node) {}
 
-void Component::SetID(unsigned id)
-{
-    id_ = id;
-}
+void Component::SetID(unsigned id) { id_ = id; }
 
 void Component::SetNode(Node* node)
 {
@@ -262,15 +238,9 @@ void Component::SetNode(Node* node)
     OnNodeSet(node_);
 }
 
-Component* Component::GetComponent(StringHash type) const
-{
-    return node_ ? node_->GetComponent(type) : nullptr;
-}
+Component* Component::GetComponent(StringHash type) const { return node_ ? node_->GetComponent(type) : nullptr; }
 
-bool Component::IsEnabledEffective() const
-{
-    return enabled_ && node_ && node_->IsEnabled();
-}
+bool Component::IsEnabledEffective() const { return enabled_ && node_ && node_->IsEnabled(); }
 
 void Component::GetComponents(PODVector<Component*>& dest, StringHash type) const
 {
@@ -324,4 +294,4 @@ void Component::DoAutoRemove(AutoRemoveMode mode)
     }
 }
 
-}
+} // namespace Urho3D

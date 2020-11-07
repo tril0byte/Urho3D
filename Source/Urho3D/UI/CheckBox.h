@@ -43,8 +43,8 @@ public:
     /// Return UI rendering batches.
     void GetBatches(PODVector<UIBatch>& batches, PODVector<float>& vertexData, const IntRect& currentScissor) override;
     /// React to mouse click begin.
-    void OnClickBegin
-        (const IntVector2& position, const IntVector2& screenPosition, MouseButton button, MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor) override;
+    void OnClickBegin(const IntVector2& position, const IntVector2& screenPosition, MouseButton button,
+                      MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor) override;
     /// React to a key press.
     void OnKey(Key key, MouseButtonFlags buttons, QualifierFlags qualifiers) override;
 
@@ -72,4 +72,4 @@ protected:
     bool checked_;
 };
 
-}
+} // namespace Urho3D

@@ -100,7 +100,8 @@ bool VertexBuffer::SetData(const void* data)
         if (!graphics_->IsDeviceLost())
         {
             graphics_->SetVBO(object_.name_);
-            glBufferData(GL_ARRAY_BUFFER, vertexCount_ * (size_t)vertexSize_, data, dynamic_ ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, vertexCount_ * (size_t)vertexSize_, data,
+                         dynamic_ ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
         }
         else
         {
@@ -150,7 +151,8 @@ bool VertexBuffer::SetDataRange(const void* data, unsigned start, unsigned count
             if (!discard || start != 0)
                 glBufferSubData(GL_ARRAY_BUFFER, start * (size_t)vertexSize_, count * vertexSize_, data);
             else
-                glBufferData(GL_ARRAY_BUFFER, count * (size_t)vertexSize_, data, dynamic_ ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+                glBufferData(GL_ARRAY_BUFFER, count * (size_t)vertexSize_, data,
+                             dynamic_ ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
         }
         else
         {
@@ -251,7 +253,8 @@ bool VertexBuffer::Create()
         }
 
         graphics_->SetVBO(object_.name_);
-        glBufferData(GL_ARRAY_BUFFER, vertexCount_ * (size_t)vertexSize_, nullptr, dynamic_ ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertexCount_ * (size_t)vertexSize_, nullptr,
+                     dynamic_ ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
     }
 
     return true;
@@ -276,4 +279,4 @@ void VertexBuffer::UnmapBuffer()
     // Never called on OpenGL
 }
 
-}
+} // namespace Urho3D

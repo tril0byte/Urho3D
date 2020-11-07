@@ -46,11 +46,11 @@ static const Vector2 DEFAULT_GRAVITY(0.0f, -9.81f);
 static const int DEFAULT_VELOCITY_ITERATIONS = 8;
 static const int DEFAULT_POSITION_ITERATIONS = 3;
 
-PhysicsWorld2D::PhysicsWorld2D(Context* context) :
-    Component(context),
-    gravity_(DEFAULT_GRAVITY),
-    velocityIterations_(DEFAULT_VELOCITY_ITERATIONS),
-    positionIterations_(DEFAULT_POSITION_ITERATIONS)
+PhysicsWorld2D::PhysicsWorld2D(Context* context)
+    : Component(context)
+    , gravity_(DEFAULT_GRAVITY)
+    , velocityIterations_(DEFAULT_VELOCITY_ITERATIONS)
+    , positionIterations_(DEFAULT_POSITION_ITERATIONS)
 {
     // Set default debug draw flags
     m_drawFlags = e_shapeBit;
@@ -85,10 +85,10 @@ void PhysicsWorld2D::RegisterObject(Context* context)
     URHO3D_ACCESSOR_ATTRIBUTE("Sub Stepping", GetSubStepping, SetSubStepping, bool, false, AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Gravity", GetGravity, SetGravity, Vector2, DEFAULT_GRAVITY, AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Auto Clear Forces", GetAutoClearForces, SetAutoClearForces, bool, false, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Velocity Iterations", GetVelocityIterations, SetVelocityIterations, int, DEFAULT_VELOCITY_ITERATIONS,
-        AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Position Iterations", GetPositionIterations, SetPositionIterations, int, DEFAULT_POSITION_ITERATIONS,
-        AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Velocity Iterations", GetVelocityIterations, SetVelocityIterations, int,
+                              DEFAULT_VELOCITY_ITERATIONS, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Position Iterations", GetPositionIterations, SetPositionIterations, int,
+                              DEFAULT_POSITION_ITERATIONS, AM_DEFAULT);
 }
 
 void PhysicsWorld2D::DrawDebugGeometry(DebugRenderer* debug, bool depthTest)
@@ -310,7 +310,7 @@ void PhysicsWorld2D::Update(float timeStep)
     while (!delayedWorldTransforms_.Empty())
     {
         for (HashMap<RigidBody2D*, DelayedWorldTransform2D>::Iterator i = delayedWorldTransforms_.Begin();
-            i != delayedWorldTransforms_.End();)
+             i != delayedWorldTransforms_.End();)
         {
             const DelayedWorldTransform2D& transform = i->second_;
 
@@ -339,10 +339,7 @@ void PhysicsWorld2D::DrawDebugGeometry()
         DrawDebugGeometry(debug, false);
 }
 
-void PhysicsWorld2D::SetUpdateEnabled(bool enable)
-{
-    updateEnabled_ = enable;
-}
+void PhysicsWorld2D::SetUpdateEnabled(bool enable) { updateEnabled_ = enable; }
 
 void PhysicsWorld2D::SetDrawShape(bool drawShape)
 {
@@ -350,7 +347,6 @@ void PhysicsWorld2D::SetDrawShape(bool drawShape)
         m_drawFlags |= e_shapeBit;
     else
         m_drawFlags &= ~e_shapeBit;
-
 }
 
 void PhysicsWorld2D::SetDrawJoint(bool drawJoint)
@@ -385,25 +381,13 @@ void PhysicsWorld2D::SetDrawCenterOfMass(bool drawCenterOfMass)
         m_drawFlags &= ~e_centerOfMassBit;
 }
 
-void PhysicsWorld2D::SetAllowSleeping(bool enable)
-{
-    world_->SetAllowSleeping(enable);
-}
+void PhysicsWorld2D::SetAllowSleeping(bool enable) { world_->SetAllowSleeping(enable); }
 
-void PhysicsWorld2D::SetWarmStarting(bool enable)
-{
-    world_->SetWarmStarting(enable);
-}
+void PhysicsWorld2D::SetWarmStarting(bool enable) { world_->SetWarmStarting(enable); }
 
-void PhysicsWorld2D::SetContinuousPhysics(bool enable)
-{
-    world_->SetContinuousPhysics(enable);
-}
+void PhysicsWorld2D::SetContinuousPhysics(bool enable) { world_->SetContinuousPhysics(enable); }
 
-void PhysicsWorld2D::SetSubStepping(bool enable)
-{
-    world_->SetSubStepping(enable);
-}
+void PhysicsWorld2D::SetSubStepping(bool enable) { world_->SetSubStepping(enable); }
 
 void PhysicsWorld2D::SetGravity(const Vector2& gravity)
 {
@@ -412,20 +396,11 @@ void PhysicsWorld2D::SetGravity(const Vector2& gravity)
     world_->SetGravity(ToB2Vec2(gravity_));
 }
 
-void PhysicsWorld2D::SetAutoClearForces(bool enable)
-{
-    world_->SetAutoClearForces(enable);
-}
+void PhysicsWorld2D::SetAutoClearForces(bool enable) { world_->SetAutoClearForces(enable); }
 
-void PhysicsWorld2D::SetVelocityIterations(int velocityIterations)
-{
-    velocityIterations_ = velocityIterations;
-}
+void PhysicsWorld2D::SetVelocityIterations(int velocityIterations) { velocityIterations_ = velocityIterations; }
 
-void PhysicsWorld2D::SetPositionIterations(int positionIterations)
-{
-    positionIterations_ = positionIterations;
-}
+void PhysicsWorld2D::SetPositionIterations(int positionIterations) { positionIterations_ = positionIterations; }
 
 void PhysicsWorld2D::AddRigidBody(RigidBody2D* rigidBody)
 {
@@ -458,10 +433,10 @@ class RayCastCallback : public b2RayCastCallback
 {
 public:
     // Construct.
-    RayCastCallback(PODVector<PhysicsRaycastResult2D>& results, const Vector2& startPoint, unsigned collisionMask) :
-        results_(results),
-        startPoint_(startPoint),
-        collisionMask_(collisionMask)
+    RayCastCallback(PODVector<PhysicsRaycastResult2D>& results, const Vector2& startPoint, unsigned collisionMask)
+        : results_(results)
+        , startPoint_(startPoint)
+        , collisionMask_(collisionMask)
     {
     }
 
@@ -494,8 +469,8 @@ protected:
     unsigned collisionMask_;
 };
 
-void PhysicsWorld2D::Raycast(PODVector<PhysicsRaycastResult2D>& results, const Vector2& startPoint, const Vector2& endPoint,
-    unsigned collisionMask)
+void PhysicsWorld2D::Raycast(PODVector<PhysicsRaycastResult2D>& results, const Vector2& startPoint,
+                             const Vector2& endPoint, unsigned collisionMask)
 {
     results.Clear();
 
@@ -508,11 +483,11 @@ class SingleRayCastCallback : public b2RayCastCallback
 {
 public:
     // Construct.
-    SingleRayCastCallback(PhysicsRaycastResult2D& result, const Vector2& startPoint, unsigned collisionMask) :
-        result_(result),
-        startPoint_(startPoint),
-        collisionMask_(collisionMask),
-        minDistance_(M_INFINITY)
+    SingleRayCastCallback(PhysicsRaycastResult2D& result, const Vector2& startPoint, unsigned collisionMask)
+        : result_(result)
+        , startPoint_(startPoint)
+        , collisionMask_(collisionMask)
+        , minDistance_(M_INFINITY)
     {
     }
 
@@ -552,7 +527,7 @@ private:
 };
 
 void PhysicsWorld2D::RaycastSingle(PhysicsRaycastResult2D& result, const Vector2& startPoint, const Vector2& endPoint,
-    unsigned collisionMask)
+                                   unsigned collisionMask)
 {
     result.body_ = nullptr;
 
@@ -565,10 +540,11 @@ class PointQueryCallback : public b2QueryCallback
 {
 public:
     // Construct.
-    PointQueryCallback(const b2Vec2& point, unsigned collisionMask) :   // NOLINT(modernize-pass-by-value)
-        point_(point),
-        collisionMask_(collisionMask),
-        rigidBody_(nullptr)
+    PointQueryCallback(const b2Vec2& point, unsigned collisionMask)
+        : // NOLINT(modernize-pass-by-value)
+        point_(point)
+        , collisionMask_(collisionMask)
+        , rigidBody_(nullptr)
     {
     }
 
@@ -638,9 +614,9 @@ class AabbQueryCallback : public b2QueryCallback
 {
 public:
     // Construct.
-    AabbQueryCallback(PODVector<RigidBody2D*>& results, unsigned collisionMask) :
-        results_(results),
-        collisionMask_(collisionMask)
+    AabbQueryCallback(PODVector<RigidBody2D*>& results, unsigned collisionMask)
+        : results_(results)
+        , collisionMask_(collisionMask)
     {
     }
 
@@ -677,30 +653,15 @@ void PhysicsWorld2D::GetRigidBodies(PODVector<RigidBody2D*>& results, const Rect
     world_->QueryAABB(&callback, b2Aabb);
 }
 
-bool PhysicsWorld2D::GetAllowSleeping() const
-{
-    return world_->GetAllowSleeping();
-}
+bool PhysicsWorld2D::GetAllowSleeping() const { return world_->GetAllowSleeping(); }
 
-bool PhysicsWorld2D::GetWarmStarting() const
-{
-    return world_->GetWarmStarting();
-}
+bool PhysicsWorld2D::GetWarmStarting() const { return world_->GetWarmStarting(); }
 
-bool PhysicsWorld2D::GetContinuousPhysics() const
-{
-    return world_->GetContinuousPhysics();
-}
+bool PhysicsWorld2D::GetContinuousPhysics() const { return world_->GetContinuousPhysics(); }
 
-bool PhysicsWorld2D::GetSubStepping() const
-{
-    return world_->GetSubStepping();
-}
+bool PhysicsWorld2D::GetSubStepping() const { return world_->GetSubStepping(); }
 
-bool PhysicsWorld2D::GetAutoClearForces() const
-{
-    return world_->GetAutoClearForces();
-}
+bool PhysicsWorld2D::GetAutoClearForces() const { return world_->GetAutoClearForces(); }
 
 void PhysicsWorld2D::OnSceneSet(Scene* scene)
 {
@@ -858,4 +819,4 @@ const Urho3D::PODVector<unsigned char>& PhysicsWorld2D::ContactInfo::Serialize(V
     return buffer.GetBuffer();
 }
 
-}
+} // namespace Urho3D

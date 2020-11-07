@@ -330,4 +330,4 @@ private:
     String loadSpriteName_;
 };
 
-}
+} // namespace Urho3D

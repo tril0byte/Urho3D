@@ -20,31 +20,31 @@
 // THE SOFTWARE.
 //
 
-#include <Urho3D/Urho2D/AnimatedSprite2D.h>
-#include <Urho3D/Urho2D/AnimationSet2D.h>
 #include <Urho3D/Core/Context.h>
 #include <Urho3D/Input/Input.h>
-#include <Urho3D/Urho2D/RigidBody2D.h>
 #include <Urho3D/Scene/Scene.h>
 #include <Urho3D/Scene/SceneEvents.h>
 #include <Urho3D/UI/Text.h>
 #include <Urho3D/UI/UI.h>
+#include <Urho3D/Urho2D/AnimatedSprite2D.h>
+#include <Urho3D/Urho2D/AnimationSet2D.h>
+#include <Urho3D/Urho2D/RigidBody2D.h>
 
 #include "Character2D.h"
 
 #include <Urho3D/DebugNew.h>
 
 // Character2D logic component
-Character2D::Character2D(Context* context) :
-    LogicComponent(context),
-    wounded_(false),
-    killed_(false),
-    timer_(0.0f),
-    maxCoins_(0),
-    remainingCoins_(0),
-    remainingLifes_(3),
-    moveSpeedScale_(1.0f),
-    zoom_(0.0f)
+Character2D::Character2D(Context* context)
+    : LogicComponent(context)
+    , wounded_(false)
+    , killed_(false)
+    , timer_(0.0f)
+    , maxCoins_(0)
+    , remainingCoins_(0)
+    , remainingLifes_(3)
+    , moveSpeedScale_(1.0f)
+    , zoom_(0.0f)
 {
 }
 
@@ -53,7 +53,8 @@ void Character2D::RegisterObject(Context* context)
     context->RegisterFactory<Character2D>();
 
     // These macros register the class attributes to the Context for automatic load / save handling.
-    // We specify the 'Default' attribute mode which means it will be used both for saving into file, and network replication.
+    // We specify the 'Default' attribute mode which means it will be used both for saving into file, and network
+    // replication.
     URHO3D_ATTRIBUTE("Move Speed Scale", float, moveSpeedScale_, 1.0f, AM_DEFAULT);
     URHO3D_ATTRIBUTE("Camera Zoom", float, zoom_, 0.0f, AM_DEFAULT);
     URHO3D_ATTRIBUTE("Coins In Level", int, maxCoins_, 0, AM_DEFAULT);

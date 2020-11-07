@@ -44,30 +44,23 @@ namespace Urho3D
 extern const char* URHO2D_CATEGORY;
 extern const char* blendModeNames[];
 
-const char* loopModeNames[] =
-{
-    "Default",
-    "ForceLooped",
-    "ForceClamped",
-    nullptr
-};
+const char* loopModeNames[] = {"Default", "ForceLooped", "ForceClamped", nullptr};
 
-AnimatedSprite2D::AnimatedSprite2D(Context* context) :
-    StaticSprite2D(context),
+AnimatedSprite2D::AnimatedSprite2D(Context* context)
+    : StaticSprite2D(context)
+    ,
 #ifdef URHO3D_SPINE
-    skeleton_(0),
-    animationStateData_(0),
-    animationState_(0),
+    skeleton_(0)
+    , animationStateData_(0)
+    , animationState_(0)
+    ,
 #endif
-    speed_(1.0f),
-    loopMode_(LM_DEFAULT)
+    speed_(1.0f)
+    , loopMode_(LM_DEFAULT)
 {
 }
 
-AnimatedSprite2D::~AnimatedSprite2D()
-{
-    Dispose();
-}
+AnimatedSprite2D::~AnimatedSprite2D() { Dispose(); }
 
 void AnimatedSprite2D::RegisterObject(Context* context)
 {
@@ -78,9 +71,10 @@ void AnimatedSprite2D::RegisterObject(Context* context)
     URHO3D_ACCESSOR_ATTRIBUTE("Speed", GetSpeed, SetSpeed, float, 1.0f, AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Entity", GetEntity, SetEntity, String, String::EMPTY, AM_DEFAULT);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Animation Set", GetAnimationSetAttr, SetAnimationSetAttr, ResourceRef,
-        ResourceRef(AnimatedSprite2D::GetTypeStatic()), AM_DEFAULT);
+                                    ResourceRef(AnimatedSprite2D::GetTypeStatic()), AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Animation", GetAnimation, SetAnimationAttr, String, String::EMPTY, AM_DEFAULT);
-    URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Loop Mode", GetLoopMode, SetLoopMode, LoopMode2D, loopModeNames, LM_DEFAULT, AM_DEFAULT);
+    URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Loop Mode", GetLoopMode, SetLoopMode, LoopMode2D, loopModeNames, LM_DEFAULT,
+                                   AM_DEFAULT);
 }
 
 void AnimatedSprite2D::OnSetEnabled()
@@ -182,10 +176,7 @@ void AnimatedSprite2D::SetAnimation(const String& name, LoopMode2D loopMode)
         SetSpriterAnimation();
 }
 
-void AnimatedSprite2D::SetLoopMode(LoopMode2D loopMode)
-{
-    loopMode_ = loopMode;
-}
+void AnimatedSprite2D::SetLoopMode(LoopMode2D loopMode) { loopMode_ = loopMode; }
 
 void AnimatedSprite2D::SetSpeed(float speed)
 {
@@ -193,10 +184,7 @@ void AnimatedSprite2D::SetSpeed(float speed)
     MarkNetworkUpdate();
 }
 
-AnimationSet2D* AnimatedSprite2D::GetAnimationSet() const
-{
-    return animationSet_;
-}
+AnimationSet2D* AnimatedSprite2D::GetAnimationSet() const { return animationSet_; }
 
 void AnimatedSprite2D::SetAnimationSetAttr(const ResourceRef& value)
 {
@@ -284,7 +272,8 @@ void AnimatedSprite2D::SetSpineAnimation()
 
     // Reset slots to setup pose, fix issue #932
     spSkeleton_setSlotsToSetupPose(skeleton_);
-    spAnimationState_setAnimationByName(animationState_, 0, animationName_.CString(), loopMode_ != LM_FORCE_CLAMPED ? true : false);
+    spAnimationState_setAnimationByName(animationState_, 0, animationName_.CString(),
+                                        loopMode_ != LM_FORCE_CLAMPED ? true : false);
 
     UpdateAnimation(0.0f);
     MarkNetworkUpdate();
@@ -306,10 +295,18 @@ void AnimatedSprite2D::UpdateSpineAnimation(float timeStep)
     worldBoundingBoxDirty_ = true;
 }
 
-// This enum used to be defined in spine/RegionAttachment.h but it got moved inside RegionAttachment.c so it's no longer accessible.
-// It's required because AnimatedSprite2D::UpdateSourceBatchesSpine() references its values (SP_VERTEX_*)
-typedef enum {
-    SP_VERTEX_X1 = 0, SP_VERTEX_Y1, SP_VERTEX_X2, SP_VERTEX_Y2, SP_VERTEX_X3, SP_VERTEX_Y3, SP_VERTEX_X4, SP_VERTEX_Y4
+// This enum used to be defined in spine/RegionAttachment.h but it got moved inside RegionAttachment.c so it's no longer
+// accessible. It's required because AnimatedSprite2D::UpdateSourceBatchesSpine() references its values (SP_VERTEX_*)
+typedef enum
+{
+    SP_VERTEX_X1 = 0,
+    SP_VERTEX_Y1,
+    SP_VERTEX_X2,
+    SP_VERTEX_Y2,
+    SP_VERTEX_X3,
+    SP_VERTEX_Y3,
+    SP_VERTEX_X4,
+    SP_VERTEX_Y4
 } spVertexIndex;
 
 void AnimatedSprite2D::UpdateSourceBatchesSpine()
@@ -329,10 +326,9 @@ void AnimatedSprite2D::UpdateSourceBatchesSpine()
         if (!attachment)
             continue;
 
-        unsigned color = Color(color_.r_ * slot->color.r,
-            color_.g_ * slot->color.g,
-            color_.b_ * slot->color.b,
-            color_.a_ * slot->color.a).ToUInt();
+        unsigned color = Color(color_.r_ * slot->color.r, color_.g_ * slot->color.g, color_.b_ * slot->color.b,
+                               color_.a_ * slot->color.a)
+                             .ToUInt();
 
         if (attachment->type == SP_ATTACHMENT_REGION)
         {
@@ -366,7 +362,8 @@ void AnimatedSprite2D::UpdateSourceBatchesSpine()
             if (mesh->super.verticesCount > SLOT_VERTEX_COUNT_MAX)
                 continue;
 
-            spVertexAttachment_computeWorldVertices(&mesh->super, slot, 0, mesh->super.verticesCount, slotVertices, 0, 2);
+            spVertexAttachment_computeWorldVertices(&mesh->super, slot, 0, mesh->super.verticesCount, slotVertices, 0,
+                                                    2);
 
             Vertex2D vertex;
             vertex.color_ = color;
@@ -453,9 +450,7 @@ void AnimatedSprite2D::UpdateSourceBatchesSpriter()
         if (flipX_ != flipY_)
             angle = -angle;
 
-        Matrix3x4 localTransform(position * PIXEL_SIZE,
-            Quaternion(angle),
-            Vector3(info.scaleX_, info.scaleY_, 1.0f));
+        Matrix3x4 localTransform(position * PIXEL_SIZE, Quaternion(angle), Vector3(info.scaleX_, info.scaleY_, 1.0f));
 
         Matrix3x4 worldTransform = nodeWorldTransform * localTransform;
         Sprite2D* sprite = animationSet_->GetSpriterFileSprite(timelineKey->folderId_, timelineKey->fileId_);
@@ -517,4 +512,4 @@ void AnimatedSprite2D::Dispose()
     spriterInstance_.Reset();
 }
 
-}
+} // namespace Urho3D

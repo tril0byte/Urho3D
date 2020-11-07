@@ -204,9 +204,9 @@ private:
     /// Box2D body.
     b2Body* body_;
     /// Collision shapes.
-    Vector<WeakPtr<CollisionShape2D> > collisionShapes_;
+    Vector<WeakPtr<CollisionShape2D>> collisionShapes_;
     /// Constraints.
-    Vector<WeakPtr<Constraint2D> > constraints_;
+    Vector<WeakPtr<Constraint2D>> constraints_;
 };
 
-}
+} // namespace Urho3D

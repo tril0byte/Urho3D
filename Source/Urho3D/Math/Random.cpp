@@ -31,15 +31,9 @@ namespace Urho3D
 
 static unsigned randomSeed = 1;
 
-void SetRandomSeed(unsigned seed)
-{
-    randomSeed = seed;
-}
+void SetRandomSeed(unsigned seed) { randomSeed = seed; }
 
-unsigned GetRandomSeed()
-{
-    return randomSeed;
-}
+unsigned GetRandomSeed() { return randomSeed; }
 
 int Rand()
 {
@@ -58,4 +52,4 @@ float RandStandardNormal()
     return val;
 }
 
-}
+} // namespace Urho3D

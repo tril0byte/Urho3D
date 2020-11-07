@@ -60,9 +60,9 @@ struct ViewBatchInfo2D
     /// Distances.
     PODVector<float> distances_;
     /// Materials.
-    Vector<SharedPtr<Material> > materials_;
+    Vector<SharedPtr<Material>> materials_;
     /// Geometries.
-    Vector<SharedPtr<Geometry> > geometries_;
+    Vector<SharedPtr<Geometry>> geometries_;
 };
 
 /// 2D renderer component.
@@ -82,7 +82,8 @@ public:
 
     /// Process octree raycast. May be called from a worker thread.
     void ProcessRayQuery(const RayOctreeQuery& query, PODVector<RayQueryResult>& results) override;
-    /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly re-entrantly.
+    /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly
+    /// re-entrantly.
     void UpdateBatches(const FrameInfo& frame) override;
     /// Prepare geometry for rendering. Called from a worker thread if possible (no GPU update).
     void UpdateGeometry(const FrameInfo& frame) override;
@@ -111,8 +112,8 @@ private:
     /// Update view batch info.
     void UpdateViewBatchInfo(ViewBatchInfo2D& viewBatchInfo, Camera* camera);
     /// Add view batch.
-    void AddViewBatch(ViewBatchInfo2D& viewBatchInfo, Material* material,
-        unsigned indexStart, unsigned indexCount, unsigned vertexStart, unsigned vertexCount, float distance);
+    void AddViewBatch(ViewBatchInfo2D& viewBatchInfo, Material* material, unsigned indexStart, unsigned indexCount,
+                      unsigned vertexStart, unsigned vertexCount, float distance);
 
     /// Index buffer.
     SharedPtr<IndexBuffer> indexBuffer_;
@@ -129,9 +130,9 @@ private:
     /// View mask of current camera for visibility checking.
     unsigned viewMask_;
     /// Cached materials.
-    HashMap<Texture2D*, HashMap<int, SharedPtr<Material> > > cachedMaterials_;
+    HashMap<Texture2D*, HashMap<int, SharedPtr<Material>>> cachedMaterials_;
     /// Cached techniques per blend mode.
-    HashMap<int, SharedPtr<Technique> > cachedTechniques_;
+    HashMap<int, SharedPtr<Technique>> cachedTechniques_;
 };
 
-}
+} // namespace Urho3D

@@ -220,7 +220,8 @@ void IndexBuffer::Unlock()
         lockState_ = LOCK_NONE;
         break;
 
-    default: break;
+    default:
+        break;
     }
 }
 
@@ -243,13 +244,9 @@ bool IndexBuffer::Create()
         unsigned d3dUsage = dynamic_ ? D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY : 0;
 
         IDirect3DDevice9* device = graphics_->GetImpl()->GetDevice();
-        HRESULT hr = device->CreateIndexBuffer(
-            indexCount_ * indexSize_,
-            d3dUsage,
-            indexSize_ == sizeof(unsigned) ? D3DFMT_INDEX32 : D3DFMT_INDEX16,
-            (D3DPOOL)pool,
-            (IDirect3DIndexBuffer9**)&object_,
-            nullptr);
+        HRESULT hr = device->CreateIndexBuffer(indexCount_ * indexSize_, d3dUsage,
+                                               indexSize_ == sizeof(unsigned) ? D3DFMT_INDEX32 : D3DFMT_INDEX16,
+                                               (D3DPOOL)pool, (IDirect3DIndexBuffer9**)&object_, nullptr);
         if (FAILED(hr))
         {
             URHO3D_SAFE_RELEASE(object_.ptr_)
@@ -280,7 +277,8 @@ void* IndexBuffer::MapBuffer(unsigned start, unsigned count, bool discard)
         if (discard && dynamic_)
             flags = D3DLOCK_DISCARD;
 
-        HRESULT hr = ((IDirect3DIndexBuffer9*)object_.ptr_)->Lock(start * indexSize_, count * indexSize_, &hwData, flags);
+        HRESULT hr =
+            ((IDirect3DIndexBuffer9*)object_.ptr_)->Lock(start * indexSize_, count * indexSize_, &hwData, flags);
         if (FAILED(hr))
             URHO3D_LOGD3DERROR("Could not lock index buffer", hr);
         else
@@ -299,4 +297,4 @@ void IndexBuffer::UnmapBuffer()
     }
 }
 
-}
+} // namespace Urho3D

@@ -35,8 +35,8 @@ namespace Urho3D
 
 #ifdef _WIN32
 
-Condition::Condition() :
-    event_(nullptr)
+Condition::Condition()
+    : event_(nullptr)
 {
     event_ = CreateEvent(nullptr, FALSE, FALSE, nullptr);
 }
@@ -47,21 +47,15 @@ Condition::~Condition()
     event_ = nullptr;
 }
 
-void Condition::Set()
-{
-    SetEvent((HANDLE)event_);
-}
+void Condition::Set() { SetEvent((HANDLE)event_); }
 
-void Condition::Wait()
-{
-    WaitForSingleObject((HANDLE)event_, INFINITE);
-}
+void Condition::Wait() { WaitForSingleObject((HANDLE)event_, INFINITE); }
 
 #else
 
-Condition::Condition() :
-    mutex_(new pthread_mutex_t),
-    event_(new pthread_cond_t)
+Condition::Condition()
+    : mutex_(new pthread_mutex_t)
+    , event_(new pthread_cond_t)
 {
     pthread_mutex_init((pthread_mutex_t*)mutex_, nullptr);
     pthread_cond_init((pthread_cond_t*)event_, nullptr);
@@ -80,10 +74,7 @@ Condition::~Condition()
     mutex_ = nullptr;
 }
 
-void Condition::Set()
-{
-    pthread_cond_signal((pthread_cond_t*)event_);
-}
+void Condition::Set() { pthread_cond_signal((pthread_cond_t*)event_); }
 
 void Condition::Wait()
 {
@@ -97,4 +88,4 @@ void Condition::Wait()
 
 #endif
 
-}
+} // namespace Urho3D

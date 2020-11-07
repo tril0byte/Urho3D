@@ -27,9 +27,9 @@
 #include "XmlAnalyzer.h"
 #include "XmlSourceData.h"
 
-#include <regex>
 #include <cassert>
 #include <map>
+#include <regex>
 
 namespace ASBindingGenerator
 {
@@ -46,11 +46,11 @@ static string GetAliasMark(const GlobalFunctionAnalyzer& functionAnalyzer)
     return "";
 }
 
-static vector<map<string, string> > GetSpecializations(const GlobalFunctionAnalyzer& functionAnalyzer)
+static vector<map<string, string>> GetSpecializations(const GlobalFunctionAnalyzer& functionAnalyzer)
 {
     vector<string> templateParams = functionAnalyzer.GetTemplateParams();
 
-    vector<map<string, string> > result;
+    vector<map<string, string>> result;
     string comment = functionAnalyzer.GetComment();
     smatch match;
 
@@ -104,7 +104,8 @@ static vector<map<string, string> > GetSpecializations(const GlobalFunctionAnaly
 
 static shared_ptr<ASGeneratedFile_GlobalFunctions> _result;
 
-static void BindGlobalFunction(const GlobalFunctionAnalyzer& functionAnalyzer, const map<string, string>& templateSpecialization = map<string, string>())
+static void BindGlobalFunction(const GlobalFunctionAnalyzer& functionAnalyzer,
+                               const map<string, string>& templateSpecialization = map<string, string>())
 {
     string declParams = "";
     vector<ParamAnalyzer> params = functionAnalyzer.GetParams(templateSpecialization);
@@ -112,7 +113,7 @@ static void BindGlobalFunction(const GlobalFunctionAnalyzer& functionAnalyzer, c
 
     bool needWrapper = false;
 
-    vector<shared_ptr<FuncParamConv> > convertedParams;
+    vector<shared_ptr<FuncParamConv>> convertedParams;
 
     for (size_t i = 0; i < params.size(); i++)
     {
@@ -135,13 +136,14 @@ static void BindGlobalFunction(const GlobalFunctionAnalyzer& functionAnalyzer, c
         convertedParams.push_back(conv);
     }
 
-    shared_ptr<FuncReturnTypeConv> retConv = CppFunctionReturnTypeToAS(functionAnalyzer.GetReturnType(templateSpecialization));
+    shared_ptr<FuncReturnTypeConv> retConv =
+        CppFunctionReturnTypeToAS(functionAnalyzer.GetReturnType(templateSpecialization));
     if (!retConv->success_)
     {
         _result->reg_ << "    // " << GetLastErrorMessage() << "\n";
         return;
     }
-    
+
     if (retConv->needWrapper_)
         needWrapper = true;
 
@@ -184,7 +186,7 @@ static void ProcessGlobalFunction(const GlobalFunctionAnalyzer& functionAnalyzer
     if (functionAnalyzer.IsDefine())
         return;
 
-    vector<map<string, string> > specializations;
+    vector<map<string, string>> specializations;
 
     if (functionAnalyzer.IsTemplate())
     {
@@ -249,4 +251,4 @@ void ProcessAllGlobalFunctions(const string& outputBasePath)
     _result->Save();
 }
 
-}
+} // namespace ASBindingGenerator

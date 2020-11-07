@@ -46,8 +46,8 @@
 
 URHO3D_DEFINE_APPLICATION_MAIN(AngelScriptIntegration)
 
-AngelScriptIntegration::AngelScriptIntegration(Context* context) :
-    Sample(context)
+AngelScriptIntegration::AngelScriptIntegration(Context* context)
+    : Sample(context)
 {
     // Instantiate and register the AngelScript subsystem so that we can use the ScriptInstance component
     context_->RegisterSubsystem(new Script(context_));
@@ -84,9 +84,10 @@ void AngelScriptIntegration::CreateScene()
     // (-1000, -1000, -1000) to (1000, 1000, 1000)
     scene_->CreateComponent<Octree>();
 
-    // Create a Zone component into a child scene node. The Zone controls ambient lighting and fog settings. Like the Octree,
-    // it also defines its volume with a bounding box, but can be rotated (so it does not need to be aligned to the world X, Y
-    // and Z axes.) Drawable objects "pick up" the zone they belong to and use it when rendering; several zones can exist
+    // Create a Zone component into a child scene node. The Zone controls ambient lighting and fog settings. Like the
+    // Octree, it also defines its volume with a bounding box, but can be rotated (so it does not need to be aligned to
+    // the world X, Y and Z axes.) Drawable objects "pick up" the zone they belong to and use it when rendering; several
+    // zones can exist
     Node* zoneNode = scene_->CreateChild("Zone");
     auto* zone = zoneNode->CreateComponent<Zone>();
     // Set same volume as the Octree, set a close bluish fog and some ambient light
@@ -108,8 +109,8 @@ void AngelScriptIntegration::CreateScene()
         boxObject->SetModel(cache->GetResource<Model>("Models/Box.mdl"));
         boxObject->SetMaterial(cache->GetResource<Material>("Materials/Stone.xml"));
 
-        // Add our custom Rotator script object (using the ScriptInstance C++ component to instantiate / store it) which will
-        // rotate the scene node each frame, when the scene sends its update event
+        // Add our custom Rotator script object (using the ScriptInstance C++ component to instantiate / store it) which
+        // will rotate the scene node each frame, when the scene sends its update event
         auto* instance = boxNode->CreateComponent<ScriptInstance>();
         instance->CreateObject(cache->GetResource<ScriptFile>("Scripts/Utilities/Rotator.as"), "Rotator");
         // Call the script object's "SetRotationSpeed" function. Function arguments need to be passed in a VariantVector
@@ -118,8 +119,8 @@ void AngelScriptIntegration::CreateScene()
         instance->Execute("void SetRotationSpeed(const Vector3&in)", parameters);
     }
 
-    // Create the camera. Let the starting position be at the world origin. As the fog limits maximum visible distance, we can
-    // bring the far clip plane closer for more effective culling of distant objects
+    // Create the camera. Let the starting position be at the world origin. As the fog limits maximum visible distance,
+    // we can bring the far clip plane closer for more effective culling of distant objects
     cameraNode_ = scene_->CreateChild("Camera");
     auto* camera = cameraNode_->CreateComponent<Camera>();
     camera->SetFarClip(100.0f);

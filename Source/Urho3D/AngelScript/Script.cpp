@@ -44,12 +44,13 @@ class ScriptResourceRouter : public ResourceRouter
     URHO3D_OBJECT(ScriptResourceRouter, ResourceRouter);
 
     /// Construct.
-    explicit ScriptResourceRouter(Context* context) :
-        ResourceRouter(context)
+    explicit ScriptResourceRouter(Context* context)
+        : ResourceRouter(context)
     {
     }
 
-    /// Check if request is for an AngelScript file and reroute to compiled version if necessary (.as file not available).
+    /// Check if request is for an AngelScript file and reroute to compiled version if necessary (.as file not
+    /// available).
     void Route(String& name, ResourceRequest requestType) override
     {
         String extension = GetExtension(name);
@@ -108,12 +109,12 @@ void ASRegisterGenerated_GlobalFunctions(asIScriptEngine* engine);
 
 void ASRegisterManualLast(asIScriptEngine* engine);
 
-Script::Script(Context* context) :
-    Object(context),
-    scriptEngine_(nullptr),
-    immediateContext_(nullptr),
-    scriptNestingLevel_(0),
-    executeConsoleCommands_(false)
+Script::Script(Context* context)
+    : Object(context)
+    , scriptEngine_(nullptr)
+    , immediateContext_(nullptr)
+    , scriptNestingLevel_(0)
+    , executeConsoleCommands_(false)
 {
     scriptEngine_ = asCreateScriptEngine(ANGELSCRIPT_VERSION);
     if (!scriptEngine_)
@@ -123,11 +124,12 @@ Script::Script(Context* context) :
     }
 
     scriptEngine_->SetUserData(this);
-    scriptEngine_->SetEngineProperty(asEP_USE_CHARACTER_LITERALS, (asPWORD)true);
-    scriptEngine_->SetEngineProperty(asEP_ALLOW_UNSAFE_REFERENCES, (asPWORD)true);
-    scriptEngine_->SetEngineProperty(asEP_ALLOW_IMPLICIT_HANDLE_TYPES, (asPWORD)true);
-    scriptEngine_->SetEngineProperty(asEP_BUILD_WITHOUT_LINE_CUES, (asPWORD)true);
-// Use the copy of the original asMETHOD macro in a web build (for some reason it still works, presumably because the signature of the function is known)
+    scriptEngine_->SetEngineProperty(asEP_USE_CHARACTER_LITERALS, (asPWORD) true);
+    scriptEngine_->SetEngineProperty(asEP_ALLOW_UNSAFE_REFERENCES, (asPWORD) true);
+    scriptEngine_->SetEngineProperty(asEP_ALLOW_IMPLICIT_HANDLE_TYPES, (asPWORD) true);
+    scriptEngine_->SetEngineProperty(asEP_BUILD_WITHOUT_LINE_CUES, (asPWORD) true);
+// Use the copy of the original asMETHOD macro in a web build (for some reason it still works, presumably because the
+// signature of the function is known)
 #ifdef AS_MAX_PORTABILITY
     scriptEngine_->SetMessageCallback(_asMETHOD(Script, MessageCallback), this, asCALL_THISCALL);
 #else
@@ -136,7 +138,8 @@ Script::Script(Context* context) :
 
     // Create the context for immediate execution
     immediateContext_ = scriptEngine_->CreateContext();
-// Use the copy of the original asMETHOD macro in a web build (for some reason it still works, presumably because the signature of the function is known)
+// Use the copy of the original asMETHOD macro in a web build (for some reason it still works, presumably because the
+// signature of the function is known)
 #ifdef AS_MAX_PORTABILITY
     immediateContext_->SetExceptionCallback(_asMETHOD(Script, ExceptionCallback), this, asCALL_THISCALL);
 #else
@@ -153,7 +156,7 @@ Script::Script(Context* context) :
     ASRegisterGenerated_Enums(scriptEngine_);
     ASRegisterGenerated_Classes(scriptEngine_);
     ASRegisterGenerated_Members_HighPriority(scriptEngine_);
-    
+
     ASRegisterGenerated_Members_A(scriptEngine_);
     ASRegisterGenerated_Members_B(scriptEngine_);
     ASRegisterGenerated_Members_Ca_Cm(scriptEngine_);
@@ -186,10 +189,10 @@ Script::Script(Context* context) :
     ASRegisterGenerated_Members_Z(scriptEngine_);
 
     ASRegisterGenerated_Members_Other(scriptEngine_);
-    
+
     ASRegisterGenerated_GlobalVariables(scriptEngine_);
     ASRegisterGenerated_GlobalFunctions(scriptEngine_);
-    
+
     ASRegisterManualLast(scriptEngine_);
 
     // Register the rest of the script API
@@ -267,15 +270,9 @@ bool Script::Execute(const String& line)
     return success;
 }
 
-void Script::SetDefaultScriptFile(ScriptFile* file)
-{
-    defaultScriptFile_ = file;
-}
+void Script::SetDefaultScriptFile(ScriptFile* file) { defaultScriptFile_ = file; }
 
-void Script::SetDefaultScene(Scene* scene)
-{
-    defaultScene_ = scene;
-}
+void Script::SetDefaultScene(Scene* scene) { defaultScene_ = scene; }
 
 void Script::SetExecuteConsoleCommands(bool enable)
 {
@@ -314,7 +311,7 @@ void Script::ExceptionCallback(asIScriptContext* context)
 {
     String message;
     message.AppendWithFormat("- Exception '%s' in '%s'\n%s", context->GetExceptionString(),
-        context->GetExceptionFunction()->GetDeclaration(), GetCallStack(context).CString());
+                             context->GetExceptionFunction()->GetDeclaration(), GetCallStack(context).CString());
 
     asSMessageInfo msg{};
     msg.row = context->GetExceptionLineNumber(&msg.col, &msg.section);
@@ -342,20 +339,11 @@ String Script::GetCallStack(asIScriptContext* context)
     return str;
 }
 
-ScriptFile* Script::GetDefaultScriptFile() const
-{
-    return defaultScriptFile_;
-}
+ScriptFile* Script::GetDefaultScriptFile() const { return defaultScriptFile_; }
 
-Scene* Script::GetDefaultScene() const
-{
-    return defaultScene_;
-}
+Scene* Script::GetDefaultScene() const { return defaultScene_; }
 
-void Script::ClearObjectTypeCache()
-{
-    objectTypes_.Clear();
-}
+void Script::ClearObjectTypeCache() { objectTypes_.Clear(); }
 
 asITypeInfo* Script::GetObjectType(const char* declaration)
 {
@@ -368,7 +356,7 @@ asITypeInfo* Script::GetObjectType(const char* declaration)
     return type;
 }
 
-const char **Script::GetEnumValues(int asTypeID)
+const char** Script::GetEnumValues(int asTypeID)
 {
     // If we've already found it, do not try to update the values, as that may invalidate the buffer
     if (enumValues_.Contains(asTypeID))
@@ -386,14 +374,14 @@ const char **Script::GetEnumValues(int asTypeID)
     for (unsigned i = 0; i < count; ++i)
     {
         int val = -1;
-        const char* name = type->GetEnumValueByIndex(i,&val);
-        if ((unsigned)val >= count)// use unsigned for val so negative values will be flagged as invalid
+        const char* name = type->GetEnumValueByIndex(i, &val);
+        if ((unsigned)val >= count) // use unsigned for val so negative values will be flagged as invalid
         {
             URHO3D_LOGDEBUGF("Could not register enum attribute names for type %d."
-                      "%s has value of %d, which is outside of the range [0,%d) for a 0-based enum.",
-                      asTypeID,name,val,count);
+                             "%s has value of %d, which is outside of the range [0,%d) for a 0-based enum.",
+                             asTypeID, name, val, count);
 
-            //fill with empty buffer
+            // fill with empty buffer
             enumValues_[asTypeID] = PODVector<const char*>();
             return nullptr;
         }
@@ -411,7 +399,8 @@ asIScriptContext* Script::GetScriptFileContext()
     while (scriptNestingLevel_ >= scriptFileContexts_.Size())
     {
         asIScriptContext* newContext = scriptEngine_->CreateContext();
-// Use the copy of the original asMETHOD macro in a web build (for some reason it still works, presumably because the signature of the function is known)
+// Use the copy of the original asMETHOD macro in a web build (for some reason it still works, presumably because the
+// signature of the function is known)
 #ifdef AS_MAX_PORTABILITY
         newContext->SetExceptionCallback(_asMETHOD(Script, ExceptionCallback), this, asCALL_THISCALL);
 #else
@@ -437,4 +426,4 @@ void RegisterScriptLibrary(Context* context)
     ScriptInstance::RegisterObject(context);
 }
 
-}
+} // namespace Urho3D

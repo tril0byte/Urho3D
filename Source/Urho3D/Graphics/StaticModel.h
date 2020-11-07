@@ -53,7 +53,8 @@ public:
 
     /// Process octree raycast. May be called from a worker thread.
     void ProcessRayQuery(const RayOctreeQuery& query, PODVector<RayQueryResult>& results) override;
-    /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly re-entrantly.
+    /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly
+    /// re-entrantly.
     void UpdateBatches(const FrameInfo& frame) override;
     /// Return the geometry for a specific LOD level.
     Geometry* GetLodGeometry(unsigned batchIndex, unsigned level) override;
@@ -74,7 +75,8 @@ public:
     /// Set occlusion LOD level. By default (M_MAX_UNSIGNED) same as visible.
     /// @property
     void SetOcclusionLodLevel(unsigned level);
-    /// Apply default materials from a material list file. If filename is empty (default), the model's resource name with extension .txt will be used.
+    /// Apply default materials from a material list file. If filename is empty (default), the model's resource name
+    /// with extension .txt will be used.
     void ApplyMaterialList(const String& fileName = String::EMPTY);
 
     /// Return model.
@@ -125,7 +127,7 @@ protected:
     /// Extra per-geometry data.
     PODVector<StaticModelGeometryData> geometryData_;
     /// All geometries.
-    Vector<Vector<SharedPtr<Geometry> > > geometries_;
+    Vector<Vector<SharedPtr<Geometry>>> geometries_;
     /// Model.
     SharedPtr<Model> model_;
     /// Occlusion LOD level.
@@ -138,4 +140,4 @@ private:
     void HandleModelReloadFinished(StringHash eventType, VariantMap& eventData);
 };
 
-}
+} // namespace Urho3D

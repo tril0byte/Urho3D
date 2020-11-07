@@ -30,7 +30,7 @@ namespace Urho3D
 class Node;
 class Scene;
 
-}
+} // namespace Urho3D
 
 /// Render to texture example
 /// This sample demonstrates:

@@ -35,26 +35,16 @@
 namespace Urho3D
 {
 
-static GLenum glWrapModes[] =
-{
-    GL_REPEAT,
-    GL_MIRRORED_REPEAT,
-    GL_CLAMP_TO_EDGE,
+static GLenum glWrapModes[] = {GL_REPEAT, GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE,
 #ifndef GL_ES_VERSION_2_0
-    GL_CLAMP
+                               GL_CLAMP
 #else
-    GL_CLAMP_TO_EDGE
+                               GL_CLAMP_TO_EDGE
 #endif
 };
 
 #ifndef GL_ES_VERSION_2_0
-static GLenum gl3WrapModes[] =
-{
-    GL_REPEAT,
-    GL_MIRRORED_REPEAT,
-    GL_CLAMP_TO_EDGE,
-    GL_CLAMP_TO_BORDER
-};
+static GLenum gl3WrapModes[] = {GL_REPEAT, GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER};
 #endif
 
 static GLenum GetWrapMode(TextureAddressMode mode)
@@ -89,7 +79,7 @@ void Texture::UpdateParameters()
     if (!object_.name_ || !graphics_)
         return;
 
-    // If texture is multisampled, do not attempt to set parameters as it's illegal, just return
+        // If texture is multisampled, do not attempt to set parameters as it's illegal, just return
 #ifndef GL_ES_VERSION_2_0
     if (target_ == GL_TEXTURE_2D_MULTISAMPLE)
     {
@@ -155,7 +145,9 @@ void Texture::UpdateParameters()
     {
         unsigned maxAnisotropy = anisotropy_ ? anisotropy_ : graphics_->GetDefaultTextureAnisotropy();
         glTexParameterf(target_, GL_TEXTURE_MAX_ANISOTROPY_EXT,
-            (filterMode == FILTER_ANISOTROPIC || filterMode == FILTER_NEAREST_ANISOTROPIC) ? (float)maxAnisotropy : 1.0f);
+                        (filterMode == FILTER_ANISOTROPIC || filterMode == FILTER_NEAREST_ANISOTROPIC)
+                            ? (float)maxAnisotropy
+                            : 1.0f);
     }
 
     // Shadow compare
@@ -173,18 +165,15 @@ void Texture::UpdateParameters()
     parametersDirty_ = false;
 }
 
-bool Texture::GetParametersDirty() const
-{
-    return parametersDirty_;
-}
+bool Texture::GetParametersDirty() const { return parametersDirty_; }
 
 bool Texture::IsCompressed() const
 {
     return format_ == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT || format_ == GL_COMPRESSED_RGBA_S3TC_DXT3_EXT ||
-           format_ == GL_COMPRESSED_RGBA_S3TC_DXT5_EXT || format_ == GL_ETC1_RGB8_OES ||
-           format_ == GL_ETC2_RGB8_OES || format_ == GL_ETC2_RGBA8_OES ||
-           format_ == COMPRESSED_RGB_PVRTC_4BPPV1_IMG || format_ == COMPRESSED_RGBA_PVRTC_4BPPV1_IMG ||
-           format_ == COMPRESSED_RGB_PVRTC_2BPPV1_IMG || format_ == COMPRESSED_RGBA_PVRTC_2BPPV1_IMG;
+           format_ == GL_COMPRESSED_RGBA_S3TC_DXT5_EXT || format_ == GL_ETC1_RGB8_OES || format_ == GL_ETC2_RGB8_OES ||
+           format_ == GL_ETC2_RGBA8_OES || format_ == COMPRESSED_RGB_PVRTC_4BPPV1_IMG ||
+           format_ == COMPRESSED_RGBA_PVRTC_4BPPV1_IMG || format_ == COMPRESSED_RGB_PVRTC_2BPPV1_IMG ||
+           format_ == COMPRESSED_RGBA_PVRTC_2BPPV1_IMG;
 }
 
 unsigned Texture::GetRowDataSize(int width) const
@@ -349,4 +338,4 @@ void Texture::RegenerateLevels()
     levelsDirty_ = false;
 }
 
-}
+} // namespace Urho3D

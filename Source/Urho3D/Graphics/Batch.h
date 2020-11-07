@@ -53,17 +53,17 @@ struct Batch
     Batch() = default;
 
     /// Construct from a drawable's source batch.
-    explicit Batch(const SourceBatch& rhs) :
-        distance_(rhs.distance_),
-        renderOrder_(rhs.material_ ? rhs.material_->GetRenderOrder() : DEFAULT_RENDER_ORDER),
-        isBase_(false),
-        geometry_(rhs.geometry_),
-        material_(rhs.material_),
-        worldTransform_(rhs.worldTransform_),
-        numWorldTransforms_(rhs.numWorldTransforms_),
-        instancingData_(rhs.instancingData_),
-        lightQueue_(nullptr),
-        geometryType_(rhs.geometryType_)
+    explicit Batch(const SourceBatch& rhs)
+        : distance_(rhs.distance_)
+        , renderOrder_(rhs.material_ ? rhs.material_->GetRenderOrder() : DEFAULT_RENDER_ORDER)
+        , isBase_(false)
+        , geometry_(rhs.geometry_)
+        , material_(rhs.material_)
+        , worldTransform_(rhs.worldTransform_)
+        , numWorldTransforms_(rhs.numWorldTransforms_)
+        , instancingData_(rhs.instancingData_)
+        , lightQueue_(nullptr)
+        , geometryType_(rhs.geometryType_)
     {
     }
 
@@ -115,10 +115,10 @@ struct InstanceData
     InstanceData() = default;
 
     /// Construct with transform, instancing data and distance.
-    InstanceData(const Matrix3x4* worldTransform, const void* instancingData, float distance) :
-        worldTransform_(worldTransform),
-        instancingData_(instancingData),
-        distance_(distance)
+    InstanceData(const Matrix3x4* worldTransform, const void* instancingData, float distance)
+        : worldTransform_(worldTransform)
+        , instancingData_(instancingData)
+        , distance_(distance)
     {
     }
 
@@ -134,15 +134,15 @@ struct InstanceData
 struct BatchGroup : public Batch
 {
     /// Construct with defaults.
-    BatchGroup() :
-        startIndex_(M_MAX_UNSIGNED)
+    BatchGroup()
+        : startIndex_(M_MAX_UNSIGNED)
     {
     }
 
     /// Construct from a batch.
-    explicit BatchGroup(const Batch& batch) :
-        Batch(batch),
-        startIndex_(M_MAX_UNSIGNED)
+    explicit BatchGroup(const Batch& batch)
+        : Batch(batch)
+        , startIndex_(M_MAX_UNSIGNED)
     {
     }
 
@@ -181,13 +181,13 @@ struct BatchGroupKey
     BatchGroupKey() = default;
 
     /// Construct from a batch.
-    explicit BatchGroupKey(const Batch& batch) :
-        zone_(batch.zone_),
-        lightQueue_(batch.lightQueue_),
-        pass_(batch.pass_),
-        material_(batch.material_),
-        geometry_(batch.geometry_),
-        renderOrder_(batch.renderOrder_)
+    explicit BatchGroupKey(const Batch& batch)
+        : zone_(batch.zone_)
+        , lightQueue_(batch.lightQueue_)
+        , pass_(batch.pass_)
+        , material_(batch.material_)
+        , geometry_(batch.geometry_)
+        , renderOrder_(batch.renderOrder_)
     {
     }
 
@@ -205,17 +205,17 @@ struct BatchGroupKey
     unsigned char renderOrder_;
 
     /// Test for equality with another batch group key.
-    bool operator ==(const BatchGroupKey& rhs) const
+    bool operator==(const BatchGroupKey& rhs) const
     {
-        return zone_ == rhs.zone_ && lightQueue_ == rhs.lightQueue_ && pass_ == rhs.pass_ && material_ == rhs.material_ &&
-               geometry_ == rhs.geometry_ && renderOrder_ == rhs.renderOrder_;
+        return zone_ == rhs.zone_ && lightQueue_ == rhs.lightQueue_ && pass_ == rhs.pass_ &&
+               material_ == rhs.material_ && geometry_ == rhs.geometry_ && renderOrder_ == rhs.renderOrder_;
     }
 
     /// Test for inequality with another batch group key.
-    bool operator !=(const BatchGroupKey& rhs) const
+    bool operator!=(const BatchGroupKey& rhs) const
     {
-        return zone_ != rhs.zone_ || lightQueue_ != rhs.lightQueue_ || pass_ != rhs.pass_ || material_ != rhs.material_ ||
-               geometry_ != rhs.geometry_ || renderOrder_ != rhs.renderOrder_;
+        return zone_ != rhs.zone_ || lightQueue_ != rhs.lightQueue_ || pass_ != rhs.pass_ ||
+               material_ != rhs.material_ || geometry_ != rhs.geometry_ || renderOrder_ != rhs.renderOrder_;
     }
 
     /// Return hash value.
@@ -309,4 +309,4 @@ struct LightBatchQueue
     PODVector<Batch> volumeBatches_;
 };
 
-}
+} // namespace Urho3D

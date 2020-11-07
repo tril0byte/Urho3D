@@ -88,7 +88,7 @@ struct URHO3D_API SourceBatch
     ~SourceBatch();
 
     /// Assignment operator.
-    SourceBatch& operator =(const SourceBatch& rhs);
+    SourceBatch& operator=(const SourceBatch& rhs);
 
     /// Distance from camera.
     float distance_{};
@@ -128,11 +128,12 @@ public:
     /// Process octree raycast. May be called from a worker thread.
     virtual void ProcessRayQuery(const RayOctreeQuery& query, PODVector<RayQueryResult>& results);
     /// Update before octree reinsertion. Is called from a worker thread.
-    virtual void Update(const FrameInfo& frame) { }
-    /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly re-entrantly.
+    virtual void Update(const FrameInfo& frame) {}
+    /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly
+    /// re-entrantly.
     virtual void UpdateBatches(const FrameInfo& frame);
     /// Prepare geometry for rendering.
-    virtual void UpdateGeometry(const FrameInfo& frame) { }
+    virtual void UpdateGeometry(const FrameInfo& frame) {}
 
     /// Return whether a geometry update is necessary, and if it can happen in a worker thread.
     virtual UpdateGeometryType GetUpdateGeometryType() { return UPDATE_NONE; }
@@ -163,7 +164,8 @@ public:
     /// Set light mask. Is and'ed with light's and zone's light mask to see if the object should be lit.
     /// @property
     void SetLightMask(unsigned mask);
-    /// Set shadow mask. Is and'ed with light's light mask and zone's shadow mask to see if the object should be rendered to a shadow map.
+    /// Set shadow mask. Is and'ed with light's light mask and zone's shadow mask to see if the object should be
+    /// rendered to a shadow map.
     /// @property
     void SetShadowMask(unsigned mask);
     /// Set zone mask. Is and'ed with zone's zone mask to see if the object should belong to the zone.
@@ -181,7 +183,8 @@ public:
     /// Set occludee flag.
     /// @property
     void SetOccludee(bool enable);
-    /// Mark for update and octree reinsertion. Update is automatically queued when the drawable's scene node moves or changes scale.
+    /// Mark for update and octree reinsertion. Update is automatically queued when the drawable's scene node moves or
+    /// changes scale.
     void MarkForUpdate();
 
     /// Return local space bounding box. May not be applicable or properly updated on all drawables.
@@ -242,13 +245,15 @@ public:
     /// Return whether is in view this frame from any viewport camera. Excludes shadow map cameras.
     /// @property
     bool IsInView() const;
-    /// Return whether is in view of a specific camera this frame. Pass in a null camera to allow any camera, including shadow map cameras.
+    /// Return whether is in view of a specific camera this frame. Pass in a null camera to allow any camera, including
+    /// shadow map cameras.
     bool IsInView(Camera* camera) const;
 
     /// Return draw call source data.
     const Vector<SourceBatch>& GetBatches() const { return batches_; }
 
-    /// Set new zone. Zone assignment may optionally be temporary, meaning it needs to be re-evaluated on the next frame.
+    /// Set new zone. Zone assignment may optionally be temporary, meaning it needs to be re-evaluated on the next
+    /// frame.
     void SetZone(Zone* zone, bool temporary = false);
     /// Set sorting value.
     void SetSortValue(float value);
@@ -325,10 +330,7 @@ public:
     }
 
     /// Add a per-vertex light affecting the object this frame.
-    void AddVertexLight(Light* light)
-    {
-        vertexLights_.Push(light);
-    }
+    void AddVertexLight(Light* light) { vertexLights_.Push(light); }
 
 protected:
     /// Handle node being assigned.
@@ -341,7 +343,7 @@ protected:
     virtual void OnWorldBoundingBoxUpdate() = 0;
 
     /// Handle removal from octree.
-    virtual void OnRemoveFromOctree() { }
+    virtual void OnRemoveFromOctree() {}
 
     /// Add to octree.
     void AddToOctree();
@@ -415,11 +417,9 @@ protected:
     PODVector<Light*> vertexLights_;
 };
 
-inline bool CompareDrawables(Drawable* lhs, Drawable* rhs)
-{
-    return lhs->GetSortValue() < rhs->GetSortValue();
-}
+inline bool CompareDrawables(Drawable* lhs, Drawable* rhs) { return lhs->GetSortValue() < rhs->GetSortValue(); }
 
-URHO3D_API bool WriteDrawablesToOBJ(const PODVector<Drawable*>& drawables, File* outputFile, bool asZUp, bool asRightHanded, bool writeLightmapUV = false);
+URHO3D_API bool WriteDrawablesToOBJ(const PODVector<Drawable*>& drawables, File* outputFile, bool asZUp,
+                                    bool asRightHanded, bool writeLightmapUV = false);
 
-}
+} // namespace Urho3D

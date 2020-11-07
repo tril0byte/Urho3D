@@ -45,32 +45,32 @@ public:
     {
     public:
         /// Construct with default key.
-        KeyValue() :
-            first_(T())
+        KeyValue()
+            : first_(T())
         {
         }
 
         /// Construct with key and value.
-        KeyValue(const T& first, const U& second) :
-            first_(first),
-            second_(second)
+        KeyValue(const T& first, const U& second)
+            : first_(first)
+            , second_(second)
         {
         }
 
         /// Copy-construct.
-        KeyValue(const KeyValue& value) :
-            first_(value.first_),
-            second_(value.second_)
+        KeyValue(const KeyValue& value)
+            : first_(value.first_)
+            , second_(value.second_)
         {
         }
 
         /// Prevent assignment.
-        KeyValue& operator =(const KeyValue& rhs) = delete;
+        KeyValue& operator=(const KeyValue& rhs) = delete;
 
         /// Test for equality with another pair.
-        bool operator ==(const KeyValue& rhs) const { return first_ == rhs.first_ && second_ == rhs.second_; }
+        bool operator==(const KeyValue& rhs) const { return first_ == rhs.first_ && second_ == rhs.second_; }
         /// Test for inequality with another pair.
-        bool operator !=(const KeyValue& rhs) const { return first_ != rhs.first_ || second_ != rhs.second_; }
+        bool operator!=(const KeyValue& rhs) const { return first_ != rhs.first_ || second_ != rhs.second_; }
 
         /// Key.
         const T first_;
@@ -85,8 +85,8 @@ public:
         Node() = default;
 
         /// Construct with key and value.
-        Node(const T& key, const U& value) :
-            pair_(key, value)
+        Node(const T& key, const U& value)
+            : pair_(key, value)
         {
         }
 
@@ -110,20 +110,20 @@ public:
         Iterator() = default;
 
         /// Construct with a node pointer.
-        explicit Iterator(Node* ptr) :
-            HashIteratorBase(ptr)
+        explicit Iterator(Node* ptr)
+            : HashIteratorBase(ptr)
         {
         }
 
         /// Preincrement the pointer.
-        Iterator& operator ++()
+        Iterator& operator++()
         {
             GotoNext();
             return *this;
         }
 
         /// Postincrement the pointer.
-        Iterator operator ++(int)
+        Iterator operator++(int)
         {
             Iterator it = *this;
             GotoNext();
@@ -131,14 +131,14 @@ public:
         }
 
         /// Predecrement the pointer.
-        Iterator& operator --()
+        Iterator& operator--()
         {
             GotoPrev();
             return *this;
         }
 
         /// Postdecrement the pointer.
-        Iterator operator --(int)
+        Iterator operator--(int)
         {
             Iterator it = *this;
             GotoPrev();
@@ -146,10 +146,10 @@ public:
         }
 
         /// Point to the pair.
-        KeyValue* operator ->() const { return &(static_cast<Node*>(ptr_))->pair_; }
+        KeyValue* operator->() const { return &(static_cast<Node*>(ptr_))->pair_; }
 
         /// Dereference the pair.
-        KeyValue& operator *() const { return (static_cast<Node*>(ptr_))->pair_; }
+        KeyValue& operator*() const { return (static_cast<Node*>(ptr_))->pair_; }
     };
 
     /// Hash map node const iterator.
@@ -159,33 +159,34 @@ public:
         ConstIterator() = default;
 
         /// Construct with a node pointer.
-        explicit ConstIterator(Node* ptr) :
-            HashIteratorBase(ptr)
+        explicit ConstIterator(Node* ptr)
+            : HashIteratorBase(ptr)
         {
         }
 
         /// Construct from a non-const iterator.
-        ConstIterator(const Iterator& rhs) :        // NOLINT(google-explicit-constructor)
+        ConstIterator(const Iterator& rhs)
+            : // NOLINT(google-explicit-constructor)
             HashIteratorBase(rhs.ptr_)
         {
         }
 
         /// Assign from a non-const iterator.
-        ConstIterator& operator =(const Iterator& rhs)
+        ConstIterator& operator=(const Iterator& rhs)
         {
             ptr_ = rhs.ptr_;
             return *this;
         }
 
         /// Preincrement the pointer.
-        ConstIterator& operator ++()
+        ConstIterator& operator++()
         {
             GotoNext();
             return *this;
         }
 
         /// Postincrement the pointer.
-        ConstIterator operator ++(int)
+        ConstIterator operator++(int)
         {
             ConstIterator it = *this;
             GotoNext();
@@ -193,14 +194,14 @@ public:
         }
 
         /// Predecrement the pointer.
-        ConstIterator& operator --()
+        ConstIterator& operator--()
         {
             GotoPrev();
             return *this;
         }
 
         /// Postdecrement the pointer.
-        ConstIterator operator --(int)
+        ConstIterator operator--(int)
         {
             ConstIterator it = *this;
             GotoPrev();
@@ -208,10 +209,10 @@ public:
         }
 
         /// Point to the pair.
-        const KeyValue* operator ->() const { return &(static_cast<Node*>(ptr_))->pair_; }
+        const KeyValue* operator->() const { return &(static_cast<Node*>(ptr_))->pair_; }
 
         /// Dereference the pair.
-        const KeyValue& operator *() const { return (static_cast<Node*>(ptr_))->pair_; }
+        const KeyValue& operator*() const { return (static_cast<Node*>(ptr_))->pair_; }
     };
 
     /// Construct empty.
@@ -232,13 +233,11 @@ public:
     }
 
     /// Move-construct from another hash map.
-    HashMap(HashMap<T, U> && map) noexcept
-    {
-        Swap(map);
-    }
+    HashMap(HashMap<T, U>&& map) noexcept { Swap(map); }
 
     /// Aggregate initialization constructor.
-    HashMap(const std::initializer_list<Pair<T, U>>& list) : HashMap()
+    HashMap(const std::initializer_list<Pair<T, U>>& list)
+        : HashMap()
     {
         for (auto it = list.begin(); it != list.end(); it++)
         {
@@ -259,7 +258,7 @@ public:
     }
 
     /// Assign a hash map.
-    HashMap& operator =(const HashMap<T, U>& rhs)
+    HashMap& operator=(const HashMap<T, U>& rhs)
     {
         // In case of self-assignment do nothing
         if (&rhs != this)
@@ -271,28 +270,28 @@ public:
     }
 
     /// Move-assign a hash map.
-    HashMap& operator =(HashMap<T, U> && rhs) noexcept
+    HashMap& operator=(HashMap<T, U>&& rhs) noexcept
     {
         Swap(rhs);
         return *this;
     }
 
     /// Add-assign a pair.
-    HashMap& operator +=(const Pair<T, U>& rhs)
+    HashMap& operator+=(const Pair<T, U>& rhs)
     {
         Insert(rhs);
         return *this;
     }
 
     /// Add-assign a hash map.
-    HashMap& operator +=(const HashMap<T, U>& rhs)
+    HashMap& operator+=(const HashMap<T, U>& rhs)
     {
         Insert(rhs);
         return *this;
     }
 
     /// Test for equality with another hash map.
-    bool operator ==(const HashMap<T, U>& rhs) const
+    bool operator==(const HashMap<T, U>& rhs) const
     {
         if (rhs.Size() != Size())
             return false;
@@ -310,7 +309,7 @@ public:
     }
 
     /// Test for inequality with another hash map.
-    bool operator !=(const HashMap<T, U>& rhs) const
+    bool operator!=(const HashMap<T, U>& rhs) const
     {
         if (rhs.Size() != Size())
             return true;
@@ -328,7 +327,7 @@ public:
     }
 
     /// Index the map. Create a new pair if key not found.
-    U& operator [](const T& key)
+    U& operator[](const T& key)
     {
         if (!ptrs_)
             return InsertNode(key, U(), false)->pair_.second_;
@@ -340,7 +339,7 @@ public:
     }
 
     /// Index the map. Return null if key is not found, does not create a new pair.
-    U* operator [](const T& key) const
+    U* operator[](const T& key) const
     {
         if (!ptrs_)
             return 0;
@@ -354,22 +353,19 @@ public:
     /// Populate the map using variadic template. This handles the base case.
     HashMap& Populate(const T& key, const U& value)
     {
-        this->operator [](key) = value;
+        this->operator[](key) = value;
         return *this;
     }
 
     /// Populate the map using variadic template.
     template <typename... Args> HashMap& Populate(const T& key, const U& value, const Args&... args)
     {
-        this->operator [](key) = value;
+        this->operator[](key) = value;
         return Populate(args...);
     }
 
     /// Insert a pair. Return an iterator to it.
-    Iterator Insert(const Pair<T, U>& pair)
-    {
-        return Iterator(InsertNode(pair.first_, pair.second_));
-    }
+    Iterator Insert(const Pair<T, U>& pair) { return Iterator(InsertNode(pair.first_, pair.second_)); }
 
     /// Insert a pair. Return iterator and set exists flag according to whether the key already existed.
     Iterator Insert(const Pair<T, U>& pair, bool& exists)
@@ -481,7 +477,7 @@ public:
         if (!numKeys)
             return;
 
-        auto** ptrs = new Node* [numKeys];
+        auto** ptrs = new Node*[numKeys];
         Node* ptr = Head();
 
         for (unsigned i = 0; i < numKeys; ++i)
@@ -742,7 +738,7 @@ private:
     Node* ReserveNode()
     {
         auto* newNode = static_cast<Node*>(AllocatorReserve(allocator_));
-        new(newNode) Node();
+        new (newNode) Node();
         return newNode;
     }
 
@@ -750,7 +746,7 @@ private:
     Node* ReserveNode(const T& key, const U& value)
     {
         auto* newNode = static_cast<Node*>(AllocatorReserve(allocator_));
-        new(newNode) Node(key, value);
+        new (newNode) Node(key, value);
         return newNode;
     }
 
@@ -780,12 +776,21 @@ private:
     unsigned Hash(const T& key) const { return MakeHash(key) & (NumBuckets() - 1); }
 };
 
-template <class T, class U> typename Urho3D::HashMap<T, U>::ConstIterator begin(const Urho3D::HashMap<T, U>& v) { return v.Begin(); }
+template <class T, class U> typename Urho3D::HashMap<T, U>::ConstIterator begin(const Urho3D::HashMap<T, U>& v)
+{
+    return v.Begin();
+}
 
-template <class T, class U> typename Urho3D::HashMap<T, U>::ConstIterator end(const Urho3D::HashMap<T, U>& v) { return v.End(); }
+template <class T, class U> typename Urho3D::HashMap<T, U>::ConstIterator end(const Urho3D::HashMap<T, U>& v)
+{
+    return v.End();
+}
 
-template <class T, class U> typename Urho3D::HashMap<T, U>::Iterator begin(Urho3D::HashMap<T, U>& v) { return v.Begin(); }
+template <class T, class U> typename Urho3D::HashMap<T, U>::Iterator begin(Urho3D::HashMap<T, U>& v)
+{
+    return v.Begin();
+}
 
 template <class T, class U> typename Urho3D::HashMap<T, U>::Iterator end(Urho3D::HashMap<T, U>& v) { return v.End(); }
 
-}
+} // namespace Urho3D

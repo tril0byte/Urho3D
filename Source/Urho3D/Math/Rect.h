@@ -33,37 +33,37 @@ class URHO3D_API Rect
 {
 public:
     /// Construct an undefined rect.
-    Rect() noexcept :
-        min_(M_INFINITY, M_INFINITY),
-        max_(-M_INFINITY, -M_INFINITY)
+    Rect() noexcept
+        : min_(M_INFINITY, M_INFINITY)
+        , max_(-M_INFINITY, -M_INFINITY)
     {
     }
 
     /// Construct from minimum and maximum vectors.
-    Rect(const Vector2& min, const Vector2& max) noexcept :
-        min_(min),
-        max_(max)
+    Rect(const Vector2& min, const Vector2& max) noexcept
+        : min_(min)
+        , max_(max)
     {
     }
 
     /// Construct from coordinates.
-    Rect(float left, float top, float right, float bottom) noexcept :
-        min_(left, top),
-        max_(right, bottom)
+    Rect(float left, float top, float right, float bottom) noexcept
+        : min_(left, top)
+        , max_(right, bottom)
     {
     }
 
     /// Construct from a Vector4.
-    explicit Rect(const Vector4& vector) noexcept :
-        min_(vector.x_, vector.y_),
-        max_(vector.z_, vector.w_)
+    explicit Rect(const Vector4& vector) noexcept
+        : min_(vector.x_, vector.y_)
+        , max_(vector.z_, vector.w_)
     {
     }
 
     /// Construct from a float array.
-    explicit Rect(const float* data) noexcept :
-        min_(data[0], data[1]),
-        max_(data[2], data[3])
+    explicit Rect(const float* data) noexcept
+        : min_(data[0], data[1])
+        , max_(data[2], data[3])
     {
     }
 
@@ -71,16 +71,16 @@ public:
     Rect(const Rect& rect) noexcept = default;
 
     /// Assign from another rect.
-    Rect& operator =(const Rect& rhs) noexcept = default;
+    Rect& operator=(const Rect& rhs) noexcept = default;
 
     /// Test for equality with another rect.
-    bool operator ==(const Rect& rhs) const { return min_ == rhs.min_ && max_ == rhs.max_; }
+    bool operator==(const Rect& rhs) const { return min_ == rhs.min_ && max_ == rhs.max_; }
 
     /// Test for inequality with another rect.
-    bool operator !=(const Rect& rhs) const { return min_ != rhs.min_ || max_ != rhs.max_; }
+    bool operator!=(const Rect& rhs) const { return min_ != rhs.min_ || max_ != rhs.max_; }
 
     /// Add another rect to this one inplace.
-    Rect& operator +=(const Rect& rhs)
+    Rect& operator+=(const Rect& rhs)
     {
         min_ += rhs.min_;
         max_ += rhs.max_;
@@ -88,7 +88,7 @@ public:
     }
 
     /// Subtract another rect from this one inplace.
-    Rect& operator -=(const Rect& rhs)
+    Rect& operator-=(const Rect& rhs)
     {
         min_ -= rhs.min_;
         max_ -= rhs.max_;
@@ -96,7 +96,7 @@ public:
     }
 
     /// Divide by scalar inplace.
-    Rect& operator /=(float value)
+    Rect& operator/=(float value)
     {
         min_ /= value;
         max_ /= value;
@@ -104,7 +104,7 @@ public:
     }
 
     /// Multiply by scalar inplace.
-    Rect& operator *=(float value)
+    Rect& operator*=(float value)
     {
         min_ *= value;
         max_ *= value;
@@ -112,28 +112,16 @@ public:
     }
 
     /// Divide by scalar.
-    Rect operator /(float value) const
-    {
-        return Rect(min_ / value, max_ / value);
-    }
+    Rect operator/(float value) const { return Rect(min_ / value, max_ / value); }
 
     /// Multiply by scalar.
-    Rect operator *(float value) const
-    {
-        return Rect(min_ * value, max_ * value);
-    }
+    Rect operator*(float value) const { return Rect(min_ * value, max_ * value); }
 
     /// Add another rect.
-    Rect operator +(const Rect& rhs) const
-    {
-        return Rect(min_ + rhs.min_, max_ + rhs.max_);
-    }
+    Rect operator+(const Rect& rhs) const { return Rect(min_ + rhs.min_, max_ + rhs.max_); }
 
     /// Subtract another rect.
-    Rect operator -(const Rect& rhs) const
-    {
-        return Rect(min_ - rhs.min_, max_ - rhs.max_);
-    }
+    Rect operator-(const Rect& rhs) const { return Rect(min_ - rhs.min_, max_ - rhs.max_); }
 
     /// Define from another rect.
     void Define(const Rect& rect)
@@ -150,10 +138,7 @@ public:
     }
 
     /// Define from a point.
-    void Define(const Vector2& point)
-    {
-        min_ = max_ = point;
-    }
+    void Define(const Vector2& point) { min_ = max_ = point; }
 
     /// Merge a point.
     void Merge(const Vector2& point)
@@ -192,10 +177,7 @@ public:
     void Clip(const Rect& rect);
 
     /// Return true if this rect is defined via a previous call to Define() or Merge().
-    bool Defined() const
-    {
-        return min_.x_ != M_INFINITY;
-    }
+    bool Defined() const { return min_.x_ != M_INFINITY; }
 
     /// Return center.
     /// @property
@@ -281,55 +263,55 @@ class URHO3D_API IntRect
 {
 public:
     /// Construct a zero rect.
-    IntRect() noexcept :
-        left_(0),
-        top_(0),
-        right_(0),
-        bottom_(0)
+    IntRect() noexcept
+        : left_(0)
+        , top_(0)
+        , right_(0)
+        , bottom_(0)
     {
     }
 
     /// Construct from minimum and maximum vectors.
-    IntRect(const IntVector2& min, const IntVector2& max) noexcept :
-        left_(min.x_),
-        top_(min.y_),
-        right_(max.x_),
-        bottom_(max.y_)
+    IntRect(const IntVector2& min, const IntVector2& max) noexcept
+        : left_(min.x_)
+        , top_(min.y_)
+        , right_(max.x_)
+        , bottom_(max.y_)
     {
     }
 
     /// Construct from coordinates.
-    IntRect(int left, int top, int right, int bottom) noexcept :
-        left_(left),
-        top_(top),
-        right_(right),
-        bottom_(bottom)
+    IntRect(int left, int top, int right, int bottom) noexcept
+        : left_(left)
+        , top_(top)
+        , right_(right)
+        , bottom_(bottom)
     {
     }
 
     /// Construct from an int array.
-    explicit IntRect(const int* data) noexcept :
-        left_(data[0]),
-        top_(data[1]),
-        right_(data[2]),
-        bottom_(data[3])
+    explicit IntRect(const int* data) noexcept
+        : left_(data[0])
+        , top_(data[1])
+        , right_(data[2])
+        , bottom_(data[3])
     {
     }
 
     /// Test for equality with another rect.
-    bool operator ==(const IntRect& rhs) const
+    bool operator==(const IntRect& rhs) const
     {
         return left_ == rhs.left_ && top_ == rhs.top_ && right_ == rhs.right_ && bottom_ == rhs.bottom_;
     }
 
     /// Test for inequality with another rect.
-    bool operator !=(const IntRect& rhs) const
+    bool operator!=(const IntRect& rhs) const
     {
         return left_ != rhs.left_ || top_ != rhs.top_ || right_ != rhs.right_ || bottom_ != rhs.bottom_;
     }
 
     /// Add another rect to this one inplace.
-    IntRect& operator +=(const IntRect& rhs)
+    IntRect& operator+=(const IntRect& rhs)
     {
         left_ += rhs.left_;
         top_ += rhs.top_;
@@ -339,7 +321,7 @@ public:
     }
 
     /// Subtract another rect from this one inplace.
-    IntRect& operator -=(const IntRect& rhs)
+    IntRect& operator-=(const IntRect& rhs)
     {
         left_ -= rhs.left_;
         top_ -= rhs.top_;
@@ -349,7 +331,7 @@ public:
     }
 
     /// Divide by scalar inplace.
-    IntRect& operator /=(float value)
+    IntRect& operator/=(float value)
     {
         left_ = static_cast<int>(left_ / value);
         top_ = static_cast<int>(top_ / value);
@@ -359,7 +341,7 @@ public:
     }
 
     /// Multiply by scalar inplace.
-    IntRect& operator *=(float value)
+    IntRect& operator*=(float value)
     {
         left_ = static_cast<int>(left_ * value);
         top_ = static_cast<int>(top_ * value);
@@ -369,39 +351,29 @@ public:
     }
 
     /// Divide by scalar.
-    IntRect operator /(float value) const
+    IntRect operator/(float value) const
     {
-        return {
-            static_cast<int>(left_ / value), static_cast<int>(top_ / value),
-            static_cast<int>(right_ / value), static_cast<int>(bottom_ / value)
-        };
+        return {static_cast<int>(left_ / value), static_cast<int>(top_ / value), static_cast<int>(right_ / value),
+                static_cast<int>(bottom_ / value)};
     }
 
     /// Multiply by scalar.
-    IntRect operator *(float value) const
+    IntRect operator*(float value) const
     {
-        return {
-            static_cast<int>(left_ * value), static_cast<int>(top_ * value),
-            static_cast<int>(right_ * value), static_cast<int>(bottom_ * value)
-        };
+        return {static_cast<int>(left_ * value), static_cast<int>(top_ * value), static_cast<int>(right_ * value),
+                static_cast<int>(bottom_ * value)};
     }
 
     /// Add another rect.
-    IntRect operator +(const IntRect& rhs) const
+    IntRect operator+(const IntRect& rhs) const
     {
-        return {
-            left_ + rhs.left_, top_ + rhs.top_,
-            right_ + rhs.right_, bottom_ + rhs.bottom_
-        };
+        return {left_ + rhs.left_, top_ + rhs.top_, right_ + rhs.right_, bottom_ + rhs.bottom_};
     }
 
     /// Subtract another rect.
-    IntRect operator -(const IntRect& rhs) const
+    IntRect operator-(const IntRect& rhs) const
     {
-        return {
-            left_ - rhs.left_, top_ - rhs.top_,
-            right_ - rhs.right_, bottom_ - rhs.bottom_
-        };
+        return {left_ - rhs.left_, top_ - rhs.top_, right_ - rhs.right_, bottom_ - rhs.bottom_};
     }
 
     /// Return size.
@@ -481,4 +453,4 @@ public:
     static const IntRect ZERO;
 };
 
-}
+} // namespace Urho3D

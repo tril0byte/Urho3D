@@ -23,8 +23,8 @@
 #include "../Precompiled.h"
 
 #include "../Core/Context.h"
-#include "../Input/InputEvents.h"
 #include "../IO/Log.h"
+#include "../Input/InputEvents.h"
 #include "../UI/Slider.h"
 #include "../UI/UIEvents.h"
 
@@ -33,22 +33,17 @@
 namespace Urho3D
 {
 
-const char* orientations[] =
-{
-    "Horizontal",
-    "Vertical",
-    nullptr
-};
+const char* orientations[] = {"Horizontal", "Vertical", nullptr};
 
 extern const char* UI_CATEGORY;
 
-Slider::Slider(Context* context) :
-    BorderImage(context),
-    orientation_(O_HORIZONTAL),
-    range_(1.0f),
-    value_(0.0f),
-    dragSlider_(false),
-    repeatRate_(0.0f)
+Slider::Slider(Context* context)
+    : BorderImage(context)
+    , orientation_(O_HORIZONTAL)
+    , range_(1.0f)
+    , value_(0.0f)
+    , dragSlider_(false)
+    , repeatRate_(0.0f)
 {
     SetEnabled(true);
     knob_ = CreateChild<BorderImage>("S_Knob");
@@ -65,7 +60,8 @@ void Slider::RegisterObject(Context* context)
 
     URHO3D_COPY_BASE_ATTRIBUTES(BorderImage);
     URHO3D_UPDATE_ATTRIBUTE_DEFAULT_VALUE("Is Enabled", true);
-    URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Orientation", GetOrientation, SetOrientation, Orientation, orientations, O_HORIZONTAL, AM_FILE);
+    URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Orientation", GetOrientation, SetOrientation, Orientation, orientations,
+                                   O_HORIZONTAL, AM_FILE);
     URHO3D_ACCESSOR_ATTRIBUTE("Range", GetRange, SetRange, float, 1.0f, AM_FILE);
     URHO3D_ACCESSOR_ATTRIBUTE("Value", GetValue, SetValue, float, 0.0f, AM_FILE);
     URHO3D_ACCESSOR_ATTRIBUTE("Repeat Rate", GetRepeatRate, SetRepeatRate, float, 0.0f, AM_FILE);
@@ -81,7 +77,8 @@ void Slider::Update(float timeStep)
     knob_->SetSelected(hovering_);
 }
 
-void Slider::OnHover(const IntVector2& position, const IntVector2& screenPosition, MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor)
+void Slider::OnHover(const IntVector2& position, const IntVector2& screenPosition, MouseButtonFlags buttons,
+                     QualifierFlags qualifiers, Cursor* cursor)
 {
     BorderImage::OnHover(position, screenPosition, buttons, qualifiers, cursor);
 
@@ -93,8 +90,8 @@ void Slider::OnHover(const IntVector2& position, const IntVector2& screenPositio
         Page(position, (bool)(buttons & MOUSEB_LEFT));
 }
 
-void Slider::OnClickBegin(const IntVector2& position, const IntVector2& screenPosition, MouseButton button, MouseButtonFlags buttons, QualifierFlags qualifiers,
-    Cursor* cursor)
+void Slider::OnClickBegin(const IntVector2& position, const IntVector2& screenPosition, MouseButton button,
+                          MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor)
 {
     selected_ = true;
     hovering_ = knob_->IsInside(screenPosition, true);
@@ -102,15 +99,16 @@ void Slider::OnClickBegin(const IntVector2& position, const IntVector2& screenPo
         Page(position, true);
 }
 
-void Slider::OnClickEnd(const IntVector2& position, const IntVector2& screenPosition, MouseButton button, MouseButtonFlags buttons, QualifierFlags qualifiers,
-    Cursor* cursor, UIElement* beginElement)
+void Slider::OnClickEnd(const IntVector2& position, const IntVector2& screenPosition, MouseButton button,
+                        MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor, UIElement* beginElement)
 {
     hovering_ = knob_->IsInside(screenPosition, true);
     if (!hovering_ && button == MOUSEB_LEFT)
         Page(position, false);
 }
 
-void Slider::OnDragBegin(const IntVector2& position, const IntVector2& screenPosition, MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor)
+void Slider::OnDragBegin(const IntVector2& position, const IntVector2& screenPosition, MouseButtonFlags buttons,
+                         QualifierFlags qualifiers, Cursor* cursor)
 {
     UIElement::OnDragBegin(position, screenPosition, buttons, qualifiers, cursor);
 
@@ -122,8 +120,8 @@ void Slider::OnDragBegin(const IntVector2& position, const IntVector2& screenPos
     }
 }
 
-void Slider::OnDragMove(const IntVector2& position, const IntVector2& screenPosition, const IntVector2& deltaPos, MouseButtonFlags buttons,
-    QualifierFlags qualifiers, Cursor* cursor)
+void Slider::OnDragMove(const IntVector2& position, const IntVector2& screenPosition, const IntVector2& deltaPos,
+                        MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor)
 {
     if (!editable_ || !dragSlider_ || GetSize() == knob_->GetSize())
         return;
@@ -147,7 +145,8 @@ void Slider::OnDragMove(const IntVector2& position, const IntVector2& screenPosi
     SetValue(newValue);
 }
 
-void Slider::OnDragEnd(const IntVector2& position, const IntVector2& screenPosition, MouseButtonFlags dragButtons, MouseButtonFlags releaseButtons, Cursor* cursor)
+void Slider::OnDragEnd(const IntVector2& position, const IntVector2& screenPosition, MouseButtonFlags dragButtons,
+                       MouseButtonFlags releaseButtons, Cursor* cursor)
 {
     UIElement::OnDragEnd(position, screenPosition, dragButtons, releaseButtons, cursor);
 
@@ -158,10 +157,7 @@ void Slider::OnDragEnd(const IntVector2& position, const IntVector2& screenPosit
     }
 }
 
-void Slider::OnResize(const IntVector2& newSize, const IntVector2& delta)
-{
-    UpdateSlider();
-}
+void Slider::OnResize(const IntVector2& newSize, const IntVector2& delta) { UpdateSlider(); }
 
 void Slider::SetOrientation(Orientation orientation)
 {
@@ -196,15 +192,9 @@ void Slider::SetValue(float value)
     }
 }
 
-void Slider::ChangeValue(float delta)
-{
-    SetValue(value_ + delta);
-}
+void Slider::ChangeValue(float delta) { SetValue(value_ + delta); }
 
-void Slider::SetRepeatRate(float rate)
-{
-    repeatRate_ = Max(rate, 0.0f);
-}
+void Slider::SetRepeatRate(float rate) { repeatRate_ = Max(rate, 0.0f); }
 
 bool Slider::FilterImplicitAttributes(XMLElement& dest) const
 {
@@ -301,4 +291,4 @@ void Slider::Page(const IntVector2& position, bool pressed)
     SendEvent(E_SLIDERPAGED, eventData);
 }
 
-}
+} // namespace Urho3D

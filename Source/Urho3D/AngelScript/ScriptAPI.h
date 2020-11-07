@@ -38,4 +38,4 @@ void RegisterScriptInterfaceAPI(asIScriptEngine* engine);
 /// Register the Script library to script.
 void RegisterScriptAPI(asIScriptEngine* engine);
 
-}
+} // namespace Urho3D

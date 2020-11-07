@@ -20,35 +20,27 @@
 // THE SOFTWARE.
 //
 
-#include "../Precompiled.h"
 #include "../AngelScript/APITemplates.h"
+#include "../Precompiled.h"
 
 #include "../AngelScript/Manual_Resource.h"
 
-#include "../Resource/ResourceCache.h"
 #include "../Resource/Localization.h"
+#include "../Resource/ResourceCache.h"
 
 namespace Urho3D
 {
 
 // This function is called before ASRegisterGenerated()
-void ASRegisterManualFirst_Resource(asIScriptEngine* engine)
-{
-}
+void ASRegisterManualFirst_Resource(asIScriptEngine* engine) {}
 
 // ========================================================================================
 
 // template<class T> T * Object::GetSubsystem() const | File: ../Core/Object.h
-static ResourceCache* GetResourceCache()
-{
-    return GetScriptContext()->GetSubsystem<ResourceCache>();
-}
+static ResourceCache* GetResourceCache() { return GetScriptContext()->GetSubsystem<ResourceCache>(); }
 
 // template<class T> T * Object::GetSubsystem() const | File: ../Core/Object.h
-static Localization* GetLocalization()
-{
-    return GetScriptContext()->GetSubsystem<Localization>();
-}
+static Localization* GetLocalization() { return GetScriptContext()->GetSubsystem<Localization>(); }
 
 // This function is called after ASRegisterGenerated()
 void ASRegisterManualLast_Resource(asIScriptEngine* engine)
@@ -64,36 +56,21 @@ void ASRegisterManualLast_Resource(asIScriptEngine* engine)
 // ========================================================================================
 
 // bool Resource::Load(Deserializer &source) | File: ../Resource/Resource.h
-bool ResourceLoad(File* file, Resource* ptr)
-{
-    return file && ptr->Load(*file);
-}
+bool ResourceLoad(File* file, Resource* ptr) { return file && ptr->Load(*file); }
 
 // bool Resource::Load(Deserializer &source) | File: ../Resource/Resource.h
-bool ResourceLoadVectorBuffer(VectorBuffer& buffer, Resource* ptr)
-{
-    return ptr->Load(buffer);
-}
+bool ResourceLoadVectorBuffer(VectorBuffer& buffer, Resource* ptr) { return ptr->Load(buffer); }
 
 // virtual bool Resource::Save(Serializer &dest) const | File: ../Resource/Resource.h
-bool ResourceSave(File* file, Resource* ptr)
-{
-    return file && ptr->Save(*file);
-}
+bool ResourceSave(File* file, Resource* ptr) { return file && ptr->Save(*file); }
 
 // virtual bool Resource::Save(Serializer &dest) const | File: ../Resource/Resource.h
-bool ResourceSaveVectorBuffer(VectorBuffer& buffer, Resource* ptr)
-{
-    return ptr->Save(buffer);
-}
+bool ResourceSaveVectorBuffer(VectorBuffer& buffer, Resource* ptr) { return ptr->Save(buffer); }
 
 // ========================================================================================
 
 // XMLElement XMLFile::GetRoot(const String &name=String::EMPTY) | File: ../Resource/XMLFile.h
-XMLElement XMLFileGetRootDefault(XMLFile* ptr)
-{
-    return ptr->GetRoot();
-}
+XMLElement XMLFileGetRootDefault(XMLFile* ptr) { return ptr->GetRoot(); }
 
 // ========================================================================================
 
@@ -115,7 +92,8 @@ CScriptArray* XMLElementGetVariantVector(XMLElement* ptr)
 
 // ========================================================================================
 
-// void ResourceCache::GetResources(PODVector< Resource * > &result, StringHash type) const | File: ../Resource/ResourceCache.h
+// void ResourceCache::GetResources(PODVector< Resource * > &result, StringHash type) const | File:
+// ../Resource/ResourceCache.h
 CScriptArray* ResourceCacheGetResources(StringHash type, ResourceCache* ptr)
 {
     PODVector<Resource*> resources;
@@ -167,4 +145,4 @@ CScriptArray* JSONValueGetValues(const JSONValue& jsonValue)
     }
 }
 
-}
+} // namespace Urho3D

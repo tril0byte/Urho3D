@@ -35,17 +35,17 @@ namespace Urho3D
 {
 
 /// %Vector base class.
-/** Note that to prevent extra memory use due to vtable pointer, %VectorBase intentionally does not declare a virtual destructor
-    and therefore %VectorBase pointers should never be used.
+/** Note that to prevent extra memory use due to vtable pointer, %VectorBase intentionally does not declare a virtual
+   destructor and therefore %VectorBase pointers should never be used.
   */
 class URHO3D_API VectorBase
 {
 public:
     /// Construct.
-    VectorBase() noexcept :
-        size_(0),
-        capacity_(0),
-        buffer_(nullptr)
+    VectorBase() noexcept
+        : size_(0)
+        , capacity_(0)
+        , buffer_(nullptr)
     {
     }
 
@@ -68,4 +68,4 @@ protected:
     unsigned char* buffer_;
 };
 
-}
+} // namespace Urho3D

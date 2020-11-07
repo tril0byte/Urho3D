@@ -34,11 +34,10 @@ namespace Urho3D
 
 extern const char* URHO2D_CATEGORY;
 
-ConstraintMotor2D::ConstraintMotor2D(Context* context) :
-    Constraint2D(context),
-    linearOffset_(Vector2::ZERO)
+ConstraintMotor2D::ConstraintMotor2D(Context* context)
+    : Constraint2D(context)
+    , linearOffset_(Vector2::ZERO)
 {
-
 }
 
 ConstraintMotor2D::~ConstraintMotor2D() = default;
@@ -147,4 +146,4 @@ b2JointDef* ConstraintMotor2D::GetJointDef()
     return &jointDef_;
 }
 
-}
+} // namespace Urho3D

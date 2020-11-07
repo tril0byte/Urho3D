@@ -113,4 +113,4 @@ protected:
     WeakPtr<Constraint2D> attachedConstraint_;
 };
 
-}
+} // namespace Urho3D

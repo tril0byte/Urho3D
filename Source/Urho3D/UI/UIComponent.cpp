@@ -24,19 +24,19 @@
 
 #include "../Core/Context.h"
 #include "../Graphics/BillboardSet.h"
-#include "../Graphics/Graphics.h"
-#include "../Graphics/Octree.h"
-#include "../Graphics/Technique.h"
-#include "../Graphics/Material.h"
-#include "../Graphics/Texture2D.h"
-#include "../Graphics/StaticModel.h"
-#include "../Graphics/Renderer.h"
 #include "../Graphics/Camera.h"
+#include "../Graphics/Graphics.h"
+#include "../Graphics/Material.h"
+#include "../Graphics/Octree.h"
+#include "../Graphics/Renderer.h"
+#include "../Graphics/StaticModel.h"
+#include "../Graphics/Technique.h"
+#include "../Graphics/Texture2D.h"
 #include "../Graphics/VertexBuffer.h"
+#include "../IO/Log.h"
+#include "../Resource/ResourceCache.h"
 #include "../Scene/Scene.h"
 #include "../Scene/SceneEvents.h"
-#include "../Resource/ResourceCache.h"
-#include "../IO/Log.h"
 #include "../UI/UI.h"
 #include "../UI/UIComponent.h"
 #include "../UI/UIEvents.h"
@@ -53,14 +53,19 @@ static int const UICOMPONENT_MAX_TEXTURE_SIZE = 4096;
 class UIElement3D : public UIElement
 {
     URHO3D_OBJECT(UIElement3D, UIElement);
+
 public:
     /// Construct.
-    explicit UIElement3D(Context* context) : UIElement(context) { }
+    explicit UIElement3D(Context* context)
+        : UIElement(context)
+    {
+    }
     /// Destruct.
     ~UIElement3D() override = default;
     /// Set UIComponent which is using this element as root element.
     void SetNode(Node* node) { node_ = node; }
-    /// Set active viewport through which this element is rendered. If viewport is not set, it defaults to first viewport.
+    /// Set active viewport through which this element is rendered. If viewport is not set, it defaults to first
+    /// viewport.
     void SetViewport(Viewport* viewport) { viewport_ = viewport; }
     /// Convert element coordinates to screen coordinates.
     IntVector2 ElementToScreen(const IntVector2& position) override
@@ -133,8 +138,7 @@ public:
             }
 
             Vector2& uv = queryResult.textureUV_;
-            result = IntVector2(static_cast<int>(uv.x_ * GetWidth()),
-                static_cast<int>(uv.y_ * GetHeight()));
+            result = IntVector2(static_cast<int>(uv.x_ * GetWidth()), static_cast<int>(uv.y_ * GetHeight()));
             return result;
         }
         return result;
@@ -148,14 +152,14 @@ protected:
 };
 
 UIComponent::UIComponent(Context* context)
-    : Component(context),
-    viewportIndex_(0)
+    : Component(context)
+    , viewportIndex_(0)
 {
     texture_ = context_->CreateObject<Texture2D>();
     texture_->SetFilterMode(FILTER_BILINEAR);
     texture_->SetAddressMode(COORD_U, ADDRESS_CLAMP);
     texture_->SetAddressMode(COORD_V, ADDRESS_CLAMP);
-    texture_->SetNumLevels(1);                                        // No mipmaps
+    texture_->SetNumLevels(1); // No mipmaps
 
     rootElement_ = context_->CreateObject<UIElement3D>();
     rootElement_->SetTraversalMode(TM_BREADTH_FIRST);
@@ -180,20 +184,11 @@ void UIComponent::RegisterObject(Context* context)
     context->RegisterFactory<UIElement3D>();
 }
 
-UIElement* UIComponent::GetRoot() const
-{
-    return rootElement_;
-}
+UIElement* UIComponent::GetRoot() const { return rootElement_; }
 
-Material* UIComponent::GetMaterial() const
-{
-    return material_;
-}
+Material* UIComponent::GetMaterial() const { return material_; }
 
-Texture2D* UIComponent::GetTexture() const
-{
-    return texture_;
-}
+Texture2D* UIComponent::GetTexture() const { return texture_; }
 
 void UIComponent::OnNodeSet(Node* node)
 {
@@ -249,4 +244,4 @@ void UIComponent::SetViewportIndex(unsigned int index)
     }
 }
 
-}
+} // namespace Urho3D

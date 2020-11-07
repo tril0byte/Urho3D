@@ -20,50 +20,51 @@
 // THE SOFTWARE.
 //
 
+#include <Urho3D/Core/CoreEvents.h>
+#include <Urho3D/Engine/Engine.h>
+#include <Urho3D/Graphics/Camera.h>
+#include <Urho3D/Graphics/DebugRenderer.h>
+#include <Urho3D/Graphics/Graphics.h>
+#include <Urho3D/Graphics/GraphicsEvents.h>
+#include <Urho3D/Graphics/Octree.h>
+#include <Urho3D/Graphics/Renderer.h>
+#include <Urho3D/Graphics/Zone.h>
+#include <Urho3D/Input/Input.h>
+#include <Urho3D/Resource/ResourceCache.h>
+#include <Urho3D/Scene/Scene.h>
+#include <Urho3D/UI/Button.h>
+#include <Urho3D/UI/Font.h>
+#include <Urho3D/UI/Text.h>
+#include <Urho3D/UI/UIEvents.h>
 #include <Urho3D/Urho2D/AnimatedSprite2D.h>
 #include <Urho3D/Urho2D/AnimationSet2D.h>
-#include <Urho3D/UI/Button.h>
-#include <Urho3D/Graphics/Camera.h>
 #include <Urho3D/Urho2D/CollisionBox2D.h>
 #include <Urho3D/Urho2D/CollisionChain2D.h>
 #include <Urho3D/Urho2D/CollisionCircle2D.h>
 #include <Urho3D/Urho2D/CollisionPolygon2D.h>
-#include <Urho3D/Core/CoreEvents.h>
-#include <Urho3D/Graphics/DebugRenderer.h>
-#include <Urho3D/Engine/Engine.h>
-#include <Urho3D/UI/Font.h>
-#include <Urho3D/Graphics/Graphics.h>
-#include <Urho3D/Graphics/GraphicsEvents.h>
-#include <Urho3D/Input/Input.h>
-#include <Urho3D/Graphics/Octree.h>
+#include <Urho3D/Urho2D/PhysicsEvents2D.h>
 #include <Urho3D/Urho2D/PhysicsWorld2D.h>
-#include <Urho3D/Graphics/Renderer.h>
-#include <Urho3D/Resource/ResourceCache.h>
 #include <Urho3D/Urho2D/RigidBody2D.h>
-#include <Urho3D/Scene/Scene.h>
-#include <Urho3D/UI/Text.h>
 #include <Urho3D/Urho2D/TileMap2D.h>
 #include <Urho3D/Urho2D/TileMapLayer2D.h>
 #include <Urho3D/Urho2D/TmxFile2D.h>
-#include <Urho3D/UI/UIEvents.h>
-#include <Urho3D/Graphics/Zone.h>
-#include <Urho3D/Urho2D/PhysicsEvents2D.h>
 
 #include <Urho3D/DebugNew.h>
 
 #include "Character2D.h"
-#include "Utilities2D/Sample2D.h"
-#include "Utilities2D/Mover.h"
 #include "Urho2DIsometricDemo.h"
+#include "Utilities2D/Mover.h"
+#include "Utilities2D/Sample2D.h"
 
-Urho2DIsometricDemo::Urho2DIsometricDemo(Context* context) :
-    Sample(context),
-    zoom_(2.0f),
-    drawDebug_(false)
+Urho2DIsometricDemo::Urho2DIsometricDemo(Context* context)
+    : Sample(context)
+    , zoom_(2.0f)
+    , drawDebug_(false)
 {
     // Register factory for the Character2D component so it can be created via CreateComponent
     Character2D::RegisterObject(context);
-    // Register factory and attributes for the Mover component so it can be created via CreateComponent, and loaded / saved
+    // Register factory and attributes for the Mover component so it can be created via CreateComponent, and loaded /
+    // saved
     Mover::RegisterObject(context);
 }
 
@@ -114,7 +115,10 @@ void Urho2DIsometricDemo::CreateScene()
 
     auto* graphics = GetSubsystem<Graphics>();
     camera->SetOrthoSize((float)graphics->GetHeight() * PIXEL_SIZE);
-    camera->SetZoom(2.0f * Min((float)graphics->GetWidth() / 1280.0f, (float)graphics->GetHeight() / 800.0f)); // Set zoom according to user's resolution to ensure full visibility (initial zoom (2.0) is set for full visibility at 1280x800 resolution)
+    camera->SetZoom(2.0f * Min((float)graphics->GetWidth() / 1280.0f,
+                               (float)graphics->GetHeight() /
+                                   800.0f)); // Set zoom according to user's resolution to ensure full visibility
+                                             // (initial zoom (2.0) is set for full visibility at 1280x800 resolution)
 
     // Setup the viewport for displaying the scene
     SharedPtr<Viewport> viewport(new Viewport(context_, scene_, camera));
@@ -141,7 +145,8 @@ void Urho2DIsometricDemo::CreateScene()
     TileMapLayer2D* tileMapLayer = tileMap->GetLayer(tileMap->GetNumLayers() - 1);
     sample2D_->CreateCollisionShapesFromTMXObjects(tileMapNode, tileMapLayer, info);
 
-    // Instantiate enemies at each placeholder of "MovingEntities" layer (placeholders are Poly Line objects defining a path from points)
+    // Instantiate enemies at each placeholder of "MovingEntities" layer (placeholders are Poly Line objects defining a
+    // path from points)
     sample2D_->PopulateMovingEntities(tileMap->GetLayer(tileMap->GetNumLayers() - 2));
 
     // Instantiate coins to pick at each placeholder of "Coins" layer (placeholders for coins are Rectangle objects)
@@ -271,7 +276,8 @@ void Urho2DIsometricDemo::HandlePostUpdate(StringHash eventType, VariantMap& eve
         return;
 
     Node* character2DNode = character2D_->GetNode();
-    cameraNode_->SetPosition(Vector3(character2DNode->GetPosition().x_, character2DNode->GetPosition().y_, -10.0f)); // Camera tracks character
+    cameraNode_->SetPosition(Vector3(character2DNode->GetPosition().x_, character2DNode->GetPosition().y_,
+                                     -10.0f)); // Camera tracks character
 }
 
 void Urho2DIsometricDemo::HandlePostRenderUpdate(StringHash eventType, VariantMap& eventData)
@@ -293,7 +299,8 @@ void Urho2DIsometricDemo::ReloadScene(bool reInit)
     if (!reInit)
         filename += "InGame";
 
-    File loadFile(context_, GetSubsystem<FileSystem>()->GetProgramDir() + "Data/Scenes/" + filename + ".xml", FILE_READ);
+    File loadFile(context_, GetSubsystem<FileSystem>()->GetProgramDir() + "Data/Scenes/" + filename + ".xml",
+                  FILE_READ);
     scene_->LoadXML(loadFile);
     // After loading we have to reacquire the weak pointer to the Character2D component, as it has been recreated
     // Simply find the character's scene node by name as there's only one of them
@@ -301,7 +308,8 @@ void Urho2DIsometricDemo::ReloadScene(bool reInit)
     if (character2DNode)
         character2D_ = character2DNode->GetComponent<Character2D>();
 
-    // Set what number to use depending whether reload is requested from 'PLAY' button (reInit=true) or 'F7' key (reInit=false)
+    // Set what number to use depending whether reload is requested from 'PLAY' button (reInit=true) or 'F7' key
+    // (reInit=false)
     int lifes = character2D_->remainingLifes_;
     int coins = character2D_->remainingCoins_;
     if (reInit)

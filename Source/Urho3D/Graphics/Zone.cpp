@@ -47,19 +47,19 @@ static const float DEFAULT_FOG_HEIGHT_SCALE = 0.5f;
 
 extern const char* SCENE_CATEGORY;
 
-Zone::Zone(Context* context) :
-    Drawable(context, DRAWABLE_ZONE),
-    inverseWorldDirty_(true),
-    heightFog_(false),
-    override_(false),
-    ambientGradient_(false),
-    ambientColor_(DEFAULT_AMBIENT_COLOR),
-    fogColor_(DEFAULT_FOG_COLOR),
-    fogStart_(DEFAULT_FOG_START),
-    fogEnd_(DEFAULT_FOG_END),
-    fogHeight_(DEFAULT_FOG_HEIGHT),
-    fogHeightScale_(DEFAULT_FOG_HEIGHT_SCALE),
-    priority_(0)
+Zone::Zone(Context* context)
+    : Drawable(context, DRAWABLE_ZONE)
+    , inverseWorldDirty_(true)
+    , heightFog_(false)
+    , override_(false)
+    , ambientGradient_(false)
+    , ambientColor_(DEFAULT_AMBIENT_COLOR)
+    , fogColor_(DEFAULT_FOG_COLOR)
+    , fogStart_(DEFAULT_FOG_START)
+    , fogEnd_(DEFAULT_FOG_END)
+    , fogHeight_(DEFAULT_FOG_HEIGHT)
+    , fogHeightScale_(DEFAULT_FOG_HEIGHT_SCALE)
+    , priority_(0)
 {
     boundingBox_ = BoundingBox(DEFAULT_BOUNDING_BOX_MIN, DEFAULT_BOUNDING_BOX_MAX);
 }
@@ -71,8 +71,10 @@ void Zone::RegisterObject(Context* context)
     context->RegisterFactory<Zone>(SCENE_CATEGORY);
 
     URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AM_DEFAULT);
-    URHO3D_ATTRIBUTE_EX("Bounding Box Min", Vector3, boundingBox_.min_, MarkNodeDirty, DEFAULT_BOUNDING_BOX_MIN, AM_DEFAULT);
-    URHO3D_ATTRIBUTE_EX("Bounding Box Max", Vector3, boundingBox_.max_, MarkNodeDirty, DEFAULT_BOUNDING_BOX_MAX, AM_DEFAULT);
+    URHO3D_ATTRIBUTE_EX("Bounding Box Min", Vector3, boundingBox_.min_, MarkNodeDirty, DEFAULT_BOUNDING_BOX_MIN,
+                        AM_DEFAULT);
+    URHO3D_ATTRIBUTE_EX("Bounding Box Max", Vector3, boundingBox_.max_, MarkNodeDirty, DEFAULT_BOUNDING_BOX_MAX,
+                        AM_DEFAULT);
     URHO3D_ATTRIBUTE("Ambient Color", Color, ambientColor_, DEFAULT_AMBIENT_COLOR, AM_DEFAULT);
     URHO3D_ATTRIBUTE("Fog Color", Color, fogColor_, DEFAULT_FOG_COLOR, AM_DEFAULT);
     URHO3D_ATTRIBUTE("Fog Start", float, fogStart_, DEFAULT_FOG_START, AM_DEFAULT);
@@ -84,7 +86,7 @@ void Zone::RegisterObject(Context* context)
     URHO3D_ATTRIBUTE("Ambient Gradient", bool, ambientGradient_, false, AM_DEFAULT);
     URHO3D_ATTRIBUTE_EX("Priority", int, priority_, MarkNodeDirty, 0, AM_DEFAULT);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Zone Texture", GetZoneTextureAttr, SetZoneTextureAttr, ResourceRef,
-        ResourceRef(TextureCube::GetTypeStatic()), AM_DEFAULT);
+                                    ResourceRef(TextureCube::GetTypeStatic()), AM_DEFAULT);
     URHO3D_ATTRIBUTE("Light Mask", int, lightMask_, DEFAULT_LIGHTMASK, AM_DEFAULT);
     URHO3D_ATTRIBUTE("Shadow Mask", int, shadowMask_, DEFAULT_SHADOWMASK, AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Zone Mask", GetZoneMask, SetZoneMask, unsigned, DEFAULT_ZONEMASK, AM_DEFAULT);
@@ -221,10 +223,7 @@ void Zone::SetZoneTextureAttr(const ResourceRef& value)
     zoneTexture_ = static_cast<Texture*>(cache->GetResource(value.type_, value.name_));
 }
 
-ResourceRef Zone::GetZoneTextureAttr() const
-{
-    return GetResourceRef(zoneTexture_, TextureCube::GetTypeStatic());
-}
+ResourceRef Zone::GetZoneTextureAttr() const { return GetResourceRef(zoneTexture_, TextureCube::GetTypeStatic()); }
 
 void Zone::OnMarkedDirty(Node* node)
 {
@@ -244,10 +243,7 @@ void Zone::OnMarkedDirty(Node* node)
     inverseWorldDirty_ = true;
 }
 
-void Zone::OnWorldBoundingBoxUpdate()
-{
-    worldBoundingBox_ = boundingBox_.Transformed(node_->GetWorldTransform());
-}
+void Zone::OnWorldBoundingBoxUpdate() { worldBoundingBox_ = boundingBox_.Transformed(node_->GetWorldTransform()); }
 
 void Zone::UpdateAmbientGradient()
 {
@@ -317,10 +313,7 @@ void Zone::UpdateAmbientGradient()
     }
 }
 
-void Zone::OnRemoveFromOctree()
-{
-    ClearDrawablesZone();
-}
+void Zone::OnRemoveFromOctree() { ClearDrawablesZone(); }
 
 void Zone::ClearDrawablesZone()
 {
@@ -350,4 +343,4 @@ void Zone::ClearDrawablesZone()
     lastAmbientEndZone_.Reset();
 }
 
-}
+} // namespace Urho3D

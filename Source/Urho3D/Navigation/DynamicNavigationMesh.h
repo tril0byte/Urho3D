@@ -154,4 +154,4 @@ private:
     PODVector<IntVector2> tileQueue_;
 };
 
-}
+} // namespace Urho3D

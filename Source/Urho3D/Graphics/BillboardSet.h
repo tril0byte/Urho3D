@@ -40,7 +40,8 @@ struct URHO3D_API Billboard
 {
     /// Position.
     Vector3 position_;
-    /// Two-dimensional size. If BillboardSet has fixed screen size enabled, this is measured in pixels instead of world units.
+    /// Two-dimensional size. If BillboardSet has fixed screen size enabled, this is measured in pixels instead of world
+    /// units.
     Vector2 size_;
     /// UV coordinates.
     Rect uv_;
@@ -73,7 +74,8 @@ public:
 
     /// Process octree raycast. May be called from a worker thread.
     void ProcessRayQuery(const RayOctreeQuery& query, PODVector<RayQueryResult>& results) override;
-    /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly re-entrantly.
+    /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly
+    /// re-entrantly.
     void UpdateBatches(const FrameInfo& frame) override;
     /// Prepare geometry for rendering. Called from a worker thread if possible (no GPU update).
     void UpdateGeometry(const FrameInfo& frame) override;
@@ -95,10 +97,12 @@ public:
     /// Set whether billboards are sorted by distance. Default false.
     /// @property
     void SetSorted(bool enable);
-    /// Set whether billboards have fixed size on screen (measured in pixels) regardless of distance to camera. Default false.
+    /// Set whether billboards have fixed size on screen (measured in pixels) regardless of distance to camera. Default
+    /// false.
     /// @property
     void SetFixedScreenSize(bool enable);
-    /// Set how the billboards should rotate in relation to the camera. Default is to follow camera rotation on all axes (FC_ROTATE_XYZ).
+    /// Set how the billboards should rotate in relation to the camera. Default is to follow camera rotation on all axes
+    /// (FC_ROTATE_XYZ).
     /// @property
     void SetFaceCameraMode(FaceCameraMode mode);
     /// Set minimal angle between billboard normal and look-at direction.
@@ -229,4 +233,4 @@ private:
     mutable VectorBuffer attrBuffer_;
 };
 
-}
+} // namespace Urho3D

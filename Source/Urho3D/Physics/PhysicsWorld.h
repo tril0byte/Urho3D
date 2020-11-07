@@ -60,7 +60,7 @@ struct CollisionGeometryData;
 struct URHO3D_API PhysicsRaycastResult
 {
     /// Test for inequality, added to prevent GCC from complaining.
-    bool operator !=(const PhysicsRaycastResult& rhs) const
+    bool operator!=(const PhysicsRaycastResult& rhs) const
     {
         return position_ != rhs.position_ || normal_ != rhs.normal_ || distance_ != rhs.distance_ || body_ != rhs.body_;
     }
@@ -94,9 +94,9 @@ struct DelayedWorldTransform
 struct ManifoldPair
 {
     /// Construct with defaults.
-    ManifoldPair() :
-        manifold_(nullptr),
-        flippedManifold_(nullptr)
+    ManifoldPair()
+        : manifold_(nullptr)
+        , flippedManifold_(nullptr)
     {
     }
 
@@ -109,8 +109,8 @@ struct ManifoldPair
 /// Custom overrides of physics internals. To use overrides, must be set before the physics component is created.
 struct PhysicsWorldConfig
 {
-    PhysicsWorldConfig() :
-        collisionConfig_(nullptr)
+    PhysicsWorldConfig()
+        : collisionConfig_(nullptr)
     {
     }
 
@@ -122,7 +122,7 @@ static const int DEFAULT_FPS = 60;
 static const float DEFAULT_MAX_NETWORK_ANGULAR_VELOCITY = 100.0f;
 
 /// Cache of collision geometry data.
-using CollisionGeometryDataCache = HashMap<Pair<Model*, unsigned>, SharedPtr<CollisionGeometryData> >;
+using CollisionGeometryDataCache = HashMap<Pair<Model*, unsigned>, SharedPtr<CollisionGeometryData>>;
 
 /// Physics simulation world component. Should be added only to the root scene node.
 class URHO3D_API PhysicsWorld : public Component, public btIDebugDraw
@@ -147,8 +147,8 @@ public:
     /// Log warning from the physics engine.
     void reportErrorWarning(const char* warningString) override;
     /// Draw a physics debug contact point. Not implemented.
-    void drawContactPoint
-        (const btVector3& pointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color) override;
+    void drawContactPoint(const btVector3& pointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime,
+                          const btVector3& color) override;
     /// Draw physics debug 3D text. Not implemented.
     void draw3dText(const btVector3& location, const char* textString) override;
 
@@ -171,7 +171,8 @@ public:
     /// Set gravity.
     /// @property
     void SetGravity(const Vector3& gravity);
-    /// Set maximum number of physics substeps per frame. 0 (default) is unlimited. Positive values cap the amount. Use a negative value to enable an adaptive timestep. This may cause inconsistent physics behavior.
+    /// Set maximum number of physics substeps per frame. 0 (default) is unlimited. Positive values cap the amount. Use
+    /// a negative value to enable an adaptive timestep. This may cause inconsistent physics behavior.
     /// @property
     void SetMaxSubSteps(int num);
     /// Set number of constraint solver iterations.
@@ -192,31 +193,39 @@ public:
     /// Set maximum angular velocity for network replication.
     void SetMaxNetworkAngularVelocity(float velocity);
     /// Perform a physics world raycast and return all hits.
-    void Raycast
-        (PODVector<PhysicsRaycastResult>& result, const Ray& ray, float maxDistance, unsigned collisionMask = M_MAX_UNSIGNED);
+    void Raycast(PODVector<PhysicsRaycastResult>& result, const Ray& ray, float maxDistance,
+                 unsigned collisionMask = M_MAX_UNSIGNED);
     /// Perform a physics world raycast and return the closest hit.
-    void RaycastSingle(PhysicsRaycastResult& result, const Ray& ray, float maxDistance, unsigned collisionMask = M_MAX_UNSIGNED);
+    void RaycastSingle(PhysicsRaycastResult& result, const Ray& ray, float maxDistance,
+                       unsigned collisionMask = M_MAX_UNSIGNED);
     /// Perform a physics world segmented raycast and return the closest hit. Useful for big scenes with many bodies.
-    /// overlapDistance is used to make sure there are no gap between segments, and must be smaller than segmentDistance.
-    void RaycastSingleSegmented(PhysicsRaycastResult& result, const Ray& ray, float maxDistance, float segmentDistance, unsigned collisionMask = M_MAX_UNSIGNED, float overlapDistance = 0.1f);
+    /// overlapDistance is used to make sure there are no gap between segments, and must be smaller than
+    /// segmentDistance.
+    void RaycastSingleSegmented(PhysicsRaycastResult& result, const Ray& ray, float maxDistance, float segmentDistance,
+                                unsigned collisionMask = M_MAX_UNSIGNED, float overlapDistance = 0.1f);
     /// Perform a physics world swept sphere test and return the closest hit.
-    void SphereCast
-        (PhysicsRaycastResult& result, const Ray& ray, float radius, float maxDistance, unsigned collisionMask = M_MAX_UNSIGNED);
+    void SphereCast(PhysicsRaycastResult& result, const Ray& ray, float radius, float maxDistance,
+                    unsigned collisionMask = M_MAX_UNSIGNED);
     /// Perform a physics world swept convex test using a user-supplied collision shape and return the first hit.
-    void ConvexCast(PhysicsRaycastResult& result, CollisionShape* shape, const Vector3& startPos, const Quaternion& startRot,
-        const Vector3& endPos, const Quaternion& endRot, unsigned collisionMask = M_MAX_UNSIGNED);
+    void ConvexCast(PhysicsRaycastResult& result, CollisionShape* shape, const Vector3& startPos,
+                    const Quaternion& startRot, const Vector3& endPos, const Quaternion& endRot,
+                    unsigned collisionMask = M_MAX_UNSIGNED);
     /// Perform a physics world swept convex test using a user-supplied Bullet collision shape and return the first hit.
-    void ConvexCast(PhysicsRaycastResult& result, btCollisionShape* shape, const Vector3& startPos, const Quaternion& startRot,
-        const Vector3& endPos, const Quaternion& endRot, unsigned collisionMask = M_MAX_UNSIGNED);
+    void ConvexCast(PhysicsRaycastResult& result, btCollisionShape* shape, const Vector3& startPos,
+                    const Quaternion& startRot, const Vector3& endPos, const Quaternion& endRot,
+                    unsigned collisionMask = M_MAX_UNSIGNED);
     /// Invalidate cached collision geometry for a model.
     void RemoveCachedGeometry(Model* model);
     /// Return rigid bodies by a sphere query.
     void GetRigidBodies(PODVector<RigidBody*>& result, const Sphere& sphere, unsigned collisionMask = M_MAX_UNSIGNED);
     /// Return rigid bodies by a box query.
     void GetRigidBodies(PODVector<RigidBody*>& result, const BoundingBox& box, unsigned collisionMask = M_MAX_UNSIGNED);
-    /// Return rigid bodies by contact test with the specified body. It needs to be active to return all contacts reliably.
+    /// Return rigid bodies by contact test with the specified body. It needs to be active to return all contacts
+    /// reliably.
     void GetRigidBodies(PODVector<RigidBody*>& result, const RigidBody* body);
-    /// Return rigid bodies that have been in collision with the specified body on the last simulation step. Only returns collisions that were sent as events (depends on collision event mode) and excludes e.g. static-static collisions.
+    /// Return rigid bodies that have been in collision with the specified body on the last simulation step. Only
+    /// returns collisions that were sent as events (depends on collision event mode) and excludes e.g. static-static
+    /// collisions.
     void GetCollidingBodies(PODVector<RigidBody*>& result, const RigidBody* body);
 
     /// Return gravity.
@@ -335,9 +344,10 @@ private:
     /// Constraints in the world.
     PODVector<Constraint*> constraints_;
     /// Collision pairs on this frame.
-    HashMap<Pair<WeakPtr<RigidBody>, WeakPtr<RigidBody> >, ManifoldPair> currentCollisions_;
-    /// Collision pairs on the previous frame. Used to check if a collision is "new." Manifolds are not guaranteed to exist anymore.
-    HashMap<Pair<WeakPtr<RigidBody>, WeakPtr<RigidBody> >, ManifoldPair> previousCollisions_;
+    HashMap<Pair<WeakPtr<RigidBody>, WeakPtr<RigidBody>>, ManifoldPair> currentCollisions_;
+    /// Collision pairs on the previous frame. Used to check if a collision is "new." Manifolds are not guaranteed to
+    /// exist anymore.
+    HashMap<Pair<WeakPtr<RigidBody>, WeakPtr<RigidBody>>, ManifoldPair> previousCollisions_;
     /// Delayed (parented) world transform assignments.
     HashMap<RigidBody*, DelayedWorldTransform> delayedWorldTransforms_;
     /// Cache for trimesh geometry data by model and LOD level.
@@ -354,7 +364,8 @@ private:
     VectorBuffer contacts_;
     /// Simulation substeps per second.
     unsigned fps_{DEFAULT_FPS};
-    /// Maximum number of simulation substeps per frame. 0 (default) unlimited, or negative values for adaptive timestep.
+    /// Maximum number of simulation substeps per frame. 0 (default) unlimited, or negative values for adaptive
+    /// timestep.
     int maxSubSteps_{};
     /// Time accumulator for non-interpolated mode.
     float timeAcc_{};
@@ -381,4 +392,4 @@ private:
 /// Register Physics library objects.
 void URHO3D_API RegisterPhysicsLibrary(Context* context);
 
-}
+} // namespace Urho3D

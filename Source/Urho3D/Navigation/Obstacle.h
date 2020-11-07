@@ -96,4 +96,4 @@ private:
     WeakPtr<DynamicNavigationMesh> ownerMesh_;
 };
 
-}
+} // namespace Urho3D

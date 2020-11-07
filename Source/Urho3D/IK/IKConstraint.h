@@ -37,7 +37,6 @@ class URHO3D_API IKConstraint : public Component
     URHO3D_OBJECT(IKConstraint, Component);
 
 public:
-
     /// Constructs a new IK constraint.
     explicit IKConstraint(Context* context);
 

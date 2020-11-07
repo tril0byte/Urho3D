@@ -41,10 +41,10 @@ class URHO3D_API OctreeQuery
 {
 public:
     /// Construct with query parameters.
-    OctreeQuery(PODVector<Drawable*>& result, unsigned char drawableFlags, unsigned viewMask) :
-        result_(result),
-        drawableFlags_(drawableFlags),
-        viewMask_(viewMask)
+    OctreeQuery(PODVector<Drawable*>& result, unsigned char drawableFlags, unsigned viewMask)
+        : result_(result)
+        , drawableFlags_(drawableFlags)
+        , viewMask_(viewMask)
     {
     }
 
@@ -54,7 +54,7 @@ public:
     /// Prevent copy construction.
     OctreeQuery(const OctreeQuery& rhs) = delete;
     /// Prevent assignment.
-    OctreeQuery& operator =(const OctreeQuery& rhs) = delete;
+    OctreeQuery& operator=(const OctreeQuery& rhs) = delete;
 
     /// Intersection test for an octant.
     virtual Intersection TestOctant(const BoundingBox& box, bool inside) = 0;
@@ -76,9 +76,9 @@ class URHO3D_API PointOctreeQuery : public OctreeQuery
 public:
     /// Construct with point and query parameters.
     PointOctreeQuery(PODVector<Drawable*>& result, const Vector3& point, unsigned char drawableFlags = DRAWABLE_ANY,
-        unsigned viewMask = DEFAULT_VIEWMASK) :
-        OctreeQuery(result, drawableFlags, viewMask),
-        point_(point)
+                     unsigned viewMask = DEFAULT_VIEWMASK)
+        : OctreeQuery(result, drawableFlags, viewMask)
+        , point_(point)
     {
     }
 
@@ -98,9 +98,9 @@ class URHO3D_API SphereOctreeQuery : public OctreeQuery
 public:
     /// Construct with sphere and query parameters.
     SphereOctreeQuery(PODVector<Drawable*>& result, const Sphere& sphere, unsigned char drawableFlags = DRAWABLE_ANY,
-        unsigned viewMask = DEFAULT_VIEWMASK) :
-        OctreeQuery(result, drawableFlags, viewMask),
-        sphere_(sphere)
+                      unsigned viewMask = DEFAULT_VIEWMASK)
+        : OctreeQuery(result, drawableFlags, viewMask)
+        , sphere_(sphere)
     {
     }
 
@@ -120,9 +120,9 @@ class URHO3D_API BoxOctreeQuery : public OctreeQuery
 public:
     /// Construct with bounding box and query parameters.
     BoxOctreeQuery(PODVector<Drawable*>& result, const BoundingBox& box, unsigned char drawableFlags = DRAWABLE_ANY,
-        unsigned viewMask = DEFAULT_VIEWMASK) :
-        OctreeQuery(result, drawableFlags, viewMask),
-        box_(box)
+                   unsigned viewMask = DEFAULT_VIEWMASK)
+        : OctreeQuery(result, drawableFlags, viewMask)
+        , box_(box)
     {
     }
 
@@ -142,9 +142,9 @@ class URHO3D_API FrustumOctreeQuery : public OctreeQuery
 public:
     /// Construct with frustum and query parameters.
     FrustumOctreeQuery(PODVector<Drawable*>& result, const Frustum& frustum, unsigned char drawableFlags = DRAWABLE_ANY,
-        unsigned viewMask = DEFAULT_VIEWMASK) :
-        OctreeQuery(result, drawableFlags, viewMask),
-        frustum_(frustum)
+                       unsigned viewMask = DEFAULT_VIEWMASK)
+        : OctreeQuery(result, drawableFlags, viewMask)
+        , frustum_(frustum)
     {
     }
 
@@ -161,14 +161,14 @@ public:
 struct URHO3D_API OctreeQueryResult
 {
     /// Construct with defaults.
-    OctreeQueryResult() :
-        drawable_(nullptr),
-        node_(nullptr)
+    OctreeQueryResult()
+        : drawable_(nullptr)
+        , node_(nullptr)
     {
     }
 
     /// Test for inequality, added to prevent GCC from complaining.
-    bool operator !=(const OctreeQueryResult& rhs) const { return drawable_ != rhs.drawable_ || node_ != rhs.node_; }
+    bool operator!=(const OctreeQueryResult& rhs) const { return drawable_ != rhs.drawable_ || node_ != rhs.node_; }
 
     /// Drawable.
     Drawable* drawable_;
@@ -189,21 +189,17 @@ enum RayQueryLevel
 struct URHO3D_API RayQueryResult
 {
     /// Construct with defaults.
-    RayQueryResult() :
-        drawable_(nullptr),
-        node_(nullptr)
+    RayQueryResult()
+        : drawable_(nullptr)
+        , node_(nullptr)
     {
     }
 
     /// Test for inequality, added to prevent GCC from complaining.
-    bool operator !=(const RayQueryResult& rhs) const
+    bool operator!=(const RayQueryResult& rhs) const
     {
-        return position_ != rhs.position_ ||
-               normal_ != rhs.normal_ ||
-               textureUV_ != rhs.textureUV_ ||
-               distance_ != rhs.distance_ ||
-               drawable_ != rhs.drawable_ ||
-               node_ != rhs.node_ ||
+        return position_ != rhs.position_ || normal_ != rhs.normal_ || textureUV_ != rhs.textureUV_ ||
+               distance_ != rhs.distance_ || drawable_ != rhs.drawable_ || node_ != rhs.node_ ||
                subObject_ != rhs.subObject_;
     }
 
@@ -230,20 +226,21 @@ class URHO3D_API RayOctreeQuery
 public:
     /// Construct with ray and query parameters.
     RayOctreeQuery(PODVector<RayQueryResult>& result, const Ray& ray, RayQueryLevel level = RAY_TRIANGLE,
-        float maxDistance = M_INFINITY, unsigned char drawableFlags = DRAWABLE_ANY, unsigned viewMask = DEFAULT_VIEWMASK) :
-        result_(result),
-        ray_(ray),
-        drawableFlags_(drawableFlags),
-        viewMask_(viewMask),
-        maxDistance_(maxDistance),
-        level_(level)
+                   float maxDistance = M_INFINITY, unsigned char drawableFlags = DRAWABLE_ANY,
+                   unsigned viewMask = DEFAULT_VIEWMASK)
+        : result_(result)
+        , ray_(ray)
+        , drawableFlags_(drawableFlags)
+        , viewMask_(viewMask)
+        , maxDistance_(maxDistance)
+        , level_(level)
     {
     }
 
     /// Prevent copy construction.
     RayOctreeQuery(const RayOctreeQuery& rhs) = delete;
     /// Prevent assignment.
-    RayOctreeQuery& operator =(const RayOctreeQuery& rhs) = delete;
+    RayOctreeQuery& operator=(const RayOctreeQuery& rhs) = delete;
 
     /// Result vector reference.
     PODVector<RayQueryResult>& result_;
@@ -264,8 +261,8 @@ class URHO3D_API AllContentOctreeQuery : public OctreeQuery
 {
 public:
     /// Construct.
-    AllContentOctreeQuery(PODVector<Drawable*>& result, unsigned char drawableFlags, unsigned viewMask) :
-        OctreeQuery(result, drawableFlags, viewMask)
+    AllContentOctreeQuery(PODVector<Drawable*>& result, unsigned char drawableFlags, unsigned viewMask)
+        : OctreeQuery(result, drawableFlags, viewMask)
     {
     }
 
@@ -275,4 +272,4 @@ public:
     void TestDrawables(Drawable** start, Drawable** end, bool inside) override;
 };
 
-}
+} // namespace Urho3D

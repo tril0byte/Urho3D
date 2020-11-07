@@ -36,17 +36,14 @@
 namespace Urho3D
 {
 
-TileMapLayer2D::TileMapLayer2D(Context* context) :
-    Component(context)
+TileMapLayer2D::TileMapLayer2D(Context* context)
+    : Component(context)
 {
 }
 
 TileMapLayer2D::~TileMapLayer2D() = default;
 
-void TileMapLayer2D::RegisterObject(Context* context)
-{
-    context->RegisterFactory<TileMapLayer2D>();
-}
+void TileMapLayer2D::RegisterObject(Context* context) { context->RegisterFactory<TileMapLayer2D>(); }
 
 // Transform vector from node-local space to global space
 static Vector2 TransformNode2D(const Matrix3x4& transform, Vector2 local)
@@ -70,98 +67,100 @@ void TileMapLayer2D::DrawDebugGeometry(DebugRenderer* debug, bool depthTest)
             const Vector2& size = object->GetSize();
             const TileMapInfo2D& info = tileMap_->GetInfo();
 
-
             switch (object->GetObjectType())
             {
             case OT_RECTANGLE:
+            {
+                Vector<Vector2> points;
+
+                switch (info.orientation_)
                 {
-                    Vector<Vector2> points;
-
-                    switch (info.orientation_)
-                    {
-                    case O_ORTHOGONAL:
-                    case O_HEXAGONAL:
-                    case O_STAGGERED:
-                        {
-                            points.Push(Vector2::ZERO);
-                            points.Push(Vector2(size.x_, 0.0f));
-                            points.Push(Vector2(size.x_, -size.y_));
-                            points.Push(Vector2(0.0f, -size.y_));
-                            break;
-                        }
-                    case O_ISOMETRIC:
-                        {
-                            float ratio = (info.tileWidth_ / info.tileHeight_) * 0.5f;
-                            points.Push(Vector2::ZERO);
-                            points.Push(Vector2(size.y_ * ratio, size.y_ * 0.5f));
-                            points.Push(Vector2((size.x_ + size.y_) * ratio, (-size.x_ + size.y_) * 0.5f));
-                            points.Push(Vector2(size.x_ * ratio, -size.x_ * 0.5f));
-                            break;
-                        }
-                    }
-
-                    for (unsigned j = 0; j < points.Size(); ++j)
-                        debug->AddLine(Vector3(TransformNode2D(transform, points[j] + object->GetPosition())),
-                            Vector3(TransformNode2D(transform, points[(j + 1) % points.Size()] + object->GetPosition())), color,
-                            depthTest);
+                case O_ORTHOGONAL:
+                case O_HEXAGONAL:
+                case O_STAGGERED:
+                {
+                    points.Push(Vector2::ZERO);
+                    points.Push(Vector2(size.x_, 0.0f));
+                    points.Push(Vector2(size.x_, -size.y_));
+                    points.Push(Vector2(0.0f, -size.y_));
+                    break;
                 }
-                break;
+                case O_ISOMETRIC:
+                {
+                    float ratio = (info.tileWidth_ / info.tileHeight_) * 0.5f;
+                    points.Push(Vector2::ZERO);
+                    points.Push(Vector2(size.y_ * ratio, size.y_ * 0.5f));
+                    points.Push(Vector2((size.x_ + size.y_) * ratio, (-size.x_ + size.y_) * 0.5f));
+                    points.Push(Vector2(size.x_ * ratio, -size.x_ * 0.5f));
+                    break;
+                }
+                }
+
+                for (unsigned j = 0; j < points.Size(); ++j)
+                    debug->AddLine(
+                        Vector3(TransformNode2D(transform, points[j] + object->GetPosition())),
+                        Vector3(TransformNode2D(transform, points[(j + 1) % points.Size()] + object->GetPosition())),
+                        color, depthTest);
+            }
+            break;
 
             case OT_ELLIPSE:
-                {
-                    const Vector2 halfSize = object->GetSize() * 0.5f;
-                    float ratio = (info.tileWidth_ / info.tileHeight_) * 0.5f; // For isometric only
+            {
+                const Vector2 halfSize = object->GetSize() * 0.5f;
+                float ratio = (info.tileWidth_ / info.tileHeight_) * 0.5f; // For isometric only
 
-                    Vector2 pivot = object->GetPosition();
+                Vector2 pivot = object->GetPosition();
+                if (info.orientation_ == O_ISOMETRIC)
+                {
+                    pivot += Vector2((halfSize.x_ + halfSize.y_) * ratio, (-halfSize.x_ + halfSize.y_) * 0.5f);
+                }
+                else
+                {
+                    pivot += halfSize;
+                }
+
+                for (unsigned i = 0; i < 360; i += 30)
+                {
+                    unsigned j = i + 30;
+                    float x1 = halfSize.x_ * Cos((float)i);
+                    float y1 = halfSize.y_ * Sin((float)i);
+                    float x2 = halfSize.x_ * Cos((float)j);
+                    float y2 = halfSize.y_ * Sin((float)j);
+                    Vector2 point1 = Vector2(x1, -y1);
+                    Vector2 point2 = Vector2(x2, -y2);
+
                     if (info.orientation_ == O_ISOMETRIC)
                     {
-                        pivot += Vector2((halfSize.x_ + halfSize.y_) * ratio, (-halfSize.x_ + halfSize.y_) * 0.5f);
-                    }
-                    else
-                    {
-                        pivot += halfSize;
+                        point1 = Vector2((point1.x_ + point1.y_) * ratio, (point1.y_ - point1.x_) * 0.5f);
+                        point2 = Vector2((point2.x_ + point2.y_) * ratio, (point2.y_ - point2.x_) * 0.5f);
                     }
 
-                    for (unsigned i = 0; i < 360; i += 30)
-                    {
-                        unsigned j = i + 30;
-                        float x1 = halfSize.x_ * Cos((float)i);
-                        float y1 = halfSize.y_ * Sin((float)i);
-                        float x2 = halfSize.x_ * Cos((float)j);
-                        float y2 = halfSize.y_ * Sin((float)j);
-                        Vector2 point1 = Vector2(x1, - y1);
-                        Vector2 point2 = Vector2(x2, - y2);
-
-                        if (info.orientation_ == O_ISOMETRIC)
-                        {
-                            point1 = Vector2((point1.x_ + point1.y_) * ratio, (point1.y_ - point1.x_) * 0.5f);
-                            point2 = Vector2((point2.x_ + point2.y_) * ratio, (point2.y_ - point2.x_) * 0.5f);
-                        }
-
-                        debug->AddLine(Vector3(TransformNode2D(transform, pivot + point1)),
-                            Vector3(TransformNode2D(transform, pivot + point2)), color, depthTest);
-                    }
+                    debug->AddLine(Vector3(TransformNode2D(transform, pivot + point1)),
+                                   Vector3(TransformNode2D(transform, pivot + point2)), color, depthTest);
                 }
-                break;
+            }
+            break;
 
             case OT_POLYGON:
             case OT_POLYLINE:
-                {
-                    for (unsigned j = 0; j < object->GetNumPoints() - 1; ++j)
-                        debug->AddLine(Vector3(TransformNode2D(transform, object->GetPoint(j))),
-                            Vector3(TransformNode2D(transform, object->GetPoint(j + 1))), color, depthTest);
+            {
+                for (unsigned j = 0; j < object->GetNumPoints() - 1; ++j)
+                    debug->AddLine(Vector3(TransformNode2D(transform, object->GetPoint(j))),
+                                   Vector3(TransformNode2D(transform, object->GetPoint(j + 1))), color, depthTest);
 
-                    if (object->GetObjectType() == OT_POLYGON)
-                        debug->AddLine(Vector3(TransformNode2D(transform, object->GetPoint(0))),
-                            Vector3(TransformNode2D(transform, object->GetPoint(object->GetNumPoints() - 1))), color, depthTest);
-                    // Also draw a circle at origin to indicate direction
-                    else
-                        debug->AddCircle(Vector3(TransformNode2D(transform, object->GetPoint(0))), Vector3::FORWARD, 0.05f, color,
-                            64, depthTest);
-                }
+                if (object->GetObjectType() == OT_POLYGON)
+                    debug->AddLine(Vector3(TransformNode2D(transform, object->GetPoint(0))),
+                                   Vector3(TransformNode2D(transform, object->GetPoint(object->GetNumPoints() - 1))),
+                                   color, depthTest);
+                // Also draw a circle at origin to indicate direction
+                else
+                    debug->AddCircle(Vector3(TransformNode2D(transform, object->GetPoint(0))), Vector3::FORWARD, 0.05f,
+                                     color, 64, depthTest);
+            }
+            break;
+
+            default:
                 break;
-
-            default: break;
             }
         }
     }
@@ -246,10 +245,7 @@ void TileMapLayer2D::SetVisible(bool visible)
     }
 }
 
-TileMap2D* TileMapLayer2D::GetTileMap() const
-{
-    return tileMap_;
-}
+TileMap2D* TileMapLayer2D::GetTileMap() const { return tileMap_; }
 
 bool TileMapLayer2D::HasProperty(const String& name) const
 {
@@ -266,20 +262,11 @@ const String& TileMapLayer2D::GetProperty(const String& name) const
     return tmxLayer_->GetProperty(name);
 }
 
-TileMapLayerType2D TileMapLayer2D::GetLayerType() const
-{
-    return tmxLayer_ ? tmxLayer_->GetType() : LT_INVALID;
-}
+TileMapLayerType2D TileMapLayer2D::GetLayerType() const { return tmxLayer_ ? tmxLayer_->GetType() : LT_INVALID; }
 
-int TileMapLayer2D::GetWidth() const
-{
-    return tmxLayer_ ? tmxLayer_->GetWidth() : 0;
-}
+int TileMapLayer2D::GetWidth() const { return tmxLayer_ ? tmxLayer_->GetWidth() : 0; }
 
-int TileMapLayer2D::GetHeight() const
-{
-    return tmxLayer_ ? tmxLayer_->GetHeight() : 0;
-}
+int TileMapLayer2D::GetHeight() const { return tmxLayer_ ? tmxLayer_->GetHeight() : 0; }
 
 Tile2D* TileMapLayer2D::GetTile(int x, int y) const
 {
@@ -418,4 +405,4 @@ void TileMapLayer2D::SetImageLayer(const TmxImageLayer2D* imageLayer)
     nodes_.Push(imageNode);
 }
 
-}
+} // namespace Urho3D

@@ -34,10 +34,10 @@ namespace Urho3D
 
 extern const char* UI_CATEGORY;
 
-CheckBox::CheckBox(Context* context) :
-    BorderImage(context),
-    checkedOffset_(IntVector2::ZERO),
-    checked_(false)
+CheckBox::CheckBox(Context* context)
+    : BorderImage(context)
+    , checkedOffset_(IntVector2::ZERO)
+    , checked_(false)
 {
     SetEnabled(true);
     focusMode_ = FM_FOCUSABLE_DEFOCUSABLE;
@@ -53,7 +53,8 @@ void CheckBox::RegisterObject(Context* context)
     URHO3D_UPDATE_ATTRIBUTE_DEFAULT_VALUE("Is Enabled", true);
     URHO3D_UPDATE_ATTRIBUTE_DEFAULT_VALUE("Focus Mode", FM_FOCUSABLE_DEFOCUSABLE);
     URHO3D_ACCESSOR_ATTRIBUTE("Is Checked", IsChecked, SetChecked, bool, false, AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Checked Image Offset", GetCheckedOffset, SetCheckedOffset, IntVector2, IntVector2::ZERO, AM_FILE);
+    URHO3D_ACCESSOR_ATTRIBUTE("Checked Image Offset", GetCheckedOffset, SetCheckedOffset, IntVector2, IntVector2::ZERO,
+                              AM_FILE);
 }
 
 void CheckBox::GetBatches(PODVector<UIBatch>& batches, PODVector<float>& vertexData, const IntRect& currentScissor)
@@ -72,8 +73,8 @@ void CheckBox::GetBatches(PODVector<UIBatch>& batches, PODVector<float>& vertexD
     BorderImage::GetBatches(batches, vertexData, currentScissor, offset);
 }
 
-void CheckBox::OnClickBegin(const IntVector2& position, const IntVector2& screenPosition, MouseButton button, MouseButtonFlags buttons, QualifierFlags qualifiers,
-    Cursor* cursor)
+void CheckBox::OnClickBegin(const IntVector2& position, const IntVector2& screenPosition, MouseButton button,
+                            MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor)
 {
     if (button == MOUSEB_LEFT && editable_)
         SetChecked(!checked_);
@@ -103,14 +104,8 @@ void CheckBox::SetChecked(bool enable)
     }
 }
 
-void CheckBox::SetCheckedOffset(const IntVector2& offset)
-{
-    checkedOffset_ = offset;
-}
+void CheckBox::SetCheckedOffset(const IntVector2& offset) { checkedOffset_ = offset; }
 
-void CheckBox::SetCheckedOffset(int x, int y)
-{
-    checkedOffset_ = IntVector2(x, y);
-}
+void CheckBox::SetCheckedOffset(int x, int y) { checkedOffset_ = IntVector2(x, y); }
 
-}
+} // namespace Urho3D

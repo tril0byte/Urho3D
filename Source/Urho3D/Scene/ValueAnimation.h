@@ -40,7 +40,8 @@ enum InterpMethod
     IM_NONE = 0,
     /// Linear interpolation (default).
     IM_LINEAR,
-    /// Cardinal spline interpolation, default tension value is 0.5f. For more information please refer to http://cubic.org/docs/hermite.htm.
+    /// Cardinal spline interpolation, default tension value is 0.5f. For more information please refer to
+    /// http://cubic.org/docs/hermite.htm.
     IM_SPLINE,
 };
 
@@ -177,4 +178,4 @@ protected:
     Vector<VAnimEventFrame> eventFrames_;
 };
 
-}
+} // namespace Urho3D

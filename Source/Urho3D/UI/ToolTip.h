@@ -50,7 +50,8 @@ public:
     /// Add an alternative hover target.
     void AddAltTarget(UIElement* target);
 
-    /// Set the delay in seconds until the tooltip shows once hovering. Set zero to use the default from the UI subsystem.
+    /// Set the delay in seconds until the tooltip shows once hovering. Set zero to use the default from the UI
+    /// subsystem.
     /// @property
     void SetDelay(float delay);
 
@@ -62,7 +63,7 @@ private:
     /// The element that is being tracked for hovering. Normally the parent element.
     WeakPtr<UIElement> target_;
     /// Alternative targets. Primarily targets parent.
-    Vector<WeakPtr<UIElement> > altTargets_;
+    Vector<WeakPtr<UIElement>> altTargets_;
     /// Delay from hover start to displaying the tooltip.
     float delay_;
     /// Hover countdown has started.
@@ -73,4 +74,4 @@ private:
     IntVector2 originalPosition_;
 };
 
-}
+} // namespace Urho3D

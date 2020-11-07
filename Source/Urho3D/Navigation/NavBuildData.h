@@ -117,4 +117,4 @@ struct DynamicNavBuildData : public NavBuildData
     dtTileCacheAlloc* alloc_;
 };
 
-}
+} // namespace Urho3D

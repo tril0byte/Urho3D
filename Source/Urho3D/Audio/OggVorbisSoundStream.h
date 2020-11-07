@@ -42,7 +42,8 @@ public:
     /// Seek to sample number. Return true on success.
     bool Seek(unsigned sample_number) override;
 
-    /// Produce sound data into destination. Return number of bytes produced. Called by SoundSource from the mixing thread.
+    /// Produce sound data into destination. Return number of bytes produced. Called by SoundSource from the mixing
+    /// thread.
     unsigned GetData(signed char* dest, unsigned numBytes) override;
 
 protected:
@@ -54,4 +55,4 @@ protected:
     unsigned dataSize_;
 };
 
-}
+} // namespace Urho3D

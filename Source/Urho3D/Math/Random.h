@@ -41,4 +41,4 @@ URHO3D_API int Rand();
 /// Return a standard normal distributed number.
 URHO3D_API float RandStandardNormal();
 
-}
+} // namespace Urho3D

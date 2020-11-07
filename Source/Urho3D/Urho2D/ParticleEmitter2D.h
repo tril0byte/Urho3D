@@ -171,4 +171,4 @@ private:
     Vector3 boundingBoxMaxPoint_;
 };
 
-}
+} // namespace Urho3D

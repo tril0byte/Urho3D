@@ -30,7 +30,7 @@ namespace Urho3D
 class Node;
 class Scene;
 
-}
+} // namespace Urho3D
 
 /// Material animation example.
 /// This sample is base on StaticScene, and it demonstrates:

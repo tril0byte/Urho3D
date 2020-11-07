@@ -2,8 +2,8 @@
 
 // We need register all types before registration of any members because members can use any types
 
-#include "../Precompiled.h"
 #include "../AngelScript/APITemplates.h"
+#include "../Precompiled.h"
 
 // Ignored headers
 //#include "../Database/ODBC/ODBCConnection.h"
@@ -391,7 +391,8 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     // class BorderImage | File: ../UI/BorderImage.h
     engine->RegisterObjectType("BorderImage", 0, asOBJ_REF);
     // class BoundingBox | File: ../Math/BoundingBox.h
-    engine->RegisterObjectType("BoundingBox", sizeof(BoundingBox), asOBJ_VALUE | asGetTypeTraits<BoundingBox>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
+    engine->RegisterObjectType("BoundingBox", sizeof(BoundingBox),
+                               asOBJ_VALUE | asGetTypeTraits<BoundingBox>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
     // class BoxOctreeQuery | File: ../Graphics/OctreeQuery.h
     // Not registered because have @nobind mark
     // class BufferedSoundStream | File: ../Audio/BufferedSoundStream.h
@@ -431,7 +432,8 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     engine->RegisterObjectType("CollisionShape2D", 0, asOBJ_REF);
 #endif
     // class Color | File: ../Math/Color.h
-    engine->RegisterObjectType("Color", sizeof(Color), asOBJ_VALUE | asGetTypeTraits<Color>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
+    engine->RegisterObjectType("Color", sizeof(Color),
+                               asOBJ_VALUE | asGetTypeTraits<Color>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
     // class Component | File: ../Scene/Component.h
     engine->RegisterObjectType("Component", 0, asOBJ_REF);
     // class Condition | File: ../Core/Condition.h
@@ -601,11 +603,14 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     // class Input | File: ../Input/Input.h
     engine->RegisterObjectType("Input", 0, asOBJ_REF);
     // class IntRect | File: ../Math/Rect.h
-    engine->RegisterObjectType("IntRect", sizeof(IntRect), asOBJ_VALUE | asGetTypeTraits<IntRect>() | asOBJ_POD | asOBJ_APP_CLASS_ALLINTS);
+    engine->RegisterObjectType("IntRect", sizeof(IntRect),
+                               asOBJ_VALUE | asGetTypeTraits<IntRect>() | asOBJ_POD | asOBJ_APP_CLASS_ALLINTS);
     // class IntVector2 | File: ../Math/Vector2.h
-    engine->RegisterObjectType("IntVector2", sizeof(IntVector2), asOBJ_VALUE | asGetTypeTraits<IntVector2>() | asOBJ_POD | asOBJ_APP_CLASS_ALLINTS);
+    engine->RegisterObjectType("IntVector2", sizeof(IntVector2),
+                               asOBJ_VALUE | asGetTypeTraits<IntVector2>() | asOBJ_POD | asOBJ_APP_CLASS_ALLINTS);
     // class IntVector3 | File: ../Math/Vector3.h
-    engine->RegisterObjectType("IntVector3", sizeof(IntVector3), asOBJ_VALUE | asGetTypeTraits<IntVector3>() | asOBJ_POD | asOBJ_APP_CLASS_ALLINTS);
+    engine->RegisterObjectType("IntVector3", sizeof(IntVector3),
+                               asOBJ_VALUE | asGetTypeTraits<IntVector3>() | asOBJ_POD | asOBJ_APP_CLASS_ALLINTS);
     // class JSONFile | File: ../Resource/JSONFile.h
     engine->RegisterObjectType("JSONFile", 0, asOBJ_REF);
     // class JSONValue | File: ../Resource/JSONValue.h
@@ -627,13 +632,17 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     // class Material | File: ../Graphics/Material.h
     engine->RegisterObjectType("Material", 0, asOBJ_REF);
     // class Matrix2 | File: ../Math/Matrix2.h
-    engine->RegisterObjectType("Matrix2", sizeof(Matrix2), asOBJ_VALUE | asGetTypeTraits<Matrix2>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
+    engine->RegisterObjectType("Matrix2", sizeof(Matrix2),
+                               asOBJ_VALUE | asGetTypeTraits<Matrix2>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
     // class Matrix3 | File: ../Math/Matrix3.h
-    engine->RegisterObjectType("Matrix3", sizeof(Matrix3), asOBJ_VALUE | asGetTypeTraits<Matrix3>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
+    engine->RegisterObjectType("Matrix3", sizeof(Matrix3),
+                               asOBJ_VALUE | asGetTypeTraits<Matrix3>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
     // class Matrix3x4 | File: ../Math/Matrix3x4.h
-    engine->RegisterObjectType("Matrix3x4", sizeof(Matrix3x4), asOBJ_VALUE | asGetTypeTraits<Matrix3x4>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
+    engine->RegisterObjectType("Matrix3x4", sizeof(Matrix3x4),
+                               asOBJ_VALUE | asGetTypeTraits<Matrix3x4>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
     // class Matrix4 | File: ../Math/Matrix4.h
-    engine->RegisterObjectType("Matrix4", sizeof(Matrix4), asOBJ_VALUE | asGetTypeTraits<Matrix4>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
+    engine->RegisterObjectType("Matrix4", sizeof(Matrix4),
+                               asOBJ_VALUE | asGetTypeTraits<Matrix4>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
     // class MemoryBuffer | File: ../IO/MemoryBuffer.h
     // Not registered because have @nobind mark
     // class Menu | File: ../UI/Menu.h
@@ -717,7 +726,8 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     engine->RegisterObjectType("PhysicsWorld2D", 0, asOBJ_REF);
 #endif
     // class Plane | File: ../Math/Plane.h
-    engine->RegisterObjectType("Plane", sizeof(Plane), asOBJ_VALUE | asGetTypeTraits<Plane>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
+    engine->RegisterObjectType("Plane", sizeof(Plane),
+                               asOBJ_VALUE | asGetTypeTraits<Plane>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
     // class PointOctreeQuery | File: ../Graphics/OctreeQuery.h
     // Not registered because have @nobind mark
     // class Polyhedron | File: ../Math/Polyhedron.h
@@ -733,9 +743,11 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     engine->RegisterObjectType("PropertySet2D", 0, asOBJ_REF);
 #endif
     // class Quaternion | File: ../Math/Quaternion.h
-    engine->RegisterObjectType("Quaternion", sizeof(Quaternion), asOBJ_VALUE | asGetTypeTraits<Quaternion>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
+    engine->RegisterObjectType("Quaternion", sizeof(Quaternion),
+                               asOBJ_VALUE | asGetTypeTraits<Quaternion>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
     // class Ray | File: ../Math/Ray.h
-    engine->RegisterObjectType("Ray", sizeof(Ray), asOBJ_VALUE | asGetTypeTraits<Ray>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
+    engine->RegisterObjectType("Ray", sizeof(Ray),
+                               asOBJ_VALUE | asGetTypeTraits<Ray>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
     // class RayOctreeQuery | File: ../Graphics/OctreeQuery.h
     // Not registered because have @nobind mark
 #ifdef URHO3D_PHYSICS
@@ -743,7 +755,8 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     engine->RegisterObjectType("RaycastVehicle", 0, asOBJ_REF);
 #endif
     // class Rect | File: ../Math/Rect.h
-    engine->RegisterObjectType("Rect", sizeof(Rect), asOBJ_VALUE | asGetTypeTraits<Rect>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
+    engine->RegisterObjectType("Rect", sizeof(Rect),
+                               asOBJ_VALUE | asGetTypeTraits<Rect>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
     // class RefCounted | File: ../Container/RefCounted.h
     engine->RegisterObjectType("RefCounted", 0, asOBJ_REF);
     // class RenderPath | File: ../Graphics/RenderPath.h
@@ -813,7 +826,8 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     // class SoundStream | File: ../Audio/SoundStream.h
     engine->RegisterObjectType("SoundStream", 0, asOBJ_REF);
     // class Sphere | File: ../Math/Sphere.h
-    engine->RegisterObjectType("Sphere", sizeof(Sphere), asOBJ_VALUE | asGetTypeTraits<Sphere>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
+    engine->RegisterObjectType("Sphere", sizeof(Sphere),
+                               asOBJ_VALUE | asGetTypeTraits<Sphere>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
     // class SphereOctreeQuery | File: ../Graphics/OctreeQuery.h
     // Not registered because have @nobind mark
     // class Spline | File: ../Core/Spline.h
@@ -845,9 +859,11 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     // class String | File: ../Container/Str.h
     engine->RegisterObjectType("String", sizeof(String), asOBJ_VALUE | asGetTypeTraits<String>());
     // class StringHash | File: ../Math/StringHash.h
-    engine->RegisterObjectType("StringHash", sizeof(StringHash), asOBJ_VALUE | asGetTypeTraits<StringHash>() | asOBJ_POD | asOBJ_APP_CLASS_ALLINTS);
+    engine->RegisterObjectType("StringHash", sizeof(StringHash),
+                               asOBJ_VALUE | asGetTypeTraits<StringHash>() | asOBJ_POD | asOBJ_APP_CLASS_ALLINTS);
     // class StringHashRegister | File: ../Core/StringHashRegister.h
-    engine->RegisterObjectType("StringHashRegister", sizeof(StringHashRegister), asOBJ_VALUE | asGetTypeTraits<StringHashRegister>());
+    engine->RegisterObjectType("StringHashRegister", sizeof(StringHashRegister),
+                               asOBJ_VALUE | asGetTypeTraits<StringHashRegister>());
     // class Technique | File: ../Graphics/Technique.h
     engine->RegisterObjectType("Technique", 0, asOBJ_REF);
     // class Terrain | File: ../Graphics/Terrain.h
@@ -887,7 +903,8 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     // class Time | File: ../Core/Timer.h
     engine->RegisterObjectType("Time", 0, asOBJ_REF);
     // class Timer | File: ../Core/Timer.h
-    engine->RegisterObjectType("Timer", sizeof(Timer), asOBJ_VALUE | asGetTypeTraits<Timer>() | asOBJ_POD | asOBJ_APP_CLASS_ALLINTS);
+    engine->RegisterObjectType("Timer", sizeof(Timer),
+                               asOBJ_VALUE | asGetTypeTraits<Timer>() | asOBJ_POD | asOBJ_APP_CLASS_ALLINTS);
 #ifdef URHO3D_URHO2D
     // class TmxFile2D | File: ../Urho2D/TmxFile2D.h
     engine->RegisterObjectType("TmxFile2D", 0, asOBJ_REF);
@@ -931,11 +948,14 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     // class Variant | File: ../Core/Variant.h
     engine->RegisterObjectType("Variant", sizeof(Variant), asOBJ_VALUE | asGetTypeTraits<Variant>());
     // class Vector2 | File: ../Math/Vector2.h
-    engine->RegisterObjectType("Vector2", sizeof(Vector2), asOBJ_VALUE | asGetTypeTraits<Vector2>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
+    engine->RegisterObjectType("Vector2", sizeof(Vector2),
+                               asOBJ_VALUE | asGetTypeTraits<Vector2>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
     // class Vector3 | File: ../Math/Vector3.h
-    engine->RegisterObjectType("Vector3", sizeof(Vector3), asOBJ_VALUE | asGetTypeTraits<Vector3>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
+    engine->RegisterObjectType("Vector3", sizeof(Vector3),
+                               asOBJ_VALUE | asGetTypeTraits<Vector3>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
     // class Vector4 | File: ../Math/Vector4.h
-    engine->RegisterObjectType("Vector4", sizeof(Vector4), asOBJ_VALUE | asGetTypeTraits<Vector4>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
+    engine->RegisterObjectType("Vector4", sizeof(Vector4),
+                               asOBJ_VALUE | asGetTypeTraits<Vector4>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
     // class VectorBase | File: ../Container/VectorBase.h
     engine->RegisterObjectType("VectorBase", sizeof(VectorBase), asOBJ_VALUE | asGetTypeTraits<VectorBase>());
     // class VectorBuffer | File: ../IO/VectorBuffer.h
@@ -961,23 +981,28 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     // class XPathQuery | File: ../Resource/XMLElement.h
     engine->RegisterObjectType("XPathQuery", sizeof(XPathQuery), asOBJ_VALUE | asGetTypeTraits<XPathQuery>());
     // class XPathResultSet | File: ../Resource/XMLElement.h
-    engine->RegisterObjectType("XPathResultSet", sizeof(XPathResultSet), asOBJ_VALUE | asGetTypeTraits<XPathResultSet>());
+    engine->RegisterObjectType("XPathResultSet", sizeof(XPathResultSet),
+                               asOBJ_VALUE | asGetTypeTraits<XPathResultSet>());
     // class Zone | File: ../Graphics/Zone.h
     engine->RegisterObjectType("Zone", 0, asOBJ_REF);
     // struct AllocatorBlock | File: ../Container/Allocator.h
-    engine->RegisterObjectType("AllocatorBlock", sizeof(AllocatorBlock), asOBJ_VALUE | asGetTypeTraits<AllocatorBlock>());
+    engine->RegisterObjectType("AllocatorBlock", sizeof(AllocatorBlock),
+                               asOBJ_VALUE | asGetTypeTraits<AllocatorBlock>());
     // struct AllocatorNode | File: ../Container/Allocator.h
     engine->RegisterObjectType("AllocatorNode", sizeof(AllocatorNode), asOBJ_VALUE | asGetTypeTraits<AllocatorNode>());
     // struct AnimationControl | File: ../Graphics/AnimationController.h
     engine->RegisterObjectType("AnimationControl", 0, asOBJ_REF);
     // struct AnimationKeyFrame | File: ../Graphics/Animation.h
-    engine->RegisterObjectType("AnimationKeyFrame", sizeof(AnimationKeyFrame), asOBJ_VALUE | asGetTypeTraits<AnimationKeyFrame>());
+    engine->RegisterObjectType("AnimationKeyFrame", sizeof(AnimationKeyFrame),
+                               asOBJ_VALUE | asGetTypeTraits<AnimationKeyFrame>());
     // struct AnimationStateTrack | File: ../Graphics/AnimationState.h
-    engine->RegisterObjectType("AnimationStateTrack", sizeof(AnimationStateTrack), asOBJ_VALUE | asGetTypeTraits<AnimationStateTrack>());
+    engine->RegisterObjectType("AnimationStateTrack", sizeof(AnimationStateTrack),
+                               asOBJ_VALUE | asGetTypeTraits<AnimationStateTrack>());
     // struct AnimationTrack | File: ../Graphics/Animation.h
     engine->RegisterObjectType("AnimationTrack", 0, asOBJ_REF);
     // struct AnimationTriggerPoint | File: ../Graphics/Animation.h
-    engine->RegisterObjectType("AnimationTriggerPoint", sizeof(AnimationTriggerPoint), asOBJ_VALUE | asGetTypeTraits<AnimationTriggerPoint>());
+    engine->RegisterObjectType("AnimationTriggerPoint", sizeof(AnimationTriggerPoint),
+                               asOBJ_VALUE | asGetTypeTraits<AnimationTriggerPoint>());
     // struct AsyncProgress | File: ../Scene/Scene.h
     engine->RegisterObjectType("AsyncProgress", sizeof(AsyncProgress), asOBJ_VALUE | asGetTypeTraits<AsyncProgress>());
     // struct AttributeHandle | File: ../Core/Attribute.h
@@ -985,7 +1010,8 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     // struct AttributeInfo | File: ../Core/Attribute.h
     engine->RegisterObjectType("AttributeInfo", sizeof(AttributeInfo), asOBJ_VALUE | asGetTypeTraits<AttributeInfo>());
     // struct BackgroundLoadItem | File: ../Resource/BackgroundLoader.h
-    engine->RegisterObjectType("BackgroundLoadItem", sizeof(BackgroundLoadItem), asOBJ_VALUE | asGetTypeTraits<BackgroundLoadItem>());
+    engine->RegisterObjectType("BackgroundLoadItem", sizeof(BackgroundLoadItem),
+                               asOBJ_VALUE | asGetTypeTraits<BackgroundLoadItem>());
     // struct Batch | File: ../Graphics/Batch.h
     engine->RegisterObjectType("Batch", sizeof(Batch), asOBJ_VALUE | asGetTypeTraits<Batch>());
     // struct BatchGroup | File: ../Graphics/Batch.h
@@ -995,13 +1021,15 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     // struct BatchQueue | File: ../Graphics/Batch.h
     engine->RegisterObjectType("BatchQueue", sizeof(BatchQueue), asOBJ_VALUE | asGetTypeTraits<BatchQueue>());
     // struct BiasParameters | File: ../Graphics/Light.h
-    engine->RegisterObjectType("BiasParameters", sizeof(BiasParameters), asOBJ_VALUE | asGetTypeTraits<BiasParameters>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
+    engine->RegisterObjectType("BiasParameters", sizeof(BiasParameters),
+                               asOBJ_VALUE | asGetTypeTraits<BiasParameters>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
     // struct Billboard | File: ../Graphics/BillboardSet.h
     engine->RegisterObjectType("Billboard", 0, asOBJ_REF);
     // struct Bone | File: ../Graphics/Skeleton.h
     engine->RegisterObjectType("Bone", 0, asOBJ_REF);
     // struct CascadeParameters | File: ../Graphics/Light.h
-    engine->RegisterObjectType("CascadeParameters", sizeof(CascadeParameters), asOBJ_VALUE | asGetTypeTraits<CascadeParameters>() | asOBJ_POD);
+    engine->RegisterObjectType("CascadeParameters", sizeof(CascadeParameters),
+                               asOBJ_VALUE | asGetTypeTraits<CascadeParameters>() | asOBJ_POD);
     // struct CharLocation | File: ../UI/Text.h
     engine->RegisterObjectType("CharLocation", sizeof(CharLocation), asOBJ_VALUE | asGetTypeTraits<CharLocation>());
 #ifdef URHO3D_PHYSICS
@@ -1011,19 +1039,23 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     // struct ColorFrame | File: ../Graphics/ParticleEffect.h
     engine->RegisterObjectType("ColorFrame", 0, asOBJ_REF);
     // struct ComponentReplicationState | File: ../Scene/ReplicationState.h
-    engine->RegisterObjectType("ComponentReplicationState", sizeof(ComponentReplicationState), asOBJ_VALUE | asGetTypeTraits<ComponentReplicationState>());
+    engine->RegisterObjectType("ComponentReplicationState", sizeof(ComponentReplicationState),
+                               asOBJ_VALUE | asGetTypeTraits<ComponentReplicationState>());
     // struct CompressedLevel | File: ../Resource/Image.h
-    engine->RegisterObjectType("CompressedLevel", sizeof(CompressedLevel), asOBJ_VALUE | asGetTypeTraits<CompressedLevel>());
+    engine->RegisterObjectType("CompressedLevel", sizeof(CompressedLevel),
+                               asOBJ_VALUE | asGetTypeTraits<CompressedLevel>());
 #ifdef URHO3D_PHYSICS
     // struct ConvexData | File: ../Physics/CollisionShape.h
     engine->RegisterObjectType("ConvexData", 0, asOBJ_REF);
 #endif
 #ifdef URHO3D_NAVIGATION
     // struct CrowdObstacleAvoidanceParams | File: ../Navigation/CrowdManager.h
-    engine->RegisterObjectType("CrowdObstacleAvoidanceParams", sizeof(CrowdObstacleAvoidanceParams), asOBJ_VALUE | asGetTypeTraits<CrowdObstacleAvoidanceParams>() | asOBJ_POD);
+    engine->RegisterObjectType("CrowdObstacleAvoidanceParams", sizeof(CrowdObstacleAvoidanceParams),
+                               asOBJ_VALUE | asGetTypeTraits<CrowdObstacleAvoidanceParams>() | asOBJ_POD);
 #endif
     // struct CursorShapeInfo | File: ../UI/Cursor.h
-    engine->RegisterObjectType("CursorShapeInfo", sizeof(CursorShapeInfo), asOBJ_VALUE | asGetTypeTraits<CursorShapeInfo>());
+    engine->RegisterObjectType("CursorShapeInfo", sizeof(CursorShapeInfo),
+                               asOBJ_VALUE | asGetTypeTraits<CursorShapeInfo>());
     // struct CustomGeometryVertex | File: ../Graphics/CustomGeometry.h
     engine->RegisterObjectType("CustomGeometryVertex", 0, asOBJ_REF);
     // struct DebugLine | File: ../Graphics/DebugRenderer.h
@@ -1036,22 +1068,27 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     engine->RegisterObjectType("DecalVertex", sizeof(DecalVertex), asOBJ_VALUE | asGetTypeTraits<DecalVertex>());
 #ifdef URHO3D_PHYSICS
     // struct DelayedWorldTransform | File: ../Physics/PhysicsWorld.h
-    engine->RegisterObjectType("DelayedWorldTransform", sizeof(DelayedWorldTransform), asOBJ_VALUE | asGetTypeTraits<DelayedWorldTransform>());
+    engine->RegisterObjectType("DelayedWorldTransform", sizeof(DelayedWorldTransform),
+                               asOBJ_VALUE | asGetTypeTraits<DelayedWorldTransform>());
 #endif
 #ifdef URHO3D_URHO2D
     // struct DelayedWorldTransform2D | File: ../Urho2D/PhysicsWorld2D.h
-    engine->RegisterObjectType("DelayedWorldTransform2D", sizeof(DelayedWorldTransform2D), asOBJ_VALUE | asGetTypeTraits<DelayedWorldTransform2D>());
+    engine->RegisterObjectType("DelayedWorldTransform2D", sizeof(DelayedWorldTransform2D),
+                               asOBJ_VALUE | asGetTypeTraits<DelayedWorldTransform2D>());
 #endif
     // struct DepthValue | File: ../Graphics/OcclusionBuffer.h
-    engine->RegisterObjectType("DepthValue", sizeof(DepthValue), asOBJ_VALUE | asGetTypeTraits<DepthValue>() | asOBJ_POD | asOBJ_APP_CLASS_ALLINTS);
+    engine->RegisterObjectType("DepthValue", sizeof(DepthValue),
+                               asOBJ_VALUE | asGetTypeTraits<DepthValue>() | asOBJ_POD | asOBJ_APP_CLASS_ALLINTS);
     // struct DirtyBits | File: ../Scene/ReplicationState.h
     engine->RegisterObjectType("DirtyBits", sizeof(DirtyBits), asOBJ_VALUE | asGetTypeTraits<DirtyBits>());
     // struct DynamicNavBuildData | File: ../Navigation/NavBuildData.h
     // Not registered because have @nobind mark
     // struct FileSelectorEntry | File: ../UI/FileSelector.h
-    engine->RegisterObjectType("FileSelectorEntry", sizeof(FileSelectorEntry), asOBJ_VALUE | asGetTypeTraits<FileSelectorEntry>());
+    engine->RegisterObjectType("FileSelectorEntry", sizeof(FileSelectorEntry),
+                               asOBJ_VALUE | asGetTypeTraits<FileSelectorEntry>());
     // struct FocusParameters | File: ../Graphics/Light.h
-    engine->RegisterObjectType("FocusParameters", sizeof(FocusParameters), asOBJ_VALUE | asGetTypeTraits<FocusParameters>() | asOBJ_POD);
+    engine->RegisterObjectType("FocusParameters", sizeof(FocusParameters),
+                               asOBJ_VALUE | asGetTypeTraits<FocusParameters>() | asOBJ_POD);
     // struct FontGlyph | File: ../UI/FontFace.h
     engine->RegisterObjectType("FontGlyph", sizeof(FontGlyph), asOBJ_VALUE | asGetTypeTraits<FontGlyph>());
     // struct FrameInfo | File: ../Graphics/Drawable.h
@@ -1065,7 +1102,8 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     // struct GlyphLocation | File: ../UI/Text.h
     // Not registered because have @nobind mark
     // struct HashIteratorBase | File: ../Container/HashBase.h
-    engine->RegisterObjectType("HashIteratorBase", sizeof(HashIteratorBase), asOBJ_VALUE | asGetTypeTraits<HashIteratorBase>());
+    engine->RegisterObjectType("HashIteratorBase", sizeof(HashIteratorBase),
+                               asOBJ_VALUE | asGetTypeTraits<HashIteratorBase>());
     // struct HashNodeBase | File: ../Container/HashBase.h
     engine->RegisterObjectType("HashNodeBase", sizeof(HashNodeBase), asOBJ_VALUE | asGetTypeTraits<HashNodeBase>());
 #ifdef URHO3D_PHYSICS
@@ -1073,19 +1111,24 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     engine->RegisterObjectType("HeightfieldData", 0, asOBJ_REF);
 #endif
     // struct IndexBufferDesc | File: ../Graphics/Model.h
-    engine->RegisterObjectType("IndexBufferDesc", sizeof(IndexBufferDesc), asOBJ_VALUE | asGetTypeTraits<IndexBufferDesc>());
+    engine->RegisterObjectType("IndexBufferDesc", sizeof(IndexBufferDesc),
+                               asOBJ_VALUE | asGetTypeTraits<IndexBufferDesc>());
     // struct InstanceData | File: ../Graphics/Batch.h
     engine->RegisterObjectType("InstanceData", sizeof(InstanceData), asOBJ_VALUE | asGetTypeTraits<InstanceData>());
     // struct JoystickState | File: ../Input/Input.h
     engine->RegisterObjectType("JoystickState", 0, asOBJ_REF);
     // struct LightBatchQueue | File: ../Graphics/Batch.h
-    engine->RegisterObjectType("LightBatchQueue", sizeof(LightBatchQueue), asOBJ_VALUE | asGetTypeTraits<LightBatchQueue>());
+    engine->RegisterObjectType("LightBatchQueue", sizeof(LightBatchQueue),
+                               asOBJ_VALUE | asGetTypeTraits<LightBatchQueue>());
     // struct LightQueryResult | File: ../Graphics/View.h
-    engine->RegisterObjectType("LightQueryResult", sizeof(LightQueryResult), asOBJ_VALUE | asGetTypeTraits<LightQueryResult>());
+    engine->RegisterObjectType("LightQueryResult", sizeof(LightQueryResult),
+                               asOBJ_VALUE | asGetTypeTraits<LightQueryResult>());
     // struct LinkedListNode | File: ../Container/LinkedList.h
-    engine->RegisterObjectType("LinkedListNode", sizeof(LinkedListNode), asOBJ_VALUE | asGetTypeTraits<LinkedListNode>());
+    engine->RegisterObjectType("LinkedListNode", sizeof(LinkedListNode),
+                               asOBJ_VALUE | asGetTypeTraits<LinkedListNode>());
     // struct ListIteratorBase | File: ../Container/ListBase.h
-    engine->RegisterObjectType("ListIteratorBase", sizeof(ListIteratorBase), asOBJ_VALUE | asGetTypeTraits<ListIteratorBase>());
+    engine->RegisterObjectType("ListIteratorBase", sizeof(ListIteratorBase),
+                               asOBJ_VALUE | asGetTypeTraits<ListIteratorBase>());
     // struct ListNodeBase | File: ../Container/ListBase.h
     engine->RegisterObjectType("ListNodeBase", sizeof(ListNodeBase), asOBJ_VALUE | asGetTypeTraits<ListNodeBase>());
 #ifdef URHO3D_PHYSICS
@@ -1093,7 +1136,8 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     engine->RegisterObjectType("ManifoldPair", sizeof(ManifoldPair), asOBJ_VALUE | asGetTypeTraits<ManifoldPair>());
 #endif
     // struct MaterialShaderParameter | File: ../Graphics/Material.h
-    engine->RegisterObjectType("MaterialShaderParameter", sizeof(MaterialShaderParameter), asOBJ_VALUE | asGetTypeTraits<MaterialShaderParameter>());
+    engine->RegisterObjectType("MaterialShaderParameter", sizeof(MaterialShaderParameter),
+                               asOBJ_VALUE | asGetTypeTraits<MaterialShaderParameter>());
     // struct ModelMorph | File: ../Graphics/Model.h
     engine->RegisterObjectType("ModelMorph", sizeof(ModelMorph), asOBJ_VALUE | asGetTypeTraits<ModelMorph>());
 #ifdef URHO3D_NAVIGATION
@@ -1106,30 +1150,38 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
 #endif
 #ifdef URHO3D_NAVIGATION
     // struct NavigationGeometryInfo | File: ../Navigation/NavigationMesh.h
-    engine->RegisterObjectType("NavigationGeometryInfo", sizeof(NavigationGeometryInfo), asOBJ_VALUE | asGetTypeTraits<NavigationGeometryInfo>());
+    engine->RegisterObjectType("NavigationGeometryInfo", sizeof(NavigationGeometryInfo),
+                               asOBJ_VALUE | asGetTypeTraits<NavigationGeometryInfo>());
 #endif
 #ifdef URHO3D_NAVIGATION
     // struct NavigationPathPoint | File: ../Navigation/NavigationMesh.h
-    engine->RegisterObjectType("NavigationPathPoint", sizeof(NavigationPathPoint), asOBJ_VALUE | asGetTypeTraits<NavigationPathPoint>());
+    engine->RegisterObjectType("NavigationPathPoint", sizeof(NavigationPathPoint),
+                               asOBJ_VALUE | asGetTypeTraits<NavigationPathPoint>());
 #endif
     // struct NetworkState | File: ../Scene/ReplicationState.h
     engine->RegisterObjectType("NetworkState", sizeof(NetworkState), asOBJ_VALUE | asGetTypeTraits<NetworkState>());
     // struct NodeImpl | File: ../Scene/Node.h
     engine->RegisterObjectType("NodeImpl", sizeof(NodeImpl), asOBJ_VALUE | asGetTypeTraits<NodeImpl>());
     // struct NodeReplicationState | File: ../Scene/ReplicationState.h
-    engine->RegisterObjectType("NodeReplicationState", sizeof(NodeReplicationState), asOBJ_VALUE | asGetTypeTraits<NodeReplicationState>());
+    engine->RegisterObjectType("NodeReplicationState", sizeof(NodeReplicationState),
+                               asOBJ_VALUE | asGetTypeTraits<NodeReplicationState>());
     // struct OcclusionBatch | File: ../Graphics/OcclusionBuffer.h
-    engine->RegisterObjectType("OcclusionBatch", sizeof(OcclusionBatch), asOBJ_VALUE | asGetTypeTraits<OcclusionBatch>());
+    engine->RegisterObjectType("OcclusionBatch", sizeof(OcclusionBatch),
+                               asOBJ_VALUE | asGetTypeTraits<OcclusionBatch>());
     // struct OcclusionBufferData | File: ../Graphics/OcclusionBuffer.h
-    engine->RegisterObjectType("OcclusionBufferData", sizeof(OcclusionBufferData), asOBJ_VALUE | asGetTypeTraits<OcclusionBufferData>());
+    engine->RegisterObjectType("OcclusionBufferData", sizeof(OcclusionBufferData),
+                               asOBJ_VALUE | asGetTypeTraits<OcclusionBufferData>());
     // struct OctreeQueryResult | File: ../Graphics/OctreeQuery.h
-    engine->RegisterObjectType("OctreeQueryResult", sizeof(OctreeQueryResult), asOBJ_VALUE | asGetTypeTraits<OctreeQueryResult>());
+    engine->RegisterObjectType("OctreeQueryResult", sizeof(OctreeQueryResult),
+                               asOBJ_VALUE | asGetTypeTraits<OctreeQueryResult>());
 #ifdef URHO3D_NETWORK
     // struct PackageDownload | File: ../Network/Connection.h
-    engine->RegisterObjectType("PackageDownload", sizeof(PackageDownload), asOBJ_VALUE | asGetTypeTraits<PackageDownload>());
+    engine->RegisterObjectType("PackageDownload", sizeof(PackageDownload),
+                               asOBJ_VALUE | asGetTypeTraits<PackageDownload>());
 #endif
     // struct PackageEntry | File: ../IO/PackageFile.h
-    engine->RegisterObjectType("PackageEntry", sizeof(PackageEntry), asOBJ_VALUE | asGetTypeTraits<PackageEntry>() | asOBJ_POD | asOBJ_APP_CLASS_ALLINTS);
+    engine->RegisterObjectType("PackageEntry", sizeof(PackageEntry),
+                               asOBJ_VALUE | asGetTypeTraits<PackageEntry>() | asOBJ_POD | asOBJ_APP_CLASS_ALLINTS);
 #ifdef URHO3D_NETWORK
     // struct PackageUpload | File: ../Network/Connection.h
     engine->RegisterObjectType("PackageUpload", sizeof(PackageUpload), asOBJ_VALUE | asGetTypeTraits<PackageUpload>());
@@ -1141,54 +1193,69 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     engine->RegisterObjectType("Particle2D", sizeof(Particle2D), asOBJ_VALUE | asGetTypeTraits<Particle2D>());
 #endif
     // struct PerThreadSceneResult | File: ../Graphics/View.h
-    engine->RegisterObjectType("PerThreadSceneResult", sizeof(PerThreadSceneResult), asOBJ_VALUE | asGetTypeTraits<PerThreadSceneResult>());
+    engine->RegisterObjectType("PerThreadSceneResult", sizeof(PerThreadSceneResult),
+                               asOBJ_VALUE | asGetTypeTraits<PerThreadSceneResult>());
 #ifdef URHO3D_PHYSICS
     // struct PhysicsRaycastResult | File: ../Physics/PhysicsWorld.h
-    engine->RegisterObjectType("PhysicsRaycastResult", sizeof(PhysicsRaycastResult), asOBJ_VALUE | asGetTypeTraits<PhysicsRaycastResult>());
+    engine->RegisterObjectType("PhysicsRaycastResult", sizeof(PhysicsRaycastResult),
+                               asOBJ_VALUE | asGetTypeTraits<PhysicsRaycastResult>());
 #endif
 #ifdef URHO3D_URHO2D
     // struct PhysicsRaycastResult2D | File: ../Urho2D/PhysicsWorld2D.h
-    engine->RegisterObjectType("PhysicsRaycastResult2D", sizeof(PhysicsRaycastResult2D), asOBJ_VALUE | asGetTypeTraits<PhysicsRaycastResult2D>());
+    engine->RegisterObjectType("PhysicsRaycastResult2D", sizeof(PhysicsRaycastResult2D),
+                               asOBJ_VALUE | asGetTypeTraits<PhysicsRaycastResult2D>());
 #endif
 #ifdef URHO3D_PHYSICS
     // struct PhysicsWorldConfig | File: ../Physics/PhysicsWorld.h
-    engine->RegisterObjectType("PhysicsWorldConfig", sizeof(PhysicsWorldConfig), asOBJ_VALUE | asGetTypeTraits<PhysicsWorldConfig>());
+    engine->RegisterObjectType("PhysicsWorldConfig", sizeof(PhysicsWorldConfig),
+                               asOBJ_VALUE | asGetTypeTraits<PhysicsWorldConfig>());
 #endif
     // struct RayQueryResult | File: ../Graphics/OctreeQuery.h
-    engine->RegisterObjectType("RayQueryResult", sizeof(RayQueryResult), asOBJ_VALUE | asGetTypeTraits<RayQueryResult>());
+    engine->RegisterObjectType("RayQueryResult", sizeof(RayQueryResult),
+                               asOBJ_VALUE | asGetTypeTraits<RayQueryResult>());
     // struct RefCount | File: ../Container/RefCounted.h
-    engine->RegisterObjectType("RefCount", sizeof(RefCount), asOBJ_VALUE | asGetTypeTraits<RefCount>() | asOBJ_POD | asOBJ_APP_CLASS_ALLINTS);
+    engine->RegisterObjectType("RefCount", sizeof(RefCount),
+                               asOBJ_VALUE | asGetTypeTraits<RefCount>() | asOBJ_POD | asOBJ_APP_CLASS_ALLINTS);
 #ifdef URHO3D_NETWORK
     // struct RemoteEvent | File: ../Network/Connection.h
     engine->RegisterObjectType("RemoteEvent", sizeof(RemoteEvent), asOBJ_VALUE | asGetTypeTraits<RemoteEvent>());
 #endif
     // struct RenderPathCommand | File: ../Graphics/RenderPath.h
-    engine->RegisterObjectType("RenderPathCommand", sizeof(RenderPathCommand), asOBJ_VALUE | asGetTypeTraits<RenderPathCommand>());
+    engine->RegisterObjectType("RenderPathCommand", sizeof(RenderPathCommand),
+                               asOBJ_VALUE | asGetTypeTraits<RenderPathCommand>());
     // struct RenderTargetInfo | File: ../Graphics/RenderPath.h
-    engine->RegisterObjectType("RenderTargetInfo", sizeof(RenderTargetInfo), asOBJ_VALUE | asGetTypeTraits<RenderTargetInfo>());
+    engine->RegisterObjectType("RenderTargetInfo", sizeof(RenderTargetInfo),
+                               asOBJ_VALUE | asGetTypeTraits<RenderTargetInfo>());
     // struct ReplicationState | File: ../Scene/ReplicationState.h
-    engine->RegisterObjectType("ReplicationState", sizeof(ReplicationState), asOBJ_VALUE | asGetTypeTraits<ReplicationState>());
+    engine->RegisterObjectType("ReplicationState", sizeof(ReplicationState),
+                               asOBJ_VALUE | asGetTypeTraits<ReplicationState>());
     // struct ResourceGroup | File: ../Resource/ResourceCache.h
     engine->RegisterObjectType("ResourceGroup", sizeof(ResourceGroup), asOBJ_VALUE | asGetTypeTraits<ResourceGroup>());
     // struct ResourceRef | File: ../Core/Variant.h
     engine->RegisterObjectType("ResourceRef", sizeof(ResourceRef), asOBJ_VALUE | asGetTypeTraits<ResourceRef>());
     // struct ResourceRefList | File: ../Core/Variant.h
-    engine->RegisterObjectType("ResourceRefList", sizeof(ResourceRefList), asOBJ_VALUE | asGetTypeTraits<ResourceRefList>());
+    engine->RegisterObjectType("ResourceRefList", sizeof(ResourceRefList),
+                               asOBJ_VALUE | asGetTypeTraits<ResourceRefList>());
     // struct ScenePassInfo | File: ../Graphics/View.h
     engine->RegisterObjectType("ScenePassInfo", sizeof(ScenePassInfo), asOBJ_VALUE | asGetTypeTraits<ScenePassInfo>());
     // struct SceneReplicationState | File: ../Scene/ReplicationState.h
-    engine->RegisterObjectType("SceneReplicationState", sizeof(SceneReplicationState), asOBJ_VALUE | asGetTypeTraits<SceneReplicationState>());
+    engine->RegisterObjectType("SceneReplicationState", sizeof(SceneReplicationState),
+                               asOBJ_VALUE | asGetTypeTraits<SceneReplicationState>());
     // struct ScratchBuffer | File: ../Graphics/Graphics.h
     engine->RegisterObjectType("ScratchBuffer", sizeof(ScratchBuffer), asOBJ_VALUE | asGetTypeTraits<ScratchBuffer>());
     // struct ScreenModeParams | File: ../Graphics/Graphics.h
-    engine->RegisterObjectType("ScreenModeParams", sizeof(ScreenModeParams), asOBJ_VALUE | asGetTypeTraits<ScreenModeParams>());
+    engine->RegisterObjectType("ScreenModeParams", sizeof(ScreenModeParams),
+                               asOBJ_VALUE | asGetTypeTraits<ScreenModeParams>());
     // struct ShaderParameter | File: ../Graphics/ShaderVariation.h
-    engine->RegisterObjectType("ShaderParameter", sizeof(ShaderParameter), asOBJ_VALUE | asGetTypeTraits<ShaderParameter>());
+    engine->RegisterObjectType("ShaderParameter", sizeof(ShaderParameter),
+                               asOBJ_VALUE | asGetTypeTraits<ShaderParameter>());
     // struct ShadowBatchQueue | File: ../Graphics/Batch.h
-    engine->RegisterObjectType("ShadowBatchQueue", sizeof(ShadowBatchQueue), asOBJ_VALUE | asGetTypeTraits<ShadowBatchQueue>());
+    engine->RegisterObjectType("ShadowBatchQueue", sizeof(ShadowBatchQueue),
+                               asOBJ_VALUE | asGetTypeTraits<ShadowBatchQueue>());
 #ifdef URHO3D_NAVIGATION
     // struct SimpleNavBuildData | File: ../Navigation/NavBuildData.h
-    engine->RegisterObjectType("SimpleNavBuildData", sizeof(SimpleNavBuildData), asOBJ_VALUE | asGetTypeTraits<SimpleNavBuildData>());
+    engine->RegisterObjectType("SimpleNavBuildData", sizeof(SimpleNavBuildData),
+                               asOBJ_VALUE | asGetTypeTraits<SimpleNavBuildData>());
 #endif
     // struct SourceBatch | File: ../Graphics/Drawable.h
     engine->RegisterObjectType("SourceBatch", sizeof(SourceBatch), asOBJ_VALUE | asGetTypeTraits<SourceBatch>());
@@ -1197,11 +1264,14 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     engine->RegisterObjectType("SourceBatch2D", sizeof(SourceBatch2D), asOBJ_VALUE | asGetTypeTraits<SourceBatch2D>());
 #endif
     // struct StaticModelGeometryData | File: ../Graphics/StaticModel.h
-    engine->RegisterObjectType("StaticModelGeometryData", sizeof(StaticModelGeometryData), asOBJ_VALUE | asGetTypeTraits<StaticModelGeometryData>());
+    engine->RegisterObjectType("StaticModelGeometryData", sizeof(StaticModelGeometryData),
+                               asOBJ_VALUE | asGetTypeTraits<StaticModelGeometryData>());
     // struct StoredLogMessage | File: ../IO/Log.h
-    engine->RegisterObjectType("StoredLogMessage", sizeof(StoredLogMessage), asOBJ_VALUE | asGetTypeTraits<StoredLogMessage>());
+    engine->RegisterObjectType("StoredLogMessage", sizeof(StoredLogMessage),
+                               asOBJ_VALUE | asGetTypeTraits<StoredLogMessage>());
     // struct TechniqueEntry | File: ../Graphics/Material.h
-    engine->RegisterObjectType("TechniqueEntry", sizeof(TechniqueEntry), asOBJ_VALUE | asGetTypeTraits<TechniqueEntry>());
+    engine->RegisterObjectType("TechniqueEntry", sizeof(TechniqueEntry),
+                               asOBJ_VALUE | asGetTypeTraits<TechniqueEntry>());
     // struct TextureFrame | File: ../Graphics/ParticleEffect.h
     engine->RegisterObjectType("TextureFrame", 0, asOBJ_REF);
 #ifdef URHO3D_URHO2D
@@ -1217,7 +1287,8 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     engine->RegisterObjectType("TriangleMeshData", 0, asOBJ_REF);
 #endif
     // struct VAnimEventFrame | File: ../Scene/ValueAnimation.h
-    engine->RegisterObjectType("VAnimEventFrame", sizeof(VAnimEventFrame), asOBJ_VALUE | asGetTypeTraits<VAnimEventFrame>());
+    engine->RegisterObjectType("VAnimEventFrame", sizeof(VAnimEventFrame),
+                               asOBJ_VALUE | asGetTypeTraits<VAnimEventFrame>());
     // struct VAnimKeyFrame | File: ../Scene/ValueAnimation.h
     engine->RegisterObjectType("VAnimKeyFrame", sizeof(VAnimKeyFrame), asOBJ_VALUE | asGetTypeTraits<VAnimKeyFrame>());
 #ifdef URHO3D_URHO2D
@@ -1225,17 +1296,20 @@ void ASRegisterGenerated_Classes(asIScriptEngine* engine)
     engine->RegisterObjectType("Vertex2D", sizeof(Vertex2D), asOBJ_VALUE | asGetTypeTraits<Vertex2D>());
 #endif
     // struct VertexBufferDesc | File: ../Graphics/Model.h
-    engine->RegisterObjectType("VertexBufferDesc", sizeof(VertexBufferDesc), asOBJ_VALUE | asGetTypeTraits<VertexBufferDesc>());
+    engine->RegisterObjectType("VertexBufferDesc", sizeof(VertexBufferDesc),
+                               asOBJ_VALUE | asGetTypeTraits<VertexBufferDesc>());
     // struct VertexBufferMorph | File: ../Graphics/Model.h
-    engine->RegisterObjectType("VertexBufferMorph", sizeof(VertexBufferMorph), asOBJ_VALUE | asGetTypeTraits<VertexBufferMorph>());
+    engine->RegisterObjectType("VertexBufferMorph", sizeof(VertexBufferMorph),
+                               asOBJ_VALUE | asGetTypeTraits<VertexBufferMorph>());
     // struct VertexElement | File: ../Graphics/GraphicsDefs.h
     engine->RegisterObjectType("VertexElement", sizeof(VertexElement), asOBJ_VALUE | asGetTypeTraits<VertexElement>());
     // struct ViewBatchInfo2D | File: ../Urho2D/Renderer2D.h
     // Not registered because have @nobind mark
     // struct WindowModeParams | File: ../Graphics/Graphics.h
-    engine->RegisterObjectType("WindowModeParams", sizeof(WindowModeParams), asOBJ_VALUE | asGetTypeTraits<WindowModeParams>());
+    engine->RegisterObjectType("WindowModeParams", sizeof(WindowModeParams),
+                               asOBJ_VALUE | asGetTypeTraits<WindowModeParams>());
     // struct WorkItem | File: ../Core/WorkQueue.h
     // Not registered because have @nobind mark
 }
 
-}
+} // namespace Urho3D

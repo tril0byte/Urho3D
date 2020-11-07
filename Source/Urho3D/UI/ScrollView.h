@@ -228,4 +228,4 @@ private:
     void ScrollSmooth(float timeStep);
 };
 
-}
+} // namespace Urho3D

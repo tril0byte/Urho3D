@@ -35,7 +35,7 @@ static shared_ptr<ASGeneratedFile_GlobalVariables> _result;
 static void ProcessGlobalVariable(GlobalVariableAnalyzer varAnalyzer)
 {
     string header = varAnalyzer.GetHeaderFile();
-   
+
     if (IsIgnoredHeader(header))
     {
         _result->AddIgnoredHeader(header);
@@ -49,9 +49,9 @@ static void ProcessGlobalVariable(GlobalVariableAnalyzer varAnalyzer)
         if (!insideDefine.empty())
             _result->reg_ << "#ifdef " << insideDefine << "\n";
 
-        _result->reg_ <<
-            "    // " << varAnalyzer.GetLocation() << "\n"
-            "    // Not registered because array\n";
+        _result->reg_ << "    // " << varAnalyzer.GetLocation()
+                      << "\n"
+                         "    // Not registered because array\n";
 
         if (!insideDefine.empty())
             _result->reg_ << "#endif\n";
@@ -73,9 +73,10 @@ static void ProcessGlobalVariable(GlobalVariableAnalyzer varAnalyzer)
 
     string varName = varAnalyzer.GetName();
 
-    _result->reg_ <<
-        "    // " << varAnalyzer.GetLocation() << "\n"
-        "    engine->RegisterGlobalProperty(\"" << asType << " " << varName << "\", (void*)&" << varName << ");\n";
+    _result->reg_ << "    // " << varAnalyzer.GetLocation()
+                  << "\n"
+                     "    engine->RegisterGlobalProperty(\""
+                  << asType << " " << varName << "\", (void*)&" << varName << ");\n";
 
     if (!insideDefine.empty())
         _result->reg_ << "#endif\n";

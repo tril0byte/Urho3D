@@ -39,10 +39,10 @@ namespace Urho3D
 struct PropertyInfo
 {
     /// Construct.
-    PropertyInfo() :
-        read_(false),
-        write_(false),
-        indexed_(false)
+    PropertyInfo()
+        : read_(false)
+        , write_(false)
+        , indexed_(false)
     {
     }
 
@@ -67,10 +67,7 @@ struct HeaderFile
     String sectionName;
 };
 
-bool CompareHeaderFiles(const HeaderFile& lhs, const HeaderFile& rhs)
-{
-    return lhs.sectionName < rhs.sectionName;
-}
+bool CompareHeaderFiles(const HeaderFile& lhs, const HeaderFile& rhs) { return lhs.sectionName < rhs.sectionName; }
 
 void ExtractPropertyInfo(const String& functionName, const String& declaration, Vector<PropertyInfo>& propertyInfos)
 {
@@ -173,7 +170,7 @@ void Script::OutputAPIRow(DumpMode mode, const String& row, bool removeReference
 
         // s/(\w+)\[\]/Array<\1>/g
         unsigned posBegin = String::NPOS;
-        while (true)   // Loop to cater for array of array of T
+        while (true) // Loop to cater for array of array of T
         {
             unsigned posEnd = out.Find("[]");
             if (posEnd == String::NPOS)
@@ -192,12 +189,13 @@ void Script::OutputAPIRow(DumpMode mode, const String& row, bool removeReference
 
 void Script::DumpAPI(DumpMode mode, const String& sourceTree)
 {
-    // Does not use URHO3D_LOGRAW macro here to ensure the messages are always dumped regardless of URHO3D_LOGGING compiler directive
-    // and of Log subsystem availability
+    // Does not use URHO3D_LOGRAW macro here to ensure the messages are always dumped regardless of URHO3D_LOGGING
+    // compiler directive and of Log subsystem availability
 
-    // Dump event descriptions and attribute definitions in Doxygen mode. For events, this means going through the header files,
-    // as the information is not available otherwise.
-    /// \todo Dump events + attributes before the actual script API because the remarks (readonly / writeonly) seem to throw off
+    // Dump event descriptions and attribute definitions in Doxygen mode. For events, this means going through the
+    // header files, as the information is not available otherwise.
+    /// \todo Dump events + attributes before the actual script API because the remarks (readonly / writeonly) seem to
+    /// throw off
     // Doxygen parsing and the following page definition(s) may not be properly recognized
     if (mode == DOXYGEN)
     {
@@ -211,7 +209,8 @@ void Script::DumpAPI(DumpMode mode, const String& sourceTree)
 
         fileSystem->ScanDir(headerFileNames, path, "*.h", SCAN_FILES, true);
 
-        /// \hack Rename any Events2D to 2DEvents to work with the event category creation correctly (currently PhysicsEvents2D)
+        /// \hack Rename any Events2D to 2DEvents to work with the event category creation correctly (currently
+        /// PhysicsEvents2D)
         Vector<HeaderFile> headerFiles;
         for (unsigned i = 0; i < headerFileNames.Size(); ++i)
         {
@@ -266,10 +265,11 @@ void Script::DumpAPI(DumpMode mode, const String& sourceTree)
 
         Log::WriteRaw("\n\\page AttributeList Attribute list\n");
 
-        const HashMap<StringHash, Vector<AttributeInfo> >& attributes = context_->GetAllAttributes();
+        const HashMap<StringHash, Vector<AttributeInfo>>& attributes = context_->GetAllAttributes();
 
         Vector<String> objectTypes;
-        for (HashMap<StringHash, Vector<AttributeInfo> >::ConstIterator i = attributes.Begin(); i != attributes.End(); ++i)
+        for (HashMap<StringHash, Vector<AttributeInfo>>::ConstIterator i = attributes.Begin(); i != attributes.End();
+             ++i)
             objectTypes.Push(context_->GetTypeName(i->first_));
 
         Sort(objectTypes.Begin(), objectTypes.End());
@@ -306,7 +306,8 @@ void Script::DumpAPI(DumpMode mode, const String& sourceTree)
                 String name;
                 name.Join(nameParts, " ");
                 String type = Variant::GetTypeName(attrs[j].type_);
-                // Variant typenames are all uppercase. Convert primitive types to the proper lowercase form for the documentation
+                // Variant typenames are all uppercase. Convert primitive types to the proper lowercase form for the
+                // documentation
                 if (type == "Int" || type == "Bool" || type == "Float")
                     type[0] = (char)ToLower((unsigned)type[0]);
 
@@ -320,28 +321,27 @@ void Script::DumpAPI(DumpMode mode, const String& sourceTree)
     if (mode == DOXYGEN)
         Log::WriteRaw("\n\\page ScriptAPI Scripting API\n\n");
     else if (mode == C_HEADER)
-        Log::WriteRaw(
-            "// Script API header intended to be 'force included' in IDE for AngelScript content assist / code completion\n\n"
-                "#define int8 signed char\n"
-                "#define int16 signed short\n"
-                "#define int64 long\n"
-                "#define uint8 unsigned char\n"
-                "#define uint16 unsigned short\n"
-                "#define uint64 unsigned long\n"
-                "#define null 0\n"
-                "#define in\n"
-                "#define out\n"
-                "#define inout\n"
-                "#define is ==\n"
-                "#define interface struct\n"
-                "#define class struct\n"
-                "#define cast reinterpret_cast\n"
-                "#define mixin\n"
-                "#define funcdef\n"
-            );
+        Log::WriteRaw("// Script API header intended to be 'force included' in IDE for AngelScript content assist / "
+                      "code completion\n\n"
+                      "#define int8 signed char\n"
+                      "#define int16 signed short\n"
+                      "#define int64 long\n"
+                      "#define uint8 unsigned char\n"
+                      "#define uint16 unsigned short\n"
+                      "#define uint64 unsigned long\n"
+                      "#define null 0\n"
+                      "#define in\n"
+                      "#define out\n"
+                      "#define inout\n"
+                      "#define is ==\n"
+                      "#define interface struct\n"
+                      "#define class struct\n"
+                      "#define cast reinterpret_cast\n"
+                      "#define mixin\n"
+                      "#define funcdef\n");
 
     unsigned types = scriptEngine_->GetObjectTypeCount();
-    Vector<Pair<String, unsigned> > sortedTypes;
+    Vector<Pair<String, unsigned>> sortedTypes;
     for (unsigned i = 0; i < types; ++i)
     {
         asITypeInfo* type = scriptEngine_->GetObjectTypeByIndex(i);
@@ -354,7 +354,7 @@ void Script::DumpAPI(DumpMode mode, const String& sourceTree)
     Sort(sortedTypes.Begin(), sortedTypes.End());
 
     // Get global constants by namespace
-    HashMap<String, Vector<String> > globalConstants;
+    HashMap<String, Vector<String>> globalConstants;
     unsigned properties = scriptEngine_->GetGlobalPropertyCount();
     for (unsigned i = 0; i < properties; ++i)
     {
@@ -368,18 +368,18 @@ void Script::DumpAPI(DumpMode mode, const String& sourceTree)
         String type(propertyDeclaration);
         globalConstants[String(propertyNameSpace)].Push(type + " " + String(propertyName));
     }
-    for (HashMap<String, Vector<String> >::Iterator i = globalConstants.Begin(); i != globalConstants.End(); ++i)
+    for (HashMap<String, Vector<String>>::Iterator i = globalConstants.Begin(); i != globalConstants.End(); ++i)
         Sort(i->second_.Begin(), i->second_.End(), ComparePropertyStrings);
 
     if (mode == DOXYGEN)
     {
         Log::WriteRaw("\\section ScriptAPI_TableOfContents Table of contents\n"
-            "\\ref ScriptAPI_ClassList \"Class list\"<br>\n"
-            "\\ref ScriptAPI_Classes \"Classes\"<br>\n"
-            "\\ref ScriptAPI_Enums \"Enumerations\"<br>\n"
-            "\\ref ScriptAPI_GlobalFunctions \"Global functions\"<br>\n"
-            "\\ref ScriptAPI_GlobalProperties \"Global properties\"<br>\n"
-            "\\ref ScriptAPI_GlobalConstants \"Global constants\"<br>\n\n");
+                      "\\ref ScriptAPI_ClassList \"Class list\"<br>\n"
+                      "\\ref ScriptAPI_Classes \"Classes\"<br>\n"
+                      "\\ref ScriptAPI_Enums \"Enumerations\"<br>\n"
+                      "\\ref ScriptAPI_GlobalFunctions \"Global functions\"<br>\n"
+                      "\\ref ScriptAPI_GlobalProperties \"Global properties\"<br>\n"
+                      "\\ref ScriptAPI_GlobalConstants \"Global constants\"<br>\n\n");
 
         Log::WriteRaw("\\section ScriptAPI_ClassList Class list\n\n");
 
@@ -414,22 +414,26 @@ void Script::DumpAPI(DumpMode mode, const String& sourceTree)
             }
             else if (mode == C_HEADER)
             {
-                if (type->GetFlags() & asOBJ_TEMPLATE) {
+                if (type->GetFlags() & asOBJ_TEMPLATE)
+                {
                     String str = "\ntemplate <";
-                    for (asUINT tt = 0, ttm = type->GetSubTypeCount(); tt < ttm; tt++) {
+                    for (asUINT tt = 0, ttm = type->GetSubTypeCount(); tt < ttm; tt++)
+                    {
                         asITypeInfo* pSubType = type->GetSubType(tt);
                         str += String("class ") + pSubType->GetName() + (tt < ttm - 1 ? ", " : ">");
                     }
                     Log::WriteRaw(str);
                 }
                 Log::WriteRaw("\nclass " + typeName + "\n{\npublic:\n");
-                for (asUINT m = 0, mc = type->GetBehaviourCount(); m < mc; m++) {
+                for (asUINT m = 0, mc = type->GetBehaviourCount(); m < mc; m++)
+                {
                     asEBehaviours bh;
                     asIScriptFunction* pM = type->GetBehaviourByIndex(m, &bh);
                     if (bh == asBEHAVE_CONSTRUCT || bh == asBEHAVE_DESTRUCT)
                         Log::WriteRaw(String(pM->GetDeclaration(false, false, true)) + ";\n");
                 }
-                for (asUINT m = 0, mc = type->GetFactoryCount(); m < mc; m++) {
+                for (asUINT m = 0, mc = type->GetFactoryCount(); m < mc; m++)
+                {
                     asIScriptFunction* pM = type->GetFactoryByIndex(m);
                     String declaration(pM->GetDeclaration(false, false, true));
                     declaration = declaration.Substring(declaration.Find(' ') + 1);
@@ -455,7 +459,8 @@ void Script::DumpAPI(DumpMode mode, const String& sourceTree)
                 else
                 {
                     // Sanitate the method name. For some operators fix name
-                    if (declaration.Contains("::op")) {
+                    if (declaration.Contains("::op"))
+                    {
                         declaration.Replace("::opEquals(", "::operator==(");
                         declaration.Replace("::opAssign(", "::operator=(");
                         declaration.Replace("::opAddAssign(", "::operator+=(");
@@ -554,7 +559,7 @@ void Script::DumpAPI(DumpMode mode, const String& sourceTree)
             }
 
             // Check for namespaced constants to be included in the class documentation
-            HashMap<String, Vector<String> >::ConstIterator gcIt = globalConstants.Find(typeName);
+            HashMap<String, Vector<String>>::ConstIterator gcIt = globalConstants.Find(typeName);
             if (gcIt != globalConstants.End())
             {
                 String prefix;
@@ -572,7 +577,6 @@ void Script::DumpAPI(DumpMode mode, const String& sourceTree)
                 for (unsigned j = 0; j < constants.Size(); ++j)
                     OutputAPIRow(mode, prefix + constants[j]);
             }
-
 
             if (mode == DOXYGEN)
                 Log::WriteRaw("\n");
@@ -609,7 +613,7 @@ void Script::DumpAPI(DumpMode mode, const String& sourceTree)
         Log::WriteRaw("\n// Enumerations\n");
 
     unsigned enums = scriptEngine_->GetEnumCount();
-    Vector<Pair<String, unsigned> > sortedEnums;
+    Vector<Pair<String, unsigned>> sortedEnums;
     for (unsigned i = 0; i < enums; ++i)
         sortedEnums.Push(MakePair(String(scriptEngine_->GetEnumByIndex(i)->GetName()), i));
     Sort(sortedEnums.Begin(), sortedEnums.End());
@@ -666,4 +670,4 @@ void Script::DumpAPI(DumpMode mode, const String& sourceTree)
         Log::WriteRaw("*/\n\n}\n");
 }
 
-}
+} // namespace Urho3D

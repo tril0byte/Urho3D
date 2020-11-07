@@ -39,14 +39,14 @@ static const float DEFAULT_REPEAT_RATE = 20.0f;
 extern const char* orientations[];
 extern const char* UI_CATEGORY;
 
-ScrollBar::ScrollBar(Context* context) :
-    BorderImage(context),
-    scrollStep_(DEFAULT_SCROLL_STEP),
-    stepFactor_(1.0f),
-    leftRect_(IntRect::ZERO),
-    rightRect_(IntRect::ZERO),
-    upRect_(IntRect::ZERO),
-    downRect_(IntRect::ZERO)
+ScrollBar::ScrollBar(Context* context)
+    : BorderImage(context)
+    , scrollStep_(DEFAULT_SCROLL_STEP)
+    , stepFactor_(1.0f)
+    , leftRect_(IntRect::ZERO)
+    , rightRect_(IntRect::ZERO)
+    , upRect_(IntRect::ZERO)
+    , downRect_(IntRect::ZERO)
 {
     SetEnabled(true);
 
@@ -82,7 +82,8 @@ void ScrollBar::RegisterObject(Context* context)
 
     URHO3D_COPY_BASE_ATTRIBUTES(BorderImage);
     URHO3D_UPDATE_ATTRIBUTE_DEFAULT_VALUE("Is Enabled", true);
-    URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Orientation", GetOrientation, SetOrientation, Orientation, orientations, O_HORIZONTAL, AM_FILE);
+    URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Orientation", GetOrientation, SetOrientation, Orientation, orientations,
+                                   O_HORIZONTAL, AM_FILE);
     URHO3D_ACCESSOR_ATTRIBUTE("Range", GetRange, SetRange, float, 1.0f, AM_FILE);
     URHO3D_ACCESSOR_ATTRIBUTE("Value", GetValue, SetValue, float, 0.0f, AM_FILE);
     URHO3D_ACCESSOR_ATTRIBUTE("Scroll Step", GetScrollStep, SetScrollStep, float, DEFAULT_SCROLL_STEP, AM_FILE);
@@ -140,10 +141,7 @@ void ScrollBar::OnResize(const IntVector2& newSize, const IntVector2& delta)
     }
 }
 
-void ScrollBar::OnSetEditable()
-{
-    slider_->SetEditable(editable_);
-}
+void ScrollBar::OnSetEditable() { slider_->SetEditable(editable_); }
 
 void ScrollBar::SetOrientation(Orientation orientation)
 {
@@ -163,60 +161,27 @@ void ScrollBar::SetOrientation(Orientation orientation)
     OnResize(GetSize(), IntVector2::ZERO);
 }
 
-void ScrollBar::SetRange(float range)
-{
-    slider_->SetRange(range);
-}
+void ScrollBar::SetRange(float range) { slider_->SetRange(range); }
 
-void ScrollBar::SetValue(float value)
-{
-    slider_->SetValue(value);
-}
+void ScrollBar::SetValue(float value) { slider_->SetValue(value); }
 
-void ScrollBar::ChangeValue(float delta)
-{
-    slider_->ChangeValue(delta);
-}
+void ScrollBar::ChangeValue(float delta) { slider_->ChangeValue(delta); }
 
-void ScrollBar::SetScrollStep(float step)
-{
-    scrollStep_ = Max(step, 0.0f);
-}
+void ScrollBar::SetScrollStep(float step) { scrollStep_ = Max(step, 0.0f); }
 
-void ScrollBar::SetStepFactor(float factor)
-{
-    stepFactor_ = Max(factor, M_EPSILON);
-}
+void ScrollBar::SetStepFactor(float factor) { stepFactor_ = Max(factor, M_EPSILON); }
 
-void ScrollBar::StepBack()
-{
-    slider_->SetValue(slider_->GetValue() - GetEffectiveScrollStep());
-}
+void ScrollBar::StepBack() { slider_->SetValue(slider_->GetValue() - GetEffectiveScrollStep()); }
 
-void ScrollBar::StepForward()
-{
-    slider_->SetValue(slider_->GetValue() + GetEffectiveScrollStep());
-}
+void ScrollBar::StepForward() { slider_->SetValue(slider_->GetValue() + GetEffectiveScrollStep()); }
 
-Orientation ScrollBar::GetOrientation() const
-{
-    return slider_->GetOrientation();
-}
+Orientation ScrollBar::GetOrientation() const { return slider_->GetOrientation(); }
 
-float ScrollBar::GetRange() const
-{
-    return slider_->GetRange();
-}
+float ScrollBar::GetRange() const { return slider_->GetRange(); }
 
-float ScrollBar::GetValue() const
-{
-    return slider_->GetValue();
-}
+float ScrollBar::GetValue() const { return slider_->GetValue(); }
 
-float ScrollBar::GetEffectiveScrollStep() const
-{
-    return scrollStep_ * stepFactor_;
-}
+float ScrollBar::GetEffectiveScrollStep() const { return scrollStep_ * stepFactor_; }
 
 bool ScrollBar::FilterImplicitAttributes(XMLElement& dest) const
 {
@@ -246,7 +211,6 @@ bool ScrollBar::FilterImplicitAttributes(XMLElement& dest) const
 
     childElem = childElem.GetNext("element");
     return FilterButtonImplicitAttributes(childElem, "SB_Forward");
-
 }
 
 bool ScrollBar::FilterButtonImplicitAttributes(XMLElement& dest, const String& name) const
@@ -298,29 +262,31 @@ void ScrollBar::HandleSliderPaged(StringHash eventType, VariantMap& eventData)
 
     // Synthesize hover event to the forward/back buttons
     if (eventData[P_OFFSET].GetInt() < 0)
-        backButton_->OnHover(IntVector2::ZERO, backButton_->ElementToScreen(IntVector2::ZERO), MOUSEB_NONE, QUAL_NONE, nullptr);
+        backButton_->OnHover(IntVector2::ZERO, backButton_->ElementToScreen(IntVector2::ZERO), MOUSEB_NONE, QUAL_NONE,
+                             nullptr);
     else
-        forwardButton_->OnHover(IntVector2::ZERO, forwardButton_->ElementToScreen(IntVector2::ZERO), MOUSEB_NONE, QUAL_NONE, nullptr);
+        forwardButton_->OnHover(IntVector2::ZERO, forwardButton_->ElementToScreen(IntVector2::ZERO), MOUSEB_NONE,
+                                QUAL_NONE, nullptr);
 
     // Synthesize click / release events to the buttons
     if (eventData[P_PRESSED].GetBool())
     {
         if (eventData[P_OFFSET].GetInt() < 0)
-            backButton_->OnClickBegin(IntVector2::ZERO, backButton_->ElementToScreen(IntVector2::ZERO),
-                MOUSEB_LEFT, MOUSEB_LEFT, QUAL_NONE, nullptr);
+            backButton_->OnClickBegin(IntVector2::ZERO, backButton_->ElementToScreen(IntVector2::ZERO), MOUSEB_LEFT,
+                                      MOUSEB_LEFT, QUAL_NONE, nullptr);
         else
             forwardButton_->OnClickBegin(IntVector2::ZERO, forwardButton_->ElementToScreen(IntVector2::ZERO),
-                MOUSEB_LEFT, MOUSEB_LEFT, QUAL_NONE, nullptr);
+                                         MOUSEB_LEFT, MOUSEB_LEFT, QUAL_NONE, nullptr);
     }
     else
     {
         if (eventData[P_OFFSET].GetInt() < 0)
-            backButton_->OnClickEnd(IntVector2::ZERO, backButton_->ElementToScreen(IntVector2::ZERO),
-                MOUSEB_LEFT, MOUSEB_NONE, QUAL_NONE, nullptr, backButton_);
+            backButton_->OnClickEnd(IntVector2::ZERO, backButton_->ElementToScreen(IntVector2::ZERO), MOUSEB_LEFT,
+                                    MOUSEB_NONE, QUAL_NONE, nullptr, backButton_);
         else
-            forwardButton_->OnClickEnd(IntVector2::ZERO, forwardButton_->ElementToScreen(IntVector2::ZERO),
-                MOUSEB_LEFT, MOUSEB_NONE, QUAL_NONE, nullptr, forwardButton_);
+            forwardButton_->OnClickEnd(IntVector2::ZERO, forwardButton_->ElementToScreen(IntVector2::ZERO), MOUSEB_LEFT,
+                                       MOUSEB_NONE, QUAL_NONE, nullptr, forwardButton_);
     }
 }
 
-}
+} // namespace Urho3D

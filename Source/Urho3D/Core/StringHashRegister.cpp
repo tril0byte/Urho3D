@@ -22,8 +22,8 @@
 
 #include "../Precompiled.h"
 
-#include "../Core/StringHashRegister.h"
 #include "../Core/Mutex.h"
+#include "../Core/StringHashRegister.h"
 #include "../IO/Log.h"
 
 #include <cstdio>
@@ -39,8 +39,7 @@ StringHashRegister::StringHashRegister(bool threadSafe)
         mutex_ = MakeUnique<Mutex>();
 }
 
-
-StringHashRegister::~StringHashRegister()       // NOLINT(hicpp-use-equals-default, modernize-use-equals-default)
+StringHashRegister::~StringHashRegister() // NOLINT(hicpp-use-equals-default, modernize-use-equals-default)
 {
     // Keep destructor here to let mutex_ destruct
 }
@@ -57,8 +56,8 @@ StringHash StringHashRegister::RegisterString(const StringHash& hash, const char
     }
     else if (iter->second_.Compare(string, false) != 0)
     {
-        URHO3D_LOGWARNINGF("StringHash collision detected! Both \"%s\" and \"%s\" have hash #%s",
-            string, iter->second_.CString(), hash.ToString().CString());
+        URHO3D_LOGWARNINGF("StringHash collision detected! Both \"%s\" and \"%s\" have hash #%s", string,
+                           iter->second_.CString(), hash.ToString().CString());
     }
 
     if (mutex_)
@@ -105,4 +104,4 @@ const String& StringHashRegister::GetString(const StringHash& hash) const
     return iter == map_.End() ? String::EMPTY : iter->second_;
 }
 
-}
+} // namespace Urho3D

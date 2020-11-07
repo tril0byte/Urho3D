@@ -56,4 +56,4 @@ private:
     void* event_;
 };
 
-}
+} // namespace Urho3D

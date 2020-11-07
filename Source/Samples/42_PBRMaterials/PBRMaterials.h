@@ -32,7 +32,7 @@ class Node;
 class Scene;
 class Zone;
 
-}
+} // namespace Urho3D
 
 /// PBR materials example.
 /// This sample demonstrates:

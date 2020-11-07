@@ -23,13 +23,13 @@
 #pragma once
 
 #include <PugiXml/pugixml.hpp>
-#include <string>
-#include <memory>
-#include <vector>
 #include <map>
+#include <memory>
+#include <string>
+#include <vector>
 
-#include "XmlSourceData.h"
 #include "Utils.h"
+#include "XmlSourceData.h"
 
 using namespace pugi;
 using namespace std;
@@ -41,11 +41,11 @@ private:
     string fullType_;
     string name_;
     bool isConst_;
-    bool isPointer_; // *
-    bool isReference_; // &
+    bool isPointer_;         // *
+    bool isReference_;       // &
     bool isRvalueReference_; // &&
-    bool isDoublePointer_; // **
-    bool isRefToPoiner_; // *&
+    bool isDoublePointer_;   // **
+    bool isRefToPoiner_;     // *&
     string templateParams_;
 
 public:
@@ -144,7 +144,8 @@ TypeAnalyzer ExtractType(xml_node memberdef, const map<string, string>& template
 // <memberdef kind="function">
 //     <param>...</param>
 //     <param>...</param>
-vector<ParamAnalyzer> ExtractParams(xml_node memberdef, const map<string, string>& templateSpecialization = map<string, string>());
+vector<ParamAnalyzer> ExtractParams(xml_node memberdef,
+                                    const map<string, string>& templateSpecialization = map<string, string>());
 
 // <memberdef kind="function">
 //     <param>...</param>
@@ -208,7 +209,6 @@ public:
     //     <enumvalue><name>...</name></enumvalue>
     //     <enumvalue><name>...</name></enumvalue>
     vector<string> GetEnumerators() const;
-
 };
 
 // ============================================================================
@@ -241,7 +241,7 @@ class ClassAnalyzer
 {
 private:
     xml_node compounddef_;
-    
+
     vector<xml_node> GetMemberdefs() const;
 
 public:
@@ -299,7 +299,8 @@ public:
 
     string GetName() const { return ExtractName(memberdef_); }
     string GetClassName() const { return classAnalyzer_.GetClassName(); }
-    string GetContainsClassName() const; // May this function defined in parent class, so return name o class, real define this function
+    string GetContainsClassName()
+        const; // May this function defined in parent class, so return name o class, real define this function
     string GetLine() const { return ExtractLine(memberdef_); }
     string GetColumn() const { return ExtractColumn(memberdef_); }
     string GetComment() const { return ExtractComment(memberdef_); }
@@ -311,7 +312,10 @@ public:
     bool IsParentDestructor() const;
     string GetLocation() const;
     string GetHeaderFile() const { return ExtractHeaderFile(memberdef_); }
-    TypeAnalyzer GetReturnType(const map<string, string>& templateSpecialization = map<string, string>()) const { return ExtractType(memberdef_, templateSpecialization); }
+    TypeAnalyzer GetReturnType(const map<string, string>& templateSpecialization = map<string, string>()) const
+    {
+        return ExtractType(memberdef_, templateSpecialization);
+    }
     bool CanBeGetProperty() const;
     bool CanBeSetProperty() const;
     bool IsTemplate() const { return ::IsTemplate(memberdef_); }
@@ -364,8 +368,14 @@ public:
     string GetHeaderFile() const { return ExtractHeaderFile(memberdef_); }
     bool IsTemplate() const { return ::IsTemplate(memberdef_); }
     string GetComment() const { return ExtractComment(memberdef_); }
-    vector<ParamAnalyzer> GetParams(const map<string, string>& templateSpecialization = map<string, string>()) const { return ExtractParams(memberdef_, templateSpecialization); }
-    TypeAnalyzer GetReturnType(const map<string, string>& templateSpecialization = map<string, string>()) const { return ExtractType(memberdef_, templateSpecialization); }
+    vector<ParamAnalyzer> GetParams(const map<string, string>& templateSpecialization = map<string, string>()) const
+    {
+        return ExtractParams(memberdef_, templateSpecialization);
+    }
+    TypeAnalyzer GetReturnType(const map<string, string>& templateSpecialization = map<string, string>()) const
+    {
+        return ExtractType(memberdef_, templateSpecialization);
+    }
     xml_node GetMemberdef() const { return memberdef_; }
     vector<string> GetTemplateParams() const { return ExtractTemplateParams(memberdef_); }
     string JoinParamsNames() const { return ::JoinParamsNames(memberdef_); }
@@ -391,8 +401,14 @@ public:
     string GetHeaderFile() const { return ExtractHeaderFile(memberdef_); }
     bool IsTemplate() const { return ::IsTemplate(memberdef_); }
     string GetComment() const { return ExtractComment(memberdef_); }
-    vector<ParamAnalyzer> GetParams(const map<string, string>& templateSpecialization = map<string, string>()) const { return ExtractParams(memberdef_, templateSpecialization); }
-    TypeAnalyzer GetReturnType(const map<string, string>& templateSpecialization = map<string, string>()) const { return ExtractType(memberdef_, templateSpecialization); }
+    vector<ParamAnalyzer> GetParams(const map<string, string>& templateSpecialization = map<string, string>()) const
+    {
+        return ExtractParams(memberdef_, templateSpecialization);
+    }
+    TypeAnalyzer GetReturnType(const map<string, string>& templateSpecialization = map<string, string>()) const
+    {
+        return ExtractType(memberdef_, templateSpecialization);
+    }
     xml_node GetMemberdef() const { return memberdef_; }
     vector<string> GetTemplateParams() const { return ExtractTemplateParams(memberdef_); }
     string GetClassName() const { return classAnalyzer_.GetClassName(); }
@@ -446,4 +462,3 @@ public:
     //         <memberdef kind="function">...</memberdef>
     vector<GlobalFunctionAnalyzer> GetFunctions();
 };
-

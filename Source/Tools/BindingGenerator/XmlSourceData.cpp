@@ -20,9 +20,9 @@
 // THE SOFTWARE.
 //
 
+#include "XmlSourceData.h"
 #include "Utils.h"
 #include "XmlAnalyzer.h"
-#include "XmlSourceData.h"
 
 #include <algorithm>
 #include <cassert>
@@ -40,7 +40,7 @@
 static void LoadXml(const string& fullPath)
 {
     // All loaded XMLs. Not used directly, just prevents destruction
-    static vector<shared_ptr<xml_document> > xmlStorage;
+    static vector<shared_ptr<xml_document>> xmlStorage;
 
     // Load and store XML file
     shared_ptr<xml_document> xmlDocument = make_shared<xml_document>();
@@ -49,7 +49,7 @@ static void LoadXml(const string& fullPath)
     xmlStorage.push_back(xmlDocument);
 
     xml_node doxygenindex = xmlDocument->child("doxygenindex");
-    
+
     if (doxygenindex) // index.xml
     {
         // Fill defines_
@@ -69,9 +69,9 @@ static void LoadXml(const string& fullPath)
 
         return;
     }
-    
+
     xml_node compounddef = xmlDocument->child("doxygen").child("compounddef");
-    
+
     if (!compounddef)
         return;
 
@@ -82,7 +82,7 @@ static void LoadXml(const string& fullPath)
         // Fill classes_
         string id = compounddef.attribute("id").value();
         assert(!id.empty());
-        SourceData::classesByID_.insert({ id, compounddef });
+        SourceData::classesByID_.insert({id, compounddef});
 
         // Fill classesByName_
         string compoundname = ExtractCompoundname(compounddef);
@@ -91,7 +91,7 @@ static void LoadXml(const string& fullPath)
             string name = CutStart(compoundname, "Urho3D::");
 
             if (!Contains(name, "::"))
-                SourceData::classesByName_.insert({ name, compounddef });
+                SourceData::classesByName_.insert({name, compounddef});
         }
 
         // Fill members_
@@ -104,13 +104,13 @@ static void LoadXml(const string& fullPath)
                     continue;
 
                 string member_id = ExtractID(memberdef);
-                SourceData::members_.insert({ member_id, memberdef });
+                SourceData::members_.insert({member_id, memberdef});
             }
         }
 
         return;
     }
-    
+
     if (compounddef_kind == "namespace")
     {
         string compoundname = compounddef.child("compoundname").child_value();
@@ -130,7 +130,7 @@ static void LoadXml(const string& fullPath)
 
         xml_node typedefs = FindSectiondef(compounddef, "typedef");
         assert(typedefs);
-        
+
         for (xml_node memberdef : typedefs.children("memberdef"))
         {
             string definition = ExtractDefinition(memberdef);
@@ -150,12 +150,12 @@ static void LoadXml(const string& fullPath)
         for (xml_node memberdef : enums.children("memberdef"))
         {
             string name = ExtractName(memberdef);
-            SourceData::enums_.insert({ name, memberdef });
+            SourceData::enums_.insert({name, memberdef});
         }
 
         return;
     }
-    
+
     if (compounddef_kind == "file")
     {
         // Fill ignoredHeaders_
@@ -220,23 +220,23 @@ static void GetXmlFiles(string dirPath, vector<string>& result)
 
 namespace SourceData
 {
-    unordered_map<string, xml_node> classesByID_;
-    unordered_map<string, xml_node> classesByName_;
-    unordered_map<string, xml_node> members_;
-    unordered_map<string, xml_node> enums_;
-    xml_node namespaceUrho3D_;
-    vector<xml_node> usings_;
-    vector<string> defines_;
-    vector<string> ignoredHeaders_;
+unordered_map<string, xml_node> classesByID_;
+unordered_map<string, xml_node> classesByName_;
+unordered_map<string, xml_node> members_;
+unordered_map<string, xml_node> enums_;
+xml_node namespaceUrho3D_;
+vector<xml_node> usings_;
+vector<string> defines_;
+vector<string> ignoredHeaders_;
 
-    void LoadAllXmls(const string& dir)
-    {
-        cout << "Loading XMLs from " << dir << "\n";
-        vector<string> fullPaths;
-        GetXmlFiles(dir, fullPaths);
-        cout << "Found " << fullPaths.size() << " xml files\n";
+void LoadAllXmls(const string& dir)
+{
+    cout << "Loading XMLs from " << dir << "\n";
+    vector<string> fullPaths;
+    GetXmlFiles(dir, fullPaths);
+    cout << "Found " << fullPaths.size() << " xml files\n";
 
-        for (string fullPath : fullPaths)
-            LoadXml(fullPath);
-    }
+    for (string fullPath : fullPaths)
+        LoadXml(fullPath);
 }
+} // namespace SourceData

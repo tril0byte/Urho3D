@@ -29,14 +29,13 @@
 
 #include "../DebugNew.h"
 
-
 namespace Urho3D
 {
 
-TypeInfo::TypeInfo(const char* typeName, const TypeInfo* baseTypeInfo) :
-    type_(typeName),
-    typeName_(typeName),
-    baseTypeInfo_(baseTypeInfo)
+TypeInfo::TypeInfo(const char* typeName, const TypeInfo* baseTypeInfo)
+    : type_(typeName)
+    , typeName_(typeName)
+    , baseTypeInfo_(baseTypeInfo)
 {
 }
 
@@ -60,7 +59,7 @@ bool TypeInfo::IsTypeOf(const TypeInfo* typeInfo) const
 {
     if (typeInfo == nullptr)
         return false;
-    
+
     const TypeInfo* current = this;
     while (current)
     {
@@ -73,9 +72,9 @@ bool TypeInfo::IsTypeOf(const TypeInfo* typeInfo) const
     return false;
 }
 
-Object::Object(Context* context) :
-    context_(context),
-    blockEvents_(false)
+Object::Object(Context* context)
+    : context_(context)
+    , blockEvents_(false)
 {
     assert(context_);
 }
@@ -129,15 +128,9 @@ void Object::OnEvent(Object* sender, StringHash eventType, VariantMap& eventData
     }
 }
 
-bool Object::IsInstanceOf(StringHash type) const
-{
-    return GetTypeInfo()->IsTypeOf(type);
-}
+bool Object::IsInstanceOf(StringHash type) const { return GetTypeInfo()->IsTypeOf(type); }
 
-bool Object::IsInstanceOf(const TypeInfo* typeInfo) const
-{
-    return GetTypeInfo()->IsTypeOf(typeInfo);
-}
+bool Object::IsInstanceOf(const TypeInfo* typeInfo) const { return GetTypeInfo()->IsTypeOf(typeInfo); }
 
 void Object::SubscribeToEvent(StringHash eventType, EventHandler* handler)
 {
@@ -185,12 +178,14 @@ void Object::SubscribeToEvent(Object* sender, StringHash eventType, EventHandler
     }
 }
 
-void Object::SubscribeToEvent(StringHash eventType, const std::function<void(StringHash, VariantMap&)>& function, void* userData/*=0*/)
+void Object::SubscribeToEvent(StringHash eventType, const std::function<void(StringHash, VariantMap&)>& function,
+                              void* userData /*=0*/)
 {
     SubscribeToEvent(eventType, new EventHandler11Impl(function, userData));
 }
 
-void Object::SubscribeToEvent(Object* sender, StringHash eventType, const std::function<void(StringHash, VariantMap&)>& function, void* userData/*=0*/)
+void Object::SubscribeToEvent(Object* sender, StringHash eventType,
+                              const std::function<void(StringHash, VariantMap&)>& function, void* userData /*=0*/)
 {
     SubscribeToEvent(sender, eventType, new EventHandler11Impl(function, userData));
 }
@@ -398,45 +393,21 @@ void Object::SendEvent(StringHash eventType, VariantMap& eventData)
     context->EndSendEvent();
 }
 
-VariantMap& Object::GetEventDataMap() const
-{
-    return context_->GetEventDataMap();
-}
+VariantMap& Object::GetEventDataMap() const { return context_->GetEventDataMap(); }
 
-const Variant& Object::GetGlobalVar(StringHash key) const
-{
-    return context_->GetGlobalVar(key);
-}
+const Variant& Object::GetGlobalVar(StringHash key) const { return context_->GetGlobalVar(key); }
 
-const VariantMap& Object::GetGlobalVars() const
-{
-    return context_->GetGlobalVars();
-}
+const VariantMap& Object::GetGlobalVars() const { return context_->GetGlobalVars(); }
 
-void Object::SetGlobalVar(StringHash key, const Variant& value)
-{
-    context_->SetGlobalVar(key, value);
-}
+void Object::SetGlobalVar(StringHash key, const Variant& value) { context_->SetGlobalVar(key, value); }
 
-Object* Object::GetSubsystem(StringHash type) const
-{
-    return context_->GetSubsystem(type);
-}
+Object* Object::GetSubsystem(StringHash type) const { return context_->GetSubsystem(type); }
 
-Object* Object::GetEventSender() const
-{
-    return context_->GetEventSender();
-}
+Object* Object::GetEventSender() const { return context_->GetEventSender(); }
 
-EventHandler* Object::GetEventHandler() const
-{
-    return context_->GetEventHandler();
-}
+EventHandler* Object::GetEventHandler() const { return context_->GetEventHandler(); }
 
-bool Object::HasSubscribedToEvent(StringHash eventType) const
-{
-    return FindEventHandler(eventType) != nullptr;
-}
+bool Object::HasSubscribedToEvent(StringHash eventType) const { return FindEventHandler(eventType) != nullptr; }
 
 bool Object::HasSubscribedToEvent(Object* sender, StringHash eventType) const
 {
@@ -448,8 +419,9 @@ bool Object::HasSubscribedToEvent(Object* sender, StringHash eventType) const
 
 const String& Object::GetCategory() const
 {
-    const HashMap<String, Vector<StringHash> >& objectCategories = context_->GetObjectCategories();
-    for (HashMap<String, Vector<StringHash> >::ConstIterator i = objectCategories.Begin(); i != objectCategories.End(); ++i)
+    const HashMap<String, Vector<StringHash>>& objectCategories = context_->GetObjectCategories();
+    for (HashMap<String, Vector<StringHash>>::ConstIterator i = objectCategories.Begin(); i != objectCategories.End();
+         ++i)
     {
         if (i->second_.Contains(GetType()))
             return i->first_;
@@ -539,4 +511,4 @@ StringHashRegister& GetEventNameRegister()
     return eventNameRegister;
 }
 
-}
+} // namespace Urho3D

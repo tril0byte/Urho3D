@@ -47,11 +47,11 @@ void CompileScript(Context* context, const String& fileName);
 
 int main(int argc, char** argv)
 {
-    #ifdef WIN32
+#ifdef WIN32
     const Vector<String>& arguments = ParseArguments(GetCommandLineW());
-    #else
+#else
     const Vector<String>& arguments = ParseArguments(argc, argv);
-    #endif
+#endif
 
     bool dumpApiMode = false;
     String sourceTree;
@@ -92,9 +92,9 @@ int main(int argc, char** argv)
         engineParameters[EP_RESOURCE_PATHS] = String::EMPTY;
         engineParameters[EP_AUTOLOAD_PATHS] = String::EMPTY;
         engine->Initialize(engineParameters);
-    #ifdef URHO3D_LUA
+#ifdef URHO3D_LUA
         context->RegisterSubsystem(new LuaScript(context));
-    #endif
+#endif
     }
 
     auto* log = context->GetSubsystem<Log>();

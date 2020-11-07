@@ -30,16 +30,16 @@
 namespace Urho3D
 {
 
-NavBuildData::NavBuildData() :
-    ctx_(new rcContext(true)),
-    heightField_(nullptr),
-    compactHeightField_(nullptr)
+NavBuildData::NavBuildData()
+    : ctx_(new rcContext(true))
+    , heightField_(nullptr)
+    , compactHeightField_(nullptr)
 {
 }
 
 NavBuildData::~NavBuildData()
 {
-    delete(ctx_);
+    delete (ctx_);
     ctx_ = nullptr;
     rcFreeHeightField(heightField_);
     heightField_ = nullptr;
@@ -47,11 +47,11 @@ NavBuildData::~NavBuildData()
     compactHeightField_ = nullptr;
 }
 
-SimpleNavBuildData::SimpleNavBuildData() :
-    NavBuildData(),
-    contourSet_(nullptr),
-    polyMesh_(nullptr),
-    polyMeshDetail_(nullptr)
+SimpleNavBuildData::SimpleNavBuildData()
+    : NavBuildData()
+    , contourSet_(nullptr)
+    , polyMesh_(nullptr)
+    , polyMeshDetail_(nullptr)
 {
 }
 
@@ -65,12 +65,12 @@ SimpleNavBuildData::~SimpleNavBuildData()
     polyMeshDetail_ = nullptr;
 }
 
-DynamicNavBuildData::DynamicNavBuildData(dtTileCacheAlloc* allocator) :
-    NavBuildData(),
-    contourSet_(nullptr),
-    polyMesh_(nullptr),
-    heightFieldLayers_(nullptr),
-    alloc_(allocator)
+DynamicNavBuildData::DynamicNavBuildData(dtTileCacheAlloc* allocator)
+    : NavBuildData()
+    , contourSet_(nullptr)
+    , polyMesh_(nullptr)
+    , heightFieldLayers_(nullptr)
+    , alloc_(allocator)
 {
     assert(allocator);
 }
@@ -85,4 +85,4 @@ DynamicNavBuildData::~DynamicNavBuildData()
     heightFieldLayers_ = nullptr;
 }
 
-}
+} // namespace Urho3D

@@ -34,18 +34,8 @@
 namespace Urho3D
 {
 
-const char* ShaderVariation::elementSemanticNames[] =
-{
-    "POS",
-    "NORMAL",
-    "BINORMAL",
-    "TANGENT",
-    "TEXCOORD",
-    "COLOR",
-    "BLENDWEIGHT",
-    "BLENDINDICES",
-    "OBJECTINDEX"
-};
+const char* ShaderVariation::elementSemanticNames[] = {"POS",   "NORMAL",      "BINORMAL",     "TANGENT",    "TEXCOORD",
+                                                       "COLOR", "BLENDWEIGHT", "BLENDINDICES", "OBJECTINDEX"};
 
 void ShaderVariation::OnDeviceLost()
 {
@@ -190,10 +180,7 @@ bool ShaderVariation::Create()
     return object_.name_ != 0;
 }
 
-void ShaderVariation::SetDefines(const String& defines)
-{
-    defines_ = defines;
-}
+void ShaderVariation::SetDefines(const String& defines) { defines_ = defines; }
 
 // These methods are no-ops for OpenGL
 bool ShaderVariation::LoadByteCode(const String& binaryShaderName) { return false; }
@@ -202,4 +189,4 @@ void ShaderVariation::ParseParameters(unsigned char* bufData, unsigned bufSize) 
 void ShaderVariation::SaveByteCode(const String& binaryShaderName) {}
 void ShaderVariation::CalculateConstantBufferSizes() {}
 
-}
+} // namespace Urho3D

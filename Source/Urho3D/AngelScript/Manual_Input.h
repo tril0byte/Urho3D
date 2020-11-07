@@ -46,24 +46,33 @@ void InputSetMouseMode(MouseMode mode, Input* ptr);
 // void Input::SetMouseVisible(bool enable, bool suppressEvent=false) | File: ../Input/Input.h
 void InputSetMouseVisible(bool enable, Input* ptr);
 
-#define REGISTER_MANUAL_PART_Input(T, className) \
-    /* bool Input::SaveGestures(Serializer &dest) | File: ../Input/Input.h */ \
-    engine->RegisterObjectMethod(className, "bool SaveGestures(File@+)", asFUNCTION(InputSaveGestures), asCALL_CDECL_OBJLAST); \
-    /* bool Input::SaveGestures(Serializer &dest) | File: ../Input/Input.h */ \
-    engine->RegisterObjectMethod(className, "bool SaveGestures(VectorBuffer&)", asFUNCTION(InputSaveGesturesVectorBuffer), asCALL_CDECL_OBJLAST); \
-    /* bool Input::SaveGesture(Serializer &dest, unsigned gestureID) | File: ../Input/Input.h */ \
-    engine->RegisterObjectMethod(className, "bool SaveGesture(File@+, uint)", asFUNCTION(InputSaveGesture), asCALL_CDECL_OBJLAST); \
-    /* bool Input::SaveGesture(Serializer &dest, unsigned gestureID) | File: ../Input/Input.h */ \
-    engine->RegisterObjectMethod(className, "bool SaveGesture(VectorBuffer&, uint)", asFUNCTION(InputSaveGestureVectorBuffer), asCALL_CDECL_OBJLAST); \
-    /* unsigned Input::LoadGestures(Deserializer &source) | File: ../Input/Input.h */ \
-    engine->RegisterObjectMethod(className, "uint LoadGestures(File@+)", asFUNCTION(InputLoadGestures), asCALL_CDECL_OBJLAST); \
-    /* unsigned Input::LoadGestures(Deserializer &source) | File: ../Input/Input.h */ \
-    engine->RegisterObjectMethod(className, "uint LoadGestures(VectorBuffer&)", asFUNCTION(InputLoadGesturesVectorBuffer), asCALL_CDECL_OBJLAST); \
-    /* void Input::SetMouseGrabbed(bool grab, bool suppressEvent=false) | File: ../Input/Input.h */ \
-    engine->RegisterObjectMethod(className, "void set_mouseGrabbed(bool)", asFUNCTION(InputSetMouseGrabbed), asCALL_CDECL_OBJLAST); \
-    /* void Input::SetMouseMode(MouseMode mode, bool suppressEvent=false) | File: ../Input/Input.h */ \
-    engine->RegisterObjectMethod(className, "void set_mouseMode(MouseMode)", asFUNCTION(InputSetMouseMode), asCALL_CDECL_OBJLAST); \
-    /* void Input::SetMouseVisible(bool enable, bool suppressEvent=false) | File: ../Input/Input.h */ \
-    engine->RegisterObjectMethod(className, "void set_mouseVisible(bool)", asFUNCTION(InputSetMouseVisible), asCALL_CDECL_OBJLAST);
+#define REGISTER_MANUAL_PART_Input(T, className)                                                                       \
+    /* bool Input::SaveGestures(Serializer &dest) | File: ../Input/Input.h */                                          \
+    engine->RegisterObjectMethod(className, "bool SaveGestures(File@+)", asFUNCTION(InputSaveGestures),                \
+                                 asCALL_CDECL_OBJLAST);                                                                \
+    /* bool Input::SaveGestures(Serializer &dest) | File: ../Input/Input.h */                                          \
+    engine->RegisterObjectMethod(className, "bool SaveGestures(VectorBuffer&)",                                        \
+                                 asFUNCTION(InputSaveGesturesVectorBuffer), asCALL_CDECL_OBJLAST);                     \
+    /* bool Input::SaveGesture(Serializer &dest, unsigned gestureID) | File: ../Input/Input.h */                       \
+    engine->RegisterObjectMethod(className, "bool SaveGesture(File@+, uint)", asFUNCTION(InputSaveGesture),            \
+                                 asCALL_CDECL_OBJLAST);                                                                \
+    /* bool Input::SaveGesture(Serializer &dest, unsigned gestureID) | File: ../Input/Input.h */                       \
+    engine->RegisterObjectMethod(className, "bool SaveGesture(VectorBuffer&, uint)",                                   \
+                                 asFUNCTION(InputSaveGestureVectorBuffer), asCALL_CDECL_OBJLAST);                      \
+    /* unsigned Input::LoadGestures(Deserializer &source) | File: ../Input/Input.h */                                  \
+    engine->RegisterObjectMethod(className, "uint LoadGestures(File@+)", asFUNCTION(InputLoadGestures),                \
+                                 asCALL_CDECL_OBJLAST);                                                                \
+    /* unsigned Input::LoadGestures(Deserializer &source) | File: ../Input/Input.h */                                  \
+    engine->RegisterObjectMethod(className, "uint LoadGestures(VectorBuffer&)",                                        \
+                                 asFUNCTION(InputLoadGesturesVectorBuffer), asCALL_CDECL_OBJLAST);                     \
+    /* void Input::SetMouseGrabbed(bool grab, bool suppressEvent=false) | File: ../Input/Input.h */                    \
+    engine->RegisterObjectMethod(className, "void set_mouseGrabbed(bool)", asFUNCTION(InputSetMouseGrabbed),           \
+                                 asCALL_CDECL_OBJLAST);                                                                \
+    /* void Input::SetMouseMode(MouseMode mode, bool suppressEvent=false) | File: ../Input/Input.h */                  \
+    engine->RegisterObjectMethod(className, "void set_mouseMode(MouseMode)", asFUNCTION(InputSetMouseMode),            \
+                                 asCALL_CDECL_OBJLAST);                                                                \
+    /* void Input::SetMouseVisible(bool enable, bool suppressEvent=false) | File: ../Input/Input.h */                  \
+    engine->RegisterObjectMethod(className, "void set_mouseVisible(bool)", asFUNCTION(InputSetMouseVisible),           \
+                                 asCALL_CDECL_OBJLAST);
 
-}
+} // namespace Urho3D

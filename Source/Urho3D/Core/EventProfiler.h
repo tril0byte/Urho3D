@@ -33,9 +33,9 @@ class URHO3D_API EventProfilerBlock : public ProfilerBlock
 {
 public:
     /// Construct with the specified parent block and event ID.
-    EventProfilerBlock(EventProfilerBlock* parent, StringHash eventID) :
-        ProfilerBlock(parent, GetEventNameRegister().GetString(eventID).CString()),
-        eventID_(eventID)
+    EventProfilerBlock(EventProfilerBlock* parent, StringHash eventID)
+        : ProfilerBlock(parent, GetEventNameRegister().GetString(eventID).CString())
+        , eventID_(eventID)
     {
     }
 
@@ -68,7 +68,8 @@ public:
     /// Construct.
     explicit EventProfiler(Context* context);
 
-    /// Activate the event profiler to collect information. This incurs slight performance hit on each SendEvent. By default inactive.
+    /// Activate the event profiler to collect information. This incurs slight performance hit on each SendEvent. By
+    /// default inactive.
     static void SetActive(bool newActive) { active = newActive; }
     /// Return true if active.
     static bool IsActive() { return active; }
@@ -89,4 +90,4 @@ private:
     static bool active;
 };
 
-}
+} // namespace Urho3D

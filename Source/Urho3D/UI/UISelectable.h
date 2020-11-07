@@ -65,4 +65,4 @@ protected:
     Color hoverColor_{Color::TRANSPARENT_BLACK};
 };
 
-}
+} // namespace Urho3D

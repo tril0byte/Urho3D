@@ -22,16 +22,16 @@
 
 #include "../Precompiled.h"
 
-#include "../Core/CoreEvents.h"
-#include "../Core/Profiler.h"
-#include "../Core/EventProfiler.h"
 #include "../Core/Context.h"
+#include "../Core/CoreEvents.h"
+#include "../Core/EventProfiler.h"
+#include "../Core/Profiler.h"
 #include "../Engine/DebugHud.h"
 #include "../Engine/Engine.h"
 #include "../Graphics/Graphics.h"
 #include "../Graphics/Renderer.h"
-#include "../Resource/ResourceCache.h"
 #include "../IO/Log.h"
+#include "../Resource/ResourceCache.h"
 #include "../UI/Font.h"
 #include "../UI/Text.h"
 #include "../UI/UI.h"
@@ -41,30 +41,17 @@
 namespace Urho3D
 {
 
-static const char* qualityTexts[] =
-{
-    "Low",
-    "Med",
-    "High",
-    "High+"
-};
+static const char* qualityTexts[] = {"Low", "Med", "High", "High+"};
 
-static const char* shadowQualityTexts[] =
-{
-    "16bit Simple",
-    "24bit Simple",
-    "16bit PCF",
-    "24bit PCF",
-    "VSM",
-    "Blurred VSM"
-};
+static const char* shadowQualityTexts[] = {"16bit Simple", "24bit Simple", "16bit PCF",
+                                           "24bit PCF",    "VSM",          "Blurred VSM"};
 
-DebugHud::DebugHud(Context* context) :
-    Object(context),
-    profilerMaxDepth_(M_MAX_UNSIGNED),
-    profilerInterval_(1000),
-    useRendererStats_(false),
-    mode_(DEBUGHUD_SHOW_NONE)
+DebugHud::DebugHud(Context* context)
+    : Object(context)
+    , profilerMaxDepth_(M_MAX_UNSIGNED)
+    , profilerInterval_(1000)
+    , useRendererStats_(false)
+    , mode_(DEBUGHUD_SHOW_NONE)
 {
     auto* ui = GetSubsystem<UI>();
     UIElement* uiRoot = ui->GetRoot();
@@ -143,13 +130,9 @@ void DebugHud::Update()
         }
 
         String stats;
-        stats.AppendWithFormat("Triangles %u\nBatches %u\nViews %u\nLights %u\nShadowmaps %u\nOccluders %u",
-            primitives,
-            batches,
-            renderer->GetNumViews(),
-            renderer->GetNumLights(true),
-            renderer->GetNumShadowMaps(true),
-            renderer->GetNumOccluders(true));
+        stats.AppendWithFormat("Triangles %u\nBatches %u\nViews %u\nLights %u\nShadowmaps %u\nOccluders %u", primitives,
+                               batches, renderer->GetNumViews(), renderer->GetNumLights(true),
+                               renderer->GetNumShadowMaps(true), renderer->GetNumOccluders(true));
 
         if (!appStats_.Empty())
         {
@@ -165,15 +148,12 @@ void DebugHud::Update()
     {
         String mode;
         mode.AppendWithFormat("Tex:%s Mat:%s Spec:%s Shadows:%s Size:%i Quality:%s Occlusion:%s Instancing:%s API:%s",
-            qualityTexts[renderer->GetTextureQuality()],
-            qualityTexts[Min((unsigned)renderer->GetMaterialQuality(), 3)],
-            renderer->GetSpecularLighting() ? "On" : "Off",
-            renderer->GetDrawShadows() ? "On" : "Off",
-            renderer->GetShadowMapSize(),
-            shadowQualityTexts[renderer->GetShadowQuality()],
-            renderer->GetMaxOccluderTriangles() > 0 ? "On" : "Off",
-            renderer->GetDynamicInstancing() ? "On" : "Off",
-            graphics->GetApiName().CString());
+                              qualityTexts[renderer->GetTextureQuality()],
+                              qualityTexts[Min((unsigned)renderer->GetMaterialQuality(), 3)],
+                              renderer->GetSpecularLighting() ? "On" : "Off", renderer->GetDrawShadows() ? "On" : "Off",
+                              renderer->GetShadowMapSize(), shadowQualityTexts[renderer->GetShadowQuality()],
+                              renderer->GetMaxOccluderTriangles() > 0 ? "On" : "Off",
+                              renderer->GetDynamicInstancing() ? "On" : "Off", graphics->GetApiName().CString());
 
         modeText_->SetText(mode);
     }
@@ -242,45 +222,21 @@ void DebugHud::SetMode(unsigned mode)
     mode_ = mode;
 }
 
-void DebugHud::SetProfilerMaxDepth(unsigned depth)
-{
-    profilerMaxDepth_ = depth;
-}
+void DebugHud::SetProfilerMaxDepth(unsigned depth) { profilerMaxDepth_ = depth; }
 
-void DebugHud::SetProfilerInterval(float interval)
-{
-    profilerInterval_ = Max((unsigned)(interval * 1000.0f), 0U);
-}
+void DebugHud::SetProfilerInterval(float interval) { profilerInterval_ = Max((unsigned)(interval * 1000.0f), 0U); }
 
-void DebugHud::SetUseRendererStats(bool enable)
-{
-    useRendererStats_ = enable;
-}
+void DebugHud::SetUseRendererStats(bool enable) { useRendererStats_ = enable; }
 
-void DebugHud::Toggle(unsigned mode)
-{
-    SetMode(GetMode() ^ mode);
-}
+void DebugHud::Toggle(unsigned mode) { SetMode(GetMode() ^ mode); }
 
-void DebugHud::ToggleAll()
-{
-    Toggle(DEBUGHUD_SHOW_ALL);
-}
+void DebugHud::ToggleAll() { Toggle(DEBUGHUD_SHOW_ALL); }
 
-XMLFile* DebugHud::GetDefaultStyle() const
-{
-    return statsText_->GetDefaultStyle(false);
-}
+XMLFile* DebugHud::GetDefaultStyle() const { return statsText_->GetDefaultStyle(false); }
 
-float DebugHud::GetProfilerInterval() const
-{
-    return (float)profilerInterval_ / 1000.0f;
-}
+float DebugHud::GetProfilerInterval() const { return (float)profilerInterval_ / 1000.0f; }
 
-void DebugHud::SetAppStats(const String& label, const Variant& stats)
-{
-    SetAppStats(label, stats.ToString());
-}
+void DebugHud::SetAppStats(const String& label, const Variant& stats) { SetAppStats(label, stats.ToString()); }
 
 void DebugHud::SetAppStats(const String& label, const String& stats)
 {
@@ -290,15 +246,9 @@ void DebugHud::SetAppStats(const String& label, const String& stats)
         appStats_.Sort();
 }
 
-bool DebugHud::ResetAppStats(const String& label)
-{
-    return appStats_.Erase(label);
-}
+bool DebugHud::ResetAppStats(const String& label) { return appStats_.Erase(label); }
 
-void DebugHud::ClearAppStats()
-{
-    appStats_.Clear();
-}
+void DebugHud::ClearAppStats() { appStats_.Clear(); }
 
 void DebugHud::HandlePostUpdate(StringHash eventType, VariantMap& eventData)
 {
@@ -307,4 +257,4 @@ void DebugHud::HandlePostUpdate(StringHash eventType, VariantMap& eventData)
     Update();
 }
 
-}
+} // namespace Urho3D

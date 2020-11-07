@@ -51,7 +51,8 @@ public:
     bool StartWatching(const String& pathName, bool watchSubDirs);
     /// Stop watching the directory.
     void StopWatching();
-    /// Set the delay in seconds before file changes are notified. This (hopefully) avoids notifying when a file save is still in progress. Default 1 second.
+    /// Set the delay in seconds before file changes are notified. This (hopefully) avoids notifying when a file save is
+    /// still in progress. Default 1 second.
     void SetDelay(float interval);
     /// Add a file change into the changes queue.
     void AddChange(const String& fileName);
@@ -100,4 +101,4 @@ private:
 #endif
 };
 
-}
+} // namespace Urho3D

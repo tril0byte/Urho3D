@@ -54,7 +54,8 @@ private:
     /// Save font face texture as image file.
     bool SaveFaceTexture(Texture2D* texture, const String& fileName);
     /// Blit.
-    void Blit(Image* dest, int x, int y, int width, int height, Image* source, int sourceX, int sourceY, int components);
+    void Blit(Image* dest, int x, int y, int width, int height, Image* source, int sourceX, int sourceY,
+              int components);
 };
 
-}
+} // namespace Urho3D

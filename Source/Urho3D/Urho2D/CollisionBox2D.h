@@ -82,4 +82,4 @@ private:
     float angle_;
 };
 
-}
+} // namespace Urho3D

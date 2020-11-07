@@ -33,8 +33,8 @@ class URHO3D_API Plane
 {
 public:
     /// Construct a degenerate plane with zero normal and parameter.
-    Plane() noexcept :
-        d_(0.0f)
+    Plane() noexcept
+        : d_(0.0f)
     {
     }
 
@@ -42,25 +42,16 @@ public:
     Plane(const Plane& plane) noexcept = default;
 
     /// Construct from 3 vertices.
-    Plane(const Vector3& v0, const Vector3& v1, const Vector3& v2) noexcept
-    {
-        Define(v0, v1, v2);
-    }
+    Plane(const Vector3& v0, const Vector3& v1, const Vector3& v2) noexcept { Define(v0, v1, v2); }
 
     /// Construct from a normal vector and a point on the plane.
-    Plane(const Vector3& normal, const Vector3& point) noexcept
-    {
-        Define(normal, point);
-    }
+    Plane(const Vector3& normal, const Vector3& point) noexcept { Define(normal, point); }
 
     /// Construct from a 4-dimensional vector, where the w coordinate is the plane parameter.
-    explicit Plane(const Vector4& plane) noexcept
-    {
-        Define(plane);
-    }
+    explicit Plane(const Vector4& plane) noexcept { Define(plane); }
 
     /// Assign from another plane.
-    Plane& operator =(const Plane& rhs) noexcept = default;
+    Plane& operator=(const Plane& rhs) noexcept = default;
 
     /// Define from 3 vertices.
     void Define(const Vector3& v0, const Vector3& v1, const Vector3& v2)
@@ -101,7 +92,10 @@ public:
     float Distance(const Vector3& point) const { return normal_.DotProduct(point) + d_; }
 
     /// Reflect a normalized direction vector.
-    Vector3 Reflect(const Vector3& direction) const { return direction - (2.0f * normal_.DotProduct(direction) * normal_); }
+    Vector3 Reflect(const Vector3& direction) const
+    {
+        return direction - (2.0f * normal_.DotProduct(direction) * normal_);
+    }
 
     /// Return a reflection matrix.
     /// @property
@@ -127,4 +121,4 @@ public:
     static const Plane UP;
 };
 
-}
+} // namespace Urho3D

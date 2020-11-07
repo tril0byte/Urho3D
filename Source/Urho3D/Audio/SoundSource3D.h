@@ -55,10 +55,12 @@ public:
     /// Set far distance. Outside this range sound will be completely attenuated.
     /// @property
     void SetFarDistance(float distance);
-    /// Set inner angle in degrees. Inside this angle sound will not be attenuated.By default 360, meaning direction never has an effect.
+    /// Set inner angle in degrees. Inside this angle sound will not be attenuated.By default 360, meaning direction
+    /// never has an effect.
     /// @property
     void SetInnerAngle(float angle);
-    /// Set outer angle in degrees. Outside this angle sound will be completely attenuated. By default 360, meaning direction never has an effect.
+    /// Set outer angle in degrees. Outside this angle sound will be completely attenuated. By default 360, meaning
+    /// direction never has an effect.
     /// @property
     void SetOuterAngle(float angle);
     /// Set rolloff power factor, defines attenuation function shape.
@@ -100,4 +102,4 @@ protected:
     float rolloffFactor_;
 };
 
-}
+} // namespace Urho3D

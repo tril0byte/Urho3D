@@ -31,7 +31,7 @@ class Node;
 class IKEffector;
 class IKSolver;
 class Scene;
-}
+} // namespace Urho3D
 
 /// Inverse Kinematics demo.
 /// This sample demonstrates how to adjust the position of animated feet so they match the ground's angle using IK.

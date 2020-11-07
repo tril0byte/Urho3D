@@ -49,11 +49,13 @@ public:
     /// Return the current height.
     int GetHeight() const { return size_.y_; }
 
-    /// Return whether uses fast mode. Fast mode uses a simpler allocation scheme which may waste free space, but is OK for eg. fonts.
+    /// Return whether uses fast mode. Fast mode uses a simpler allocation scheme which may waste free space, but is OK
+    /// for eg. fonts.
     bool GetFastMode() const { return fastMode_; }
 
 private:
-    /// Remove space from a free rectangle. Return true if the original rectangle should be erased from the free list. Not called in fast mode.
+    /// Remove space from a free rectangle. Return true if the original rectangle should be erased from the free list.
+    /// Not called in fast mode.
     bool SplitRect(unsigned freeAreaIndex, const IntRect& reserve);
     /// Clean up redundant free space. Not called in fast mode.
     void Cleanup();
@@ -70,4 +72,4 @@ private:
     bool fastMode_{true};
 };
 
-}
+} // namespace Urho3D

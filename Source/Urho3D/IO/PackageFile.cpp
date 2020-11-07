@@ -29,21 +29,21 @@
 namespace Urho3D
 {
 
-PackageFile::PackageFile(Context* context) :
-    Object(context),
-    totalSize_(0),
-    totalDataSize_(0),
-    checksum_(0),
-    compressed_(false)
+PackageFile::PackageFile(Context* context)
+    : Object(context)
+    , totalSize_(0)
+    , totalDataSize_(0)
+    , checksum_(0)
+    , compressed_(false)
 {
 }
 
-PackageFile::PackageFile(Context* context, const String& fileName, unsigned startOffset) :
-    Object(context),
-    totalSize_(0),
-    totalDataSize_(0),
-    checksum_(0),
-    compressed_(false)
+PackageFile::PackageFile(Context* context, const String& fileName, unsigned startOffset)
+    : Object(context)
+    , totalSize_(0)
+    , totalDataSize_(0)
+    , checksum_(0)
+    , compressed_(false)
 {
     Open(fileName, startOffset);
 }
@@ -153,4 +153,4 @@ const PackageEntry* PackageFile::GetEntry(const String& fileName) const
     return nullptr;
 }
 
-}
+} // namespace Urho3D

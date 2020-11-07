@@ -78,8 +78,9 @@ public:
     /// Handle enabled/disabled state change.
     void OnSetEnabled() override;
     /// Update before octree reinsertion. Is called from a main thread.
-    void Update(const FrameInfo &frame) override;
-    /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly re-entrantly.
+    void Update(const FrameInfo& frame) override;
+    /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly
+    /// re-entrantly.
     void UpdateBatches(const FrameInfo& frame) override;
     /// Prepare geometry for rendering. Called from a worker thread if possible (no GPU update).
     void UpdateGeometry(const FrameInfo& frame) override;
@@ -145,7 +146,7 @@ public:
 
     /// Get distance between points.
     /// @property
-    float GetVertexDistance() const { return vertexDistance_;  }
+    float GetVertexDistance() const { return vertexDistance_; }
 
     /// Get width of the trail.
     /// @property
@@ -157,7 +158,7 @@ public:
 
     /// Get vertex blended color for end of trail.
     /// @property
-    const Color& GetEndColor() const { return endColor_;  }
+    const Color& GetEndColor() const { return endColor_; }
 
     /// Get vertex blended scale for start of trail.
     /// @property
@@ -173,7 +174,7 @@ public:
 
     /// Return tail time to live.
     /// @property
-    float GetLifetime() const {return lifetime_;}
+    float GetLifetime() const { return lifetime_; }
 
     /// Return animation LOD bias.
     /// @property
@@ -193,7 +194,7 @@ public:
 
     /// Return whether is currently emitting.
     /// @property
-    bool IsEmitting() const { return emitting_ ; }
+    bool IsEmitting() const { return emitting_; }
 
     /// Return whether to update when trail emitter are not visible.
     /// @property
@@ -284,4 +285,4 @@ private:
     float startEndTailTime_;
 };
 
-}
+} // namespace Urho3D

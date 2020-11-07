@@ -34,15 +34,7 @@
 namespace Urho3D
 {
 
-static const char* shaderParameterGroups[] = {
-    "frame",
-    "camera",
-    "zone",
-    "light",
-    "material",
-    "object",
-    "custom"
-};
+static const char* shaderParameterGroups[] = {"frame", "camera", "zone", "light", "material", "object", "custom"};
 
 static unsigned NumberPostfix(const String& str)
 {
@@ -58,19 +50,16 @@ static unsigned NumberPostfix(const String& str)
 unsigned ShaderProgram::globalFrameNumber = 0;
 const void* ShaderProgram::globalParameterSources[MAX_SHADER_PARAMETER_GROUPS];
 
-ShaderProgram::ShaderProgram(Graphics* graphics, ShaderVariation* vertexShader, ShaderVariation* pixelShader) :
-    GPUObject(graphics),
-    vertexShader_(vertexShader),
-    pixelShader_(pixelShader)
+ShaderProgram::ShaderProgram(Graphics* graphics, ShaderVariation* vertexShader, ShaderVariation* pixelShader)
+    : GPUObject(graphics)
+    , vertexShader_(vertexShader)
+    , pixelShader_(pixelShader)
 {
     for (auto& parameterSource : parameterSources_)
         parameterSource = (const void*)M_MAX_UNSIGNED;
 }
 
-ShaderProgram::~ShaderProgram()
-{
-    Release();
-}
+ShaderProgram::~ShaderProgram() { Release(); }
 
 void ShaderProgram::OnDeviceLost()
 {
@@ -181,7 +170,7 @@ bool ShaderProgram::Link()
         if (semantic == MAX_VERTEX_ELEMENT_SEMANTICS)
         {
             URHO3D_LOGWARNING("Found vertex attribute " + name + " with no known semantic in shader program " +
-                vertexShader_->GetFullName() + " " + pixelShader_->GetFullName());
+                              vertexShader_->GetFullName() + " " + pixelShader_->GetFullName());
             continue;
         }
 
@@ -224,8 +213,8 @@ bool ShaderProgram::Link()
 
             if (group >= MAX_SHADER_PARAMETER_GROUPS)
             {
-                URHO3D_LOGWARNING("Skipping unrecognized uniform block " + name + " in shader program " + vertexShader_->GetFullName() +
-                           " " + pixelShader_->GetFullName());
+                URHO3D_LOGWARNING("Skipping unrecognized uniform block " + name + " in shader program " +
+                                  vertexShader_->GetFullName() + " " + pixelShader_->GetFullName());
                 continue;
             }
 
@@ -236,8 +225,8 @@ bool ShaderProgram::Link()
                 continue;
 
             unsigned bindingIndex = group;
-            // Vertex shader constant buffer bindings occupy slots starting from zero to maximum supported, pixel shader bindings
-            // from that point onward
+            // Vertex shader constant buffer bindings occupy slots starting from zero to maximum supported, pixel shader
+            // bindings from that point onward
             ShaderType shaderType = VS;
             if (name.Contains("PS", false))
             {
@@ -248,7 +237,8 @@ bool ShaderProgram::Link()
             glUniformBlockBinding(object_.name_, blockIndex, bindingIndex);
             blockToBinding[blockIndex] = bindingIndex;
 
-            constantBuffers_[bindingIndex] = graphics_->GetOrCreateConstantBuffer(shaderType, bindingIndex, (unsigned)dataSize);
+            constantBuffers_[bindingIndex] =
+                graphics_->GetOrCreateConstantBuffer(shaderType, bindingIndex, (unsigned)dataSize);
         }
     }
 #endif
@@ -320,15 +310,9 @@ bool ShaderProgram::Link()
     return true;
 }
 
-ShaderVariation* ShaderProgram::GetVertexShader() const
-{
-    return vertexShader_;
-}
+ShaderVariation* ShaderProgram::GetVertexShader() const { return vertexShader_; }
 
-ShaderVariation* ShaderProgram::GetPixelShader() const
-{
-    return pixelShader_;
-}
+ShaderVariation* ShaderProgram::GetPixelShader() const { return pixelShader_; }
 
 bool ShaderProgram::HasParameter(StringHash param) const
 {
@@ -417,4 +401,4 @@ void ShaderProgram::ClearGlobalParameterSource(ShaderParameterGroup group)
     globalParameterSources[group] = (const void*)M_MAX_UNSIGNED;
 }
 
-}
+} // namespace Urho3D

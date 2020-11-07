@@ -37,7 +37,7 @@
 #include "../../DebugNew.h"
 
 #ifdef _MSC_VER
-#pragma warning(disable:4355)
+#pragma warning(disable : 4355)
 #endif
 
 namespace Urho3D
@@ -159,17 +159,17 @@ bool Texture2DArray::SetData(unsigned layer, unsigned level, int x, int y, int w
     {
         if (wholeLevel)
             glTexImage3D(target_, level, format, width, height, layers_, 0, GetExternalFormat(format_),
-                GetDataType(format_), nullptr);
-        glTexSubImage3D(target_, level, x, y, layer, width, height, 1, GetExternalFormat(format_),
-            GetDataType(format_), data);
+                         GetDataType(format_), nullptr);
+        glTexSubImage3D(target_, level, x, y, layer, width, height, 1, GetExternalFormat(format_), GetDataType(format_),
+                        data);
     }
     else
     {
         if (wholeLevel)
             glCompressedTexImage3D(target_, level, format, width, height, layers_, 0,
-                GetDataSize(width, height, layers_), nullptr);
-        glCompressedTexSubImage3D(target_, level, x, y, layer, width, height, 1, format,
-            GetDataSize(width, height), data);
+                                   GetDataSize(width, height, layers_), nullptr);
+        glCompressedTexSubImage3D(target_, level, x, y, layer, width, height, 1, format, GetDataSize(width, height),
+                                  data);
     }
 #endif
 
@@ -218,7 +218,8 @@ bool Texture2DArray::SetData(unsigned layer, Image* image, bool useAlpha)
         unsigned components = image->GetComponents();
         if (Graphics::GetGL3Support() && ((components == 1 && !useAlpha) || components == 2))
         {
-            mipImage = image->ConvertToRGBA(); image = mipImage;
+            mipImage = image->ConvertToRGBA();
+            image = mipImage;
             if (!image)
                 return false;
             components = image->GetComponents();
@@ -232,7 +233,8 @@ bool Texture2DArray::SetData(unsigned layer, Image* image, bool useAlpha)
         // Discard unnecessary mip levels
         for (unsigned i = 0; i < mipsToSkip_[quality]; ++i)
         {
-            mipImage = image->GetNextLevel(); image = mipImage;
+            mipImage = image->GetNextLevel();
+            image = mipImage;
             levelData = image->GetData();
             levelWidth = image->GetWidth();
             levelHeight = image->GetHeight();
@@ -257,14 +259,15 @@ bool Texture2DArray::SetData(unsigned layer, Image* image, bool useAlpha)
             break;
 
         default:
-            assert(false);  // Should not reach here
+            assert(false); // Should not reach here
             break;
         }
 
         // Create the texture array when layer 0 is being loaded, check that rest of the layers are same size & format
         if (!layer)
         {
-            // If image was previously compressed, reset number of requested levels to avoid error if level count is too high for new size
+            // If image was previously compressed, reset number of requested levels to avoid error if level count is too
+            // high for new size
             if (IsCompressed() && requestedLevels_ > 1)
                 requestedLevels_ = 0;
             // Create the texture array (the number of layers must have been already set)
@@ -291,7 +294,8 @@ bool Texture2DArray::SetData(unsigned layer, Image* image, bool useAlpha)
 
             if (i < levels_ - 1)
             {
-                mipImage = image->GetNextLevel(); image = mipImage;
+                mipImage = image->GetNextLevel();
+                image = mipImage;
                 levelData = image->GetData();
                 levelWidth = image->GetWidth();
                 levelHeight = image->GetHeight();
@@ -486,4 +490,4 @@ bool Texture2DArray::Create()
 #endif
 }
 
-}
+} // namespace Urho3D

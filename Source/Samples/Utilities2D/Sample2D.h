@@ -30,7 +30,7 @@ namespace Urho3D
 class Node;
 class Scene;
 
-}
+} // namespace Urho3D
 
 class Character2D;
 
@@ -61,9 +61,11 @@ public:
     ~Sample2D() override = default;
 
     /// Generate physics collision shapes from the tmx file's objects located in tileMapLayer.
-    void CreateCollisionShapesFromTMXObjects(Node* tileMapNode, TileMapLayer2D* tileMapLayer, const TileMapInfo2D& info);
+    void CreateCollisionShapesFromTMXObjects(Node* tileMapNode, TileMapLayer2D* tileMapLayer,
+                                             const TileMapInfo2D& info);
     /// Build collision shape from Tiled 'Rectangle' objects.
-    CollisionBox2D* CreateRectangleShape(Node* node, TileMapObject2D* object, const Vector2& size, const TileMapInfo2D& info);
+    CollisionBox2D* CreateRectangleShape(Node* node, TileMapObject2D* object, const Vector2& size,
+                                         const TileMapInfo2D& info);
     /// Build collision shape from Tiled 'Ellipse' objects.
     CollisionCircle2D* CreateCircleShape(Node* node, TileMapObject2D* object, float radius, const TileMapInfo2D& info);
     /// Build collision shape from Tiled 'Polygon' objects.
@@ -82,7 +84,8 @@ public:
     Node* CreateCoin();
     /// Create a moving platform (will be cloned at each tmx placeholder).
     Node* CreateMovingPlatform();
-    /// Instantiate enemies and moving platforms at each placeholder (placeholders are Poly Line objects defining a path from points).
+    /// Instantiate enemies and moving platforms at each placeholder (placeholders are Poly Line objects defining a path
+    /// from points).
     void PopulateMovingEntities(TileMapLayer2D* movingEntitiesLayer);
     /// Instantiate coins to pick at each placeholder.
     void PopulateCoins(TileMapLayer2D* coinsLayer);
@@ -112,24 +115,31 @@ public:
 
 protected:
     /// Return XML patch instructions for screen joystick layout.
-    virtual String GetScreenJoystickPatchString() const { return
-        "<patch>"
-        "    <remove sel=\"/element/element[./attribute[@name='Name' and @value='Button0']]/attribute[@name='Is Visible']\" />"
-        "    <replace sel=\"/element/element[./attribute[@name='Name' and @value='Button0']]/element[./attribute[@name='Name' and @value='Label']]/attribute[@name='Text']/@value\">Fight</replace>"
-        "    <add sel=\"/element/element[./attribute[@name='Name' and @value='Button0']]\">"
-        "        <element type=\"Text\">"
-        "            <attribute name=\"Name\" value=\"KeyBinding\" />"
-        "            <attribute name=\"Text\" value=\"SPACE\" />"
-        "        </element>"
-        "    </add>"
-        "    <remove sel=\"/element/element[./attribute[@name='Name' and @value='Button1']]/attribute[@name='Is Visible']\" />"
-        "    <replace sel=\"/element/element[./attribute[@name='Name' and @value='Button1']]/element[./attribute[@name='Name' and @value='Label']]/attribute[@name='Text']/@value\">Jump</replace>"
-        "    <add sel=\"/element/element[./attribute[@name='Name' and @value='Button1']]\">"
-        "        <element type=\"Text\">"
-        "            <attribute name=\"Name\" value=\"KeyBinding\" />"
-        "            <attribute name=\"Text\" value=\"UP\" />"
-        "        </element>"
-        "    </add>"
-        "</patch>";
+    virtual String GetScreenJoystickPatchString() const
+    {
+        return "<patch>"
+               "    <remove sel=\"/element/element[./attribute[@name='Name' and @value='Button0']]/attribute[@name='Is "
+               "Visible']\" />"
+               "    <replace sel=\"/element/element[./attribute[@name='Name' and "
+               "@value='Button0']]/element[./attribute[@name='Name' and "
+               "@value='Label']]/attribute[@name='Text']/@value\">Fight</replace>"
+               "    <add sel=\"/element/element[./attribute[@name='Name' and @value='Button0']]\">"
+               "        <element type=\"Text\">"
+               "            <attribute name=\"Name\" value=\"KeyBinding\" />"
+               "            <attribute name=\"Text\" value=\"SPACE\" />"
+               "        </element>"
+               "    </add>"
+               "    <remove sel=\"/element/element[./attribute[@name='Name' and @value='Button1']]/attribute[@name='Is "
+               "Visible']\" />"
+               "    <replace sel=\"/element/element[./attribute[@name='Name' and "
+               "@value='Button1']]/element[./attribute[@name='Name' and "
+               "@value='Label']]/attribute[@name='Text']/@value\">Jump</replace>"
+               "    <add sel=\"/element/element[./attribute[@name='Name' and @value='Button1']]\">"
+               "        <element type=\"Text\">"
+               "            <attribute name=\"Name\" value=\"KeyBinding\" />"
+               "            <attribute name=\"Text\" value=\"UP\" />"
+               "        </element>"
+               "    </add>"
+               "</patch>";
     }
 };

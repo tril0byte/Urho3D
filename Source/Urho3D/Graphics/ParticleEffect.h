@@ -45,22 +45,22 @@ enum EmitterType
 struct ColorFrame
 {
     /// Construct with default values.
-    ColorFrame() :
-        time_(0.0f)
+    ColorFrame()
+        : time_(0.0f)
     {
     }
 
     /// Construct with a color and zero time.
-    explicit ColorFrame(const Color& color) :
-        color_(color),
-        time_(0.0f)
+    explicit ColorFrame(const Color& color)
+        : color_(color)
+        , time_(0.0f)
     {
     }
 
     /// Construct from a color and time.
-    ColorFrame(const Color& color, float time) :
-        color_(color),
-        time_(time)
+    ColorFrame(const Color& color, float time)
+        : color_(color)
+        , time_(time)
     {
     }
 
@@ -88,9 +88,9 @@ struct ColorFrame
 struct TextureFrame
 {
     /// Construct with default values.
-    TextureFrame() :
-        uv_(0.0f, 0.0f, 1.0f, 1.0f),
-        time_(0.0f)
+    TextureFrame()
+        : uv_(0.0f, 0.0f, 1.0f, 1.0f)
+        , time_(0.0f)
     {
     }
 
@@ -220,7 +220,8 @@ public:
     /// Set particle size multiplicative modifier.
     /// @property
     void SetSizeMul(float sizeMul);
-    /// Set how the particles should rotate in relation to the camera. Default is to follow camera rotation on all axes (FC_ROTATE_XYZ).
+    /// Set how the particles should rotate in relation to the camera. Default is to follow camera rotation on all axes
+    /// (FC_ROTATE_XYZ).
     /// @property
     void SetFaceCameraMode(FaceCameraMode mode);
 
@@ -493,4 +494,4 @@ private:
     FaceCameraMode faceCameraMode_;
 };
 
-}
+} // namespace Urho3D

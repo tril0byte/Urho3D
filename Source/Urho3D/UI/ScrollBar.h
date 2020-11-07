@@ -142,4 +142,4 @@ private:
     void HandleSliderPaged(StringHash eventType, VariantMap& eventData);
 };
 
-}
+} // namespace Urho3D

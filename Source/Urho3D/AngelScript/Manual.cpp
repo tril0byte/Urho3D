@@ -20,12 +20,12 @@
 // THE SOFTWARE.
 //
 
-#include "../Precompiled.h"
 #include "../AngelScript/APITemplates.h"
+#include "../Precompiled.h"
 
 namespace Urho3D
 {
-    
+
 void ASRegisterManualFirst_Addons(asIScriptEngine* engine);
 void ASRegisterManualLast_Addons(asIScriptEngine* engine);
 
@@ -86,7 +86,6 @@ void ASRegisterManualLast_Database(asIScriptEngine* engine);
 void ASRegisterManualFirst_Urho2D(asIScriptEngine* engine);
 void ASRegisterManualLast_Urho2D(asIScriptEngine* engine);
 #endif
-
 
 // This function is called before ASRegisterGenerated()
 void ASRegisterManualFirst(asIScriptEngine* engine)

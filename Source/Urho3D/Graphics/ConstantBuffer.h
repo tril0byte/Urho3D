@@ -70,4 +70,4 @@ private:
     bool dirty_{};
 };
 
-}
+} // namespace Urho3D

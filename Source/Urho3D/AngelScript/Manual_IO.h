@@ -22,9 +22,9 @@
 
 #pragma once
 
+#include "../IO/FileSystem.h"
 #include "../IO/NamedPipe.h"
 #include "../IO/PackageFile.h"
-#include "../IO/FileSystem.h"
 
 namespace Urho3D
 {
@@ -34,11 +34,13 @@ CScriptArray* DeserializerRead(unsigned size, Deserializer* ptr);
 // VectorBuffer(Deserializer& source, unsigned size) | File: .. / IO / VectorBuffer.h
 VectorBuffer DeserializerReadVectorBuffer(unsigned size, Deserializer* ptr);
 
-#define REGISTER_MANUAL_PART_Deserializer(T, className) \
-    /* virtual unsigned Deserializer::Read(void *dest, unsigned size)=0 | File: ../IO/Deserializer.h */ \
-    engine->RegisterObjectMethod(className, "Array<uint8>@ Read(uint)", asFUNCTION(DeserializerRead), asCALL_CDECL_OBJLAST); \
-    /* VectorBuffer(Deserializer& source, unsigned size) | File: ../IO/VectorBuffer.h */ \
-    engine->RegisterObjectMethod(className, "VectorBuffer ReadVectorBuffer(uint)", asFUNCTION(DeserializerReadVectorBuffer), asCALL_CDECL_OBJLAST);
+#define REGISTER_MANUAL_PART_Deserializer(T, className)                                                                \
+    /* virtual unsigned Deserializer::Read(void *dest, unsigned size)=0 | File: ../IO/Deserializer.h */                \
+    engine->RegisterObjectMethod(className, "Array<uint8>@ Read(uint)", asFUNCTION(DeserializerRead),                  \
+                                 asCALL_CDECL_OBJLAST);                                                                \
+    /* VectorBuffer(Deserializer& source, unsigned size) | File: ../IO/VectorBuffer.h */                               \
+    engine->RegisterObjectMethod(className, "VectorBuffer ReadVectorBuffer(uint)",                                     \
+                                 asFUNCTION(DeserializerReadVectorBuffer), asCALL_CDECL_OBJLAST);
 
 // ================================================================================
 
@@ -47,19 +49,26 @@ unsigned SerializerWrite(CScriptArray* arr, Serializer* ptr);
 // virtual unsigned Serializer::Write(const void *data, unsigned size)=0 | File: ../IO/Serializer.h
 bool SerializerWriteVectorBuffer(VectorBuffer* src, Serializer* ptr);
 
-#define REGISTER_MANUAL_PART_Serializer(T, className) \
-    /* virtual unsigned Serializer::Write(const void *data, unsigned size)=0 | File: ../IO/Serializer.h */ \
-    engine->RegisterObjectMethod(className, "uint Write(Array<uint8>@+)", asFUNCTION(SerializerWrite), asCALL_CDECL_OBJLAST); \
-    /* virtual unsigned Serializer::Write(const void *data, unsigned size)=0 | File: ../IO/Serializer.h */ \
-    engine->RegisterObjectMethod(className, "bool WriteVectorBuffer(const VectorBuffer&in)", asFUNCTION(SerializerWriteVectorBuffer), asCALL_CDECL_OBJLAST);
+#define REGISTER_MANUAL_PART_Serializer(T, className)                                                                  \
+    /* virtual unsigned Serializer::Write(const void *data, unsigned size)=0 | File: ../IO/Serializer.h */             \
+    engine->RegisterObjectMethod(className, "uint Write(Array<uint8>@+)", asFUNCTION(SerializerWrite),                 \
+                                 asCALL_CDECL_OBJLAST);                                                                \
+    /* virtual unsigned Serializer::Write(const void *data, unsigned size)=0 | File: ../IO/Serializer.h */             \
+    engine->RegisterObjectMethod(className, "bool WriteVectorBuffer(const VectorBuffer&in)",                           \
+                                 asFUNCTION(SerializerWriteVectorBuffer), asCALL_CDECL_OBJLAST);
 
 // ================================================================================
 
-// void FileSystem::ScanDir(Vector< String > &result, const String &pathName, const String &filter, unsigned flags, bool recursive) const | File: ../IO/FileSystem.h
-CScriptArray* FileSystemScanDir(const String& pathName, const String& filter, unsigned flags, bool recursive, FileSystem* ptr);
+// void FileSystem::ScanDir(Vector< String > &result, const String &pathName, const String &filter, unsigned flags, bool
+// recursive) const | File: ../IO/FileSystem.h
+CScriptArray* FileSystemScanDir(const String& pathName, const String& filter, unsigned flags, bool recursive,
+                                FileSystem* ptr);
 
-#define REGISTER_MANUAL_PART_FileSystem(T, className) \
-    /* void FileSystem::ScanDir(Vector< String > &result, const String &pathName, const String &filter, unsigned flags, bool recursive) const | File: ../IO/FileSystem.h */ \
-    engine->RegisterObjectMethod(className, "Array<String>@ ScanDir(const String&in, const String&in, uint, bool) const", asFUNCTION(FileSystemScanDir), asCALL_CDECL_OBJLAST);
+#define REGISTER_MANUAL_PART_FileSystem(T, className)                                                                  \
+    /* void FileSystem::ScanDir(Vector< String > &result, const String &pathName, const String &filter, unsigned       \
+     * flags, bool recursive) const | File: ../IO/FileSystem.h */                                                      \
+    engine->RegisterObjectMethod(className,                                                                            \
+                                 "Array<String>@ ScanDir(const String&in, const String&in, uint, bool) const",         \
+                                 asFUNCTION(FileSystemScanDir), asCALL_CDECL_OBJLAST);
 
-}
+} // namespace Urho3D

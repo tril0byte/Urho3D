@@ -73,4 +73,4 @@ private:
     AreaAllocator allocator_;
 };
 
-}
+} // namespace Urho3D

@@ -45,7 +45,8 @@ public:
     /// Visualize the component as debug geometry.
     void DrawDebugGeometry(DebugRenderer* debug, bool depthTest) override;
 
-    /// Set local-space bounding box. Will be used as an oriented bounding box to test whether objects or the camera are inside.
+    /// Set local-space bounding box. Will be used as an oriented bounding box to test whether objects or the camera are
+    /// inside.
     /// @property
     void SetBoundingBox(const BoundingBox& box);
     /// Set ambient color.
@@ -72,13 +73,15 @@ public:
     /// Set height fog mode.
     /// @property
     void SetHeightFog(bool enable);
-    /// Set override mode. If camera is inside an override zone, that zone will be used for all rendered objects instead of their own zone.
+    /// Set override mode. If camera is inside an override zone, that zone will be used for all rendered objects instead
+    /// of their own zone.
     /// @property
     void SetOverride(bool enable);
     /// Set ambient gradient mode. In gradient mode ambient color is interpolated from neighbor zones.
     /// @property
     void SetAmbientGradient(bool enable);
-    /// Set zone texture. This will be bound to the zone texture unit when rendering objects inside the zone. Note that the default shaders do not use it.
+    /// Set zone texture. This will be bound to the zone texture unit when rendering objects inside the zone. Note that
+    /// the default shaders do not use it.
     /// @property
     void SetZoneTexture(Texture* texture);
 
@@ -151,7 +154,8 @@ protected:
     void OnWorldBoundingBoxUpdate() override;
     /// Handle removal from octree.
     void OnRemoveFromOctree() override;
-    /// Recalculate the ambient gradient colors from neighbor zones. Not safe to call from worker threads due to octree query.
+    /// Recalculate the ambient gradient colors from neighbor zones. Not safe to call from worker threads due to octree
+    /// query.
     void UpdateAmbientGradient();
     /// Clear zone reference from drawables inside the bounding box.
     void ClearDrawablesZone();
@@ -196,4 +200,4 @@ protected:
     WeakPtr<Zone> lastAmbientEndZone_;
 };
 
-}
+} // namespace Urho3D

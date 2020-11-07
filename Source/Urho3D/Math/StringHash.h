@@ -34,8 +34,8 @@ class URHO3D_API StringHash
 {
 public:
     /// Construct with zero value.
-    StringHash() noexcept :
-        value_(0)
+    StringHash() noexcept
+        : value_(0)
     {
     }
 
@@ -43,21 +43,21 @@ public:
     StringHash(const StringHash& rhs) noexcept = default;
 
     /// Construct with an initial value.
-    explicit StringHash(unsigned value) noexcept :
-        value_(value)
+    explicit StringHash(unsigned value) noexcept
+        : value_(value)
     {
     }
 
     /// Construct from a C string.
-    StringHash(const char* str) noexcept;        // NOLINT(google-explicit-constructor)
+    StringHash(const char* str) noexcept; // NOLINT(google-explicit-constructor)
     /// Construct from a string.
-    StringHash(const String& str) noexcept;      // NOLINT(google-explicit-constructor)
+    StringHash(const String& str) noexcept; // NOLINT(google-explicit-constructor)
 
     /// Assign from another hash.
-    StringHash& operator =(const StringHash& rhs) noexcept = default;
+    StringHash& operator=(const StringHash& rhs) noexcept = default;
 
     /// Add a hash.
-    StringHash operator +(const StringHash& rhs) const
+    StringHash operator+(const StringHash& rhs) const
     {
         StringHash ret;
         ret.value_ = value_ + rhs.value_;
@@ -65,23 +65,23 @@ public:
     }
 
     /// Add-assign a hash.
-    StringHash& operator +=(const StringHash& rhs)
+    StringHash& operator+=(const StringHash& rhs)
     {
         value_ += rhs.value_;
         return *this;
     }
 
     /// Test for equality with another hash.
-    bool operator ==(const StringHash& rhs) const { return value_ == rhs.value_; }
+    bool operator==(const StringHash& rhs) const { return value_ == rhs.value_; }
 
     /// Test for inequality with another hash.
-    bool operator !=(const StringHash& rhs) const { return value_ != rhs.value_; }
+    bool operator!=(const StringHash& rhs) const { return value_ != rhs.value_; }
 
     /// Test if less than another hash.
-    bool operator <(const StringHash& rhs) const { return value_ < rhs.value_; }
+    bool operator<(const StringHash& rhs) const { return value_ < rhs.value_; }
 
     /// Test if greater than another hash.
-    bool operator >(const StringHash& rhs) const { return value_ > rhs.value_; }
+    bool operator>(const StringHash& rhs) const { return value_ > rhs.value_; }
 
     /// Return true if nonzero hash value.
     explicit operator bool() const { return value_ != 0; }
@@ -93,7 +93,8 @@ public:
     /// Return as string.
     String ToString() const;
 
-    /// Return string which has specific hash value. Return first string if many (in order of calculation). Use for debug purposes only. Return empty string if URHO3D_HASH_DEBUG is off.
+    /// Return string which has specific hash value. Return first string if many (in order of calculation). Use for
+    /// debug purposes only. Return empty string if URHO3D_HASH_DEBUG is off.
     String Reverse() const;
 
     /// Return hash value for HashSet & HashMap.
@@ -113,4 +114,4 @@ private:
     unsigned value_;
 };
 
-}
+} // namespace Urho3D

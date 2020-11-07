@@ -42,8 +42,8 @@ public:
         Node() = default;
 
         /// Construct with key.
-        explicit Node(const T& key) :
-            key_(key)
+        explicit Node(const T& key)
+            : key_(key)
         {
         }
 
@@ -67,20 +67,20 @@ public:
         Iterator() = default;
 
         /// Construct with a node pointer.
-        explicit Iterator(Node* ptr) :
-            HashIteratorBase(ptr)
+        explicit Iterator(Node* ptr)
+            : HashIteratorBase(ptr)
         {
         }
 
         /// Preincrement the pointer.
-        Iterator& operator ++()
+        Iterator& operator++()
         {
             GotoNext();
             return *this;
         }
 
         /// Postincrement the pointer.
-        Iterator operator ++(int)
+        Iterator operator++(int)
         {
             Iterator it = *this;
             GotoNext();
@@ -88,14 +88,14 @@ public:
         }
 
         /// Predecrement the pointer.
-        Iterator& operator --()
+        Iterator& operator--()
         {
             GotoPrev();
             return *this;
         }
 
         /// Postdecrement the pointer.
-        Iterator operator --(int)
+        Iterator operator--(int)
         {
             Iterator it = *this;
             GotoPrev();
@@ -103,10 +103,10 @@ public:
         }
 
         /// Point to the key.
-        const T* operator ->() const { return &(static_cast<Node*>(ptr_))->key_; }
+        const T* operator->() const { return &(static_cast<Node*>(ptr_))->key_; }
 
         /// Dereference the key.
-        const T& operator *() const { return (static_cast<Node*>(ptr_))->key_; }
+        const T& operator*() const { return (static_cast<Node*>(ptr_))->key_; }
     };
 
     /// Hash set node const iterator.
@@ -116,33 +116,34 @@ public:
         ConstIterator() = default;
 
         /// Construct with a node pointer.
-        explicit ConstIterator(Node* ptr) :
-            HashIteratorBase(ptr)
+        explicit ConstIterator(Node* ptr)
+            : HashIteratorBase(ptr)
         {
         }
 
         /// Construct from a non-const iterator.
-        ConstIterator(const Iterator& rhs) :    // NOLINT(google-explicit-constructor)
+        ConstIterator(const Iterator& rhs)
+            : // NOLINT(google-explicit-constructor)
             HashIteratorBase(rhs.ptr_)
         {
         }
 
         /// Assign from a non-const iterator.
-        ConstIterator& operator =(const Iterator& rhs)
+        ConstIterator& operator=(const Iterator& rhs)
         {
             ptr_ = rhs.ptr_;
             return *this;
         }
 
         /// Preincrement the pointer.
-        ConstIterator& operator ++()
+        ConstIterator& operator++()
         {
             GotoNext();
             return *this;
         }
 
         /// Postincrement the pointer.
-        ConstIterator operator ++(int)
+        ConstIterator operator++(int)
         {
             ConstIterator it = *this;
             GotoNext();
@@ -150,14 +151,14 @@ public:
         }
 
         /// Predecrement the pointer.
-        ConstIterator& operator --()
+        ConstIterator& operator--()
         {
             GotoPrev();
             return *this;
         }
 
         /// Postdecrement the pointer.
-        ConstIterator operator --(int)
+        ConstIterator operator--(int)
         {
             ConstIterator it = *this;
             GotoPrev();
@@ -165,10 +166,10 @@ public:
         }
 
         /// Point to the key.
-        const T* operator ->() const { return &(static_cast<Node*>(ptr_))->key_; }
+        const T* operator->() const { return &(static_cast<Node*>(ptr_))->key_; }
 
         /// Dereference the key.
-        const T& operator *() const { return (static_cast<Node*>(ptr_))->key_; }
+        const T& operator*() const { return (static_cast<Node*>(ptr_))->key_; }
     };
 
     /// Construct empty.
@@ -189,13 +190,11 @@ public:
     }
 
     /// Move-construct from another hash set.
-    HashSet(HashSet<T> && set) noexcept
-    {
-        Swap(set);
-    }
+    HashSet(HashSet<T>&& set) noexcept { Swap(set); }
 
     /// Aggregate initialization constructor.
-    HashSet(const std::initializer_list<T>& list) : HashSet()
+    HashSet(const std::initializer_list<T>& list)
+        : HashSet()
     {
         for (auto it = list.begin(); it != list.end(); it++)
         {
@@ -216,7 +215,7 @@ public:
     }
 
     /// Assign a hash set.
-    HashSet& operator =(const HashSet<T>& rhs)
+    HashSet& operator=(const HashSet<T>& rhs)
     {
         // In case of self-assignment do nothing
         if (&rhs != this)
@@ -228,28 +227,28 @@ public:
     }
 
     /// Move-assign a hash set.
-    HashSet& operator =(HashSet<T> && rhs) noexcept
+    HashSet& operator=(HashSet<T>&& rhs) noexcept
     {
         Swap(rhs);
         return *this;
     }
 
     /// Add-assign a value.
-    HashSet& operator +=(const T& rhs)
+    HashSet& operator+=(const T& rhs)
     {
         Insert(rhs);
         return *this;
     }
 
     /// Add-assign a hash set.
-    HashSet& operator +=(const HashSet<T>& rhs)
+    HashSet& operator+=(const HashSet<T>& rhs)
     {
         Insert(rhs);
         return *this;
     }
 
     /// Test for equality with another hash set.
-    bool operator ==(const HashSet<T>& rhs) const
+    bool operator==(const HashSet<T>& rhs) const
     {
         if (rhs.Size() != Size())
             return false;
@@ -266,7 +265,7 @@ public:
     }
 
     /// Test for inequality with another hash set.
-    bool operator !=(const HashSet<T>& rhs) const
+    bool operator!=(const HashSet<T>& rhs) const
     {
         if (rhs.Size() != Size())
             return true;
@@ -331,10 +330,7 @@ public:
     }
 
     /// Insert a key by iterator. Return iterator to the value.
-    Iterator Insert(const ConstIterator& it)
-    {
-        return Iterator(InsertNode(*it));
-    }
+    Iterator Insert(const ConstIterator& it) { return Iterator(InsertNode(*it)); }
 
     /// Erase a key. Return true if was found.
     bool Erase(const T& key)
@@ -414,7 +410,7 @@ public:
         if (!numKeys)
             return;
 
-        auto** ptrs = new Node* [numKeys];
+        auto** ptrs = new Node*[numKeys];
         Node* ptr = Head();
 
         for (unsigned i = 0; i < numKeys; ++i)
@@ -602,7 +598,7 @@ private:
     Node* ReserveNode()
     {
         auto* newNode = static_cast<Node*>(AllocatorReserve(allocator_));
-        new(newNode) Node();
+        new (newNode) Node();
         return newNode;
     }
 
@@ -610,7 +606,7 @@ private:
     Node* ReserveNode(const T& key)
     {
         auto* newNode = static_cast<Node*>(AllocatorReserve(allocator_));
-        new(newNode) Node(key);
+        new (newNode) Node(key);
         return newNode;
     }
 
@@ -648,4 +644,4 @@ template <class T> typename Urho3D::HashSet<T>::Iterator begin(Urho3D::HashSet<T
 
 template <class T> typename Urho3D::HashSet<T>::Iterator end(Urho3D::HashSet<T>& v) { return v.End(); }
 
-}
+} // namespace Urho3D

@@ -155,4 +155,4 @@ protected:
     unsigned size_;
 };
 
-}
+} // namespace Urho3D

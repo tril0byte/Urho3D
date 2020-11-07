@@ -41,4 +41,4 @@ public:
     static void RegisterObject(Context* context);
 };
 
-}
+} // namespace Urho3D

@@ -38,14 +38,14 @@ static const float DEFAULT_RADIUS = 1.0f;
 static const unsigned DEFAULT_MASK_FLAG = 1;
 static const unsigned DEFAULT_AREA = 1;
 
-OffMeshConnection::OffMeshConnection(Context* context) :
-    Component(context),
-    endPointID_(0),
-    radius_(DEFAULT_RADIUS),
-    bidirectional_(true),
-    endPointDirty_(false),
-    mask_(DEFAULT_MASK_FLAG),
-    areaId_(DEFAULT_AREA)
+OffMeshConnection::OffMeshConnection(Context* context)
+    : Component(context)
+    , endPointID_(0)
+    , radius_(DEFAULT_RADIUS)
+    , bidirectional_(true)
+    , endPointDirty_(false)
+    , mask_(DEFAULT_MASK_FLAG)
+    , areaId_(DEFAULT_AREA)
 {
 }
 
@@ -117,9 +117,6 @@ void OffMeshConnection::SetEndPoint(Node* node)
     MarkNetworkUpdate();
 }
 
-Node* OffMeshConnection::GetEndPoint() const
-{
-    return endPoint_;
-}
+Node* OffMeshConnection::GetEndPoint() const { return endPoint_; }
 
-}
+} // namespace Urho3D

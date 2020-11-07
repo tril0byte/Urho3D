@@ -92,7 +92,8 @@ public:
     /// Set constraint rotation relative to the other body by specifying the axis.
     /// @property
     void SetOtherAxis(const Vector3& axis);
-    /// Set constraint world space position. Resets both own and other body relative position, ie. zeroes the constraint error.
+    /// Set constraint world space position. Resets both own and other body relative position, ie. zeroes the constraint
+    /// error.
     /// @property
     void SetWorldPosition(const Vector3& position);
     /// Set high limit. Interpretation is constraint type specific.
@@ -234,4 +235,4 @@ private:
     bool retryCreation_;
 };
 
-}
+} // namespace Urho3D

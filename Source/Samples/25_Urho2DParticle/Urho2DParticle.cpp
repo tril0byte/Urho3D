@@ -41,8 +41,8 @@
 
 URHO3D_DEFINE_APPLICATION_MAIN(Urho2DParticle)
 
-Urho2DParticle::Urho2DParticle(Context* context) :
-    Sample(context)
+Urho2DParticle::Urho2DParticle(Context* context)
+    : Sample(context)
 {
 }
 
@@ -86,7 +86,10 @@ void Urho2DParticle::CreateScene()
 
     auto* graphics = GetSubsystem<Graphics>();
     camera->SetOrthoSize((float)graphics->GetHeight() * PIXEL_SIZE);
-    camera->SetZoom(1.2f * Min((float)graphics->GetWidth() / 1280.0f, (float)graphics->GetHeight() / 800.0f)); // Set zoom according to user's resolution to ensure full visibility (initial zoom (1.2) is set for full visibility at 1280x800 resolution)
+    camera->SetZoom(1.2f * Min((float)graphics->GetWidth() / 1280.0f,
+                               (float)graphics->GetHeight() /
+                                   800.0f)); // Set zoom according to user's resolution to ensure full visibility
+                                             // (initial zoom (1.2) is set for full visibility at 1280x800 resolution)
 
     auto* cache = GetSubsystem<ResourceCache>();
     auto* particleEffect = cache->GetResource<ParticleEffect2D>("Urho2D/sun.pex");
@@ -150,6 +153,7 @@ void Urho2DParticle::HandleMouseMove(StringHash eventType, VariantMap& eventData
         auto y = (float)eventData[P_Y].GetInt();
         auto* graphics = GetSubsystem<Graphics>();
         auto* camera = cameraNode_->GetComponent<Camera>();
-        particleNode_->SetPosition(camera->ScreenToWorldPoint(Vector3(x / graphics->GetWidth(), y / graphics->GetHeight(), 10.0f)));
+        particleNode_->SetPosition(
+            camera->ScreenToWorldPoint(Vector3(x / graphics->GetWidth(), y / graphics->GetHeight(), 10.0f)));
     }
 }

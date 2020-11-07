@@ -71,4 +71,4 @@ private:
     Vector2 center_;
 };
 
-}
+} // namespace Urho3D

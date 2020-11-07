@@ -51,11 +51,11 @@ public:
     static const ChannelMask ARGB;
 
     /// Construct with default values (opaque white).
-    Color() noexcept :
-        r_(1.0f),
-        g_(1.0f),
-        b_(1.0f),
-        a_(1.0f)
+    Color() noexcept
+        : r_(1.0f)
+        , g_(1.0f)
+        , b_(1.0f)
+        , a_(1.0f)
     {
     }
 
@@ -63,38 +63,38 @@ public:
     Color(const Color& color) noexcept = default;
 
     /// Construct from another color and modify the alpha.
-    Color(const Color& color, float a) noexcept :
-        r_(color.r_),
-        g_(color.g_),
-        b_(color.b_),
-        a_(a)
+    Color(const Color& color, float a) noexcept
+        : r_(color.r_)
+        , g_(color.g_)
+        , b_(color.b_)
+        , a_(a)
     {
     }
 
     /// Construct from RGB values and set alpha fully opaque.
-    Color(float r, float g, float b) noexcept :
-        r_(r),
-        g_(g),
-        b_(b),
-        a_(1.0f)
+    Color(float r, float g, float b) noexcept
+        : r_(r)
+        , g_(g)
+        , b_(b)
+        , a_(1.0f)
     {
     }
 
     /// Construct from RGBA values.
-    Color(float r, float g, float b, float a) noexcept :
-        r_(r),
-        g_(g),
-        b_(b),
-        a_(a)
+    Color(float r, float g, float b, float a) noexcept
+        : r_(r)
+        , g_(g)
+        , b_(b)
+        , a_(a)
     {
     }
 
     /// Construct from a float array.
-    explicit Color(const float* data) noexcept :
-        r_(data[0]),
-        g_(data[1]),
-        b_(data[2]),
-        a_(data[3])
+    explicit Color(const float* data) noexcept
+        : r_(data[0])
+        , g_(data[1])
+        , b_(data[2])
+        , a_(data[3])
     {
     }
 
@@ -102,34 +102,40 @@ public:
     explicit Color(unsigned color, const ChannelMask& mask = ABGR) { FromUIntMask(color, mask); }
 
     /// Construct from 3-vector.
-    explicit Color(const Vector3& color) : Color(color.x_, color.y_, color.z_) {}
+    explicit Color(const Vector3& color)
+        : Color(color.x_, color.y_, color.z_)
+    {
+    }
 
     /// Construct from 4-vector.
-    explicit Color(const Vector4& color) : Color(color.x_, color.y_, color.z_, color.w_) {}
+    explicit Color(const Vector4& color)
+        : Color(color.x_, color.y_, color.z_, color.w_)
+    {
+    }
 
     /// Assign from another color.
-    Color& operator =(const Color& rhs) noexcept = default;
+    Color& operator=(const Color& rhs) noexcept = default;
 
     /// Test for equality with another color without epsilon.
-    bool operator ==(const Color& rhs) const { return r_ == rhs.r_ && g_ == rhs.g_ && b_ == rhs.b_ && a_ == rhs.a_; }
+    bool operator==(const Color& rhs) const { return r_ == rhs.r_ && g_ == rhs.g_ && b_ == rhs.b_ && a_ == rhs.a_; }
 
     /// Test for inequality with another color without epsilon.
-    bool operator !=(const Color& rhs) const { return r_ != rhs.r_ || g_ != rhs.g_ || b_ != rhs.b_ || a_ != rhs.a_; }
+    bool operator!=(const Color& rhs) const { return r_ != rhs.r_ || g_ != rhs.g_ || b_ != rhs.b_ || a_ != rhs.a_; }
 
     /// Multiply with a scalar.
-    Color operator *(float rhs) const { return Color(r_ * rhs, g_ * rhs, b_ * rhs, a_ * rhs); }
+    Color operator*(float rhs) const { return Color(r_ * rhs, g_ * rhs, b_ * rhs, a_ * rhs); }
 
     /// Add a color.
-    Color operator +(const Color& rhs) const { return Color(r_ + rhs.r_, g_ + rhs.g_, b_ + rhs.b_, a_ + rhs.a_); }
+    Color operator+(const Color& rhs) const { return Color(r_ + rhs.r_, g_ + rhs.g_, b_ + rhs.b_, a_ + rhs.a_); }
 
     /// Return negation.
-    Color operator -() const { return Color(-r_, -g_, -b_, -a_); }
+    Color operator-() const { return Color(-r_, -g_, -b_, -a_); }
 
     /// Subtract a color.
-    Color operator -(const Color& rhs) const { return Color(r_ - rhs.r_, g_ - rhs.g_, b_ - rhs.b_, a_ - rhs.a_); }
+    Color operator-(const Color& rhs) const { return Color(r_ - rhs.r_, g_ - rhs.g_, b_ - rhs.b_, a_ - rhs.a_); }
 
     /// Add-assign a color.
-    Color& operator +=(const Color& rhs)
+    Color& operator+=(const Color& rhs)
     {
         r_ += rhs.r_;
         g_ += rhs.g_;
@@ -141,13 +147,16 @@ public:
     /// Return float data.
     const float* Data() const { return &r_; }
 
-    /// Return color packed to a 32-bit integer, with R component in the lowest 8 bits. Components are clamped to [0, 1] range.
+    /// Return color packed to a 32-bit integer, with R component in the lowest 8 bits. Components are clamped to [0, 1]
+    /// range.
     unsigned ToUInt() const;
     /// Return color packed to a 32-bit integer with arbitrary channel mask. Components are clamped to [0, 1] range.
     unsigned ToUIntMask(const ChannelMask& mask) const;
-    /// Return HSL color-space representation as a Vector3; the RGB values are clipped before conversion but not changed in the process.
+    /// Return HSL color-space representation as a Vector3; the RGB values are clipped before conversion but not changed
+    /// in the process.
     Vector3 ToHSL() const;
-    /// Return HSV color-space representation as a Vector3; the RGB values are clipped before conversion but not changed in the process.
+    /// Return HSV color-space representation as a Vector3; the RGB values are clipped before conversion but not changed
+    /// in the process.
     Vector3 ToHSV() const;
     /// Set RGBA values from packed 32-bit integer, with R component in the lowest 8 bits (format 0xAABBGGRR).
     void FromUInt(unsigned color);
@@ -212,15 +221,22 @@ public:
     }
 
     /// Convert color from gamma to linear space.
-    Color GammaToLinear() const { return { ConvertGammaToLinear(r_), ConvertGammaToLinear(g_), ConvertGammaToLinear(b_), a_ }; }
+    Color GammaToLinear() const
+    {
+        return {ConvertGammaToLinear(r_), ConvertGammaToLinear(g_), ConvertGammaToLinear(b_), a_};
+    }
 
     /// Convert color from linear to gamma space.
-    Color LinearToGamma() const { return { ConvertLinearToGamma(r_), ConvertLinearToGamma(g_), ConvertLinearToGamma(b_), a_ }; }
+    Color LinearToGamma() const
+    {
+        return {ConvertLinearToGamma(r_), ConvertLinearToGamma(g_), ConvertLinearToGamma(b_), a_};
+    }
 
     /// Return lightness as defined for HSL: average of the largest and smallest values of the RGB components.
     float Lightness() const;
 
-    /// Stores the values of least and greatest RGB component at specified pointer addresses, optionally clipping those values to [0, 1] range.
+    /// Stores the values of least and greatest RGB component at specified pointer addresses, optionally clipping those
+    /// values to [0, 1] range.
     void Bounds(float* min, float* max, bool clipped = false) const;
     /// Return the largest value of the RGB components.
     float MaxRGB() const;
@@ -242,13 +258,15 @@ public:
     /// Test for equality with another color with epsilon.
     bool Equals(const Color& rhs) const
     {
-        return Urho3D::Equals(r_, rhs.r_) && Urho3D::Equals(g_, rhs.g_) && Urho3D::Equals(b_, rhs.b_) && Urho3D::Equals(a_, rhs.a_);
+        return Urho3D::Equals(r_, rhs.r_) && Urho3D::Equals(g_, rhs.g_) && Urho3D::Equals(b_, rhs.b_) &&
+               Urho3D::Equals(a_, rhs.a_);
     }
 
     /// Return as string.
     String ToString() const;
 
-    /// Return color packed to a 32-bit integer, with B component in the lowest 8 bits. Components are clamped to [0, 1] range.
+    /// Return color packed to a 32-bit integer, with B component in the lowest 8 bits. Components are clamped to [0, 1]
+    /// range.
     unsigned ToUIntArgb() const { return ToUIntMask(ARGB); }
 
     /// Return hash value for HashSet & HashMap.
@@ -296,6 +314,6 @@ protected:
 };
 
 /// Multiply Color with a scalar.
-inline Color operator *(float lhs, const Color& rhs) { return rhs * lhs; }
+inline Color operator*(float lhs, const Color& rhs) { return rhs * lhs; }
 
-}
+} // namespace Urho3D

@@ -28,8 +28,9 @@
 namespace Urho3D
 {
 
-Database::Database(Context* context) :
-    Object(context),
+Database::Database(Context* context)
+    : Object(context)
+    ,
 #ifdef ODBC_3_OR_LATER
     poolSize_(0)
 #else
@@ -54,7 +55,7 @@ DbConnection* Database::Connect(const String& connectionString)
     SharedPtr<DbConnection> connection;
     if (IsPooling())
     {
-        Vector<SharedPtr<DbConnection> >& connectionsPool = connectionsPool_[connectionString];
+        Vector<SharedPtr<DbConnection>>& connectionsPool = connectionsPool_[connectionString];
         while (!connectionsPool.Empty())
         {
             connection = connectionsPool.Back();
@@ -90,10 +91,10 @@ void Database::Disconnect(DbConnection* connection)
 
     if (IsPooling())
     {
-        Vector<SharedPtr<DbConnection> >& connectionsPool = connectionsPool_[connection->GetConnectionString()];
+        Vector<SharedPtr<DbConnection>>& connectionsPool = connectionsPool_[connection->GetConnectionString()];
         if (connectionsPool.Size() < poolSize_)
             connectionsPool.Push(dbConnection);
     }
 }
 
-}
+} // namespace Urho3D

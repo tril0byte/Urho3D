@@ -68,6 +68,7 @@ private:
     bool onGround_;
     /// Jump flag.
     bool okToJump_;
-    /// In air timer. Due to possible physics inaccuracy, character can be off ground for max. 1/10 second and still be allowed to move.
+    /// In air timer. Due to possible physics inaccuracy, character can be off ground for max. 1/10 second and still be
+    /// allowed to move.
     float inAirTimer_;
 };

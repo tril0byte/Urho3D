@@ -20,50 +20,50 @@
 // THE SOFTWARE.
 //
 
-#include <Urho3D/Urho2D/AnimatedSprite2D.h>
-#include <Urho3D/Urho2D/AnimationSet2D.h>
+#include <Urho3D/Audio/Sound.h>
+#include <Urho3D/Audio/SoundSource.h>
+#include <Urho3D/Core/Context.h>
+#include <Urho3D/Core/CoreEvents.h>
+#include <Urho3D/Core/StringUtils.h>
+#include <Urho3D/Engine/Engine.h>
+#include <Urho3D/Graphics/Camera.h>
+#include <Urho3D/Graphics/Texture2D.h>
+#include <Urho3D/IO/File.h>
+#include <Urho3D/IO/FileSystem.h>
+#include <Urho3D/Input/Input.h>
+#include <Urho3D/Resource/ResourceCache.h>
+#include <Urho3D/Scene/Scene.h>
+#include <Urho3D/Scene/ValueAnimation.h>
 #include <Urho3D/UI/BorderImage.h>
 #include <Urho3D/UI/Button.h>
-#include <Urho3D/Graphics/Camera.h>
+#include <Urho3D/UI/Font.h>
+#include <Urho3D/UI/Text.h>
+#include <Urho3D/UI/UI.h>
+#include <Urho3D/UI/UIEvents.h>
+#include <Urho3D/UI/Window.h>
+#include <Urho3D/Urho2D/AnimatedSprite2D.h>
+#include <Urho3D/Urho2D/AnimationSet2D.h>
 #include <Urho3D/Urho2D/CollisionBox2D.h>
 #include <Urho3D/Urho2D/CollisionChain2D.h>
 #include <Urho3D/Urho2D/CollisionCircle2D.h>
 #include <Urho3D/Urho2D/CollisionPolygon2D.h>
-#include <Urho3D/Core/Context.h>
-#include <Urho3D/Core/CoreEvents.h>
-#include <Urho3D/Engine/Engine.h>
-#include <Urho3D/IO/File.h>
-#include <Urho3D/IO/FileSystem.h>
-#include <Urho3D/UI/Font.h>
-#include <Urho3D/Input/Input.h>
 #include <Urho3D/Urho2D/ParticleEffect2D.h>
 #include <Urho3D/Urho2D/ParticleEmitter2D.h>
-#include <Urho3D/Resource/ResourceCache.h>
 #include <Urho3D/Urho2D/RigidBody2D.h>
-#include <Urho3D/Scene/Scene.h>
-#include <Urho3D/Audio/Sound.h>
-#include <Urho3D/Audio/SoundSource.h>
-#include <Urho3D/Core/StringUtils.h>
-#include <Urho3D/UI/Text.h>
-#include <Urho3D/Graphics/Texture2D.h>
 #include <Urho3D/Urho2D/TileMap2D.h>
 #include <Urho3D/Urho2D/TileMapLayer2D.h>
 #include <Urho3D/Urho2D/TmxFile2D.h>
-#include <Urho3D/UI/UI.h>
-#include <Urho3D/UI/UIEvents.h>
-#include <Urho3D/Scene/ValueAnimation.h>
-#include <Urho3D/UI/Window.h>
 
-#include "Utilities2D/Mover.h"
 #include "Sample2D.h"
+#include "Utilities2D/Mover.h"
 
-
-Sample2D::Sample2D(Context* context) :
-    Object(context)
+Sample2D::Sample2D(Context* context)
+    : Object(context)
 {
 }
 
-void Sample2D::CreateCollisionShapesFromTMXObjects(Node* tileMapNode, TileMapLayer2D* tileMapLayer, const TileMapInfo2D& info)
+void Sample2D::CreateCollisionShapesFromTMXObjects(Node* tileMapNode, TileMapLayer2D* tileMapLayer,
+                                                   const TileMapInfo2D& info)
 {
     // Create rigid body to the root node
     auto* body = tileMapNode->CreateComponent<RigidBody2D>();
@@ -77,34 +77,36 @@ void Sample2D::CreateCollisionShapesFromTMXObjects(Node* tileMapNode, TileMapLay
         // Create collision shape from tmx object
         switch (tileMapObject->GetObjectType())
         {
-            case OT_RECTANGLE:
-            {
-                CreateRectangleShape(tileMapNode, tileMapObject, tileMapObject->GetSize(), info);
-            }
-            break;
+        case OT_RECTANGLE:
+        {
+            CreateRectangleShape(tileMapNode, tileMapObject, tileMapObject->GetSize(), info);
+        }
+        break;
 
-            case OT_ELLIPSE:
-            {
-                CreateCircleShape(tileMapNode, tileMapObject, tileMapObject->GetSize().x_ / 2, info); // Ellipse is built as a Circle shape as it doesn't exist in Box2D
-            }
-            break;
+        case OT_ELLIPSE:
+        {
+            CreateCircleShape(tileMapNode, tileMapObject, tileMapObject->GetSize().x_ / 2,
+                              info); // Ellipse is built as a Circle shape as it doesn't exist in Box2D
+        }
+        break;
 
-            case OT_POLYGON:
-            {
-                CreatePolygonShape(tileMapNode, tileMapObject);
-            }
-            break;
+        case OT_POLYGON:
+        {
+            CreatePolygonShape(tileMapNode, tileMapObject);
+        }
+        break;
 
-            case OT_POLYLINE:
-            {
-                CreatePolyLineShape(tileMapNode, tileMapObject);
-            }
-            break;
+        case OT_POLYLINE:
+        {
+            CreatePolyLineShape(tileMapNode, tileMapObject);
+        }
+        break;
         }
     }
 }
 
-CollisionBox2D* Sample2D::CreateRectangleShape(Node* node, TileMapObject2D* object, const Vector2& size, const TileMapInfo2D& info)
+CollisionBox2D* Sample2D::CreateRectangleShape(Node* node, TileMapObject2D* object, const Vector2& size,
+                                               const TileMapInfo2D& info)
 {
     auto* shape = node->CreateComponent<CollisionBox2D>();
     shape->SetSize(size);
@@ -121,7 +123,8 @@ CollisionBox2D* Sample2D::CreateRectangleShape(Node* node, TileMapObject2D* obje
     return shape;
 }
 
-CollisionCircle2D* Sample2D::CreateCircleShape(Node* node, TileMapObject2D* object, float radius, const TileMapInfo2D& info)
+CollisionCircle2D* Sample2D::CreateCircleShape(Node* node, TileMapObject2D* object, float radius,
+                                               const TileMapInfo2D& info)
 {
     auto* shape = node->CreateComponent<CollisionCircle2D>();
     Vector2 size = object->GetSize();
@@ -176,14 +179,15 @@ Node* Sample2D::CreateCharacter(const TileMapInfo2D& info, float friction, const
     auto* animationSet = cache->GetResource<AnimationSet2D>("Urho2D/imp/imp.scml");
     animatedSprite->SetAnimationSet(animationSet);
     animatedSprite->SetAnimation("idle");
-    animatedSprite->SetLayer(3); // Put character over tile map (which is on layer 0) and over Orcs (which are on layer 2)
+    animatedSprite->SetLayer(
+        3); // Put character over tile map (which is on layer 0) and over Orcs (which are on layer 2)
     auto* impBody = spriteNode->CreateComponent<RigidBody2D>();
     impBody->SetBodyType(BT_DYNAMIC);
     impBody->SetAllowSleep(false);
     auto* shape = spriteNode->CreateComponent<CollisionCircle2D>();
-    shape->SetRadius(1.1f); // Set shape size
+    shape->SetRadius(1.1f);       // Set shape size
     shape->SetFriction(friction); // Set friction
-    shape->SetRestitution(0.1f); // Bounce
+    shape->SetRestitution(0.1f);  // Bounce
 
     return spriteNode;
 }
@@ -207,7 +211,7 @@ Node* Sample2D::CreateEnemy()
     auto* body = node->CreateComponent<RigidBody2D>();
     body->SetBodyType(BT_STATIC);
     auto* shape = node->CreateComponent<CollisionCircle2D>(); // Create circle shape
-    shape->SetRadius(0.25f); // Set radius
+    shape->SetRadius(0.25f);                                  // Set radius
     return node;
 }
 
@@ -220,7 +224,7 @@ Node* Sample2D::CreateOrc()
     auto* animationSet = cache->GetResource<AnimationSet2D>("Urho2D/Orc/Orc.scml");
     animatedSprite->SetAnimationSet(animationSet);
     animatedSprite->SetAnimation("run"); // Get scml file and Play "run" anim
-    animatedSprite->SetLayer(2); // Make orc always visible
+    animatedSprite->SetLayer(2);         // Make orc always visible
     auto* body = node->CreateComponent<RigidBody2D>();
     auto* shape = node->CreateComponent<CollisionCircle2D>();
     shape->SetRadius(1.3f); // Set shape size
@@ -241,7 +245,7 @@ Node* Sample2D::CreateCoin()
     auto* body = node->CreateComponent<RigidBody2D>();
     body->SetBodyType(BT_STATIC);
     auto* shape = node->CreateComponent<CollisionCircle2D>(); // Create circle shape
-    shape->SetRadius(0.32f); // Set radius
+    shape->SetRadius(0.32f);                                  // Set radius
     shape->SetTrigger(true);
     return node;
 }
@@ -256,8 +260,8 @@ Node* Sample2D::CreateMovingPlatform()
     auto* body = node->CreateComponent<RigidBody2D>();
     body->SetBodyType(BT_STATIC);
     auto* shape = node->CreateComponent<CollisionBox2D>(); // Create box shape
-    shape->SetSize(Vector2(0.32f, 0.32f)); // Set box size
-    shape->SetFriction(0.8f); // Set friction
+    shape->SetSize(Vector2(0.32f, 0.32f));                 // Set box size
+    shape->SetFriction(0.8f);                              // Set friction
     return node;
 }
 
@@ -268,8 +272,9 @@ void Sample2D::PopulateMovingEntities(TileMapLayer2D* movingEntitiesLayer)
     Node* orcNode = CreateOrc();
     Node* platformNode = CreateMovingPlatform();
 
-    // Instantiate enemies and moving platforms at each placeholder (placeholders are Poly Line objects defining a path from points)
-    for (unsigned i=0; i < movingEntitiesLayer->GetNumObjects(); ++i)
+    // Instantiate enemies and moving platforms at each placeholder (placeholders are Poly Line objects defining a path
+    // from points)
+    for (unsigned i = 0; i < movingEntitiesLayer->GetNumObjects(); ++i)
     {
         // Get placeholder object
         TileMapObject2D* movingObject = movingEntitiesLayer->GetObject(i); // Get placeholder object
@@ -316,12 +321,11 @@ void Sample2D::PopulateCoins(TileMapLayer2D* coinsLayer)
     Node* coinNode = CreateCoin();
 
     // Instantiate coins to pick at each placeholder
-    for (unsigned i=0; i < coinsLayer->GetNumObjects(); ++i)
+    for (unsigned i = 0; i < coinsLayer->GetNumObjects(); ++i)
     {
         TileMapObject2D* coinObject = coinsLayer->GetObject(i); // Get placeholder object
         Node* coinClone = coinNode->Clone();
         coinClone->SetPosition2D(coinObject->GetPosition() + coinObject->GetSize() / 2 + Vector2(0.0f, 0.16f));
-
     }
 
     // Remove node used for cloning purpose
@@ -334,7 +338,7 @@ void Sample2D::PopulateTriggers(TileMapLayer2D* triggersLayer)
     Node* triggerNode = CreateTrigger();
 
     // Instantiate triggers at each placeholder (Rectangle objects)
-    for (unsigned i=0; i < triggersLayer->GetNumObjects(); ++i)
+    for (unsigned i = 0; i < triggersLayer->GetNumObjects(); ++i)
     {
         TileMapObject2D* triggerObject = triggersLayer->GetObject(i); // Get placeholder object
         if (triggerObject->GetObjectType() == OT_RECTANGLE)
@@ -377,7 +381,7 @@ float Sample2D::Zoom(Camera* camera)
 PODVector<Vector2> Sample2D::CreatePathFromPoints(TileMapObject2D* object, const Vector2& offset)
 {
     PODVector<Vector2> path;
-    for (unsigned i=0; i < object->GetNumPoints(); ++i)
+    for (unsigned i = 0; i < object->GetNumPoints(); ++i)
         path.Push(object->GetPoint(i) + offset);
     return path;
 }
@@ -391,7 +395,8 @@ void Sample2D::CreateUIContent(const String& demoTitle, int remainingLifes, int 
     ui->GetRoot()->SetDefaultStyle(cache->GetResource<XMLFile>("UI/DefaultStyle.xml"));
     auto* font = cache->GetResource<Font>("Fonts/Anonymous Pro.ttf");
 
-    // We create in-game UIs (coins and lifes) first so that they are hidden by the fullscreen UI (we could also temporary hide them using SetVisible)
+    // We create in-game UIs (coins and lifes) first so that they are hidden by the fullscreen UI (we could also
+    // temporary hide them using SetVisible)
 
     // Create the UI for displaying the remaining coins
     auto* coinsUI = ui->GetRoot()->CreateChild<BorderImage>("Coins");
@@ -440,7 +445,7 @@ void Sample2D::CreateUIContent(const String& demoTitle, int remainingLifes, int 
     spriteUI->SetTexture(cache->GetResource<Texture2D>("Urho2D/imp/imp_all.png"));
     spriteUI->SetSize(238, 271);
     spriteUI->SetAlignment(HA_CENTER, VA_CENTER);
-    spriteUI->SetPosition(0, - ui->GetRoot()->GetHeight() / 4);
+    spriteUI->SetPosition(0, -ui->GetRoot()->GetHeight() / 4);
 
     // Create the 'EXIT' button
     auto* exitButton = ui->GetRoot()->CreateChild<Button>("ExitButton");
@@ -466,11 +471,12 @@ void Sample2D::CreateUIContent(const String& demoTitle, int remainingLifes, int 
     playText->SetAlignment(HA_CENTER, VA_CENTER);
     playText->SetFont(font, 24);
     playText->SetText("PLAY");
-//  SubscribeToEvent(playButton, E_RELEASED, HANDLER(Urho2DPlatformer, HandlePlayButton));
+    //  SubscribeToEvent(playButton, E_RELEASED, HANDLER(Urho2DPlatformer, HandlePlayButton));
 
     // Create the instructions
     auto* instructionText = ui->GetRoot()->CreateChild<Text>("Instructions");
-    instructionText->SetText("Use WASD keys or Arrows to move\nPageUp/PageDown/MouseWheel to zoom\nF5/F7 to save/reload scene\n'Z' to toggle debug geometry\nSpace to fight");
+    instructionText->SetText("Use WASD keys or Arrows to move\nPageUp/PageDown/MouseWheel to zoom\nF5/F7 to "
+                             "save/reload scene\n'Z' to toggle debug geometry\nSpace to fight");
     instructionText->SetFont(cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"), 15);
     instructionText->SetTextAlignment(HA_CENTER); // Center rows in relation to each other
     instructionText->SetAlignment(HA_CENTER, VA_CENTER);
@@ -492,7 +498,8 @@ void Sample2D::SaveScene(bool initial)
     String filename = demoFilename_;
     if (!initial)
         filename += "InGame";
-    File saveFile(context_, GetSubsystem<FileSystem>()->GetProgramDir() + "Data/Scenes/" + filename + ".xml", FILE_WRITE);
+    File saveFile(context_, GetSubsystem<FileSystem>()->GetProgramDir() + "Data/Scenes/" + filename + ".xml",
+                  FILE_WRITE);
     scene_->SaveXML(saveFile);
 }
 
@@ -534,7 +541,8 @@ void Sample2D::PlaySoundEffect(const String& soundName)
     auto* cache = GetSubsystem<ResourceCache>();
     auto* source = scene_->CreateComponent<SoundSource>();
     auto* sound = cache->GetResource<Sound>("Sounds/" + soundName);
-    if (sound != nullptr) {
+    if (sound != nullptr)
+    {
         source->SetAutoRemoveMode(REMOVE_COMPONENT);
         source->Play(sound);
     }

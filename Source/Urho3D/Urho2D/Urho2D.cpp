@@ -22,7 +22,6 @@
 #include "../Precompiled.h"
 
 #include "../Core/Context.h"
-#include "../Urho2D/StretchableSprite2D.h"
 #include "../Urho2D/AnimatedSprite2D.h"
 #include "../Urho2D/AnimationSet2D.h"
 #include "../Urho2D/CollisionBox2D.h"
@@ -49,6 +48,7 @@
 #include "../Urho2D/RigidBody2D.h"
 #include "../Urho2D/Sprite2D.h"
 #include "../Urho2D/SpriteSheet2D.h"
+#include "../Urho2D/StretchableSprite2D.h"
 #include "../Urho2D/TileMap2D.h"
 #include "../Urho2D/TileMapLayer2D.h"
 #include "../Urho2D/TmxFile2D.h"
@@ -108,4 +108,4 @@ void RegisterUrho2DLibrary(Context* context)
     ConstraintWheel2D::RegisterObject(context);
 }
 
-}
+} // namespace Urho3D

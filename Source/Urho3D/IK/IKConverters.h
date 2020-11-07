@@ -31,7 +31,8 @@
 #include <ik/quat.h>
 #include <ik/vec3.h>
 
-namespace Urho3D {
+namespace Urho3D
+{
 
 /// Converts from an Urho3D Vector3 to an IK vec3_t.
 vec3_t Vec3Urho2IK(const Vector3& urho);
@@ -42,4 +43,4 @@ quat_t QuatUrho2IK(const Quaternion& urho);
 /// Converts from an IK quat_t to an Urho3D quaternion.
 Quaternion QuatIK2Urho(const quat_t* ik);
 
-}
+} // namespace Urho3D

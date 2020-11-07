@@ -50,7 +50,8 @@ public:
     /// The function to run in the thread.
     virtual void ThreadFunction() = 0;
 
-    /// Start running the thread. Return true if successful, or false if already running or if can not create the thread.
+    /// Start running the thread. Return true if successful, or false if already running or if can not create the
+    /// thread.
     bool Run();
     /// Set the running flag to false and wait for the thread to finish.
     void Stop();
@@ -78,4 +79,4 @@ protected:
     static ThreadID mainThreadID;
 };
 
-}
+} // namespace Urho3D

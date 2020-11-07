@@ -20,8 +20,8 @@
 // THE SOFTWARE.
 //
 
-#include "../Precompiled.h"
 #include "../AngelScript/APITemplates.h"
+#include "../Precompiled.h"
 
 #include "../AngelScript/Manual_Input.h"
 
@@ -29,18 +29,12 @@ namespace Urho3D
 {
 
 // This function is called before ASRegisterGenerated()
-void ASRegisterManualFirst_Input(asIScriptEngine* engine)
-{
-    engine->RegisterTypedef("SDL_JoystickID", "int");
-}
+void ASRegisterManualFirst_Input(asIScriptEngine* engine) { engine->RegisterTypedef("SDL_JoystickID", "int"); }
 
 // ========================================================================================
 
 // template<class T> T * Object::GetSubsystem() const | File: ../Core/Object.h
-static Input* GetInput()
-{
-    return GetScriptContext()->GetSubsystem<Input>();
-}
+static Input* GetInput() { return GetScriptContext()->GetSubsystem<Input>(); }
 
 // This function is called after ASRegisterGenerated()
 void ASRegisterManualLast_Input(asIScriptEngine* engine)
@@ -52,22 +46,13 @@ void ASRegisterManualLast_Input(asIScriptEngine* engine)
 // ========================================================================================
 
 // bool Input::SaveGestures(Serializer &dest) | File: ../Input/Input.h
-bool InputSaveGestures(File* file, Input* ptr)
-{
-    return file && ptr->SaveGestures(*file);
-}
+bool InputSaveGestures(File* file, Input* ptr) { return file && ptr->SaveGestures(*file); }
 
 // bool Input::SaveGestures(Serializer &dest) | File: ../Input/Input.h
-bool InputSaveGesturesVectorBuffer(VectorBuffer& buffer, Input* ptr)
-{
-    return ptr->SaveGestures(buffer);
-}
+bool InputSaveGesturesVectorBuffer(VectorBuffer& buffer, Input* ptr) { return ptr->SaveGestures(buffer); }
 
 // bool Input::SaveGesture(Serializer &dest, unsigned gestureID) | File: ../Input/Input.h
-bool InputSaveGesture(File* file, unsigned gestureID, Input* ptr)
-{
-    return file && ptr->SaveGesture(*file, gestureID);
-}
+bool InputSaveGesture(File* file, unsigned gestureID, Input* ptr) { return file && ptr->SaveGesture(*file, gestureID); }
 
 // bool Input::SaveGesture(Serializer &dest, unsigned gestureID) | File: ../Input/Input.h
 bool InputSaveGestureVectorBuffer(VectorBuffer& buffer, unsigned gestureID, Input* ptr)
@@ -76,33 +61,18 @@ bool InputSaveGestureVectorBuffer(VectorBuffer& buffer, unsigned gestureID, Inpu
 }
 
 // unsigned Input::LoadGestures(Deserializer &source) | File: ../Input/Input.h
-unsigned InputLoadGestures(File* file, Input* ptr)
-{
-    return file ? ptr->LoadGestures(*file) : 0;
-}
+unsigned InputLoadGestures(File* file, Input* ptr) { return file ? ptr->LoadGestures(*file) : 0; }
 
 // unsigned Input::LoadGestures(Deserializer &source) | File: ../Input/Input.h
-unsigned InputLoadGesturesVectorBuffer(VectorBuffer& buffer, Input* ptr)
-{
-    return ptr->LoadGestures(buffer);
-}
+unsigned InputLoadGesturesVectorBuffer(VectorBuffer& buffer, Input* ptr) { return ptr->LoadGestures(buffer); }
 
 // void Input::SetMouseGrabbed(bool grab, bool suppressEvent=false) | File: ../Input/Input.h
-void InputSetMouseGrabbed(bool enable, Input* ptr)
-{
-    ptr->SetMouseGrabbed(enable, false);
-}
+void InputSetMouseGrabbed(bool enable, Input* ptr) { ptr->SetMouseGrabbed(enable, false); }
 
 // void Input::SetMouseMode(MouseMode mode, bool suppressEvent=false) | File: ../Input/Input.h
-void InputSetMouseMode(MouseMode mode, Input* ptr)
-{
-    ptr->SetMouseMode(mode, false);
-}
+void InputSetMouseMode(MouseMode mode, Input* ptr) { ptr->SetMouseMode(mode, false); }
 
 // void Input::SetMouseVisible(bool enable, bool suppressEvent=false) | File: ../Input/Input.h
-void InputSetMouseVisible(bool enable, Input* ptr)
-{
-    ptr->SetMouseVisible(enable, false);
-}
+void InputSetMouseVisible(bool enable, Input* ptr) { ptr->SetMouseVisible(enable, false); }
 
-}
+} // namespace Urho3D

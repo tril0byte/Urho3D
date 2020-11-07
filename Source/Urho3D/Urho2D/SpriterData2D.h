@@ -311,6 +311,6 @@ struct SpriteTimelineKey : SpatialTimelineKey
     int zIndex_{};
 };
 
-}
+} // namespace Spriter
 
-}
+} // namespace Urho3D

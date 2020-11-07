@@ -25,11 +25,11 @@
 #include <Urho3D/Engine/Engine.h>
 #include <Urho3D/Graphics/Graphics.h>
 #include <Urho3D/Graphics/Zone.h>
-#include <Urho3D/Input/Input.h>
 #include <Urho3D/IO/IOEvents.h>
 #include <Urho3D/IO/Log.h>
 #include <Urho3D/IO/MemoryBuffer.h>
 #include <Urho3D/IO/VectorBuffer.h>
+#include <Urho3D/Input/Input.h>
 #include <Urho3D/Network/Network.h>
 #include <Urho3D/Network/NetworkEvents.h>
 #include <Urho3D/Resource/ResourceCache.h>
@@ -52,8 +52,8 @@
 
 URHO3D_DEFINE_APPLICATION_MAIN(LANDiscovery)
 
-LANDiscovery::LANDiscovery(Context* context) :
-    Sample(context)
+LANDiscovery::LANDiscovery(Context* context)
+    : Sample(context)
 {
 }
 
@@ -87,14 +87,14 @@ void LANDiscovery::CreateUI()
     root->SetDefaultStyle(uiStyle);
 
     int marginTop = 20;
-    CreateLabel("1. Start server", IntVector2(20, marginTop-20));
+    CreateLabel("1. Start server", IntVector2(20, marginTop - 20));
     startServer_ = CreateButton("Start server", 160, IntVector2(20, marginTop));
     stopServer_ = CreateButton("Stop server", 160, IntVector2(20, marginTop));
     stopServer_->SetVisible(false);
 
     // Create client connection related fields
     marginTop += 80;
-    CreateLabel("2. Discover LAN servers", IntVector2(20, marginTop-20));
+    CreateLabel("2. Discover LAN servers", IntVector2(20, marginTop - 20));
     refreshServerList_ = CreateButton("Search...", 160, IntVector2(20, marginTop));
 
     marginTop += 80;
@@ -152,13 +152,15 @@ void LANDiscovery::HandleNetworkHostDiscovered(StringHash eventType, VariantMap&
     URHO3D_LOGINFO("Server discovered!");
     String text = serverList_->GetText();
     VariantMap data = eventData[P_BEACON].GetVariantMap();
-    text += "\n" + data["Name"].GetString() + "(" + String(data["Players"].GetInt()) + ")" + eventData[P_ADDRESS].GetString() + ":" + String(eventData[P_PORT].GetInt());
+    text += "\n" + data["Name"].GetString() + "(" + String(data["Players"].GetInt()) + ")" +
+            eventData[P_ADDRESS].GetString() + ":" + String(eventData[P_PORT].GetInt());
     serverList_->SetText(text);
 }
 
 void LANDiscovery::HandleStartServer(StringHash eventType, VariantMap& eventData)
 {
-    if (GetSubsystem<Network>()->StartServer(SERVER_PORT)) {
+    if (GetSubsystem<Network>()->StartServer(SERVER_PORT))
+    {
         VariantMap data;
         data["Name"] = "Test server";
         data["Players"] = 100;

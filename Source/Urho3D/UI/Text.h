@@ -57,10 +57,10 @@ struct CharLocation
 struct GlyphLocation
 {
     /// Construct.
-    GlyphLocation(float x, float y, const FontGlyph* glyph) :
-        x_(x),
-        y_(y),
-        glyph_(glyph)
+    GlyphLocation(float x, float y, const FontGlyph* glyph)
+        : x_(x)
+        , y_(y)
+        , glyph_(glyph)
     {
     }
 
@@ -112,7 +112,8 @@ public:
     /// Set row spacing, 1.0 for original font spacing.
     /// @property
     void SetRowSpacing(float spacing);
-    /// Set wordwrap. In wordwrap mode the text element will respect its current width. Otherwise it resizes itself freely.
+    /// Set wordwrap. In wordwrap mode the text element will respect its current width. Otherwise it resizes itself
+    /// freely.
     /// @property
     void SetWordwrap(bool enable);
     /// The text will be automatically translated. The text value used as string identifier.
@@ -243,9 +244,8 @@ protected:
     /// Return row start X position.
     int GetRowStartPosition(unsigned rowIndex) const;
     /// Construct batch.
-    void ConstructBatch
-        (UIBatch& pageBatch, const PODVector<GlyphLocation>& pageGlyphLocation, float dx = 0, float dy = 0, Color* color = nullptr,
-            float depthBias = 0.0f);
+    void ConstructBatch(UIBatch& pageBatch, const PODVector<GlyphLocation>& pageGlyphLocation, float dx = 0,
+                        float dy = 0, Color* color = nullptr, float depthBias = 0.0f);
 
     /// Font.
     SharedPtr<Font> font_;
@@ -290,7 +290,7 @@ protected:
     /// Row widths.
     PODVector<float> rowWidths_;
     /// Glyph locations per each texture in the font.
-    Vector<PODVector<GlyphLocation> > pageGlyphLocations_;
+    Vector<PODVector<GlyphLocation>> pageGlyphLocations_;
     /// Cached locations of each character in the text.
     PODVector<CharLocation> charLocations_;
     /// The text will be automatically translated.
@@ -303,4 +303,4 @@ protected:
     void DecodeToUnicode();
 };
 
-}
+} // namespace Urho3D

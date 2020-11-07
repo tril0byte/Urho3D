@@ -22,9 +22,9 @@
 
 // Functions that users can change to affect the work BindingGenerator
 
-#include "XmlSourceData.h"
 #include "Tuning.h"
 #include "Utils.h"
+#include "XmlSourceData.h"
 
 // Some parts of the engine are compiled only if there are defines
 string InsideDefine(const string& headerFile)

@@ -45,16 +45,15 @@ public:
     /// Return UI rendering batches.
     void GetBatches(PODVector<UIBatch>& batches, PODVector<float>& vertexData, const IntRect& currentScissor) override;
     /// React to mouse click begin.
-    void OnClickBegin
-        (const IntVector2& position, const IntVector2& screenPosition, MouseButton button, MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor) override;
+    void OnClickBegin(const IntVector2& position, const IntVector2& screenPosition, MouseButton button,
+                      MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor) override;
     /// React to mouse click end.
-    void OnClickEnd
-        (const IntVector2& position, const IntVector2& screenPosition, MouseButton button, MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor,
-            UIElement* beginElement) override;
+    void OnClickEnd(const IntVector2& position, const IntVector2& screenPosition, MouseButton button,
+                    MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor,
+                    UIElement* beginElement) override;
     /// React to mouse drag motion.
-    void OnDragMove
-        (const IntVector2& position, const IntVector2& screenPosition, const IntVector2& deltaPos, MouseButtonFlags buttons, QualifierFlags qualifiers,
-            Cursor* cursor) override;
+    void OnDragMove(const IntVector2& position, const IntVector2& screenPosition, const IntVector2& deltaPos,
+                    MouseButtonFlags buttons, QualifierFlags qualifiers, Cursor* cursor) override;
     /// React to a key press.
     void OnKey(Key key, MouseButtonFlags buttons, QualifierFlags qualifiers) override;
 
@@ -115,4 +114,4 @@ protected:
     bool pressed_;
 };
 
-}
+} // namespace Urho3D

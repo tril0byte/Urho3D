@@ -119,4 +119,4 @@ void AllocatorFree(AllocatorBlock* allocator, void* ptr)
     allocator->free_ = node;
 }
 
-}
+} // namespace Urho3D

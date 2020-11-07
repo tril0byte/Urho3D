@@ -32,7 +32,7 @@ class xml_document;
 class xml_node;
 class xpath_node;
 
-}
+} // namespace pugi
 
 namespace Urho3D
 {
@@ -97,4 +97,4 @@ private:
     UniquePtr<pugi::xml_document> document_;
 };
 
-}
+} // namespace Urho3D

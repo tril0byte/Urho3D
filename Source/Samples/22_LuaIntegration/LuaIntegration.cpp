@@ -47,8 +47,8 @@
 
 URHO3D_DEFINE_APPLICATION_MAIN(LuaIntegration)
 
-LuaIntegration::LuaIntegration(Context* context) :
-    Sample(context)
+LuaIntegration::LuaIntegration(Context* context)
+    : Sample(context)
 {
     // Instantiate and register the Lua script subsystem so that we can use the LuaScriptInstance component
     context_->RegisterSubsystem(new LuaScript(context_));
@@ -85,9 +85,10 @@ void LuaIntegration::CreateScene()
     // (-1000, -1000, -1000) to (1000, 1000, 1000)
     scene_->CreateComponent<Octree>();
 
-    // Create a Zone component into a child scene node. The Zone controls ambient lighting and fog settings. Like the Octree,
-    // it also defines its volume with a bounding box, but can be rotated (so it does not need to be aligned to the world X, Y
-    // and Z axes.) Drawable objects "pick up" the zone they belong to and use it when rendering; several zones can exist
+    // Create a Zone component into a child scene node. The Zone controls ambient lighting and fog settings. Like the
+    // Octree, it also defines its volume with a bounding box, but can be rotated (so it does not need to be aligned to
+    // the world X, Y and Z axes.) Drawable objects "pick up" the zone they belong to and use it when rendering; several
+    // zones can exist
     Node* zoneNode = scene_->CreateChild("Zone");
     auto* zone = zoneNode->CreateComponent<Zone>();
     // Set same volume as the Octree, set a close bluish fog and some ambient light
@@ -113,8 +114,8 @@ void LuaIntegration::CreateScene()
         boxObject->SetModel(cache->GetResource<Model>("Models/Box.mdl"));
         boxObject->SetMaterial(cache->GetResource<Material>("Materials/Stone.xml"));
 
-        // Add our custom Rotator script object (using the LuaScriptInstance C++ component to instantiate / store it) which will
-        // rotate the scene node each frame, when the scene sends its update event
+        // Add our custom Rotator script object (using the LuaScriptInstance C++ component to instantiate / store it)
+        // which will rotate the scene node each frame, when the scene sends its update event
         auto* instance = boxNode->CreateComponent<LuaScriptInstance>();
         instance->CreateObject(scriptFile, "Rotator");
 
@@ -127,8 +128,8 @@ void LuaIntegration::CreateScene()
         }
     }
 
-    // Create the camera. Let the starting position be at the world origin. As the fog limits maximum visible distance, we can
-    // bring the far clip plane closer for more effective culling of distant objects
+    // Create the camera. Let the starting position be at the world origin. As the fog limits maximum visible distance,
+    // we can bring the far clip plane closer for more effective culling of distant objects
     cameraNode_ = scene_->CreateChild("Camera");
     auto* camera = cameraNode_->CreateComponent<Camera>();
     camera->SetFarClip(100.0f);

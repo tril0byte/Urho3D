@@ -20,8 +20,8 @@
 // THE SOFTWARE.
 //
 
-#include "../Precompiled.h"
 #include "../AngelScript/APITemplates.h"
+#include "../Precompiled.h"
 
 #include "../AngelScript/Manual_IO.h"
 
@@ -29,9 +29,7 @@ namespace Urho3D
 {
 
 // This function is called before ASRegisterGenerated()
-void ASRegisterManualFirst_IO(asIScriptEngine* engine)
-{
-}
+void ASRegisterManualFirst_IO(asIScriptEngine* engine) {}
 
 // ========================================================================================
 
@@ -50,53 +48,31 @@ static unsigned char* VectorBufferAt(unsigned index, VectorBuffer* ptr)
 static void RegisterVectorBuffer(asIScriptEngine* engine)
 {
     // unsigned char* VectorBuffer::GetModifiableData() | File: ../IO/VectorBuffer.h
-    engine->RegisterObjectMethod("VectorBuffer", "uint8 &opIndex(uint)", asFUNCTION(VectorBufferAt), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("VectorBuffer", "const uint8 &opIndex(uint) const", asFUNCTION(VectorBufferAt), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("VectorBuffer", "uint8 &opIndex(uint)", asFUNCTION(VectorBufferAt),
+                                 asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("VectorBuffer", "const uint8 &opIndex(uint) const", asFUNCTION(VectorBufferAt),
+                                 asCALL_CDECL_OBJLAST);
 }
 
 // ========================================================================================
 
 #ifdef URHO3D_LOGGING
 
-static void Print(const String& value, bool error)
-{
-    Log::WriteRaw(value + "\n", error);
-}
+static void Print(const String& value, bool error) { Log::WriteRaw(value + "\n", error); }
 
-static void Print(int value, bool error)
-{
-    Log::WriteRaw(String(value) + "\n", error);
-}
+static void Print(int value, bool error) { Log::WriteRaw(String(value) + "\n", error); }
 
-static void Print(long long value, bool error)
-{
-    Log::WriteRaw(String(value) + "\n", error);
-}
+static void Print(long long value, bool error) { Log::WriteRaw(String(value) + "\n", error); }
 
-static void Print(unsigned value, bool error)
-{
-    Log::WriteRaw(String(value) + "\n", error);
-}
+static void Print(unsigned value, bool error) { Log::WriteRaw(String(value) + "\n", error); }
 
-static void Print(unsigned long long value, bool error)
-{
-    Log::WriteRaw(String(value) + "\n", error);
-}
+static void Print(unsigned long long value, bool error) { Log::WriteRaw(String(value) + "\n", error); }
 
-static void Print(float value, bool error)
-{
-    Log::WriteRaw(String(value) + "\n", error);
-}
+static void Print(float value, bool error) { Log::WriteRaw(String(value) + "\n", error); }
 
-static void Print(bool value, bool error)
-{
-    Log::WriteRaw(String(value) + "\n", error);
-}
+static void Print(bool value, bool error) { Log::WriteRaw(String(value) + "\n", error); }
 
-static void Print(const Variant& value, bool error)
-{
-    Log::WriteRaw(value.ToString() + "\n", error);
-}
+static void Print(const Variant& value, bool error) { Log::WriteRaw(value.ToString() + "\n", error); }
 
 static void PrintCallStack(bool error)
 {
@@ -105,90 +81,75 @@ static void PrintCallStack(bool error)
         Log::WriteRaw(Script::GetCallStack(context), error);
 }
 
-static void LogWrite(const String& str, bool error, Log* ptr)
-{
-    Log::WriteRaw(str + "\n", error);
-}
+static void LogWrite(const String& str, bool error, Log* ptr) { Log::WriteRaw(str + "\n", error); }
 
-static void LogTrace(const String& str, Log* ptr)
-{
-    Log::Write(LOG_TRACE, str);
-}
+static void LogTrace(const String& str, Log* ptr) { Log::Write(LOG_TRACE, str); }
 
-static void LogDebug(const String& str, Log* ptr)
-{
-    Log::Write(LOG_DEBUG, str);
-}
+static void LogDebug(const String& str, Log* ptr) { Log::Write(LOG_DEBUG, str); }
 
-static void LogInfo(const String& str, Log* ptr)
-{
-    Log::Write(LOG_INFO, str);
-}
+static void LogInfo(const String& str, Log* ptr) { Log::Write(LOG_INFO, str); }
 
-static void LogWarning(const String& str, Log* ptr)
-{
-    Log::Write(LOG_WARNING, str);
-}
+static void LogWarning(const String& str, Log* ptr) { Log::Write(LOG_WARNING, str); }
 
-static void LogError(const String& str, Log* ptr)
-{
-    Log::Write(LOG_ERROR, str);
-}
+static void LogError(const String& str, Log* ptr) { Log::Write(LOG_ERROR, str); }
 
 #else
 
-static void Print(const String& value, bool error) { }
-static void Print(int value, bool error) { }
-static void Print(long long value, bool error) { }
-static void Print(unsigned value, bool error) { }
-static void Print(unsigned long long value, bool error) { }
-static void Print(float value, bool error) { }
-static void Print(bool value, bool error) { }
-static void Print(const Variant& value, bool error) { }
-static void PrintCallStack(bool error) { }
-static void LogWrite(const String& str, bool error, Log* ptr) { }
-static void LogTrace(const String& str, Log* ptr) { }
-static void LogDebug(const String& str, Log* ptr) { }
-static void LogInfo(const String& str, Log* ptr) { }
-static void LogWarning(const String& str, Log* ptr) { }
-static void LogError(const String& str, Log* ptr) { }
+static void Print(const String& value, bool error) {}
+static void Print(int value, bool error) {}
+static void Print(long long value, bool error) {}
+static void Print(unsigned value, bool error) {}
+static void Print(unsigned long long value, bool error) {}
+static void Print(float value, bool error) {}
+static void Print(bool value, bool error) {}
+static void Print(const Variant& value, bool error) {}
+static void PrintCallStack(bool error) {}
+static void LogWrite(const String& str, bool error, Log* ptr) {}
+static void LogTrace(const String& str, Log* ptr) {}
+static void LogDebug(const String& str, Log* ptr) {}
+static void LogInfo(const String& str, Log* ptr) {}
+static void LogWarning(const String& str, Log* ptr) {}
+static void LogError(const String& str, Log* ptr) {}
 
 #endif
 
 static void RegisterLog(asIScriptEngine* engine)
 {
-    engine->RegisterObjectMethod("Log", "void Write(const String&in, bool error = false)", asFUNCTION(LogWrite), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("Log", "void Write(const String&in, bool error = false)", asFUNCTION(LogWrite),
+                                 asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("Log", "void Trace(const String&in)", asFUNCTION(LogTrace), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("Log", "void Debug(const String&in)", asFUNCTION(LogDebug), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("Log", "void Info(const String&in)", asFUNCTION(LogInfo), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("Log", "void Warning(const String&in)", asFUNCTION(LogWarning), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("Log", "void Error(const String&in)", asFUNCTION(LogError), asCALL_CDECL_OBJLAST);
-	
-	// Register also Print() functions for convenience
-    engine->RegisterGlobalFunction("void Print(const String&in, bool error = false)", asFUNCTIONPR(Print, (const String&, bool), void), asCALL_CDECL);
-    engine->RegisterGlobalFunction("void Print(int, bool error = false)", asFUNCTIONPR(Print, (int, bool), void), asCALL_CDECL);
-    engine->RegisterGlobalFunction("void Print(int64, bool error = false)", asFUNCTIONPR(Print, (long long, bool), void), asCALL_CDECL);
-    engine->RegisterGlobalFunction("void Print(uint, bool error = false)", asFUNCTIONPR(Print, (unsigned, bool), void), asCALL_CDECL);
-    engine->RegisterGlobalFunction("void Print(uint64, bool error = false)", asFUNCTIONPR(Print, (unsigned long long, bool), void), asCALL_CDECL);
-    engine->RegisterGlobalFunction("void Print(float, bool error = false)", asFUNCTIONPR(Print, (float, bool), void), asCALL_CDECL);
-    engine->RegisterGlobalFunction("void Print(bool, bool error = false)", asFUNCTIONPR(Print, (bool, bool), void), asCALL_CDECL);
-    engine->RegisterGlobalFunction("void Print(const Variant&in, bool error = false)", asFUNCTIONPR(Print, (const Variant&, bool), void), asCALL_CDECL);
+
+    // Register also Print() functions for convenience
+    engine->RegisterGlobalFunction("void Print(const String&in, bool error = false)",
+                                   asFUNCTIONPR(Print, (const String&, bool), void), asCALL_CDECL);
+    engine->RegisterGlobalFunction("void Print(int, bool error = false)", asFUNCTIONPR(Print, (int, bool), void),
+                                   asCALL_CDECL);
+    engine->RegisterGlobalFunction("void Print(int64, bool error = false)",
+                                   asFUNCTIONPR(Print, (long long, bool), void), asCALL_CDECL);
+    engine->RegisterGlobalFunction("void Print(uint, bool error = false)", asFUNCTIONPR(Print, (unsigned, bool), void),
+                                   asCALL_CDECL);
+    engine->RegisterGlobalFunction("void Print(uint64, bool error = false)",
+                                   asFUNCTIONPR(Print, (unsigned long long, bool), void), asCALL_CDECL);
+    engine->RegisterGlobalFunction("void Print(float, bool error = false)", asFUNCTIONPR(Print, (float, bool), void),
+                                   asCALL_CDECL);
+    engine->RegisterGlobalFunction("void Print(bool, bool error = false)", asFUNCTIONPR(Print, (bool, bool), void),
+                                   asCALL_CDECL);
+    engine->RegisterGlobalFunction("void Print(const Variant&in, bool error = false)",
+                                   asFUNCTIONPR(Print, (const Variant&, bool), void), asCALL_CDECL);
     engine->RegisterGlobalFunction("void PrintCallStack(bool error = false)", asFUNCTION(PrintCallStack), asCALL_CDECL);
 }
 
 // ========================================================================================
 
 // template<class T> T * Object::GetSubsystem() const | File: ../Core/Object.h
-static FileSystem* GetFileSystem()
-{
-    return GetScriptContext()->GetSubsystem<FileSystem>();
-}
+static FileSystem* GetFileSystem() { return GetScriptContext()->GetSubsystem<FileSystem>(); }
 
 // template<class T> T * Object::GetSubsystem() const | File: ../Core/Object.h
-static Log* GetLog()
-{
-    return GetScriptContext()->GetSubsystem<Log>();
-}
+static Log* GetLog() { return GetScriptContext()->GetSubsystem<Log>(); }
 
 // This function is called after ASRegisterGenerated()
 void ASRegisterManualLast_IO(asIScriptEngine* engine)
@@ -214,10 +175,7 @@ CScriptArray* DeserializerRead(unsigned size, Deserializer* ptr)
 }
 
 // VectorBuffer(Deserializer& source, unsigned size) | File: .. / IO / VectorBuffer.h
-VectorBuffer DeserializerReadVectorBuffer(unsigned size, Deserializer* ptr)
-{
-    return VectorBuffer(*ptr, size);
-}
+VectorBuffer DeserializerReadVectorBuffer(unsigned size, Deserializer* ptr) { return VectorBuffer(*ptr, size); }
 
 // ========================================================================================
 
@@ -236,12 +194,14 @@ bool SerializerWriteVectorBuffer(VectorBuffer* src, Serializer* ptr)
 
 // ========================================================================================
 
-// void FileSystem::ScanDir(Vector< String > &result, const String &pathName, const String &filter, unsigned flags, bool recursive) const | File: ../IO/FileSystem.h
-CScriptArray* FileSystemScanDir(const String& pathName, const String& filter, unsigned flags, bool recursive, FileSystem* ptr)
+// void FileSystem::ScanDir(Vector< String > &result, const String &pathName, const String &filter, unsigned flags, bool
+// recursive) const | File: ../IO/FileSystem.h
+CScriptArray* FileSystemScanDir(const String& pathName, const String& filter, unsigned flags, bool recursive,
+                                FileSystem* ptr)
 {
     Vector<String> result;
     ptr->ScanDir(result, pathName, filter, flags, recursive);
     return VectorToArray<String>(result, "Array<String>");
 }
 
-}
+} // namespace Urho3D

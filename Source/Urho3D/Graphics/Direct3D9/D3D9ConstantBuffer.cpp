@@ -22,8 +22,8 @@
 
 #include "../../Precompiled.h"
 
-#include "../../Graphics/Graphics.h"
 #include "../../Graphics/ConstantBuffer.h"
+#include "../../Graphics/Graphics.h"
 #include "../../IO/Log.h"
 
 #include "../../DebugNew.h"
@@ -31,13 +31,9 @@
 namespace Urho3D
 {
 
-void ConstantBuffer::OnDeviceReset()
-{
-}
+void ConstantBuffer::OnDeviceReset() {}
 
-void ConstantBuffer::Release()
-{
-}
+void ConstantBuffer::Release() {}
 
 bool ConstantBuffer::SetSize(unsigned size)
 {
@@ -45,8 +41,6 @@ bool ConstantBuffer::SetSize(unsigned size)
     return false;
 }
 
-void ConstantBuffer::Apply()
-{
-}
+void ConstantBuffer::Apply() {}
 
-}
+} // namespace Urho3D

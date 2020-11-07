@@ -80,5 +80,4 @@ protected:
     bool dataPending_{};
 };
 
-}
-
+} // namespace Urho3D

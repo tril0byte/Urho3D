@@ -32,15 +32,18 @@ class Text;
 class UIElement;
 class XMLFile;
 
-/// Message box dialog. Manages its lifetime automatically, so the application does not need to hold a reference to it, and shouldn't attempt to destroy it manually.
+/// Message box dialog. Manages its lifetime automatically, so the application does not need to hold a reference to it,
+/// and shouldn't attempt to destroy it manually.
 class URHO3D_API MessageBox : public Object
 {
     URHO3D_OBJECT(MessageBox, Object);
 
 public:
-    /// Construct. If layout file is not given, use the default message box layout. If style file is not given, use the default style file from root UI element.
-    explicit MessageBox(Context* context, const String& messageString = String::EMPTY, const String& titleString = String::EMPTY,
-        XMLFile* layoutFile = nullptr, XMLFile* styleFile = nullptr);
+    /// Construct. If layout file is not given, use the default message box layout. If style file is not given, use the
+    /// default style file from root UI element.
+    explicit MessageBox(Context* context, const String& messageString = String::EMPTY,
+                        const String& titleString = String::EMPTY, XMLFile* layoutFile = nullptr,
+                        XMLFile* styleFile = nullptr);
     /// Destruct.
     ~MessageBox() override;
     /// Register object factory.
@@ -78,4 +81,4 @@ private:
     Button* okButton_;
 };
 
-}
+} // namespace Urho3D

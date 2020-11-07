@@ -56,8 +56,8 @@ public:
     /// Set the draw range.
     bool SetDrawRange(PrimitiveType type, unsigned indexStart, unsigned indexCount, bool getUsedVertexRange = true);
     /// Set the draw range.
-    bool SetDrawRange(PrimitiveType type, unsigned indexStart, unsigned indexCount, unsigned vertexStart, unsigned vertexCount,
-        bool checkIllegal = true);
+    bool SetDrawRange(PrimitiveType type, unsigned indexStart, unsigned indexCount, unsigned vertexStart,
+                      unsigned vertexCount, bool checkIllegal = true);
     /// Set the LOD distance.
     /// @property
     void SetLodDistance(float distance);
@@ -71,7 +71,7 @@ public:
     void Draw(Graphics* graphics);
 
     /// Return all vertex buffers.
-    const Vector<SharedPtr<VertexBuffer> >& GetVertexBuffers() const { return vertexBuffers_; }
+    const Vector<SharedPtr<VertexBuffer>>& GetVertexBuffers() const { return vertexBuffers_; }
 
     /// Return number of vertex buffers.
     /// @property
@@ -111,12 +111,17 @@ public:
 
     /// Return buffers' combined hash value for state sorting.
     unsigned short GetBufferHash() const;
-    /// Return raw vertex and index data for CPU operations, or null pointers if not available. Will return data of the first vertex buffer if override data not set.
-    void GetRawData(const unsigned char*& vertexData, unsigned& vertexSize, const unsigned char*& indexData, unsigned& indexSize, const PODVector<VertexElement>*& elements) const;
-    /// Return raw vertex and index data for CPU operations, or null pointers if not available. Will return data of the first vertex buffer if override data not set.
-    void GetRawDataShared(SharedArrayPtr<unsigned char>& vertexData, unsigned& vertexSize, SharedArrayPtr<unsigned char>& indexData,
-        unsigned& indexSize, const PODVector<VertexElement>*& elements) const;
-    /// Return ray hit distance or infinity if no hit. Requires raw data to be set. Optionally return hit normal and hit uv coordinates at intersect point.
+    /// Return raw vertex and index data for CPU operations, or null pointers if not available. Will return data of the
+    /// first vertex buffer if override data not set.
+    void GetRawData(const unsigned char*& vertexData, unsigned& vertexSize, const unsigned char*& indexData,
+                    unsigned& indexSize, const PODVector<VertexElement>*& elements) const;
+    /// Return raw vertex and index data for CPU operations, or null pointers if not available. Will return data of the
+    /// first vertex buffer if override data not set.
+    void GetRawDataShared(SharedArrayPtr<unsigned char>& vertexData, unsigned& vertexSize,
+                          SharedArrayPtr<unsigned char>& indexData, unsigned& indexSize,
+                          const PODVector<VertexElement>*& elements) const;
+    /// Return ray hit distance or infinity if no hit. Requires raw data to be set. Optionally return hit normal and hit
+    /// uv coordinates at intersect point.
     float GetHitDistance(const Ray& ray, Vector3* outNormal = nullptr, Vector2* outUV = nullptr) const;
     /// Return whether or not the ray is inside geometry.
     bool IsInside(const Ray& ray) const;
@@ -127,7 +132,7 @@ public:
 
 private:
     /// Vertex buffers.
-    Vector<SharedPtr<VertexBuffer> > vertexBuffers_;
+    Vector<SharedPtr<VertexBuffer>> vertexBuffers_;
     /// Index buffer.
     SharedPtr<IndexBuffer> indexBuffer_;
     /// Primitive type.
@@ -154,4 +159,4 @@ private:
     unsigned rawIndexSize_;
 };
 
-}
+} // namespace Urho3D

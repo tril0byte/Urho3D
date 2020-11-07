@@ -109,6 +109,6 @@ private:
     PODVector<SpatialTimelineKey*> timelineKeys_;
 };
 
-}
+} // namespace Spriter
 
-}
+} // namespace Urho3D

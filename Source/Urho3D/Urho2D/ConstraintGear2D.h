@@ -74,4 +74,4 @@ private:
     WeakPtr<Constraint2D> otherConstraint_;
 };
 
-}
+} // namespace Urho3D

@@ -73,4 +73,4 @@ TRandomAccessIterator UpperBound(TRandomAccessIterator first, TRandomAccessItera
     return first;
 }
 
-}
+} // namespace Urho3D

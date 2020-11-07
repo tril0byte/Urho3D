@@ -55,10 +55,7 @@ void Sphere::Define(const BoundingBox& box)
     Merge(max);
 }
 
-void Sphere::Define(const Frustum& frustum)
-{
-    Define(frustum.vertices_, NUM_FRUSTUM_VERTICES);
-}
+void Sphere::Define(const Frustum& frustum) { Define(frustum.vertices_, NUM_FRUSTUM_VERTICES); }
 
 void Sphere::Define(const Polyhedron& poly)
 {
@@ -256,11 +253,7 @@ Intersection Sphere::IsInsideFast(const BoundingBox& box) const
 
 Vector3 Sphere::GetLocalPoint(float theta, float phi) const
 {
-    return Vector3(
-        radius_ * Sin(theta) * Sin(phi),
-        radius_ * Cos(phi),
-        radius_ * Cos(theta) * Sin(phi)
-    );
+    return Vector3(radius_ * Sin(theta) * Sin(phi), radius_ * Cos(phi), radius_ * Cos(theta) * Sin(phi));
 }
 
-}
+} // namespace Urho3D

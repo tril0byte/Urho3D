@@ -23,8 +23,8 @@
 #include "../Precompiled.h"
 
 #include "../Core/Context.h"
-#include "../Resource/XMLFile.h"
 #include "../Resource/JSONFile.h"
+#include "../Resource/XMLFile.h"
 #include "../Scene/ObjectAnimation.h"
 #include "../Scene/SceneEvents.h"
 #include "../Scene/ValueAnimation.h"
@@ -35,25 +35,16 @@
 namespace Urho3D
 {
 
-const char* wrapModeNames[] =
-{
-    "Loop",
-    "Once",
-    "Clamp",
-    nullptr
-};
+const char* wrapModeNames[] = {"Loop", "Once", "Clamp", nullptr};
 
-ObjectAnimation::ObjectAnimation(Context* context) :
-    Resource(context)
+ObjectAnimation::ObjectAnimation(Context* context)
+    : Resource(context)
 {
 }
 
 ObjectAnimation::~ObjectAnimation() = default;
 
-void ObjectAnimation::RegisterObject(Context* context)
-{
-    context->RegisterFactory<ObjectAnimation>();
-}
+void ObjectAnimation::RegisterObject(Context* context) { context->RegisterFactory<ObjectAnimation>(); }
 
 bool ObjectAnimation::BeginLoad(Deserializer& source)
 {
@@ -111,7 +102,7 @@ bool ObjectAnimation::LoadXML(const XMLElement& source)
 
 bool ObjectAnimation::SaveXML(XMLElement& dest) const
 {
-    for (HashMap<String, SharedPtr<ValueAnimationInfo> >::ConstIterator i = attributeAnimationInfos_.Begin();
+    for (HashMap<String, SharedPtr<ValueAnimationInfo>>::ConstIterator i = attributeAnimationInfos_.Begin();
          i != attributeAnimationInfos_.End(); ++i)
     {
         XMLElement animElem = dest.CreateChild("attributeanimation");
@@ -170,7 +161,7 @@ bool ObjectAnimation::SaveJSON(JSONValue& dest) const
 {
     JSONValue attributeAnimationsValue;
 
-    for (HashMap<String, SharedPtr<ValueAnimationInfo> >::ConstIterator i = attributeAnimationInfos_.Begin();
+    for (HashMap<String, SharedPtr<ValueAnimationInfo>>::ConstIterator i = attributeAnimationInfos_.Begin();
          i != attributeAnimationInfos_.End(); ++i)
     {
         JSONValue animValue;
@@ -181,7 +172,7 @@ bool ObjectAnimation::SaveJSON(JSONValue& dest) const
             return false;
 
         animValue.Set("wrapmode", wrapModeNames[info->GetWrapMode()]);
-        animValue.Set("speed", (float) info->GetSpeed());
+        animValue.Set("speed", (float)info->GetSpeed());
 
         attributeAnimationsValue.Set(i->first_, animValue);
     }
@@ -190,7 +181,8 @@ bool ObjectAnimation::SaveJSON(JSONValue& dest) const
     return true;
 }
 
-void ObjectAnimation::AddAttributeAnimation(const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode, float speed)
+void ObjectAnimation::AddAttributeAnimation(const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode,
+                                            float speed)
 {
     if (!attributeAnimation)
         return;
@@ -203,7 +195,7 @@ void ObjectAnimation::AddAttributeAnimation(const String& name, ValueAnimation* 
 
 void ObjectAnimation::RemoveAttributeAnimation(const String& name)
 {
-    HashMap<String, SharedPtr<ValueAnimationInfo> >::Iterator i = attributeAnimationInfos_.Find(name);
+    HashMap<String, SharedPtr<ValueAnimationInfo>>::Iterator i = attributeAnimationInfos_.Find(name);
     if (i != attributeAnimationInfos_.End())
     {
         SendAttributeAnimationRemovedEvent(name);
@@ -218,7 +210,7 @@ void ObjectAnimation::RemoveAttributeAnimation(ValueAnimation* attributeAnimatio
     if (!attributeAnimation)
         return;
 
-    for (HashMap<String, SharedPtr<ValueAnimationInfo> >::Iterator i = attributeAnimationInfos_.Begin();
+    for (HashMap<String, SharedPtr<ValueAnimationInfo>>::Iterator i = attributeAnimationInfos_.Begin();
          i != attributeAnimationInfos_.End(); ++i)
     {
         if (i->second_->GetAnimation() == attributeAnimation)
@@ -252,7 +244,7 @@ float ObjectAnimation::GetAttributeAnimationSpeed(const String& name) const
 
 ValueAnimationInfo* ObjectAnimation::GetAttributeAnimationInfo(const String& name) const
 {
-    HashMap<String, SharedPtr<ValueAnimationInfo> >::ConstIterator i = attributeAnimationInfos_.Find(name);
+    HashMap<String, SharedPtr<ValueAnimationInfo>>::ConstIterator i = attributeAnimationInfos_.Find(name);
     if (i != attributeAnimationInfos_.End())
         return i->second_;
     return nullptr;
@@ -276,4 +268,4 @@ void ObjectAnimation::SendAttributeAnimationRemovedEvent(const String& name)
     SendEvent(E_ATTRIBUTEANIMATIONREMOVED, eventData);
 }
 
-}
+} // namespace Urho3D

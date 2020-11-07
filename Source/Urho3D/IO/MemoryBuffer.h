@@ -61,4 +61,4 @@ private:
     bool readOnly_;
 };
 
-}
+} // namespace Urho3D

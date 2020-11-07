@@ -28,9 +28,9 @@
 #include "XmlSourceData.h"
 
 #include <cassert>
+#include <fstream>
 #include <iostream>
 #include <regex>
-#include <fstream>
 #include <vector>
 
 namespace ASBindingGenerator
@@ -78,13 +78,13 @@ static shared_ptr<ASGeneratedFile_Members> GetGeneratedFile(const string& classN
 {
     if (StartsWith(className, "A"))
         return _result_Members_A;
- 
+
     if (StartsWith(className, "B"))
         return _result_Members_B;
-    
+
     if (StartsWith(className, "Constraint"))
         return _result_Members_Constraint;
-    
+
     if (StartsWith(className, "C"))
     {
         if (className.length() < 2)
@@ -97,40 +97,40 @@ static shared_ptr<ASGeneratedFile_Members> GetGeneratedFile(const string& classN
 
         return _result_Members_Ca_Cm;
     }
-    
+
     if (StartsWith(className, "D"))
         return _result_Members_D;
-    
+
     if (StartsWith(className, "E"))
         return _result_Members_E;
-    
+
     if (StartsWith(className, "F"))
         return _result_Members_F;
-    
+
     if (StartsWith(className, "G"))
         return _result_Members_G;
-    
+
     if (StartsWith(className, "H"))
         return _result_Members_H;
-    
+
     if (StartsWith(className, "I"))
         return _result_Members_I;
-    
+
     if (StartsWith(className, "J"))
         return _result_Members_J;
-    
+
     if (StartsWith(className, "K"))
         return _result_Members_K;
-    
+
     if (StartsWith(className, "L"))
         return _result_Members_L;
-    
+
     if (StartsWith(className, "M"))
         return _result_Members_M;
-    
+
     if (StartsWith(className, "N"))
         return _result_Members_N;
-    
+
     if (StartsWith(className, "O"))
         return _result_Members_O;
 
@@ -149,10 +149,10 @@ static shared_ptr<ASGeneratedFile_Members> GetGeneratedFile(const string& classN
             return _result_Members_Sa_Sm;
 
         char secondChar = className[1];
-        
+
         if (secondChar >= 'n')
             return _result_Members_Sn_Sz;
-        
+
         return _result_Members_Sa_Sm;
     }
 
@@ -162,10 +162,10 @@ static shared_ptr<ASGeneratedFile_Members> GetGeneratedFile(const string& classN
             return _result_Members_Ta_Tm;
 
         char secondChar = className[1];
-        
+
         if (secondChar >= 'n')
             return _result_Members_Tn_Tz;
-        
+
         return _result_Members_Ta_Tm;
     }
 
@@ -193,13 +193,14 @@ static shared_ptr<ASGeneratedFile_Members> GetGeneratedFile(const string& classN
     return _result_Members_Other;
 }
 
-//static void RegisterStaticFunction(const ClassStaticFunctionAnalyzer& functionAnalyzer, shared_ptr<ASGeneratedFile_Members> result)
+// static void RegisterStaticFunction(const ClassStaticFunctionAnalyzer& functionAnalyzer,
+// shared_ptr<ASGeneratedFile_Members> result)
 static void RegisterStaticFunction(const ClassStaticFunctionAnalyzer& functionAnalyzer, ASGeneratedFile_Base* result)
 {
     result->reg_ << "    // " << functionAnalyzer.GetLocation() << "\n";
 
     vector<ParamAnalyzer> params = functionAnalyzer.GetParams();
-    vector<shared_ptr<FuncParamConv> > convertedParams;
+    vector<shared_ptr<FuncParamConv>> convertedParams;
     string outGlue;
     bool needWrapper = false;
 
@@ -273,8 +274,10 @@ static void RegisterRefCountedConstructor(const ClassFunctionAnalyzer& functionA
     assert(endPos != string::npos);
     args = args.substr(1, endPos - 1);
 
-    //shared_ptr<ASGeneratedFile_Members> result = GetGeneratedFile(functionAnalyzer.GetClass().GetClassName());
-    ASGeneratedFile_Base* result = templateVersion ? (ASGeneratedFile_Base*)_result_Templates.get() : (ASGeneratedFile_Base*)GetGeneratedFile(functionAnalyzer.GetClass().GetClassName()).get();
+    // shared_ptr<ASGeneratedFile_Members> result = GetGeneratedFile(functionAnalyzer.GetClass().GetClassName());
+    ASGeneratedFile_Base* result =
+        templateVersion ? (ASGeneratedFile_Base*)_result_Templates.get()
+                        : (ASGeneratedFile_Base*)GetGeneratedFile(functionAnalyzer.GetClass().GetClassName()).get();
 
     bool firstContext = StartsWith(args, "Context *context");
     if (firstContext)
@@ -284,9 +287,9 @@ static void RegisterRefCountedConstructor(const ClassFunctionAnalyzer& functionA
     }
     else if (args.find("Context") != string::npos)
     {
-        result->reg_ <<
-            "    // " << functionAnalyzer.GetLocation() << "\n"
-            "    // Error: context can be only first\n";
+        result->reg_ << "    // " << functionAnalyzer.GetLocation()
+                     << "\n"
+                        "    // Error: context can be only first\n";
         return;
     }
 
@@ -327,9 +330,10 @@ static void RegisterRefCountedConstructor(const ClassFunctionAnalyzer& functionA
 
         if (!outSuccess)
         {
-            result->reg_ <<
-                "    // " << functionAnalyzer.GetLocation() << "\n"
-                "    // " << GetLastErrorMessage() << "\n";
+            result->reg_ << "    // " << functionAnalyzer.GetLocation()
+                         << "\n"
+                            "    // "
+                         << GetLastErrorMessage() << "\n";
             return;
         }
     }
@@ -338,38 +342,50 @@ static void RegisterRefCountedConstructor(const ClassFunctionAnalyzer& functionA
 
     if (templateVersion)
     {
-        result->reg_ <<
-            "    // " << functionAnalyzer.GetLocation() << "\n"
-            "    {\n"
-            "        String declFactory(String(className) + \"@ f()\");\n"
-            "        engine->RegisterObjectBehaviour(className, "
-            "asBEHAVE_FACTORY, "
-            "declFactory.CString(), "
-            "asFUNCTION(" << wrapperName << "), "
-            "asCALL_CDECL);\n"
-            "    }\n";
+        result->reg_ << "    // " << functionAnalyzer.GetLocation()
+                     << "\n"
+                        "    {\n"
+                        "        String declFactory(String(className) + \"@ f()\");\n"
+                        "        engine->RegisterObjectBehaviour(className, "
+                        "asBEHAVE_FACTORY, "
+                        "declFactory.CString(), "
+                        "asFUNCTION("
+                     << wrapperName
+                     << "), "
+                        "asCALL_CDECL);\n"
+                        "    }\n";
     }
     else
     {
-        result->reg_ <<
-            "    // " << functionAnalyzer.GetLocation() << "\n"
-            "    engine->RegisterObjectBehaviour("
-            "\"" << className << "\", "
-            "asBEHAVE_FACTORY, "
-            "\"" << decl << "\", "
-            "asFUNCTION(" << wrapperName << "), "
-            "asCALL_CDECL);\n";
+        result->reg_ << "    // " << functionAnalyzer.GetLocation()
+                     << "\n"
+                        "    engine->RegisterObjectBehaviour("
+                        "\""
+                     << className
+                     << "\", "
+                        "asBEHAVE_FACTORY, "
+                        "\""
+                     << decl
+                     << "\", "
+                        "asFUNCTION("
+                     << wrapperName
+                     << "), "
+                        "asCALL_CDECL);\n";
     }
 
     if (!insideDefine.empty())
         result->glue_ << "#ifdef " << insideDefine << "\n";
 
-    result->glue_ <<
-        "// " << functionAnalyzer.GetLocation() << "\n"
-        "static " << className << "* " << wrapperName << "(" << args << ")\n"
-        "{\n"
-        "    return new " << className << "(" << cppParamsNames << ");\n"
-        "}\n";
+    result->glue_ << "// " << functionAnalyzer.GetLocation()
+                  << "\n"
+                     "static "
+                  << className << "* " << wrapperName << "(" << args
+                  << ")\n"
+                     "{\n"
+                     "    return new "
+                  << className << "(" << cppParamsNames
+                  << ");\n"
+                     "}\n";
 
     if (!insideDefine.empty())
         result->glue_ << "#endif\n";
@@ -383,7 +399,7 @@ static void RegisterValueConstructor(const ClassFunctionAnalyzer& functionAnalyz
     string insideDefine = InsideDefine(header);
     string className = functionAnalyzer.GetClassName();
     string wrapperName = GenerateWrapperName(functionAnalyzer, templateVersion);
-    
+
     string args = ExtractArgsstring(functionAnalyzer.GetMemberdef());
     assert(!args.empty());
     assert(StartsWith(args, "("));
@@ -419,14 +435,15 @@ static void RegisterValueConstructor(const ClassFunctionAnalyzer& functionAnalyz
         {
             if (isDefaultConstructor && !insideDefine.empty())
                 reg << "#ifdef " << insideDefine << "\n";
-            
-            reg <<
-                "    // " << functionAnalyzer.GetLocation() << "\n"
-                "    // " << GetLastErrorMessage() << "\n";
-            
+
+            reg << "    // " << functionAnalyzer.GetLocation()
+                << "\n"
+                   "    // "
+                << GetLastErrorMessage() << "\n";
+
             if (isDefaultConstructor && !insideDefine.empty())
                 reg << "#endif\n";
-            
+
             return;
         }
     }
@@ -435,14 +452,20 @@ static void RegisterValueConstructor(const ClassFunctionAnalyzer& functionAnalyz
     if (isDefaultConstructor && !insideDefine.empty())
         reg << "#ifdef " << insideDefine << "\n";
 
-    reg <<
-        "    // " << functionAnalyzer.GetLocation() << "\n"
-        "    engine->RegisterObjectBehaviour("
-        "\"" << className << "\", "
-        "asBEHAVE_CONSTRUCT, "
-        "\"" << decl << "\", "
-        "asFUNCTION(" << wrapperName << "), "
-        "asCALL_CDECL_OBJFIRST);\n";
+    reg << "    // " << functionAnalyzer.GetLocation()
+        << "\n"
+           "    engine->RegisterObjectBehaviour("
+           "\""
+        << className
+        << "\", "
+           "asBEHAVE_CONSTRUCT, "
+           "\""
+        << decl
+        << "\", "
+           "asFUNCTION("
+        << wrapperName
+        << "), "
+           "asCALL_CDECL_OBJFIRST);\n";
 
     if (isDefaultConstructor && !insideDefine.empty())
         reg << "#endif\n";
@@ -450,17 +473,20 @@ static void RegisterValueConstructor(const ClassFunctionAnalyzer& functionAnalyz
     if (isDefaultConstructor && !insideDefine.empty())
         glue << "#ifdef " << insideDefine << "\n";
 
-    glue <<
-        "// " << functionAnalyzer.GetLocation() << "\n"
-        "static void " << wrapperName << "(" << className << "* ptr";
+    glue << "// " << functionAnalyzer.GetLocation()
+         << "\n"
+            "static void "
+         << wrapperName << "(" << className << "* ptr";
 
     if (args.length() > 0)
         glue << ", " << args;
 
     glue << ")\n"
-        "{\n"
-        "    new(ptr) " << className << "(" << functionAnalyzer.JoinParamsNames() << ");\n"
-        "}\n";
+            "{\n"
+            "    new(ptr) "
+         << className << "(" << functionAnalyzer.JoinParamsNames()
+         << ");\n"
+            "}\n";
 
     if (isDefaultConstructor && !insideDefine.empty())
         glue << "#endif\n";
@@ -477,14 +503,19 @@ static void RegisterValueDestructor(const ClassFunctionAnalyzer& functionAnalyze
     string wrapperName = GenerateWrapperName(functionAnalyzer, templateVersion);
     shared_ptr<ASGeneratedFile_Members> result = GetGeneratedFile(className);
 
-    result->glue_ <<
-        "// " << functionAnalyzer.GetLocation() << "\n"
-        "static void " << wrapperName << "(" << className << "* ptr)\n"
-        "{\n"
-        "    ptr->~" << className << "();\n"
-        "}\n\n";
+    result->glue_ << "// " << functionAnalyzer.GetLocation()
+                  << "\n"
+                     "static void "
+                  << wrapperName << "(" << className
+                  << "* ptr)\n"
+                     "{\n"
+                     "    ptr->~"
+                  << className
+                  << "();\n"
+                     "}\n\n";
 
-    result->reg_ << "    engine->RegisterObjectBehaviour(\"" << className << "\", asBEHAVE_DESTRUCT, \"void f()\", asFUNCTION(" << wrapperName << "), asCALL_CDECL_OBJFIRST);\n";
+    result->reg_ << "    engine->RegisterObjectBehaviour(\"" << className
+                 << "\", asBEHAVE_DESTRUCT, \"void f()\", asFUNCTION(" << wrapperName << "), asCALL_CDECL_OBJFIRST);\n";
 }
 
 static void RegisterImplicitlyDeclaredDestructor(const ClassAnalyzer& classAnalyzer)
@@ -498,21 +529,27 @@ static void RegisterImplicitlyDeclaredDestructor(const ClassAnalyzer& classAnaly
     if (!insideDefine.empty())
         result->glue_ << "#ifdef " << insideDefine << "\n";
 
-    result->glue_ <<
-        "// " << className << "::~" << className << "() | Implicitly-declared \n"
-        "static void " << wrapperName << "(" << className << "* ptr)\n"
-        "{\n"
-        "    ptr->~" << className << "();\n"
-        "}\n";
+    result->glue_ << "// " << className << "::~" << className
+                  << "() | Implicitly-declared \n"
+                     "static void "
+                  << wrapperName << "(" << className
+                  << "* ptr)\n"
+                     "{\n"
+                     "    ptr->~"
+                  << className
+                  << "();\n"
+                     "}\n";
 
     if (!insideDefine.empty())
         result->glue_ << "#endif\n";
 
     result->glue_ << "\n";
 
-    result->reg_ <<
-        "    // " << className << "::~" << className << "() | Implicitly-declared\n"
-        "    engine->RegisterObjectBehaviour(\"" << className << "\", asBEHAVE_DESTRUCT, \"void f()\", asFUNCTION(" << wrapperName << "), asCALL_CDECL_OBJFIRST);\n";
+    result->reg_ << "    // " << className << "::~" << className
+                 << "() | Implicitly-declared\n"
+                    "    engine->RegisterObjectBehaviour(\""
+                 << className << "\", asBEHAVE_DESTRUCT, \"void f()\", asFUNCTION(" << wrapperName
+                 << "), asCALL_CDECL_OBJFIRST);\n";
 }
 
 static void RegisterImplicitlyDeclaredConstructor(const ClassAnalyzer& classAnalyzer)
@@ -529,16 +566,22 @@ static void RegisterImplicitlyDeclaredConstructor(const ClassAnalyzer& classAnal
         _result_Members_HighPriority->reg_ << "#ifdef " << insideDefine << "\n";
     }
 
-    _result_Members_HighPriority->glue_ <<
-        "// " << className << "::" << className << "() | Implicitly-declared\n"
-        "static void " << wrapperName << "(" << className << "* ptr)\n"
-        "{\n"
-        "    new(ptr) " << className << "();\n"
-        "}\n";
+    _result_Members_HighPriority->glue_ << "// " << className << "::" << className
+                                        << "() | Implicitly-declared\n"
+                                           "static void "
+                                        << wrapperName << "(" << className
+                                        << "* ptr)\n"
+                                           "{\n"
+                                           "    new(ptr) "
+                                        << className
+                                        << "();\n"
+                                           "}\n";
 
-    _result_Members_HighPriority->reg_ <<
-        "    // " << className << "::" << className << "() | Implicitly-declared\n"
-        "    engine->RegisterObjectBehaviour(\"" << className << "\", asBEHAVE_CONSTRUCT, \"void f()\", asFUNCTION(" << wrapperName << "), asCALL_CDECL_OBJFIRST);\n";
+    _result_Members_HighPriority->reg_ << "    // " << className << "::" << className
+                                       << "() | Implicitly-declared\n"
+                                          "    engine->RegisterObjectBehaviour(\""
+                                       << className << "\", asBEHAVE_CONSTRUCT, \"void f()\", asFUNCTION("
+                                       << wrapperName << "), asCALL_CDECL_OBJFIRST);\n";
 
     if (!insideDefine.empty())
     {
@@ -553,10 +596,11 @@ static void TryRegisterImplicitlyDeclaredAssignOperator(const ClassAnalyzer& cla
 {
     string className = classAnalyzer.GetClassName();
     shared_ptr<ASGeneratedFile_Members> result = GetGeneratedFile(className);
-    
-    result->reg_ <<
-        "    // " << className << "& " << className << "::operator=(const " << className << "&) | Possible implicitly-declared\n"
-        "    RegisterImplicitlyDeclaredAssignOperatorIfPossible<" << className << ">(engine, \"" << className << "\");\n";
+
+    result->reg_ << "    // " << className << "& " << className << "::operator=(const " << className
+                 << "&) | Possible implicitly-declared\n"
+                    "    RegisterImplicitlyDeclaredAssignOperatorIfPossible<"
+                 << className << ">(engine, \"" << className << "\");\n";
 }
 
 static bool IsDestructorRequired(const ClassAnalyzer& classAnalyzer)
@@ -610,29 +654,39 @@ static void RegisterComparisonOperator(const ClassAnalyzer& classAnalyzer)
     string operatorGreaterLocation = classAnalyzer.GetFunction("operator>").GetLocation();
     shared_ptr<ASGeneratedFile_Members> result = GetGeneratedFile(className);
 
-    result->glue_ <<
-        "// " << operatorLessLocation << "\n"
-        "// " << operatorGreaterLocation << "\n"
-        "static int " << wrapperName << "(const " << className << "& lhs, const " << className << "& rhs)\n"
-        "{\n"
-        "    if (lhs < rhs)\n"
-        "        return -1;\n\n"
-        "    if (lhs > rhs)\n"
-        "        return 1;\n\n"
-        "    return 0;\n"
-        "}\n\n";
+    result->glue_ << "// " << operatorLessLocation
+                  << "\n"
+                     "// "
+                  << operatorGreaterLocation
+                  << "\n"
+                     "static int "
+                  << wrapperName << "(const " << className << "& lhs, const " << className
+                  << "& rhs)\n"
+                     "{\n"
+                     "    if (lhs < rhs)\n"
+                     "        return -1;\n\n"
+                     "    if (lhs > rhs)\n"
+                     "        return 1;\n\n"
+                     "    return 0;\n"
+                     "}\n\n";
 
-    result->reg_ <<
-        "    // " << operatorLessLocation << "\n"
-        "    // " << operatorGreaterLocation << "\n"
-        "    engine->RegisterObjectMethod(\"" << className << "\", \"int opCmp(const " << className << "&in) const\", asFUNCTION(" << wrapperName << "), asCALL_CDECL_OBJFIRST);\n";
+    result->reg_ << "    // " << operatorLessLocation
+                 << "\n"
+                    "    // "
+                 << operatorGreaterLocation
+                 << "\n"
+                    "    engine->RegisterObjectMethod(\""
+                 << className << "\", \"int opCmp(const " << className << "&in) const\", asFUNCTION(" << wrapperName
+                 << "), asCALL_CDECL_OBJFIRST);\n";
 }
 
 static void RegisterAddReleaseRef(const ClassFunctionAnalyzer& functionAnalyzer, bool templateVersion)
 {
     string className = functionAnalyzer.GetClassName();
-    //shared_ptr<ASGeneratedFile_Members> result = GetGeneratedFile(className);
-    ASGeneratedFile_Base* result = templateVersion ? (ASGeneratedFile_Base*)_result_Templates.get() : (ASGeneratedFile_Base*)GetGeneratedFile(functionAnalyzer.GetClass().GetClassName()).get();
+    // shared_ptr<ASGeneratedFile_Members> result = GetGeneratedFile(className);
+    ASGeneratedFile_Base* result =
+        templateVersion ? (ASGeneratedFile_Base*)_result_Templates.get()
+                        : (ASGeneratedFile_Base*)GetGeneratedFile(functionAnalyzer.GetClass().GetClassName()).get();
     string functionName = functionAnalyzer.GetName();
     string behaviour = (functionName == "AddRef") ? "asBEHAVE_ADDREF" : "asBEHAVE_RELEASE";
     string methodpr = Generate_asMETHODPR(functionAnalyzer, templateVersion);
@@ -640,9 +694,11 @@ static void RegisterAddReleaseRef(const ClassFunctionAnalyzer& functionAnalyzer,
     result->reg_ << "    // " << functionAnalyzer.GetLocation() << "\n";
 
     if (templateVersion)
-        result->reg_ << "    engine->RegisterObjectBehaviour(className, " << behaviour << ", \"void f()\", "  << methodpr << ", asCALL_THISCALL);\n";
+        result->reg_ << "    engine->RegisterObjectBehaviour(className, " << behaviour << ", \"void f()\", " << methodpr
+                     << ", asCALL_THISCALL);\n";
     else
-        result->reg_ << "    engine->RegisterObjectBehaviour(\"" << className << "\", " << behaviour << ", \"void f()\", " << methodpr << ", asCALL_THISCALL);\n";
+        result->reg_ << "    engine->RegisterObjectBehaviour(\"" << className << "\", " << behaviour
+                     << ", \"void f()\", " << methodpr << ", asCALL_THISCALL);\n";
 }
 
 static void RegisterFakeAddReleaseRef(const ClassAnalyzer& classAnalyzer)
@@ -650,9 +706,11 @@ static void RegisterFakeAddReleaseRef(const ClassAnalyzer& classAnalyzer)
     string className = classAnalyzer.GetClassName();
     shared_ptr<ASGeneratedFile_Members> result = GetGeneratedFile(className);
 
-    result->reg_ <<
-        "    engine->RegisterObjectBehaviour(\"" << className << "\", asBEHAVE_ADDREF, \"void f()\", asFUNCTION(FakeAddRef), asCALL_CDECL_OBJLAST);\n"
-        "    engine->RegisterObjectBehaviour(\"" << className << "\", asBEHAVE_RELEASE, \"void f()\", asFUNCTION(FakeReleaseRef), asCALL_CDECL_OBJLAST);\n";
+    result->reg_ << "    engine->RegisterObjectBehaviour(\"" << className
+                 << "\", asBEHAVE_ADDREF, \"void f()\", asFUNCTION(FakeAddRef), asCALL_CDECL_OBJLAST);\n"
+                    "    engine->RegisterObjectBehaviour(\""
+                 << className
+                 << "\", asBEHAVE_RELEASE, \"void f()\", asFUNCTION(FakeReleaseRef), asCALL_CDECL_OBJLAST);\n";
 }
 
 // https://www.angelcode.com/angelscript/sdk/docs/manual/doc_script_class_ops.html
@@ -677,7 +735,7 @@ string CppMethodNameToAS(const ClassFunctionAnalyzer& functionAnalyzer, bool& ou
         outSuccess = true;
 
         if (!functionAnalyzer.GetParams().size()) // If no params
-            return "opNeg";               // then unary minus
+            return "opNeg";                       // then unary minus
         else
             return "opSub";
     }
@@ -687,37 +745,37 @@ string CppMethodNameToAS(const ClassFunctionAnalyzer& functionAnalyzer, bool& ou
         outSuccess = true;
         return "opMul";
     }
-    
+
     if (name == "operator/")
     {
         outSuccess = true;
         return "opDiv";
     }
-    
+
     if (name == "operator+=")
     {
         outSuccess = true;
         return "opAddAssign";
     }
-    
+
     if (name == "operator-=")
     {
         outSuccess = true;
         return "opSubAssign";
     }
-    
+
     if (name == "operator*=")
     {
         outSuccess = true;
         return "opMulAssign";
     }
-    
+
     if (name == "operator/=")
     {
         outSuccess = true;
         return "opDivAssign";
     }
-    
+
     if (name == "operator==")
     {
         outSuccess = true;
@@ -849,8 +907,8 @@ static string CppMethodNameToASProperty(const ClassFunctionAnalyzer& functionAna
 static void RegisterMethod(const ClassFunctionAnalyzer& functionAnalyzer, bool templateVersion)
 {
     if (functionAnalyzer.IsDefine()) // URHO3D_OBJECT
-        return; 
-    
+        return;
+
     if (!functionAnalyzer.IsPublic())
         return;
 
@@ -860,8 +918,10 @@ static void RegisterMethod(const ClassFunctionAnalyzer& functionAnalyzer, bool t
     if (functionAnalyzer.IsParentConstructor())
         return;
 
-    //shared_ptr<ASGeneratedFile_Members> result = GetGeneratedFile(functionAnalyzer.GetClass().GetClassName());
-    ASGeneratedFile_Base* result = templateVersion ? (ASGeneratedFile_Base*)_result_Templates.get() : (ASGeneratedFile_Base*)GetGeneratedFile(functionAnalyzer.GetClass().GetClassName()).get();
+    // shared_ptr<ASGeneratedFile_Members> result = GetGeneratedFile(functionAnalyzer.GetClass().GetClassName());
+    ASGeneratedFile_Base* result =
+        templateVersion ? (ASGeneratedFile_Base*)_result_Templates.get()
+                        : (ASGeneratedFile_Base*)GetGeneratedFile(functionAnalyzer.GetClass().GetClassName()).get();
 
     if (HaveMark(functionAnalyzer, "NO_BIND"))
     {
@@ -886,7 +946,8 @@ static void RegisterMethod(const ClassFunctionAnalyzer& functionAnalyzer, bool t
 
     if (functionAnalyzer.IsStatic())
     {
-        ClassStaticFunctionAnalyzer classStaticFunctionAnalyzer(functionAnalyzer.GetClass(), functionAnalyzer.GetMemberdef());
+        ClassStaticFunctionAnalyzer classStaticFunctionAnalyzer(functionAnalyzer.GetClass(),
+                                                                functionAnalyzer.GetMemberdef());
         RegisterStaticFunction(classStaticFunctionAnalyzer, result);
         return;
     }
@@ -898,8 +959,8 @@ static void RegisterMethod(const ClassFunctionAnalyzer& functionAnalyzer, bool t
         return;*/
 
     // Do not register destructor for refcounted because object is deleted by himself
-    if (functionAnalyzer.IsThisDestructor()
-        && (functionAnalyzer.GetClass().IsRefCounted() || Contains(functionAnalyzer.GetClass().GetComment(), "FAKE_REF")))
+    if (functionAnalyzer.IsThisDestructor() &&
+        (functionAnalyzer.GetClass().IsRefCounted() || Contains(functionAnalyzer.GetClass().GetComment(), "FAKE_REF")))
     {
         return;
     }
@@ -921,7 +982,8 @@ static void RegisterMethod(const ClassFunctionAnalyzer& functionAnalyzer, bool t
 
     if (functionAnalyzer.IsThisConstructor())
     {
-        if (functionAnalyzer.GetClass().IsRefCounted() || Contains(functionAnalyzer.GetClass().GetComment(), "FAKE_REF"))
+        if (functionAnalyzer.GetClass().IsRefCounted() ||
+            Contains(functionAnalyzer.GetClass().GetComment(), "FAKE_REF"))
         {
             // Do not register construnctor for abstract class
             if (functionAnalyzer.GetClass().IsAbstract())
@@ -933,12 +995,12 @@ static void RegisterMethod(const ClassFunctionAnalyzer& functionAnalyzer, bool t
         {
             RegisterValueConstructor(functionAnalyzer, templateVersion);
         }
-        
+
         return;
     }
 
     result->reg_ << "    // " << functionAnalyzer.GetLocation() << "\n";
-    
+
     if (functionAnalyzer.IsThisDestructor())
     {
         // Do not register destructor for reference type
@@ -949,7 +1011,7 @@ static void RegisterMethod(const ClassFunctionAnalyzer& functionAnalyzer, bool t
     }
 
     vector<ParamAnalyzer> params = functionAnalyzer.GetParams();
-    vector<shared_ptr<FuncParamConv> > convertedParams;
+    vector<shared_ptr<FuncParamConv>> convertedParams;
     bool needWrapper = false;
 
     for (size_t i = 0; i < params.size(); i++)
@@ -1014,10 +1076,12 @@ static void RegisterMethod(const ClassFunctionAnalyzer& functionAnalyzer, bool t
     if (templateVersion)
         result->reg_ << "    engine->RegisterObjectMethod(className, \"" << decl << "\", ";
     else
-        result->reg_ << "    engine->RegisterObjectMethod(\"" << functionAnalyzer.GetClassName() << "\", \"" << decl << "\", ";
+        result->reg_ << "    engine->RegisterObjectMethod(\"" << functionAnalyzer.GetClassName() << "\", \"" << decl
+                     << "\", ";
 
     if (needWrapper)
-        result->reg_ << "asFUNCTION(" << GenerateWrapperName(functionAnalyzer, templateVersion) << "), asCALL_CDECL_OBJFIRST);\n";
+        result->reg_ << "asFUNCTION(" << GenerateWrapperName(functionAnalyzer, templateVersion)
+                     << "), asCALL_CDECL_OBJFIRST);\n";
     else
         result->reg_ << Generate_asMETHODPR(functionAnalyzer, templateVersion) << ", asCALL_THISCALL);\n";
 
@@ -1038,7 +1102,7 @@ static void RegisterMethod(const ClassFunctionAnalyzer& functionAnalyzer, bool t
                 return;
             }
         }
-        
+
         decl = asReturnType + " " + asFunctionName + "(" + declParams + ")";
 
         if (functionAnalyzer.IsConst())
@@ -1047,10 +1111,12 @@ static void RegisterMethod(const ClassFunctionAnalyzer& functionAnalyzer, bool t
         if (templateVersion)
             result->reg_ << "    engine->RegisterObjectMethod(className, \"" << decl << "\", ";
         else
-            result->reg_ << "    engine->RegisterObjectMethod(\"" << functionAnalyzer.GetClassName() << "\", \"" << decl << "\", ";
+            result->reg_ << "    engine->RegisterObjectMethod(\"" << functionAnalyzer.GetClassName() << "\", \"" << decl
+                         << "\", ";
 
         if (needWrapper)
-            result->reg_ << "asFUNCTION(" << GenerateWrapperName(functionAnalyzer, templateVersion) << "), asCALL_CDECL_OBJFIRST);\n";
+            result->reg_ << "asFUNCTION(" << GenerateWrapperName(functionAnalyzer, templateVersion)
+                         << "), asCALL_CDECL_OBJFIRST);\n";
         else
             result->reg_ << Generate_asMETHODPR(functionAnalyzer, templateVersion) << ", asCALL_THISCALL);\n";
     }
@@ -1096,13 +1162,14 @@ static void RegisterClassVarAsProperty(ClassVariableAnalyzer& variable)
 
         string className = variable.GetClassName();
 
-        result->reg_ <<
-            "    engine->SetDefaultNamespace(\"" << className << "\");\n";
+        result->reg_ << "    engine->SetDefaultNamespace(\"" << className << "\");\n";
 
-        result->reg_ <<
-            "    engine->RegisterGlobalProperty("
-            "\"" << asType << " " << variable.GetName() << "\", "
-            "(void*)&" << className << "::" << variable.GetName() << ");\n";
+        result->reg_ << "    engine->RegisterGlobalProperty("
+                        "\""
+                     << asType << " " << variable.GetName()
+                     << "\", "
+                        "(void*)&"
+                     << className << "::" << variable.GetName() << ");\n";
 
         result->reg_ << "    engine->SetDefaultNamespace(\"\");\n";
     }
@@ -1138,19 +1205,25 @@ static void RegisterClassVarAsProperty(ClassVariableAnalyzer& variable)
 
         string className = variable.GetClassName();
 
-        result->reg_ <<
-            "    engine->RegisterObjectProperty("
-            "\"" << className << "\", "
-            "\"" << propType << " " << propName << "\", "
-            "offsetof(" << className << ", " << varName << "));\n";
+        result->reg_ << "    engine->RegisterObjectProperty("
+                        "\""
+                     << className
+                     << "\", "
+                        "\""
+                     << propType << " " << propName
+                     << "\", "
+                        "offsetof("
+                     << className << ", " << varName << "));\n";
     }
 }
 
 static void RegisterObjectMembers(const ClassAnalyzer& classAnalyzer, bool templateVersion)
 {
     string header = classAnalyzer.GetHeaderFile();
-    
-    ASGeneratedFile_Base* result = templateVersion ? (ASGeneratedFile_Base*)_result_Templates.get() : (ASGeneratedFile_Base*)GetGeneratedFile(classAnalyzer.GetClassName()).get();
+
+    ASGeneratedFile_Base* result = templateVersion
+                                       ? (ASGeneratedFile_Base*)_result_Templates.get()
+                                       : (ASGeneratedFile_Base*)GetGeneratedFile(classAnalyzer.GetClassName()).get();
 
     result->AddHeader(header);
 
@@ -1204,15 +1277,18 @@ static void RegisterObjectMembers(const ClassAnalyzer& classAnalyzer, bool templ
                 string baseClassName = baseClass.GetClassName();
 
                 if (templateVersion)
-                    result->reg_ << "    RegisterSubclass<" << baseClassName << ", T>(engine, \"" << baseClassName << "\", className);\n";
+                    result->reg_ << "    RegisterSubclass<" << baseClassName << ", T>(engine, \"" << baseClassName
+                                 << "\", className);\n";
                 else
-                    result->reg_ << "    RegisterSubclass<" << baseClassName << ", " << className << ">(engine, \"" << baseClassName << "\", \"" << className << "\");\n";
+                    result->reg_ << "    RegisterSubclass<" << baseClassName << ", " << className << ">(engine, \""
+                                 << baseClassName << "\", \"" << className << "\");\n";
             }
         }
 
         // In template also add current class
         if (templateVersion)
-            result->reg_ << "    RegisterSubclass<" << className << ", T>(engine, \"" << className << "\", className);\n";
+            result->reg_ << "    RegisterSubclass<" << className << ", T>(engine, \"" << className
+                         << "\", className);\n";
     }
 
     /*if (!analyzer.IsRefCounted()) // Executed also for FAKE_REF
@@ -1243,7 +1319,8 @@ static void RegisterObjectType(const ClassAnalyzer& classAnalyzer, bool template
 {
     string header = classAnalyzer.GetHeaderFile();
 
-    ASGeneratedFile_Base* result = templateVersion ? (ASGeneratedFile_Base*)_result_Templates.get() : (ASGeneratedFile_Base*)_result_Classes.get();
+    ASGeneratedFile_Base* result =
+        templateVersion ? (ASGeneratedFile_Base*)_result_Templates.get() : (ASGeneratedFile_Base*)_result_Classes.get();
 
     result->AddHeader(header);
 
@@ -1278,7 +1355,8 @@ static void RegisterObjectType(const ClassAnalyzer& classAnalyzer, bool template
                 flags += " | asOBJ_APP_CLASS_ALLINTS";
         }
 
-        result->reg_ << "    engine->RegisterObjectType(\"" << className << "\", sizeof(" << className << "), " << flags << ");\n";
+        result->reg_ << "    engine->RegisterObjectType(\"" << className << "\", sizeof(" << className << "), " << flags
+                     << ");\n";
     }
 
     if (!insideDefine.empty())
@@ -1290,9 +1368,10 @@ static void ProcessClass(const ClassAnalyzer& classAnalyzer, bool templateVersio
     if (classAnalyzer.IsInternal())
         return;
 
-    if (classAnalyzer.IsAbstract() && !(classAnalyzer.IsRefCounted() || Contains(classAnalyzer.GetComment(), "FAKE_REF")))
+    if (classAnalyzer.IsAbstract() &&
+        !(classAnalyzer.IsRefCounted() || Contains(classAnalyzer.GetComment(), "FAKE_REF")))
         return;
-    
+
     if (Contains(classAnalyzer.GetComment(), "NO_BIND"))
     {
         _result_Classes->reg_ << "    // " << classAnalyzer.GetLocation() << "\n";
@@ -1318,7 +1397,8 @@ static void ProcessClass(const ClassAnalyzer& classAnalyzer, bool templateVersio
         return;
 
     if (templateVersion)
-        _result_Templates->reg_ << "template <class T> void Register" << classAnalyzer.GetClassName() << "(asIScriptEngine* engine, const char* className)\n{\n";
+        _result_Templates->reg_ << "template <class T> void Register" << classAnalyzer.GetClassName()
+                                << "(asIScriptEngine* engine, const char* className)\n{\n";
 
     RegisterObjectType(classAnalyzer, templateVersion);
     RegisterObjectMembers(classAnalyzer, templateVersion);
@@ -1331,40 +1411,83 @@ void ProcessAllClasses(const string& outputBasePath)
 {
     _outputBasePath = outputBasePath;
 
-    _result_Members_A = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_A.cpp", "ASRegisterGenerated_Members_A");
-    _result_Members_B = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_B.cpp", "ASRegisterGenerated_Members_B");
-    _result_Members_Constraint = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Constraint.cpp", "ASRegisterGenerated_Members_Constraint");
-    _result_Members_Ca_Cm = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Ca_Cm.cpp", "ASRegisterGenerated_Members_Ca_Cm");
-    _result_Members_Cn_Cz = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Cn_Cz.cpp", "ASRegisterGenerated_Members_Cn_Cz");
-    _result_Members_D = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_D.cpp", "ASRegisterGenerated_Members_D");
-    _result_Members_E = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_E.cpp", "ASRegisterGenerated_Members_E");
-    _result_Members_F = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_F.cpp", "ASRegisterGenerated_Members_F");
-    _result_Members_G = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_G.cpp", "ASRegisterGenerated_Members_G");
-    _result_Members_H = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_H.cpp", "ASRegisterGenerated_Members_H");
-    _result_Members_I = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_I.cpp", "ASRegisterGenerated_Members_I");
-    _result_Members_J = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_J.cpp", "ASRegisterGenerated_Members_J");
-    _result_Members_K = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_K.cpp", "ASRegisterGenerated_Members_K");
-    _result_Members_L = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_L.cpp", "ASRegisterGenerated_Members_L");
-    _result_Members_M = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_M.cpp", "ASRegisterGenerated_Members_M");
-    _result_Members_N = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_N.cpp", "ASRegisterGenerated_Members_N");
-    _result_Members_O = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_O.cpp", "ASRegisterGenerated_Members_O");
-    _result_Members_P = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_P.cpp", "ASRegisterGenerated_Members_P");
-    _result_Members_Q = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Q.cpp", "ASRegisterGenerated_Members_Q");
-    _result_Members_R = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_R.cpp", "ASRegisterGenerated_Members_R");
-    _result_Members_Sa_Sm = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Sa_Sm.cpp", "ASRegisterGenerated_Members_Sa_Sm");
-    _result_Members_Sn_Sz = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Sn_Sz.cpp", "ASRegisterGenerated_Members_Sn_Sz");
-    _result_Members_Ta_Tm = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Ta_Tm.cpp", "ASRegisterGenerated_Members_Ta_Tm");
-    _result_Members_Tn_Tz = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Tn_Tz.cpp", "ASRegisterGenerated_Members_Tn_Tz");
-    _result_Members_U = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_U.cpp", "ASRegisterGenerated_Members_U");
-    _result_Members_V = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_V.cpp", "ASRegisterGenerated_Members_V");
-    _result_Members_W = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_W.cpp", "ASRegisterGenerated_Members_W");
-    _result_Members_X = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_X.cpp", "ASRegisterGenerated_Members_X");
-    _result_Members_Y = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Y.cpp", "ASRegisterGenerated_Members_Y");
-    _result_Members_Z = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Z.cpp", "ASRegisterGenerated_Members_Z");
-    _result_Classes = make_shared<ASGeneratedFile_Classes>(outputBasePath + "/Source/Urho3D/AngelScript/Generated_Classes.cpp", "ASRegisterGenerated_Classes");
-    _result_Members_HighPriority = make_shared<ASGeneratedFile_Members_HighPriority>(outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_HighPriority.cpp", "ASRegisterGenerated_Members_HighPriority");
-    _result_Members_Other = make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Other.cpp", "ASRegisterGenerated_Members_Other");
-    _result_Templates = make_shared<ASGeneratedFile_Templates>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Templates.h");
+    _result_Members_A = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_A.cpp", "ASRegisterGenerated_Members_A");
+    _result_Members_B = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_B.cpp", "ASRegisterGenerated_Members_B");
+    _result_Members_Constraint = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Constraint.cpp",
+        "ASRegisterGenerated_Members_Constraint");
+    _result_Members_Ca_Cm =
+        make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Ca_Cm.cpp",
+                                             "ASRegisterGenerated_Members_Ca_Cm");
+    _result_Members_Cn_Cz =
+        make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Cn_Cz.cpp",
+                                             "ASRegisterGenerated_Members_Cn_Cz");
+    _result_Members_D = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_D.cpp", "ASRegisterGenerated_Members_D");
+    _result_Members_E = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_E.cpp", "ASRegisterGenerated_Members_E");
+    _result_Members_F = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_F.cpp", "ASRegisterGenerated_Members_F");
+    _result_Members_G = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_G.cpp", "ASRegisterGenerated_Members_G");
+    _result_Members_H = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_H.cpp", "ASRegisterGenerated_Members_H");
+    _result_Members_I = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_I.cpp", "ASRegisterGenerated_Members_I");
+    _result_Members_J = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_J.cpp", "ASRegisterGenerated_Members_J");
+    _result_Members_K = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_K.cpp", "ASRegisterGenerated_Members_K");
+    _result_Members_L = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_L.cpp", "ASRegisterGenerated_Members_L");
+    _result_Members_M = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_M.cpp", "ASRegisterGenerated_Members_M");
+    _result_Members_N = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_N.cpp", "ASRegisterGenerated_Members_N");
+    _result_Members_O = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_O.cpp", "ASRegisterGenerated_Members_O");
+    _result_Members_P = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_P.cpp", "ASRegisterGenerated_Members_P");
+    _result_Members_Q = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Q.cpp", "ASRegisterGenerated_Members_Q");
+    _result_Members_R = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_R.cpp", "ASRegisterGenerated_Members_R");
+    _result_Members_Sa_Sm =
+        make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Sa_Sm.cpp",
+                                             "ASRegisterGenerated_Members_Sa_Sm");
+    _result_Members_Sn_Sz =
+        make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Sn_Sz.cpp",
+                                             "ASRegisterGenerated_Members_Sn_Sz");
+    _result_Members_Ta_Tm =
+        make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Ta_Tm.cpp",
+                                             "ASRegisterGenerated_Members_Ta_Tm");
+    _result_Members_Tn_Tz =
+        make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Tn_Tz.cpp",
+                                             "ASRegisterGenerated_Members_Tn_Tz");
+    _result_Members_U = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_U.cpp", "ASRegisterGenerated_Members_U");
+    _result_Members_V = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_V.cpp", "ASRegisterGenerated_Members_V");
+    _result_Members_W = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_W.cpp", "ASRegisterGenerated_Members_W");
+    _result_Members_X = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_X.cpp", "ASRegisterGenerated_Members_X");
+    _result_Members_Y = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Y.cpp", "ASRegisterGenerated_Members_Y");
+    _result_Members_Z = make_shared<ASGeneratedFile_Members>(
+        _outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Z.cpp", "ASRegisterGenerated_Members_Z");
+    _result_Classes = make_shared<ASGeneratedFile_Classes>(
+        outputBasePath + "/Source/Urho3D/AngelScript/Generated_Classes.cpp", "ASRegisterGenerated_Classes");
+    _result_Members_HighPriority = make_shared<ASGeneratedFile_Members_HighPriority>(
+        outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_HighPriority.cpp",
+        "ASRegisterGenerated_Members_HighPriority");
+    _result_Members_Other =
+        make_shared<ASGeneratedFile_Members>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Members_Other.cpp",
+                                             "ASRegisterGenerated_Members_Other");
+    _result_Templates =
+        make_shared<ASGeneratedFile_Templates>(_outputBasePath + "/Source/Urho3D/AngelScript/Generated_Templates.h");
 
     // Sorting keys to make class order compiler independent
     vector<string> classIDs;
@@ -1420,4 +1543,4 @@ void ProcessAllClasses(const string& outputBasePath)
     _result_Templates->Save();
 }
 
-}
+} // namespace ASBindingGenerator

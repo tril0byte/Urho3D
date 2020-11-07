@@ -40,7 +40,7 @@ static void ProcessEnum(EnumAnalyzer analyzer)
         return;
 
     string header = analyzer.GetHeaderFile();
-    
+
     if (IsIgnoredHeader(header))
     {
         _result->AddIgnoredHeader(header);
@@ -56,15 +56,15 @@ static void ProcessEnum(EnumAnalyzer analyzer)
         if (!insideDefine.empty())
             _result->reg_ << "#ifdef " << insideDefine << "\n";
 
-        _result->reg_ <<
-            "    // " << location << "\n"
-            "    // Not registered because have @nobind mark\n";
+        _result->reg_ << "    // " << location
+                      << "\n"
+                         "    // Not registered because have @nobind mark\n";
 
         if (!insideDefine.empty())
             _result->reg_ << "#endif\n";
 
         _result->reg_ << "\n";
-        
+
         return;
     }
 
@@ -73,9 +73,9 @@ static void ProcessEnum(EnumAnalyzer analyzer)
         if (!insideDefine.empty())
             _result->reg_ << "#ifdef " << insideDefine << "\n";
 
-        _result->reg_ <<
-            "    // " << location << "\n"
-            "    // Not registered because have @manualbind mark\n";
+        _result->reg_ << "    // " << location
+                      << "\n"
+                         "    // Not registered because have @manualbind mark\n";
 
         if (!insideDefine.empty())
             _result->reg_ << "#endif\n";
@@ -95,12 +95,14 @@ static void ProcessEnum(EnumAnalyzer analyzer)
         if (!insideDefine.empty())
             _result->reg_ << "#ifdef " << insideDefine << "\n";
 
-        _result->reg_ <<
-            "    // " << location << "\n"
-            "    engine->RegisterEnum(\"" << enumTypeName << "\");\n";
+        _result->reg_ << "    // " << location
+                      << "\n"
+                         "    engine->RegisterEnum(\""
+                      << enumTypeName << "\");\n";
 
         for (string value : analyzer.GetEnumerators())
-            _result->reg_ << "    engine->RegisterEnumValue(\"" << enumTypeName << "\", \"" << value << "\", " << value << ");\n";
+            _result->reg_ << "    engine->RegisterEnumValue(\"" << enumTypeName << "\", \"" << value << "\", " << value
+                          << ");\n";
 
         if (!insideDefine.empty())
             _result->reg_ << "#endif\n";
@@ -117,9 +119,10 @@ static void ProcessEnum(EnumAnalyzer analyzer)
 
     string asEnumBaseType = CppFundamentalTypeToAS(cppEnumBaseType);
 
-    _result->reg_ <<
-        "    // " << location << "\n"
-        "    engine->RegisterTypedef(\"" << enumTypeName << "\", \"" << asEnumBaseType << "\");\n";
+    _result->reg_ << "    // " << location
+                  << "\n"
+                     "    engine->RegisterTypedef(\""
+                  << enumTypeName << "\", \"" << asEnumBaseType << "\");\n";
 
     _result->glue_ << "// " << location << "\n";
 
@@ -131,7 +134,8 @@ static void ProcessEnum(EnumAnalyzer analyzer)
 
         _result->glue_ << "static const " << cppEnumBaseType << " " << constName << " = " << enumerator << ";\n";
 
-        _result->reg_ << "    engine->RegisterGlobalProperty(\"const " << asEnumBaseType << " " << enumerator << "\", (void*)&" << constName << ");\n";
+        _result->reg_ << "    engine->RegisterGlobalProperty(\"const " << asEnumBaseType << " " << enumerator
+                      << "\", (void*)&" << constName << ");\n";
     }
 
     if (!insideDefine.empty())
@@ -171,9 +175,10 @@ static void ProcessFlagset(GlobalFunctionAnalyzer analyzer)
     if (!insideDefine.empty())
         _result->reg_ << "#ifdef " << insideDefine << "\n";
 
-    _result->reg_ <<
-        "    // " << location << "\n"
-        "    engine->RegisterTypedef(\"" << flagsetName << "\", \"" << asEnumBaseType << "\");\n";
+    _result->reg_ << "    // " << location
+                  << "\n"
+                     "    engine->RegisterTypedef(\""
+                  << flagsetName << "\", \"" << asEnumBaseType << "\");\n";
 
     if (!insideDefine.empty())
         _result->reg_ << "#endif\n";

@@ -22,9 +22,9 @@
 
 #pragma once
 
-#include "../Scene/LogicComponent.h"
 #include "../Physics/PhysicsUtils.h"
 #include "../Physics/RigidBody.h"
+#include "../Scene/LogicComponent.h"
 
 namespace Urho3D
 {
@@ -50,7 +50,8 @@ public:
     void ApplyAttributes() override;
 
     /// Add a wheel. All parameters are relative to RigidBody / node.
-    void AddWheel(Node* wheelNode, Vector3 wheelDirection, Vector3 wheelAxle, float restLength, float wheelRadius, bool frontWheel);
+    void AddWheel(Node* wheelNode, Vector3 wheelDirection, Vector3 wheelAxle, float restLength, float wheelRadius,
+                  bool frontWheel);
     /// Reset all suspension.
     void ResetSuspension();
     /// Update transform for particular wheel.
@@ -59,7 +60,8 @@ public:
     void SetSteeringValue(int wheel, float steeringValue);
     /// Set suspension stiffness for particular wheel.
     void SetWheelSuspensionStiffness(int wheel, float stiffness);
-    /// Set wheel max suspension force. Good results are often obtained by a value that is about 3x to 4x the vehicle weight.
+    /// Set wheel max suspension force. Good results are often obtained by a value that is about 3x to 4x the vehicle
+    /// weight.
     void SetWheelMaxSuspensionForce(int wheel, float force);
     /// Set wheel damping relaxation.
     void SetWheelDampingRelaxation(int wheel, float damping);
@@ -92,7 +94,8 @@ public:
     void SetMaxSideSlipSpeed(float speed);
     /// Set cumulative skid info.
     void SetWheelSkidInfoCumulative(int wheel, float skid);
-    /// Set revolution per minute value for when wheel doesn't touch ground. If set to 0 (or not set), calculated from engine force (probably not what you want).
+    /// Set revolution per minute value for when wheel doesn't touch ground. If set to 0 (or not set), calculated from
+    /// engine force (probably not what you want).
     /// @property
     void SetInAirRPM(float rpm);
     /// Set the coordinate system. The default is (0, 1, 2).
@@ -213,4 +216,4 @@ private:
     VariantVector loadedWheelData_;
 };
 
-}
+} // namespace Urho3D

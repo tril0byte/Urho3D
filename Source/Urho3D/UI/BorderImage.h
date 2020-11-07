@@ -58,7 +58,8 @@ public:
     /// Set border dimensions on the screen.
     /// @property
     void SetBorder(const IntRect& rect);
-    /// Set border dimensions on the image. If zero (default) uses the screen dimensions, resulting in pixel-perfect borders.
+    /// Set border dimensions on the image. If zero (default) uses the screen dimensions, resulting in pixel-perfect
+    /// borders.
     /// @property
     void SetImageBorder(const IntRect& rect);
     /// Set offset to image rectangle used on hover.
@@ -126,10 +127,11 @@ public:
     void SetMaterialAttr(const ResourceRef& value);
     /// Get material attribute.
     ResourceRef GetMaterialAttr() const;
+
 protected:
     /// Return UI rendering batches with offset to image rectangle.
-    void GetBatches
-        (PODVector<UIBatch>& batches, PODVector<float>& vertexData, const IntRect& currentScissor, const IntVector2& offset);
+    void GetBatches(PODVector<UIBatch>& batches, PODVector<float>& vertexData, const IntRect& currentScissor,
+                    const IntVector2& offset);
 
     /// Texture.
     SharedPtr<Texture> texture_;
@@ -151,4 +153,4 @@ protected:
     SharedPtr<Material> material_;
 };
 
-}
+} // namespace Urho3D

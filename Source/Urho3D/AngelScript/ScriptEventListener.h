@@ -75,4 +75,4 @@ public:
     virtual bool HasEventHandler(Object* sender, StringHash eventType) const = 0;
 };
 
-}
+} // namespace Urho3D

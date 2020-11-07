@@ -32,7 +32,7 @@ class Node;
 class Scene;
 class Sprite;
 
-}
+} // namespace Urho3D
 
 // All Urho3D classes reside in namespace Urho3D
 using namespace Urho3D;

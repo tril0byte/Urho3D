@@ -171,7 +171,7 @@ struct URHO3D_API RenderPathCommand
     /// %Shader parameters.
     HashMap<StringHash, Variant> shaderParameters_;
     /// Output rendertarget names and faces.
-    Vector<Pair<String, CubeMapFace> > outputs_;
+    Vector<Pair<String, CubeMapFace>> outputs_;
     /// Depth-stencil output name.
     String depthStencilName_;
     /// Clear flags. Affects clear command only.
@@ -198,7 +198,8 @@ struct URHO3D_API RenderPathCommand
     String eventName_;
 };
 
-/// Rendering path definition. A sequence of commands (e.g. clear screen, draw objects with specific pass) that yields the scene rendering result.
+/// Rendering path definition. A sequence of commands (e.g. clear screen, draw objects with specific pass) that yields
+/// the scene rendering result.
 class URHO3D_API RenderPath : public RefCounted
 {
 public:
@@ -270,4 +271,4 @@ public:
     Vector<RenderPathCommand> commands_;
 };
 
-}
+} // namespace Urho3D

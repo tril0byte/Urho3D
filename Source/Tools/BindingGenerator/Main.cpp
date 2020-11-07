@@ -28,45 +28,39 @@ using namespace std;
 
 namespace SourceData
 {
-    void LoadAllXmls(const string& dir);
+void LoadAllXmls(const string& dir);
 }
 
 namespace ASBindingGenerator
 {
-    void ProcessAllEnums(const string& outputBasePath);
-    void ProcessAllClasses(const string& outputBasePath);
-    void ProcessAllGlobalVariables(const string& outputBasePath);
-    void ProcessAllGlobalFunctions(const string& outputBasePath);
+void ProcessAllEnums(const string& outputBasePath);
+void ProcessAllClasses(const string& outputBasePath);
+void ProcessAllGlobalVariables(const string& outputBasePath);
+void ProcessAllGlobalFunctions(const string& outputBasePath);
 
-    void GenerateBindings(const string& outputBasePath)
-    {
-        ProcessAllEnums(outputBasePath);
-        ProcessAllClasses(outputBasePath);
-        ProcessAllGlobalVariables(outputBasePath);
-        ProcessAllGlobalFunctions(outputBasePath);
-    }
+void GenerateBindings(const string& outputBasePath)
+{
+    ProcessAllEnums(outputBasePath);
+    ProcessAllClasses(outputBasePath);
+    ProcessAllGlobalVariables(outputBasePath);
+    ProcessAllGlobalFunctions(outputBasePath);
 }
+} // namespace ASBindingGenerator
 
 namespace LuaBindingGenerator
 {
-    void GenerateBindings(const string& outputBasePath)
-    {
-    }
-}
+void GenerateBindings(const string& outputBasePath) {}
+} // namespace LuaBindingGenerator
 
 namespace JSBindingGenerator
 {
-    void GenerateBindings(const string& outputBasePath)
-    {
-    }
-}
+void GenerateBindings(const string& outputBasePath) {}
+} // namespace JSBindingGenerator
 
 namespace CSBindingGenerator
 {
-    void GenerateBindings(const string& outputBasePath)
-    {
-    }
-}
+void GenerateBindings(const string& outputBasePath) {}
+} // namespace CSBindingGenerator
 
 int main(int argc, char* argv[])
 {
@@ -87,6 +81,6 @@ int main(int argc, char* argv[])
     LuaBindingGenerator::GenerateBindings(outputBasePath);
     JSBindingGenerator::GenerateBindings(outputBasePath);
     CSBindingGenerator::GenerateBindings(outputBasePath);
-    
+
     return 0;
 }

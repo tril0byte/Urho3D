@@ -27,11 +27,10 @@
 #include "../Container/FlagSet.h"
 #include "../Math/MathDefs.h"
 
-#include <SDL/SDL_joystick.h>
 #include <SDL/SDL_gamecontroller.h>
+#include <SDL/SDL_joystick.h>
 #include <SDL/SDL_keycode.h>
 #include <SDL/SDL_mouse.h>
-
 
 namespace Urho3D
 {
@@ -57,7 +56,6 @@ enum Qualifier : unsigned
     QUAL_ANY = 8
 };
 URHO3D_FLAGSET(Qualifier, QualifierFlags);
-
 
 enum Key : unsigned
 {
@@ -589,4 +587,4 @@ enum ControllerAxis : unsigned
     CONTROLLER_AXIS_TRIGGERRIGHT = SDL_CONTROLLER_AXIS_TRIGGERRIGHT,
 };
 
-}
+} // namespace Urho3D

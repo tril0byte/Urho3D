@@ -32,7 +32,7 @@ namespace Urho3D
 class Node;
 class Scene;
 
-}
+} // namespace Urho3D
 
 /// Water example.
 /// This sample demonstrates:

@@ -43,4 +43,4 @@ template <> URHO3D_API void Swap<VectorBase>(VectorBase& first, VectorBase& seco
 template <> URHO3D_API void Swap<ListBase>(ListBase& first, ListBase& second);
 template <> URHO3D_API void Swap<HashBase>(HashBase& first, HashBase& second);
 
-}
+} // namespace Urho3D

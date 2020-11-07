@@ -54,10 +54,10 @@ struct StoredLogMessage
     StoredLogMessage() = default;
 
     /// Construct with parameters.
-    StoredLogMessage(const String& message, int level, bool error) :
-        message_(message),
-        level_(level),
-        error_(error)
+    StoredLogMessage(const String& message, int level, bool error)
+        : message_(message)
+        , level_(level)
+        , error_(error)
     {
     }
 
@@ -90,7 +90,8 @@ public:
     /// Set whether to timestamp log messages.
     /// @property
     void SetTimeStamp(bool enable);
-    /// Set quiet mode ie. only print error entries to standard error stream (which is normally redirected to console also). Output to log file is not affected by this mode.
+    /// Set quiet mode ie. only print error entries to standard error stream (which is normally redirected to console
+    /// also). Output to log file is not affected by this mode.
     /// @property
     void SetQuiet(bool quiet);
 
@@ -166,4 +167,4 @@ private:
 #define URHO3D_LOGRAWF(...) ((void)0)
 #endif
 
-}
+} // namespace Urho3D

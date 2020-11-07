@@ -20,8 +20,8 @@
 // THE SOFTWARE.
 //
 
-#include "../Precompiled.h"
 #include "../AngelScript/APITemplates.h"
+#include "../Precompiled.h"
 
 #include "../Engine/Console.h"
 #include "../Engine/DebugHud.h"
@@ -31,29 +31,18 @@ namespace Urho3D
 {
 
 // This function is called before ASRegisterGenerated()
-void ASRegisterManualFirst_Engine(asIScriptEngine* engine)
-{
-}
+void ASRegisterManualFirst_Engine(asIScriptEngine* engine) {}
 
 // ========================================================================================
 
 // template<class T> T * Object::GetSubsystem() const | File: ../Core/Object.h
-static Console* GetConsole()
-{
-    return GetScriptContext()->GetSubsystem<Console>();
-}
+static Console* GetConsole() { return GetScriptContext()->GetSubsystem<Console>(); }
 
 // template<class T> T * Object::GetSubsystem() const | File: ../Core/Object.h
-static DebugHud* GetDebugHud()
-{
-    return GetScriptContext()->GetSubsystem<DebugHud>();
-}
+static DebugHud* GetDebugHud() { return GetScriptContext()->GetSubsystem<DebugHud>(); }
 
 // template<class T> T * Object::GetSubsystem() const | File: ../Core/Object.h
-static Engine* GetEngine()
-{
-    return GetScriptContext()->GetSubsystem<Engine>();
-}
+static Engine* GetEngine() { return GetScriptContext()->GetSubsystem<Engine>(); }
 
 // This function is called after ASRegisterGenerated()
 void ASRegisterManualLast_Engine(asIScriptEngine* engine)
@@ -66,4 +55,4 @@ void ASRegisterManualLast_Engine(asIScriptEngine* engine)
     engine->RegisterGlobalFunction("Engine@+ get_engine()", asFUNCTION(GetEngine), asCALL_CDECL);
 }
 
-}
+} // namespace Urho3D

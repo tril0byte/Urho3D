@@ -32,21 +32,18 @@
 namespace Urho3D
 {
 
-SmoothedTransform::SmoothedTransform(Context* context) :
-    Component(context),
-    targetPosition_(Vector3::ZERO),
-    targetRotation_(Quaternion::IDENTITY),
-    smoothingMask_(SMOOTH_NONE),
-    subscribed_(false)
+SmoothedTransform::SmoothedTransform(Context* context)
+    : Component(context)
+    , targetPosition_(Vector3::ZERO)
+    , targetRotation_(Quaternion::IDENTITY)
+    , smoothingMask_(SMOOTH_NONE)
+    , subscribed_(false)
 {
 }
 
 SmoothedTransform::~SmoothedTransform() = default;
 
-void SmoothedTransform::RegisterObject(Context* context)
-{
-    context->RegisterFactory<SmoothedTransform>();
-}
+void SmoothedTransform::RegisterObject(Context* context) { context->RegisterFactory<SmoothedTransform>(); }
 
 void SmoothedTransform::Update(float constant, float squaredSnapThreshold)
 {
@@ -176,4 +173,4 @@ void SmoothedTransform::HandleUpdateSmoothing(StringHash eventType, VariantMap& 
     Update(constant, squaredSnapThreshold);
 }
 
-}
+} // namespace Urho3D

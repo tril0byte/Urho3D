@@ -27,19 +27,19 @@
 #include "../Container/HashSet.h"
 #include "../Core/Object.h"
 #include "../Core/Timer.h"
-#include "../Input/Controls.h"
 #include "../IO/VectorBuffer.h"
+#include "../Input/Controls.h"
 #include "../Scene/ReplicationState.h"
 
 namespace SLNet
 {
-    class SystemAddress;
-    struct AddressOrGUID;
-    struct RakNetGUID;
-    struct Packet;
-    class NatPunchthroughClient;
-    class RakPeerInterface;
-}
+class SystemAddress;
+struct AddressOrGUID;
+struct RakNetGUID;
+struct Packet;
+class NatPunchthroughClient;
+class RakPeerInterface;
+} // namespace SLNet
 
 namespace Urho3D
 {
@@ -107,7 +107,8 @@ enum ObserverPositionSendMode
 };
 
 /// Packet types for outgoing buffers. Outgoing messages are grouped by their type
-enum PacketType {
+enum PacketType
+{
     PT_UNRELIABLE_UNORDERED,
     PT_UNRELIABLE_ORDERED,
     PT_RELIABLE_UNORDERED,
@@ -130,11 +131,13 @@ public:
     /// Send a message.
     void SendMessage(int msgID, bool reliable, bool inOrder, const VectorBuffer& msg, unsigned contentID = 0);
     /// Send a message.
-    void SendMessage(int msgID, bool reliable, bool inOrder, const unsigned char* data, unsigned numBytes, unsigned contentID = 0);
+    void SendMessage(int msgID, bool reliable, bool inOrder, const unsigned char* data, unsigned numBytes,
+                     unsigned contentID = 0);
     /// Send a remote event.
     void SendRemoteEvent(StringHash eventType, bool inOrder, const VariantMap& eventData = Variant::emptyVariantMap);
     /// Send a remote event with the specified node as sender.
-    void SendRemoteEvent(Node* node, StringHash eventType, bool inOrder, const VariantMap& eventData = Variant::emptyVariantMap);
+    void SendRemoteEvent(Node* node, StringHash eventType, bool inOrder,
+                         const VariantMap& eventData = Variant::emptyVariantMap);
     /// Assign scene. On the server, this will cause the client to load it.
     /// @property
     void SetScene(Scene* newScene);
@@ -145,7 +148,8 @@ public:
     /// Set the observer position for interest management, to be sent to the server.
     /// @property
     void SetPosition(const Vector3& position);
-    /// Set the observer rotation for interest management, to be sent to the server. Note: not used by the NetworkPriority component.
+    /// Set the observer rotation for interest management, to be sent to the server. Note: not used by the
+    /// NetworkPriority component.
     /// @property
     void SetRotation(const Quaternion& rotation);
     /// Set the connection pending status. Called by Network.
@@ -261,7 +265,9 @@ public:
     /// Return progress of current package download, or 1.0 if no downloads.
     /// @property
     float GetDownloadProgress() const;
-    /// Trigger client connection to download a package file from the server. Can be used to download additional resource packages when client is already joined in a scene. The package must have been added as a requirement to the scene the client is joined in, or else the eventual download will fail.
+    /// Trigger client connection to download a package file from the server. Can be used to download additional
+    /// resource packages when client is already joined in a scene. The package must have been added as a requirement to
+    /// the scene the client is joined in, or else the eventual download will fail.
     void SendPackageToClient(PackageFile* package);
 
     /// Set network simulation parameters. Called by Network.
@@ -305,7 +311,8 @@ private:
     void ProcessPackageInfo(int msgID, MemoryBuffer& msg);
     /// Process unknown message. All unknown messages are forwarded as an events
     void ProcessUnknownMessage(int msgID, MemoryBuffer& msg);
-    /// Check a package list received from server and initiate package downloads as necessary. Return true on success, or false if failed to initialze downloads (cache dir not set).
+    /// Check a package list received from server and initiate package downloads as necessary. Return true on success,
+    /// or false if failed to initialze downloads (cache dir not set).
     bool RequestNeededPackages(unsigned numPackages, MemoryBuffer& msg);
     /// Initiate a package download.
     void RequestPackage(const String& name, unsigned fileSize, unsigned checksum);
@@ -327,9 +334,9 @@ private:
     /// Ongoing package send transfers.
     HashMap<StringHash, PackageUpload> uploads_;
     /// Pending latest data for not yet received nodes.
-    HashMap<unsigned, PODVector<unsigned char> > nodeLatestData_;
+    HashMap<unsigned, PODVector<unsigned char>> nodeLatestData_;
     /// Pending latest data for not yet received components.
-    HashMap<unsigned, PODVector<unsigned char> > componentLatestData_;
+    HashMap<unsigned, PODVector<unsigned char>> componentLatestData_;
     /// Node ID's to process during a replication update.
     HashSet<unsigned> nodesToProcess_;
     /// Reusable message buffer.
@@ -374,4 +381,4 @@ private:
     int packedMessageLimit_;
 };
 
-}
+} // namespace Urho3D

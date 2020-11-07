@@ -86,4 +86,4 @@ private:
     Vector2 linearOffset_;
 };
 
-}
+} // namespace Urho3D

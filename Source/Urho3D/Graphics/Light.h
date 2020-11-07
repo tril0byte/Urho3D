@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include "../Math/Color.h"
 #include "../Graphics/Drawable.h"
-#include "../Math/Frustum.h"
 #include "../Graphics/Texture.h"
+#include "../Math/Color.h"
+#include "../Math/Frustum.h"
 
 namespace Urho3D
 {
@@ -59,10 +59,10 @@ struct URHO3D_API BiasParameters
     BiasParameters() = default;
 
     /// Construct with initial values.
-    BiasParameters(float constantBias, float slopeScaledBias, float normalOffset = 0.0f) :
-        constantBias_(constantBias),
-        slopeScaledBias_(slopeScaledBias),
-        normalOffset_(normalOffset)
+    BiasParameters(float constantBias, float slopeScaledBias, float normalOffset = 0.0f)
+        : constantBias_(constantBias)
+        , slopeScaledBias_(slopeScaledBias)
+        , normalOffset_(normalOffset)
     {
     }
 
@@ -85,9 +85,10 @@ struct URHO3D_API CascadeParameters
     CascadeParameters() = default;
 
     /// Construct with initial values.
-    CascadeParameters(float split1, float split2, float split3, float split4, float fadeStart, float biasAutoAdjust = 1.0f) :
-        fadeStart_(fadeStart),
-        biasAutoAdjust_(biasAutoAdjust)
+    CascadeParameters(float split1, float split2, float split3, float split4, float fadeStart,
+                      float biasAutoAdjust = 1.0f)
+        : fadeStart_(fadeStart)
+        , biasAutoAdjust_(biasAutoAdjust)
     {
         splits_[0] = split1;
         splits_[1] = split2;
@@ -124,12 +125,12 @@ struct URHO3D_API FocusParameters
     FocusParameters() = default;
 
     /// Construct with initial values.
-    FocusParameters(bool focus, bool nonUniform, bool autoSize, float quantize, float minView) :
-        focus_(focus),
-        nonUniform_(nonUniform),
-        autoSize_(autoSize),
-        quantize_(quantize),
-        minView_(minView)
+    FocusParameters(bool focus, bool nonUniform, bool autoSize, float quantize, float minView)
+        : focus_(focus)
+        , nonUniform_(nonUniform)
+        , autoSize_(autoSize)
+        , quantize_(quantize)
+        , minView_(minView)
     {
     }
 
@@ -163,7 +164,8 @@ public:
 
     /// Process octree raycast. May be called from a worker thread.
     void ProcessRayQuery(const RayOctreeQuery& query, PODVector<RayQueryResult>& results) override;
-    /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly re-entrantly.
+    /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly
+    /// re-entrantly.
     void UpdateBatches(const FrameInfo& frame) override;
     /// Visualize the component as debug geometry.
     void DrawDebugGeometry(DebugRenderer* debug, bool depthTest) override;
@@ -192,7 +194,8 @@ public:
     /// Set specular intensity. Zero disables specular calculations.
     /// @property
     void SetSpecularIntensity(float intensity);
-    /// Set light brightness multiplier. Both the color and specular intensity are multiplied with this. When "use physical values" is enabled, the value is specified in lumens.
+    /// Set light brightness multiplier. Both the color and specular intensity are multiplied with this. When "use
+    /// physical values" is enabled, the value is specified in lumens.
     /// @property
     void SetBrightness(float brightness);
     /// Set range.
@@ -225,10 +228,12 @@ public:
     /// Set shadow resolution between 0.25 - 1.0. Determines the shadow map to use.
     /// @property
     void SetShadowResolution(float resolution);
-    /// Set shadow camera near/far clip distance ratio for spot and point lights. Does not affect directional lights, since they are orthographic and have near clip 0.
+    /// Set shadow camera near/far clip distance ratio for spot and point lights. Does not affect directional lights,
+    /// since they are orthographic and have near clip 0.
     /// @property
     void SetShadowNearFarRatio(float nearFarRatio);
-    /// Set maximum shadow extrusion for directional lights. The actual extrusion will be the smaller of this and camera far clip. Default 1000.
+    /// Set maximum shadow extrusion for directional lights. The actual extrusion will be the smaller of this and camera
+    /// far clip. Default 1000.
     /// @property
     void SetShadowMaxExtrusion(float extrusion);
     /// Set range attenuation texture.
@@ -278,7 +283,8 @@ public:
     /// @property
     float GetBrightness() const { return brightness_; }
 
-    /// Return effective color, multiplied by brightness and affected by temperature when "use physical values" is enabled. Alpha is always 1 so that can compare against the default black color to detect a light with no effect.
+    /// Return effective color, multiplied by brightness and affected by temperature when "use physical values" is
+    /// enabled. Alpha is always 1 so that can compare against the default black color to detect a light with no effect.
     /// @property
     Color GetEffectiveColor() const;
 
@@ -405,7 +411,8 @@ private:
     float temperature_;
     /// Radius of the light source. If above 0 it will turn the light into an area light.  Works only with PBR shaders.
     float lightRad_;
-    /// Length of the light source. If above 0 and radius is above 0 it will create a tube light. Works only with PBR shaders.
+    /// Length of the light source. If above 0 and radius is above 0 it will create a tube light. Works only with PBR
+    /// shaders.
     float lightLength_;
     /// Shadow depth bias parameters.
     BiasParameters shadowBias_;
@@ -458,4 +465,4 @@ inline bool CompareLights(Light* lhs, Light* rhs)
         return lhs->GetSortValue() < rhs->GetSortValue();
 }
 
-}
+} // namespace Urho3D

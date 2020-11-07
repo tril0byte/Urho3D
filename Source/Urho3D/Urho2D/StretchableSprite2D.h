@@ -52,4 +52,4 @@ protected:
     IntRect border_; // absolute border in pixels
 };
 
-}
+} // namespace Urho3D

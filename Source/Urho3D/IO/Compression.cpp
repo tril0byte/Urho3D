@@ -34,10 +34,7 @@
 namespace Urho3D
 {
 
-unsigned EstimateCompressBound(unsigned srcSize)
-{
-    return (unsigned)LZ4_compressBound(srcSize);
-}
+unsigned EstimateCompressBound(unsigned srcSize) { return (unsigned)LZ4_compressBound(srcSize); }
 
 unsigned CompressData(void* dest, const void* src, unsigned srcSize)
 {
@@ -73,7 +70,8 @@ bool CompressStream(Serializer& dest, Deserializer& src)
     if (src.Read(srcBuffer, srcSize) != srcSize)
         return false;
 
-    auto destSize = (unsigned)LZ4_compress_HC((const char*)srcBuffer.Get(), (char*)destBuffer.Get(), srcSize, LZ4_compressBound(srcSize), 0);
+    auto destSize = (unsigned)LZ4_compress_HC((const char*)srcBuffer.Get(), (char*)destBuffer.Get(), srcSize,
+                                              LZ4_compressBound(srcSize), 0);
     bool success = true;
     success &= dest.WriteUInt(srcSize);
     success &= dest.WriteUInt(destSize);
@@ -122,4 +120,4 @@ VectorBuffer DecompressVectorBuffer(VectorBuffer& src)
     return ret;
 }
 
-}
+} // namespace Urho3D

@@ -125,9 +125,9 @@ protected:
 
 /// Tile flipping flags.
 static const unsigned FLIP_HORIZONTAL = 0x80000000u;
-static const unsigned FLIP_VERTICAL   = 0x40000000u;
-static const unsigned FLIP_DIAGONAL   = 0x20000000u;
-static const unsigned FLIP_RESERVED   = 0x10000000u;
+static const unsigned FLIP_VERTICAL = 0x40000000u;
+static const unsigned FLIP_DIAGONAL = 0x20000000u;
+static const unsigned FLIP_RESERVED = 0x10000000u;
 static const unsigned FLIP_ALL = FLIP_HORIZONTAL | FLIP_VERTICAL | FLIP_DIAGONAL | FLIP_RESERVED;
 
 /// Tile define.
@@ -245,4 +245,4 @@ private:
     SharedPtr<PropertySet2D> propertySet_;
 };
 
-}
+} // namespace Urho3D

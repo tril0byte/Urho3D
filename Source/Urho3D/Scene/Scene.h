@@ -26,8 +26,8 @@
 
 #include "../Container/HashSet.h"
 #include "../Core/Mutex.h"
-#include "../Resource/XMLElement.h"
 #include "../Resource/JSONFile.h"
+#include "../Resource/XMLElement.h"
 #include "../Scene/Node.h"
 #include "../Scene/SceneResolver.h"
 
@@ -124,26 +124,32 @@ public:
     bool SaveXML(Serializer& dest, const String& indentation = "\t") const;
     /// Save to a JSON file. Return true if successful.
     bool SaveJSON(Serializer& dest, const String& indentation = "\t") const;
-    /// Load from a binary file asynchronously. Return true if started successfully. The LOAD_RESOURCES_ONLY mode can also be used to preload resources from object prefab files.
+    /// Load from a binary file asynchronously. Return true if started successfully. The LOAD_RESOURCES_ONLY mode can
+    /// also be used to preload resources from object prefab files.
     bool LoadAsync(File* file, LoadMode mode = LOAD_SCENE_AND_RESOURCES);
-    /// Load from an XML file asynchronously. Return true if started successfully. The LOAD_RESOURCES_ONLY mode can also be used to preload resources from object prefab files.
+    /// Load from an XML file asynchronously. Return true if started successfully. The LOAD_RESOURCES_ONLY mode can also
+    /// be used to preload resources from object prefab files.
     bool LoadAsyncXML(File* file, LoadMode mode = LOAD_SCENE_AND_RESOURCES);
-    /// Load from a JSON file asynchronously. Return true if started successfully. The LOAD_RESOURCES_ONLY mode can also be used to preload resources from object prefab files.
+    /// Load from a JSON file asynchronously. Return true if started successfully. The LOAD_RESOURCES_ONLY mode can also
+    /// be used to preload resources from object prefab files.
     bool LoadAsyncJSON(File* file, LoadMode mode = LOAD_SCENE_AND_RESOURCES);
     /// Stop asynchronous loading.
     void StopAsyncLoading();
     /// Instantiate scene content from binary data. Return root node if successful.
-    Node* Instantiate(Deserializer& source, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED);
+    Node* Instantiate(Deserializer& source, const Vector3& position, const Quaternion& rotation,
+                      CreateMode mode = REPLICATED);
     /// Instantiate scene content from XML data. Return root node if successful.
-    Node* InstantiateXML
-        (const XMLElement& source, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED);
+    Node* InstantiateXML(const XMLElement& source, const Vector3& position, const Quaternion& rotation,
+                         CreateMode mode = REPLICATED);
     /// Instantiate scene content from XML data. Return root node if successful.
-    Node* InstantiateXML(Deserializer& source, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED);
+    Node* InstantiateXML(Deserializer& source, const Vector3& position, const Quaternion& rotation,
+                         CreateMode mode = REPLICATED);
     /// Instantiate scene content from JSON data. Return root node if successful.
-    Node* InstantiateJSON
-        (const JSONValue& source, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED);
+    Node* InstantiateJSON(const JSONValue& source, const Vector3& position, const Quaternion& rotation,
+                          CreateMode mode = REPLICATED);
     /// Instantiate scene content from JSON data. Return root node if successful.
-    Node* InstantiateJSON(Deserializer& source, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED);
+    Node* InstantiateJSON(Deserializer& source, const Vector3& position, const Quaternion& rotation,
+                          CreateMode mode = REPLICATED);
 
     /// Clear scene completely of either replicated, local or all nodes and components.
     void Clear(bool clearReplicated = true, bool clearLocal = true);
@@ -153,7 +159,8 @@ public:
     /// Set update time scale. 1.0 = real time (default).
     /// @property
     void SetTimeScale(float scale);
-    /// Set elapsed time in seconds. This can be used to prevent inaccuracy in the timer if the scene runs for a long time.
+    /// Set elapsed time in seconds. This can be used to prevent inaccuracy in the timer if the scene runs for a long
+    /// time.
     /// @property
     void SetElapsedTime(float time);
     /// Set network client motion smoothing constant.
@@ -181,7 +188,7 @@ public:
     /// Return component from the whole scene by ID, or null if not found.
     Component* GetComponent(unsigned id) const;
     /// Get nodes with specific tag from the whole scene, return false if empty.
-    bool GetNodesWithTag(PODVector<Node*>& dest, const String& tag)  const;
+    bool GetNodesWithTag(PODVector<Node*>& dest, const String& tag) const;
 
     /// Return whether updates are enabled.
     /// @property
@@ -229,7 +236,7 @@ public:
 
     /// Return required package files.
     /// @property
-    const Vector<SharedPtr<PackageFile> >& GetRequiredPackageFiles() const { return requiredPackageFiles_; }
+    const Vector<SharedPtr<PackageFile>>& GetRequiredPackageFiles() const { return requiredPackageFiles_; }
 
     /// Return a node user variable name, or empty if not registered.
     const String& GetVarName(StringHash hash) const;
@@ -310,7 +317,7 @@ private:
     /// Local components by ID.
     HashMap<unsigned, Component*> localComponents_;
     /// Cached tagged nodes by tag.
-    HashMap<StringHash, PODVector<Node*> > taggedNodes_;
+    HashMap<StringHash, PODVector<Node*>> taggedNodes_;
     /// Asynchronous loading progress.
     AsyncProgress asyncProgress_;
     /// Node and component ID resolver for asynchronous loading.
@@ -318,7 +325,7 @@ private:
     /// Source file name.
     mutable String fileName_;
     /// Required package files for networking.
-    Vector<SharedPtr<PackageFile> > requiredPackageFiles_;
+    Vector<SharedPtr<PackageFile>> requiredPackageFiles_;
     /// Registered node user variable reverse mappings.
     HashMap<StringHash, String> varNames_;
     /// Nodes to check for attribute changes on the next network update.
@@ -362,4 +369,4 @@ private:
 /// Register Scene library objects.
 void URHO3D_API RegisterSceneLibrary(Context* context);
 
-}
+} // namespace Urho3D

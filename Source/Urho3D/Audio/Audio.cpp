@@ -37,7 +37,7 @@
 #include "../DebugNew.h"
 
 #ifdef _MSC_VER
-#pragma warning(disable:6293)
+#pragma warning(disable : 6293)
 #endif
 
 namespace Urho3D
@@ -52,8 +52,8 @@ static const StringHash SOUND_MASTER_HASH("Master");
 
 static void SDLAudioCallback(void* userdata, Uint8* stream, int len);
 
-Audio::Audio(Context* context) :
-    Object(context)
+Audio::Audio(Context* context)
+    : Object(context)
 {
     context_->RequireSDL(SDL_INIT_AUDIO);
 
@@ -95,9 +95,11 @@ bool Audio::SetMode(int bufferLengthMSec, int mixRate, bool stereo, bool interpo
     if (Abs((int)desired.samples / 2 - bufferSamples) < Abs((int)desired.samples - bufferSamples))
         desired.samples /= 2;
 
-    // Intentionally disallow format change so that the obtained format will always be the desired format, even though that format
-    // is not matching the device format, however in doing it will enable the SDL's internal audio stream with audio conversion
-    deviceID_ = SDL_OpenAudioDevice(nullptr, SDL_FALSE, &desired, &obtained, SDL_AUDIO_ALLOW_ANY_CHANGE&~SDL_AUDIO_ALLOW_FORMAT_CHANGE);
+    // Intentionally disallow format change so that the obtained format will always be the desired format, even though
+    // that format is not matching the device format, however in doing it will enable the SDL's internal audio stream
+    // with audio conversion
+    deviceID_ = SDL_OpenAudioDevice(nullptr, SDL_FALSE, &desired, &obtained,
+                                    SDL_AUDIO_ALLOW_ANY_CHANGE & ~SDL_AUDIO_ALLOW_FORMAT_CHANGE);
     if (!deviceID_)
     {
         URHO3D_LOGERROR("Could not initialize audio output");
@@ -121,7 +123,7 @@ bool Audio::SetMode(int bufferLengthMSec, int mixRate, bool stereo, bool interpo
     clipBuffer_ = new int[stereo ? fragmentSize_ << 1u : fragmentSize_];
 
     URHO3D_LOGINFO("Set audio mode " + String(mixRate_) + " Hz " + (stereo_ ? "stereo" : "mono") + " " +
-            (interpolation_ ? "interpolated" : ""));
+                   (interpolation_ ? "interpolated" : ""));
 
     return Play();
 }
@@ -154,10 +156,7 @@ bool Audio::Play()
     return true;
 }
 
-void Audio::Stop()
-{
-    playing_ = false;
-}
+void Audio::Stop() { playing_ = false; }
 
 void Audio::SetMasterGain(const String& type, float gain)
 {
@@ -189,10 +188,7 @@ void Audio::ResumeAll()
     UpdateInternal(0.0f);
 }
 
-void Audio::SetListener(SoundListener* listener)
-{
-    listener_ = listener;
-}
+void Audio::SetListener(SoundListener* listener) { listener_ = listener; }
 
 void Audio::StopSound(Sound* sound)
 {
@@ -213,15 +209,9 @@ float Audio::GetMasterGain(const String& type) const
     return findIt->second_.GetFloat();
 }
 
-bool Audio::IsSoundTypePaused(const String& type) const
-{
-    return pausedSoundTypes_.Contains(type);
-}
+bool Audio::IsSoundTypePaused(const String& type) const { return pausedSoundTypes_.Contains(type); }
 
-SoundListener* Audio::GetListener() const
-{
-    return listener_;
-}
+SoundListener* Audio::GetListener() const { return listener_; }
 
 void Audio::AddSoundSource(SoundSource* soundSource)
 {
@@ -353,4 +343,4 @@ void RegisterAudioLibrary(Context* context)
     SoundListener::RegisterObject(context);
 }
 
-}
+} // namespace Urho3D

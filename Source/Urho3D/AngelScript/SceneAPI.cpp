@@ -48,19 +48,19 @@ static CScriptArray* GetObjectCategories()
 
 static CScriptArray* GetObjectsByCategory(const String& category)
 {
-    const HashMap<String, Vector<StringHash> >& categories = GetScriptContext()->GetObjectCategories();
+    const HashMap<String, Vector<StringHash>>& categories = GetScriptContext()->GetObjectCategories();
     Vector<String> components;
 
-    HashMap<String, Vector<StringHash> >::ConstIterator i = categories.Find(category);
+    HashMap<String, Vector<StringHash>>::ConstIterator i = categories.Find(category);
     if (i != categories.End())
     {
-        const HashMap<StringHash, SharedPtr<ObjectFactory> >& factories = GetScriptContext()->GetObjectFactories();
+        const HashMap<StringHash, SharedPtr<ObjectFactory>>& factories = GetScriptContext()->GetObjectFactories();
         const Vector<StringHash>& factoryHashes = i->second_;
         components.Reserve(factoryHashes.Size());
 
         for (unsigned j = 0; j < factoryHashes.Size(); ++j)
         {
-            HashMap<StringHash, SharedPtr<ObjectFactory> >::ConstIterator k = factories.Find(factoryHashes[j]);
+            HashMap<StringHash, SharedPtr<ObjectFactory>>::ConstIterator k = factories.Find(factoryHashes[j]);
             if (k != factories.End())
                 components.Push(k->second_->GetTypeName());
         }
@@ -81,9 +81,12 @@ static void RegisterScene(asIScriptEngine* engine)
 {
     engine->RegisterGlobalFunction("Scene@+ get_scene()", asFUNCTION(GetScriptContextScene), asCALL_CDECL);
 
-    engine->RegisterGlobalFunction("Array<String>@ GetObjectCategories()", asFUNCTION(GetObjectCategories), asCALL_CDECL);
-    engine->RegisterGlobalFunction("Array<String>@ GetObjectsByCategory(const String&in)", asFUNCTION(GetObjectsByCategory), asCALL_CDECL);
-    engine->RegisterGlobalFunction("Array<AttributeInfo>@ GetObjectAttributeInfos(const String&in)", asFUNCTION(GetObjectAttributeInfos), asCALL_CDECL);
+    engine->RegisterGlobalFunction("Array<String>@ GetObjectCategories()", asFUNCTION(GetObjectCategories),
+                                   asCALL_CDECL);
+    engine->RegisterGlobalFunction("Array<String>@ GetObjectsByCategory(const String&in)",
+                                   asFUNCTION(GetObjectsByCategory), asCALL_CDECL);
+    engine->RegisterGlobalFunction("Array<AttributeInfo>@ GetObjectAttributeInfos(const String&in)",
+                                   asFUNCTION(GetObjectAttributeInfos), asCALL_CDECL);
 }
 
 void RegisterSceneAPI(asIScriptEngine* engine)
@@ -92,4 +95,4 @@ void RegisterSceneAPI(asIScriptEngine* engine)
     RegisterScene(engine);
 }
 
-}
+} // namespace Urho3D

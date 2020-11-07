@@ -22,8 +22,8 @@
 
 #ifdef URHO3D_IK
 
-#include "../Precompiled.h"
 #include "../AngelScript/APITemplates.h"
+#include "../Precompiled.h"
 
 #include "../IK/IKSolver.h"
 
@@ -54,11 +54,13 @@ void ASRegisterManualFirst_IK(asIScriptEngine* engine)
 void ASRegisterManualLast_IK(asIScriptEngine* engine)
 {
     // Algorithm IKSolver::GetAlgorithm() const | File: ../IK/IKSolver.h
-    engine->RegisterObjectMethod("IKSolver", "IKAlgorithm get_algorithm() const", asMETHOD(IKSolver, GetAlgorithm), asCALL_THISCALL);
+    engine->RegisterObjectMethod("IKSolver", "IKAlgorithm get_algorithm() const", asMETHOD(IKSolver, GetAlgorithm),
+                                 asCALL_THISCALL);
     // void IKSolver::SetAlgorithm(Algorithm algorithm) | File: ../IK/IKSolver.h
-    engine->RegisterObjectMethod("IKSolver", "void set_algorithm(IKAlgorithm)", asMETHOD(IKSolver, SetAlgorithm), asCALL_THISCALL);
+    engine->RegisterObjectMethod("IKSolver", "void set_algorithm(IKAlgorithm)", asMETHOD(IKSolver, SetAlgorithm),
+                                 asCALL_THISCALL);
 }
 
-}
+} // namespace Urho3D
 
 #endif // def URHO3D_IK

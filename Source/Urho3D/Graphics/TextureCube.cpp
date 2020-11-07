@@ -37,29 +37,23 @@
 #include "../DebugNew.h"
 
 #ifdef _MSC_VER
-#pragma warning(disable:4355)
+#pragma warning(disable : 4355)
 #endif
 
 namespace Urho3D
 {
 
-static const char* cubeMapLayoutNames[] = {
-    "horizontal",
-    "horizontalnvidia",
-    "horizontalcross",
-    "verticalcross",
-    "blender",
-    nullptr
-};
+static const char* cubeMapLayoutNames[] = {"horizontal",    "horizontalnvidia", "horizontalcross",
+                                           "verticalcross", "blender",          nullptr};
 
 static SharedPtr<Image> GetTileImage(Image* src, int tileX, int tileY, int tileWidth, int tileHeight)
 {
-    return SharedPtr<Image>(
-        src->GetSubimage(IntRect(tileX * tileWidth, tileY * tileHeight, (tileX + 1) * tileWidth, (tileY + 1) * tileHeight)));
+    return SharedPtr<Image>(src->GetSubimage(
+        IntRect(tileX * tileWidth, tileY * tileHeight, (tileX + 1) * tileWidth, (tileY + 1) * tileHeight)));
 }
 
-TextureCube::TextureCube(Context* context) :
-    Texture(context)
+TextureCube::TextureCube(Context* context)
+    : Texture(context)
 {
 #ifdef URHO3D_OPENGL
     target_ = GL_TEXTURE_CUBE_MAP;
@@ -71,15 +65,9 @@ TextureCube::TextureCube(Context* context) :
     addressModes_[COORD_W] = ADDRESS_CLAMP;
 }
 
-TextureCube::~TextureCube()
-{
-    Release();
-}
+TextureCube::~TextureCube() { Release(); }
 
-void TextureCube::RegisterObject(Context* context)
-{
-    context->RegisterFactory<TextureCube>();
-}
+void TextureCube::RegisterObject(Context* context) { context->RegisterFactory<TextureCube>(); }
 
 bool TextureCube::BeginLoad(Deserializer& source)
 {
@@ -140,8 +128,8 @@ bool TextureCube::BeginLoad(Deserializer& source)
         else
         {
 
-            CubeMapLayout layout =
-                (CubeMapLayout)GetStringListIndex(imageElem.GetAttribute("layout").CString(), cubeMapLayoutNames, CML_HORIZONTAL);
+            CubeMapLayout layout = (CubeMapLayout)GetStringListIndex(imageElem.GetAttribute("layout").CString(),
+                                                                     cubeMapLayoutNames, CML_HORIZONTAL);
 
             switch (layout)
             {
@@ -339,7 +327,8 @@ void TextureCube::HandleRenderSurfaceUpdate(StringHash eventType, VariantMap& ev
 
     for (auto& renderSurface : renderSurfaces_)
     {
-        if (renderSurface && (renderSurface->GetUpdateMode() == SURFACE_UPDATEALWAYS || renderSurface->IsUpdateQueued()))
+        if (renderSurface &&
+            (renderSurface->GetUpdateMode() == SURFACE_UPDATEALWAYS || renderSurface->IsUpdateQueued()))
         {
             if (renderer)
                 renderer->QueueRenderSurface(renderSurface);
@@ -348,4 +337,4 @@ void TextureCube::HandleRenderSurfaceUpdate(StringHash eventType, VariantMap& ev
     }
 }
 
-}
+} // namespace Urho3D

@@ -81,7 +81,7 @@ static bool IsUsing(const string& identifier)
     for (xml_node memberdef : SourceData::usings_)
     {
         UsingAnalyzer usingAnalyzer(memberdef);
-        
+
         if (usingAnalyzer.GetIdentifier() == identifier)
             return true;
     }
@@ -302,16 +302,17 @@ shared_ptr<FuncParamConv> CppFunctionParamToAS(int paramIndex, ParamAnalyzer& pa
         result->success_ = true;
         result->inputVarName_ = paramAnalyzer.GetDeclname();
         result->convertedVarName_ = "param" + to_string(paramIndex);
-        result->glue_ = "    Vector<String> " + result->convertedVarName_ + " = ArrayToVector<String>(" + result->inputVarName_ + ");\n";
+        result->glue_ = "    Vector<String> " + result->convertedVarName_ + " = ArrayToVector<String>(" +
+                        result->inputVarName_ + ");\n";
         result->cppType_ = "CScriptArray*";
-        //result->asDecl_ = "String[]&";
+        // result->asDecl_ = "String[]&";
         result->asDecl_ = "Array<String>@+";
 
         string defval = paramAnalyzer.GetDefval();
         if (!defval.empty())
         {
             assert(defval == "Vector< String >()");
-            //result->asDecl_ += " = Array<String>()";
+            // result->asDecl_ += " = Array<String>()";
             result->asDecl_ += " = null";
         }
 
@@ -328,7 +329,8 @@ shared_ptr<FuncParamConv> CppFunctionParamToAS(int paramIndex, ParamAnalyzer& pa
         result->success_ = true;
         result->inputVarName_ = paramAnalyzer.GetDeclname();
         result->convertedVarName_ = "param" + to_string(paramIndex);
-        result->glue_ = "    PODVector<" + cppTypeName + "> " + result->convertedVarName_ + " = ArrayToPODVector<" + cppTypeName + ">(" + result->inputVarName_ + ");\n";
+        result->glue_ = "    PODVector<" + cppTypeName + "> " + result->convertedVarName_ + " = ArrayToPODVector<" +
+                        cppTypeName + ">(" + result->inputVarName_ + ");\n";
         result->cppType_ = "CScriptArray*";
         result->asDecl_ = "Array<" + asTypeName + ">@+";
 
@@ -348,7 +350,8 @@ shared_ptr<FuncParamConv> CppFunctionParamToAS(int paramIndex, ParamAnalyzer& pa
         result->success_ = true;
         result->inputVarName_ = paramAnalyzer.GetDeclname();
         result->convertedVarName_ = "param" + to_string(paramIndex);
-        result->glue_ = "    PODVector<" + cppTypeName + "*> " + result->convertedVarName_ + " = ArrayToPODVector<" + cppTypeName + "*>(" + result->inputVarName_ + ");\n";
+        result->glue_ = "    PODVector<" + cppTypeName + "*> " + result->convertedVarName_ + " = ArrayToPODVector<" +
+                        cppTypeName + "*>(" + result->inputVarName_ + ");\n";
         result->cppType_ = "CScriptArray*";
         result->asDecl_ = "Array<" + asTypeName + "@>@";
 
@@ -373,7 +376,8 @@ shared_ptr<FuncParamConv> CppFunctionParamToAS(int paramIndex, ParamAnalyzer& pa
         result->success_ = true;
         result->inputVarName_ = paramAnalyzer.GetDeclname();
         result->convertedVarName_ = "param" + to_string(paramIndex);
-        result->glue_ = "    Vector<SharedPtr<" + cppTypeName + "> > " + result->convertedVarName_ + " = HandleArrayToVector<" + cppTypeName + ">(" + result->inputVarName_ + ");\n";
+        result->glue_ = "    Vector<SharedPtr<" + cppTypeName + "> > " + result->convertedVarName_ +
+                        " = HandleArrayToVector<" + cppTypeName + ">(" + result->inputVarName_ + ");\n";
         result->cppType_ = "CScriptArray*";
         result->asDecl_ = "Array<" + asTypeName + "@>@+";
 
@@ -422,7 +426,7 @@ shared_ptr<FuncReturnTypeConv> CppFunctionReturnTypeToAS(const TypeAnalyzer& typ
         result->glueReturn_ = "";
         return result;
     }
-    
+
     if (cppTypeName == "Context")
     {
         result->errorMessage_ = "Error: type \"" + typeAnalyzer.ToString() + "\" can not be returned";
@@ -566,25 +570,29 @@ string GenerateWrapperName(const ClassStaticFunctionAnalyzer& functionAnalyzer)
 string GenerateWrapperName(const ClassFunctionAnalyzer& functionAnalyzer, bool templateVersion)
 {
     if (templateVersion)
-        return functionAnalyzer.GetClassName() + "_" + GenerateFunctionWrapperName(functionAnalyzer.GetMemberdef()) + "_template";
+        return functionAnalyzer.GetClassName() + "_" + GenerateFunctionWrapperName(functionAnalyzer.GetMemberdef()) +
+               "_template";
     else
         return functionAnalyzer.GetClassName() + "_" + GenerateFunctionWrapperName(functionAnalyzer.GetMemberdef());
 }
 
 // =================================================================================
 
-string GenerateWrapper(const GlobalFunctionAnalyzer& functionAnalyzer, vector<shared_ptr<FuncParamConv> >& convertedParams, shared_ptr<FuncReturnTypeConv> convertedReturn)
+string GenerateWrapper(const GlobalFunctionAnalyzer& functionAnalyzer,
+                       vector<shared_ptr<FuncParamConv>>& convertedParams,
+                       shared_ptr<FuncReturnTypeConv> convertedReturn)
 {
     string result;
-    
+
     string insideDefine = InsideDefine(functionAnalyzer.GetHeaderFile());
 
     if (!insideDefine.empty())
         result += "#ifdef " + insideDefine + "\n";
 
-    result +=
-        "// " + functionAnalyzer.GetLocation() + "\n"
-        "static " + convertedReturn->glueReturnType_ + " " + GenerateWrapperName(functionAnalyzer) + "(";
+    result += "// " + functionAnalyzer.GetLocation() +
+              "\n"
+              "static " +
+              convertedReturn->glueReturnType_ + " " + GenerateWrapperName(functionAnalyzer) + "(";
 
     for (size_t i = 0; i < convertedParams.size(); i++)
     {
@@ -594,9 +602,8 @@ string GenerateWrapper(const GlobalFunctionAnalyzer& functionAnalyzer, vector<sh
         result += convertedParams[i]->cppType_ + " " + convertedParams[i]->inputVarName_;
     }
 
-    result +=
-        ")\n"
-        "{\n";
+    result += ")\n"
+              "{\n";
 
     for (size_t i = 0; i < convertedParams.size(); i++)
         result += convertedParams[i]->glue_;
@@ -631,18 +638,21 @@ string GenerateWrapper(const GlobalFunctionAnalyzer& functionAnalyzer, vector<sh
     return result;
 }
 
-string GenerateWrapper(const ClassStaticFunctionAnalyzer& functionAnalyzer, vector<shared_ptr<FuncParamConv> >& convertedParams, shared_ptr<FuncReturnTypeConv> convertedReturn)
+string GenerateWrapper(const ClassStaticFunctionAnalyzer& functionAnalyzer,
+                       vector<shared_ptr<FuncParamConv>>& convertedParams,
+                       shared_ptr<FuncReturnTypeConv> convertedReturn)
 {
     string result;
-    
+
     string insideDefine = InsideDefine(functionAnalyzer.GetHeaderFile());
 
     if (!insideDefine.empty())
         result += "#ifdef " + insideDefine + "\n";
 
-    result +=
-        "// " + functionAnalyzer.GetLocation() + "\n"
-        "static " + convertedReturn->glueReturnType_ + " " + GenerateWrapperName(functionAnalyzer) + "(";
+    result += "// " + functionAnalyzer.GetLocation() +
+              "\n"
+              "static " +
+              convertedReturn->glueReturnType_ + " " + GenerateWrapperName(functionAnalyzer) + "(";
 
     for (size_t i = 0; i < convertedParams.size(); i++)
     {
@@ -652,9 +662,8 @@ string GenerateWrapper(const ClassStaticFunctionAnalyzer& functionAnalyzer, vect
         result += convertedParams[i]->cppType_ + " " + convertedParams[i]->inputVarName_;
     }
 
-    result +=
-        ")\n"
-        "{\n";
+    result += ")\n"
+              "{\n";
 
     for (size_t i = 0; i < convertedParams.size(); i++)
         result += convertedParams[i]->glue_;
@@ -689,7 +698,9 @@ string GenerateWrapper(const ClassStaticFunctionAnalyzer& functionAnalyzer, vect
     return result;
 }
 
-string GenerateWrapper(const ClassFunctionAnalyzer& functionAnalyzer, bool templateVersion, vector<shared_ptr<FuncParamConv> >& convertedParams, shared_ptr<FuncReturnTypeConv> convertedReturn)
+string GenerateWrapper(const ClassFunctionAnalyzer& functionAnalyzer, bool templateVersion,
+                       vector<shared_ptr<FuncParamConv>>& convertedParams,
+                       shared_ptr<FuncReturnTypeConv> convertedReturn)
 {
     string result;
 
@@ -698,16 +709,17 @@ string GenerateWrapper(const ClassFunctionAnalyzer& functionAnalyzer, bool templ
     if (!insideDefine.empty())
         result += "#ifdef " + insideDefine + "\n";
 
-    result +=
-        "// " + functionAnalyzer.GetLocation() + "\n"
-        "static " + convertedReturn->glueReturnType_ + " " + GenerateWrapperName(functionAnalyzer, templateVersion) + "(" + functionAnalyzer.GetClassName() + "* ptr";
+    result += "// " + functionAnalyzer.GetLocation() +
+              "\n"
+              "static " +
+              convertedReturn->glueReturnType_ + " " + GenerateWrapperName(functionAnalyzer, templateVersion) + "(" +
+              functionAnalyzer.GetClassName() + "* ptr";
 
     for (size_t i = 0; i < convertedParams.size(); i++)
         result += ", " + convertedParams[i]->cppType_ + " " + convertedParams[i]->inputVarName_;
 
-    result +=
-        ")\n"
-        "{\n";
+    result += ")\n"
+              "{\n";
 
     for (size_t i = 0; i < convertedParams.size(); i++)
         result += convertedParams[i]->glue_;
@@ -744,7 +756,8 @@ string GenerateWrapper(const ClassFunctionAnalyzer& functionAnalyzer, bool templ
 
 // =================================================================================
 
-string Generate_asFUNCTIONPR(const GlobalFunctionAnalyzer& functionAnalyzer, const map<string, string>& templateSpecialization)
+string Generate_asFUNCTIONPR(const GlobalFunctionAnalyzer& functionAnalyzer,
+                             const map<string, string>& templateSpecialization)
 {
     string functionName = functionAnalyzer.GetName();
     string cppParams = "(" + JoinParamsTypes(functionAnalyzer.GetMemberdef(), templateSpecialization) + ")";
@@ -752,7 +765,8 @@ string Generate_asFUNCTIONPR(const GlobalFunctionAnalyzer& functionAnalyzer, con
     return "asFUNCTIONPR(" + functionName + ", " + cppParams + ", " + returnType + ")";
 }
 
-string Generate_asFUNCTIONPR(const ClassStaticFunctionAnalyzer& functionAnalyzer, const map<string, string>& templateSpecialization)
+string Generate_asFUNCTIONPR(const ClassStaticFunctionAnalyzer& functionAnalyzer,
+                             const map<string, string>& templateSpecialization)
 {
     string className = functionAnalyzer.GetClassName();
     string functionName = functionAnalyzer.GetName();
@@ -761,7 +775,8 @@ string Generate_asFUNCTIONPR(const ClassStaticFunctionAnalyzer& functionAnalyzer
     return "asFUNCTIONPR(" + className + "::" + functionName + ", " + cppParams + ", " + returnType + ")";
 }
 
-string Generate_asMETHODPR(const ClassFunctionAnalyzer& functionAnalyzer, bool templateVersion, const map<string, string>& templateSpecialization)
+string Generate_asMETHODPR(const ClassFunctionAnalyzer& functionAnalyzer, bool templateVersion,
+                           const map<string, string>& templateSpecialization)
 {
     string className = functionAnalyzer.GetClassName();
     string functionName = functionAnalyzer.GetName();
@@ -772,7 +787,7 @@ string Generate_asMETHODPR(const ClassFunctionAnalyzer& functionAnalyzer, bool t
         cppParams += " const";
 
     string returnType = functionAnalyzer.GetReturnType(templateSpecialization).ToString();
-    
+
     // Extracting type from function name (workaround for https://github.com/doxygen/doxygen/issues/7732)
     if (functionAnalyzer.IsConsversionOperator())
         returnType = CutStart(functionName, "operator ");

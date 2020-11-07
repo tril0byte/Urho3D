@@ -50,4 +50,4 @@ private:
     void* inputLayout_;
 };
 
-}
+} // namespace Urho3D

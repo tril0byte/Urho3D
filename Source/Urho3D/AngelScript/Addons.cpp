@@ -24,9 +24,9 @@
 
 #include "../AngelScript/Addons.h"
 
+#include <cstdio>
 #include <cstring>
 #include <new>
-#include <cstdio>
 
 // Adapted from Angelscript's scriptarray & scriptstdstring add-ons, but with garbage collection disabled
 namespace Urho3D
@@ -37,7 +37,7 @@ using namespace std;
 // Set the default memory routines
 // Use the angelscript engine's memory routines by default
 static asALLOCFUNC_t userAlloc = asAllocMem;
-static asFREEFUNC_t  userFree  = asFreeMem;
+static asFREEFUNC_t userFree = asFreeMem;
 
 // Allows the application to set which memory routines should be used by the array object
 void CScriptArray::SetMemoryFunctions(asALLOCFUNC_t allocFunc, asFREEFUNC_t freeFunc)
@@ -46,22 +46,22 @@ void CScriptArray::SetMemoryFunctions(asALLOCFUNC_t allocFunc, asFREEFUNC_t free
     userFree = freeFunc;
 }
 
-static void RegisterScriptArray_Native(asIScriptEngine *engine);
-static void RegisterScriptArray_Generic(asIScriptEngine *engine);
+static void RegisterScriptArray_Native(asIScriptEngine* engine);
+static void RegisterScriptArray_Generic(asIScriptEngine* engine);
 
 /// %Script array buffer.
 struct SArrayBuffer
 {
     asDWORD maxElements;
     asDWORD numElements;
-    asBYTE  data[1];
+    asBYTE data[1];
 };
 
 /// %Script array cache.
 struct SArrayCache
 {
-    asIScriptFunction *cmpFunc;
-    asIScriptFunction *eqFunc;
+    asIScriptFunction* cmpFunc;
+    asIScriptFunction* eqFunc;
     int cmpFuncReturnCode; // To allow better error message in case of multiple matches
     int eqFuncReturnCode;
 };
@@ -71,9 +71,9 @@ struct SArrayCache
 // through 1999 for this purpose, so we should be fine.
 const asPWORD ARRAY_CACHE = 1000;
 
-static void CleanupTypeInfoArrayCache(asITypeInfo *type)
+static void CleanupTypeInfoArrayCache(asITypeInfo* type)
 {
-    auto*cache = reinterpret_cast<SArrayCache*>(type->GetUserData(ARRAY_CACHE));
+    auto* cache = reinterpret_cast<SArrayCache*>(type->GetUserData(ARRAY_CACHE));
     if (cache)
     {
         cache->~SArrayCache();
@@ -81,26 +81,26 @@ static void CleanupTypeInfoArrayCache(asITypeInfo *type)
     }
 }
 
-CScriptArray* CScriptArray::Create(asITypeInfo *ot, asUINT length)
+CScriptArray* CScriptArray::Create(asITypeInfo* ot, asUINT length)
 {
-    asIScriptContext *ctx = asGetActiveContext();
+    asIScriptContext* ctx = asGetActiveContext();
 
     // Allocate the memory
-    void *mem = userAlloc(sizeof(CScriptArray));
-    if( mem == nullptr )
+    void* mem = userAlloc(sizeof(CScriptArray));
+    if (mem == nullptr)
     {
-        if( ctx )
+        if (ctx)
             ctx->SetException("Out of memory");
 
         return nullptr;
     }
 
     // Initialize the object
-    auto*a = new(mem) CScriptArray(length, ot);
+    auto* a = new (mem) CScriptArray(length, ot);
 
     // It's possible the constructor raised a script exception, in which case we
     // need to free the memory and return null instead, else we get a memory leak.
-    if( ctx && ctx->GetState() == asEXECUTION_EXCEPTION )
+    if (ctx && ctx->GetState() == asEXECUTION_EXCEPTION)
     {
         a->Release();
         return nullptr;
@@ -109,26 +109,26 @@ CScriptArray* CScriptArray::Create(asITypeInfo *ot, asUINT length)
     return a;
 }
 
-CScriptArray* CScriptArray::Create(asITypeInfo *ot, void *initList)
+CScriptArray* CScriptArray::Create(asITypeInfo* ot, void* initList)
 {
-    asIScriptContext *ctx = asGetActiveContext();
+    asIScriptContext* ctx = asGetActiveContext();
 
     // Allocate the memory
-    void *mem = userAlloc(sizeof(CScriptArray));
-    if( mem == nullptr )
+    void* mem = userAlloc(sizeof(CScriptArray));
+    if (mem == nullptr)
     {
-        if( ctx )
+        if (ctx)
             ctx->SetException("Out of memory");
 
         return nullptr;
     }
 
     // Initialize the object
-    auto*a = new(mem) CScriptArray(ot, initList);
+    auto* a = new (mem) CScriptArray(ot, initList);
 
     // It's possible the constructor raised a script exception, in which case we
     // need to free the memory and return null instead, else we get a memory leak.
-    if( ctx && ctx->GetState() == asEXECUTION_EXCEPTION )
+    if (ctx && ctx->GetState() == asEXECUTION_EXCEPTION)
     {
         a->Release();
         return nullptr;
@@ -137,26 +137,26 @@ CScriptArray* CScriptArray::Create(asITypeInfo *ot, void *initList)
     return a;
 }
 
-CScriptArray* CScriptArray::Create(asITypeInfo *ot, asUINT length, void *defVal)
+CScriptArray* CScriptArray::Create(asITypeInfo* ot, asUINT length, void* defVal)
 {
-    asIScriptContext *ctx = asGetActiveContext();
+    asIScriptContext* ctx = asGetActiveContext();
 
     // Allocate the memory
-    void *mem = userAlloc(sizeof(CScriptArray));
-    if( mem == nullptr )
+    void* mem = userAlloc(sizeof(CScriptArray));
+    if (mem == nullptr)
     {
-        if( ctx )
+        if (ctx)
             ctx->SetException("Out of memory");
 
         return nullptr;
     }
 
     // Initialize the object
-    auto*a = new(mem) CScriptArray(length, defVal, ot);
+    auto* a = new (mem) CScriptArray(length, defVal, ot);
 
     // It's possible the constructor raised a script exception, in which case we
     // need to free the memory and return null instead, else we get a memory leak.
-    if( ctx && ctx->GetState() == asEXECUTION_EXCEPTION )
+    if (ctx && ctx->GetState() == asEXECUTION_EXCEPTION)
     {
         a->Release();
         return nullptr;
@@ -165,17 +165,14 @@ CScriptArray* CScriptArray::Create(asITypeInfo *ot, asUINT length, void *defVal)
     return a;
 }
 
-CScriptArray* CScriptArray::Create(asITypeInfo *ot)
-{
-    return CScriptArray::Create(ot, asUINT(0));
-}
+CScriptArray* CScriptArray::Create(asITypeInfo* ot) { return CScriptArray::Create(ot, asUINT(0)); }
 
 // This optional callback is called when the template type is first used by the compiler.
 // It allows the application to validate if the template can be instantiated for the requested
 // subtype at compile time, instead of at runtime. The output argument dontGarbageCollect
 // allow the callback to tell the engine if the template instance type shouldn't be garbage collected,
 // i.e. no asOBJ_GC flag.
-static bool ScriptArrayTemplateCallback(asITypeInfo *ti, bool &dontGarbageCollect)
+static bool ScriptArrayTemplateCallback(asITypeInfo* ti, bool& dontGarbageCollect)
 {
     // Make sure the subtype can be instantiated with a default factory/constructor,
     // otherwise we won't be able to instantiate the elements.
@@ -184,7 +181,7 @@ static bool ScriptArrayTemplateCallback(asITypeInfo *ti, bool &dontGarbageCollec
         return false;
     if ((typeId & asTYPEID_MASK_OBJECT) && !(typeId & asTYPEID_OBJHANDLE))
     {
-        asITypeInfo *subtype = ti->GetEngine()->GetTypeInfoById(typeId);
+        asITypeInfo* subtype = ti->GetEngine()->GetTypeInfoById(typeId);
         asDWORD flags = subtype->GetFlags();
         if ((flags & asOBJ_VALUE) && !(flags & asOBJ_POD))
         {
@@ -193,8 +190,9 @@ static bool ScriptArrayTemplateCallback(asITypeInfo *ti, bool &dontGarbageCollec
             for (asUINT n = 0; n < subtype->GetBehaviourCount(); n++)
             {
                 asEBehaviours beh;
-                asIScriptFunction *func = subtype->GetBehaviourByIndex(n, &beh);
-                if (beh != asBEHAVE_CONSTRUCT) continue;
+                asIScriptFunction* func = subtype->GetBehaviourByIndex(n, &beh);
+                if (beh != asBEHAVE_CONSTRUCT)
+                    continue;
 
                 if (func->GetParamCount() == 0)
                 {
@@ -223,7 +221,7 @@ static bool ScriptArrayTemplateCallback(asITypeInfo *ti, bool &dontGarbageCollec
                 // Verify that there is a default factory
                 for (asUINT n = 0; n < subtype->GetFactoryCount(); n++)
                 {
-                    asIScriptFunction *func = subtype->GetFactoryByIndex(n);
+                    asIScriptFunction* func = subtype->GetFactoryByIndex(n);
                     if (func->GetParamCount() == 0)
                     {
                         // Found the default factory
@@ -260,7 +258,7 @@ static bool ScriptArrayTemplateCallback(asITypeInfo *ti, bool &dontGarbageCollec
         // If it is possible to determine that the handle cannot refer to an object type
         // that can potentially form a circular reference with the array then it is not
         // necessary to make the array garbage collected.
-        asITypeInfo *subtype = ti->GetEngine()->GetTypeInfoById(typeId);
+        asITypeInfo* subtype = ti->GetEngine()->GetTypeInfoById(typeId);
         asDWORD flags = subtype->GetFlags();
         if (!(flags & asOBJ_GC))
         {
@@ -290,11 +288,10 @@ static bool ScriptArrayTemplateCallback(asITypeInfo *ti, bool &dontGarbageCollec
     return true;
 }
 
-CScriptArray &CScriptArray::operator=(const CScriptArray &other)
+CScriptArray& CScriptArray::operator=(const CScriptArray& other)
 {
     // Only perform the copy if the array types are the same
-    if( &other != this &&
-        other.GetArrayObjectType() == GetArrayObjectType() )
+    if (&other != this && other.GetArrayObjectType() == GetArrayObjectType())
     {
         // Make sure the arrays are of the same size
         Resize(other.buffer->numElements);
@@ -306,7 +303,7 @@ CScriptArray &CScriptArray::operator=(const CScriptArray &other)
     return *this;
 }
 
-CScriptArray::CScriptArray(asITypeInfo *ot, void *buf)
+CScriptArray::CScriptArray(asITypeInfo* ot, void* buf)
 {
     refCount = 1;
     gcFlag = false;
@@ -316,10 +313,10 @@ CScriptArray::CScriptArray(asITypeInfo *ot, void *buf)
 
     Precache();
 
-    asIScriptEngine *engine = ot->GetEngine();
+    asIScriptEngine* engine = ot->GetEngine();
 
     // Determine element size
-    if( subTypeId & asTYPEID_MASK_OBJECT )
+    if (subTypeId & asTYPEID_MASK_OBJECT)
         elementSize = sizeof(asPWORD);
     else
         elementSize = engine->GetSizeOfPrimitiveType(subTypeId);
@@ -328,34 +325,34 @@ CScriptArray::CScriptArray(asITypeInfo *ot, void *buf)
     asUINT length = *(asUINT*)buf;
 
     // Make sure the array size isn't too large for us to handle
-    if( !CheckMaxSize(length) )
+    if (!CheckMaxSize(length))
     {
         // Don't continue with the initialization
         return;
     }
 
     // Copy the values of the array elements from the buffer
-    if( (ot->GetSubTypeId() & asTYPEID_MASK_OBJECT) == 0 )
+    if ((ot->GetSubTypeId() & asTYPEID_MASK_OBJECT) == 0)
     {
         CreateBuffer(&buffer, length);
 
         // Copy the values of the primitive type into the internal buffer
-        memcpy(At(0), (((asUINT*)buf)+1), length * elementSize);
+        memcpy(At(0), (((asUINT*)buf) + 1), length * elementSize);
     }
-    else if( ot->GetSubTypeId() & asTYPEID_OBJHANDLE )
+    else if (ot->GetSubTypeId() & asTYPEID_OBJHANDLE)
     {
         CreateBuffer(&buffer, length);
 
         // Copy the handles into the internal buffer
-        memcpy(At(0), (((asUINT*)buf)+1), length * elementSize);
+        memcpy(At(0), (((asUINT*)buf) + 1), length * elementSize);
 
         // With object handles it is safe to clear the memory in the received buffer
         // instead of increasing the ref count. It will save time both by avoiding the
         // call the increase ref, and also relieve the engine from having to release
         // its references too
-        memset((((asUINT*)buf)+1), 0, length * elementSize);
+        memset((((asUINT*)buf) + 1), 0, length * elementSize);
     }
-    else if( ot->GetSubType()->GetFlags() & asOBJ_REF )
+    else if (ot->GetSubType()->GetFlags() & asOBJ_REF)
     {
         // Only allocate the buffer, but not the objects
         subTypeId |= asTYPEID_OBJHANDLE;
@@ -363,11 +360,11 @@ CScriptArray::CScriptArray(asITypeInfo *ot, void *buf)
         subTypeId &= ~asTYPEID_OBJHANDLE;
 
         // Copy the handles into the internal buffer
-        memcpy(buffer->data, (((asUINT*)buf)+1), length * elementSize);
+        memcpy(buffer->data, (((asUINT*)buf) + 1), length * elementSize);
 
         // For ref types we can do the same as for handles, as they are
         // implicitly stored as handles.
-        memset((((asUINT*)buf)+1), 0, length * elementSize);
+        memset((((asUINT*)buf) + 1), 0, length * elementSize);
     }
     else
     {
@@ -379,11 +376,11 @@ CScriptArray::CScriptArray(asITypeInfo *ot, void *buf)
         CreateBuffer(&buffer, length);
 
         // For value types we need to call the opAssign for each individual object
-        for( asUINT n = 0; n < length; n++ )
+        for (asUINT n = 0; n < length; n++)
         {
-            void *obj = At(n);
-            auto*srcObj = (asBYTE*)buf;
-            srcObj += 4 + n*ot->GetSubType()->GetSize();
+            void* obj = At(n);
+            auto* srcObj = (asBYTE*)buf;
+            srcObj += 4 + n * ot->GetSubType()->GetSize();
             engine->AssignScriptObject(obj, srcObj, ot->GetSubType());
         }
     }
@@ -396,7 +393,7 @@ CScriptArray::CScriptArray(asITypeInfo *ot, void *buf)
     */
 }
 
-CScriptArray::CScriptArray(asUINT length, asITypeInfo *ot)
+CScriptArray::CScriptArray(asUINT length, asITypeInfo* ot)
 {
     refCount = 1;
     gcFlag = false;
@@ -407,13 +404,13 @@ CScriptArray::CScriptArray(asUINT length, asITypeInfo *ot)
     Precache();
 
     // Determine element size
-    if( subTypeId & asTYPEID_MASK_OBJECT )
+    if (subTypeId & asTYPEID_MASK_OBJECT)
         elementSize = sizeof(asPWORD);
     else
         elementSize = objType->GetEngine()->GetSizeOfPrimitiveType(subTypeId);
 
     // Make sure the array size isn't too large for us to handle
-    if( !CheckMaxSize(length) )
+    if (!CheckMaxSize(length))
     {
         // Don't continue with the initialization
         return;
@@ -429,7 +426,7 @@ CScriptArray::CScriptArray(asUINT length, asITypeInfo *ot)
     */
 }
 
-CScriptArray::CScriptArray(const CScriptArray &other)
+CScriptArray::CScriptArray(const CScriptArray& other)
 {
     refCount = 1;
     gcFlag = false;
@@ -453,7 +450,7 @@ CScriptArray::CScriptArray(const CScriptArray &other)
     *this = other;
 }
 
-CScriptArray::CScriptArray(asUINT length, void *defVal, asITypeInfo *ot)
+CScriptArray::CScriptArray(asUINT length, void* defVal, asITypeInfo* ot)
 {
     refCount = 1;
     gcFlag = false;
@@ -464,13 +461,13 @@ CScriptArray::CScriptArray(asUINT length, void *defVal, asITypeInfo *ot)
     Precache();
 
     // Determine element size
-    if( subTypeId & asTYPEID_MASK_OBJECT )
+    if (subTypeId & asTYPEID_MASK_OBJECT)
         elementSize = sizeof(asPWORD);
     else
         elementSize = objType->GetEngine()->GetSizeOfPrimitiveType(subTypeId);
 
     // Make sure the array size isn't too large for us to handle
-    if( !CheckMaxSize(length) )
+    if (!CheckMaxSize(length))
     {
         // Don't continue with the initialization
         return;
@@ -486,76 +483,65 @@ CScriptArray::CScriptArray(asUINT length, void *defVal, asITypeInfo *ot)
     */
 
     // Initialize the elements with the default value
-    for( asUINT n = 0; n < GetSize(); n++ )
+    for (asUINT n = 0; n < GetSize(); n++)
         SetValue(n, defVal);
 }
 
-void CScriptArray::SetValue(asUINT index, void *value)
+void CScriptArray::SetValue(asUINT index, void* value)
 {
     // At() will take care of the out-of-bounds checking, though
     // if called from the application then nothing will be done
-    void *ptr = At(index);
-    if( ptr == nullptr ) return;
+    void* ptr = At(index);
+    if (ptr == nullptr)
+        return;
 
-    if( (subTypeId & ~asTYPEID_MASK_SEQNBR) && !(subTypeId & asTYPEID_OBJHANDLE) )
+    if ((subTypeId & ~asTYPEID_MASK_SEQNBR) && !(subTypeId & asTYPEID_OBJHANDLE))
         objType->GetEngine()->AssignScriptObject(ptr, value, objType->GetSubType());
-    else if( subTypeId & asTYPEID_OBJHANDLE )
+    else if (subTypeId & asTYPEID_OBJHANDLE)
     {
-        void *tmp = *(void**)ptr;
+        void* tmp = *(void**)ptr;
         *(void**)ptr = *(void**)value;
         objType->GetEngine()->AddRefScriptObject(*(void**)value, objType->GetSubType());
-        if( tmp )
+        if (tmp)
             objType->GetEngine()->ReleaseScriptObject(tmp, objType->GetSubType());
     }
-    else if( subTypeId == asTYPEID_BOOL ||
-             subTypeId == asTYPEID_INT8 ||
-             subTypeId == asTYPEID_UINT8 )
+    else if (subTypeId == asTYPEID_BOOL || subTypeId == asTYPEID_INT8 || subTypeId == asTYPEID_UINT8)
         *(char*)ptr = *(char*)value;
-    else if( subTypeId == asTYPEID_INT16 ||
-             subTypeId == asTYPEID_UINT16 )
+    else if (subTypeId == asTYPEID_INT16 || subTypeId == asTYPEID_UINT16)
         *(short*)ptr = *(short*)value;
-    else if( subTypeId == asTYPEID_INT32 ||
-             subTypeId == asTYPEID_UINT32 ||
-             subTypeId == asTYPEID_FLOAT ||
-             subTypeId > asTYPEID_DOUBLE ) // enums have a type id larger than doubles
+    else if (subTypeId == asTYPEID_INT32 || subTypeId == asTYPEID_UINT32 || subTypeId == asTYPEID_FLOAT ||
+             subTypeId > asTYPEID_DOUBLE) // enums have a type id larger than doubles
         *(int*)ptr = *(int*)value;
-    else if( subTypeId == asTYPEID_INT64 ||
-             subTypeId == asTYPEID_UINT64 ||
-             subTypeId == asTYPEID_DOUBLE )
+    else if (subTypeId == asTYPEID_INT64 || subTypeId == asTYPEID_UINT64 || subTypeId == asTYPEID_DOUBLE)
         *(double*)ptr = *(double*)value;
 }
 
 CScriptArray::~CScriptArray()
 {
-    if( buffer )
+    if (buffer)
     {
         DeleteBuffer(buffer);
         buffer = nullptr;
     }
-    if( objType ) objType->Release();
+    if (objType)
+        objType->Release();
 }
 
-asUINT CScriptArray::GetSize() const
-{
-    return buffer->numElements;
-}
+asUINT CScriptArray::GetSize() const { return buffer->numElements; }
 
-bool CScriptArray::IsEmpty() const
-{
-    return buffer->numElements == 0;
-}
+bool CScriptArray::IsEmpty() const { return buffer->numElements == 0; }
 
 void CScriptArray::Reserve(asUINT maxElements)
 {
-    if( maxElements <= buffer->maxElements )
+    if (maxElements <= buffer->maxElements)
         return;
 
-    if( !CheckMaxSize(maxElements) )
+    if (!CheckMaxSize(maxElements))
         return;
 
     // Allocate memory for the buffer
-    auto*newBuffer = reinterpret_cast<SArrayBuffer*>(userAlloc(sizeof(SArrayBuffer)-1 + elementSize*maxElements));
-    if( newBuffer )
+    auto* newBuffer = reinterpret_cast<SArrayBuffer*>(userAlloc(sizeof(SArrayBuffer) - 1 + elementSize * maxElements));
+    if (newBuffer)
     {
         newBuffer->numElements = buffer->numElements;
         newBuffer->maxElements = maxElements;
@@ -563,8 +549,8 @@ void CScriptArray::Reserve(asUINT maxElements)
     else
     {
         // Out of memory
-        asIScriptContext *ctx = asGetActiveContext();
-        if( ctx )
+        asIScriptContext* ctx = asGetActiveContext();
+        if (ctx)
             ctx->SetException("Out of memory");
         return;
     }
@@ -572,7 +558,7 @@ void CScriptArray::Reserve(asUINT maxElements)
     // TODO: memcpy assumes the objects in the array doesn't hold pointers to themselves
     //       This should really be using the objects copy/move constructor to copy each object
     //       to the new location. It would most likely be a hit on the performance though.
-    memcpy(newBuffer->data, buffer->data, buffer->numElements*elementSize);
+    memcpy(newBuffer->data, buffer->data, buffer->numElements * elementSize);
 
     // Release the old buffer
     userFree(buffer);
@@ -582,7 +568,7 @@ void CScriptArray::Reserve(asUINT maxElements)
 
 void CScriptArray::Resize(asUINT numElements)
 {
-    if( !CheckMaxSize(numElements) )
+    if (!CheckMaxSize(numElements))
         return;
 
     Resize((int)numElements - (int)buffer->numElements, (asUINT)-1);
@@ -591,30 +577,32 @@ void CScriptArray::Resize(asUINT numElements)
 // Internal
 void CScriptArray::Resize(int delta, asUINT at)
 {
-    if( delta < 0 )
+    if (delta < 0)
     {
-        if( -delta > (int)buffer->numElements )
+        if (-delta > (int)buffer->numElements)
             delta = -(int)buffer->numElements;
-        if( at > buffer->numElements + delta )
+        if (at > buffer->numElements + delta)
             at = buffer->numElements + delta;
     }
-    else if( delta > 0 )
+    else if (delta > 0)
     {
         // Make sure the array size isn't too large for us to handle
-        if( delta > 0 && !CheckMaxSize(buffer->numElements + delta) )
+        if (delta > 0 && !CheckMaxSize(buffer->numElements + delta))
             return;
 
-        if( at > buffer->numElements )
+        if (at > buffer->numElements)
             at = buffer->numElements;
     }
 
-    if( delta == 0 ) return;
+    if (delta == 0)
+        return;
 
-    if( buffer->maxElements < buffer->numElements + delta )
+    if (buffer->maxElements < buffer->numElements + delta)
     {
         // Allocate memory for the buffer
-        auto*newBuffer = reinterpret_cast<SArrayBuffer*>(userAlloc(sizeof(SArrayBuffer)-1 + elementSize*(buffer->numElements + delta)));
-        if( newBuffer )
+        auto* newBuffer = reinterpret_cast<SArrayBuffer*>(
+            userAlloc(sizeof(SArrayBuffer) - 1 + elementSize * (buffer->numElements + delta)));
+        if (newBuffer)
         {
             newBuffer->numElements = buffer->numElements + delta;
             newBuffer->maxElements = newBuffer->numElements;
@@ -622,8 +610,8 @@ void CScriptArray::Resize(int delta, asUINT at)
         else
         {
             // Out of memory
-            asIScriptContext *ctx = asGetActiveContext();
-            if( ctx )
+            asIScriptContext* ctx = asGetActiveContext();
+            if (ctx)
                 ctx->SetException("Out of memory");
             return;
         }
@@ -631,25 +619,27 @@ void CScriptArray::Resize(int delta, asUINT at)
         // TODO: memcpy assumes the objects in the array doesn't hold pointers to themselves
         //       This should really be using the objects copy/move constructor to copy each object
         //       to the new location. It would most likely be a hit on the performance though.
-        memcpy(newBuffer->data, buffer->data, at*elementSize);
-        if( at < buffer->numElements )
-            memcpy(newBuffer->data + (at+delta)*elementSize, buffer->data + at*elementSize, (buffer->numElements-at)*elementSize);
+        memcpy(newBuffer->data, buffer->data, at * elementSize);
+        if (at < buffer->numElements)
+            memcpy(newBuffer->data + (at + delta) * elementSize, buffer->data + at * elementSize,
+                   (buffer->numElements - at) * elementSize);
 
         // Initialize the new elements with default values
-        Construct(newBuffer, at, at+delta);
+        Construct(newBuffer, at, at + delta);
 
         // Release the old buffer
         userFree(buffer);
 
         buffer = newBuffer;
     }
-    else if( delta < 0 )
+    else if (delta < 0)
     {
-        Destruct(buffer, at, at-delta);
+        Destruct(buffer, at, at - delta);
         // TODO: memmove assumes the objects in the array doesn't hold pointers to themselves
         //       This should really be using the objects copy/move constructor to copy each object
         //       to the new location. It would most likely be a hit on the performance though.
-        memmove(buffer->data + at*elementSize, buffer->data + (at-delta)*elementSize, (buffer->numElements - (at-delta))*elementSize);
+        memmove(buffer->data + at * elementSize, buffer->data + (at - delta) * elementSize,
+                (buffer->numElements - (at - delta)) * elementSize);
         buffer->numElements += delta;
     }
     else
@@ -657,8 +647,9 @@ void CScriptArray::Resize(int delta, asUINT at)
         // TODO: memmove assumes the objects in the array doesn't hold pointers to themselves
         //       This should really be using the objects copy/move constructor to copy each object
         //       to the new location. It would most likely be a hit on the performance though.
-        memmove(buffer->data + (at+delta)*elementSize, buffer->data + at*elementSize, (buffer->numElements - at)*elementSize);
-        Construct(buffer, at, at+delta);
+        memmove(buffer->data + (at + delta) * elementSize, buffer->data + at * elementSize,
+                (buffer->numElements - at) * elementSize);
+        Construct(buffer, at, at + delta);
         buffer->numElements += delta;
     }
 }
@@ -670,13 +661,13 @@ bool CScriptArray::CheckMaxSize(asUINT numElements)
     // for the array doesn't overflow and becomes smaller than requested
 
     asUINT maxSize = 0xFFFFFFFFul - sizeof(SArrayBuffer) + 1;
-    if( elementSize > 0 )
+    if (elementSize > 0)
         maxSize /= elementSize;
 
-    if( numElements > maxSize )
+    if (numElements > maxSize)
     {
-        asIScriptContext *ctx = asGetActiveContext();
-        if( ctx )
+        asIScriptContext* ctx = asGetActiveContext();
+        if (ctx)
             ctx->SetException("Too large array size");
 
         return false;
@@ -686,28 +677,19 @@ bool CScriptArray::CheckMaxSize(asUINT numElements)
     return true;
 }
 
-asITypeInfo *CScriptArray::GetArrayObjectType() const
-{
-    return objType;
-}
+asITypeInfo* CScriptArray::GetArrayObjectType() const { return objType; }
 
-int CScriptArray::GetArrayTypeId() const
-{
-    return objType->GetTypeId();
-}
+int CScriptArray::GetArrayTypeId() const { return objType->GetTypeId(); }
 
-int CScriptArray::GetElementTypeId() const
-{
-    return subTypeId;
-}
+int CScriptArray::GetElementTypeId() const { return subTypeId; }
 
-void CScriptArray::InsertAt(asUINT index, void *value)
+void CScriptArray::InsertAt(asUINT index, void* value)
 {
-    if( index > buffer->numElements )
+    if (index > buffer->numElements)
     {
         // If this is called from a script we raise a script exception
-        asIScriptContext *ctx = asGetActiveContext();
-        if( ctx )
+        asIScriptContext* ctx = asGetActiveContext();
+        if (ctx)
             ctx->SetException("Index out of bounds");
         return;
     }
@@ -719,18 +701,15 @@ void CScriptArray::InsertAt(asUINT index, void *value)
     SetValue(index, value);
 }
 
-void CScriptArray::InsertLast(void *value)
-{
-    InsertAt(buffer->numElements, value);
-}
+void CScriptArray::InsertLast(void* value) { InsertAt(buffer->numElements, value); }
 
 void CScriptArray::RemoveAt(asUINT index)
 {
-    if( index >= buffer->numElements )
+    if (index >= buffer->numElements)
     {
         // If this is called from a script we raise a script exception
-        asIScriptContext *ctx = asGetActiveContext();
-        if( ctx )
+        asIScriptContext* ctx = asGetActiveContext();
+        if (ctx)
             ctx->SetException("Index out of bounds");
         return;
     }
@@ -739,40 +718,33 @@ void CScriptArray::RemoveAt(asUINT index)
     Resize(-1, index);
 }
 
-void CScriptArray::RemoveLast()
-{
-    RemoveAt(buffer->numElements-1);
-}
+void CScriptArray::RemoveLast() { RemoveAt(buffer->numElements - 1); }
 
 // Return a pointer to the array element. Returns 0 if the index is out of bounds
-const void *CScriptArray::At(asUINT index) const
+const void* CScriptArray::At(asUINT index) const
 {
-    if( buffer == nullptr || index >= buffer->numElements )
+    if (buffer == nullptr || index >= buffer->numElements)
     {
         // If this is called from a script we raise a script exception
-        asIScriptContext *ctx = asGetActiveContext();
-        if( ctx )
+        asIScriptContext* ctx = asGetActiveContext();
+        if (ctx)
             ctx->SetException("Index out of bounds");
         return nullptr;
     }
 
-    if( (subTypeId & asTYPEID_MASK_OBJECT) && !(subTypeId & asTYPEID_OBJHANDLE) )
-        return *(void**)(buffer->data + elementSize*index);
+    if ((subTypeId & asTYPEID_MASK_OBJECT) && !(subTypeId & asTYPEID_OBJHANDLE))
+        return *(void**)(buffer->data + elementSize * index);
     else
-        return buffer->data + elementSize*index;
+        return buffer->data + elementSize * index;
 }
-void *CScriptArray::At(asUINT index)
-{
-    return const_cast<void*>(const_cast<const CScriptArray *>(this)->At(index));
-}
-
+void* CScriptArray::At(asUINT index) { return const_cast<void*>(const_cast<const CScriptArray*>(this)->At(index)); }
 
 // internal
-void CScriptArray::CreateBuffer(SArrayBuffer **buf, asUINT numElements)
+void CScriptArray::CreateBuffer(SArrayBuffer** buf, asUINT numElements)
 {
-    *buf = reinterpret_cast<SArrayBuffer*>(userAlloc(sizeof(SArrayBuffer)-1+elementSize*numElements));
+    *buf = reinterpret_cast<SArrayBuffer*>(userAlloc(sizeof(SArrayBuffer) - 1 + elementSize * numElements));
 
-    if( *buf )
+    if (*buf)
     {
         (*buf)->numElements = numElements;
         (*buf)->maxElements = numElements;
@@ -781,14 +753,14 @@ void CScriptArray::CreateBuffer(SArrayBuffer **buf, asUINT numElements)
     else
     {
         // Oops, out of memory
-        asIScriptContext *ctx = asGetActiveContext();
-        if( ctx )
+        asIScriptContext* ctx = asGetActiveContext();
+        if (ctx)
             ctx->SetException("Out of memory");
     }
 }
 
 // internal
-void CScriptArray::DeleteBuffer(SArrayBuffer *buf)
+void CScriptArray::DeleteBuffer(SArrayBuffer* buf)
 {
     Destruct(buf, 0, buf->numElements);
 
@@ -797,25 +769,25 @@ void CScriptArray::DeleteBuffer(SArrayBuffer *buf)
 }
 
 // internal
-void CScriptArray::Construct(SArrayBuffer *buf, asUINT start, asUINT end)
+void CScriptArray::Construct(SArrayBuffer* buf, asUINT start, asUINT end)
 {
-    if( (subTypeId & asTYPEID_MASK_OBJECT) && !(subTypeId & asTYPEID_OBJHANDLE) )
+    if ((subTypeId & asTYPEID_MASK_OBJECT) && !(subTypeId & asTYPEID_OBJHANDLE))
     {
         // Create an object using the default constructor/factory for each element
-        auto**max = (void**)(buf->data + end * sizeof(void*));
-        auto**d = (void**)(buf->data + start * sizeof(void*));
+        auto** max = (void**)(buf->data + end * sizeof(void*));
+        auto** d = (void**)(buf->data + start * sizeof(void*));
 
-        asIScriptEngine *engine = objType->GetEngine();
-        asITypeInfo *subType = objType->GetSubType();
+        asIScriptEngine* engine = objType->GetEngine();
+        asITypeInfo* subType = objType->GetSubType();
 
-        for( ; d < max; d++ )
+        for (; d < max; d++)
         {
             *d = (void*)engine->CreateScriptObject(subType);
-            if( *d == nullptr )
+            if (*d == nullptr)
             {
                 // Set the remaining entries to null so the destructor
                 // won't attempt to destroy invalid objects later
-                memset(d, 0, sizeof(void*)*(max-d));
+                memset(d, 0, sizeof(void*) * (max - d));
 
                 // There is no need to set an exception on the context,
                 // as CreateScriptObject has already done that
@@ -826,91 +798,107 @@ void CScriptArray::Construct(SArrayBuffer *buf, asUINT start, asUINT end)
     else
     {
         // Set all elements to zero whether they are handles or primitives
-        auto*d = (void*)(buf->data + start * elementSize);
-        memset(d, 0, (end-start)*elementSize);
+        auto* d = (void*)(buf->data + start * elementSize);
+        memset(d, 0, (end - start) * elementSize);
     }
 }
 
 // internal
-void CScriptArray::Destruct(SArrayBuffer *buf, asUINT start, asUINT end)
+void CScriptArray::Destruct(SArrayBuffer* buf, asUINT start, asUINT end)
 {
-    if( subTypeId & asTYPEID_MASK_OBJECT )
+    if (subTypeId & asTYPEID_MASK_OBJECT)
     {
-        asIScriptEngine *engine = objType->GetEngine();
+        asIScriptEngine* engine = objType->GetEngine();
 
-        auto**max = (void**)(buf->data + end * sizeof(void*));
-        auto**d   = (void**)(buf->data + start * sizeof(void*));
+        auto** max = (void**)(buf->data + end * sizeof(void*));
+        auto** d = (void**)(buf->data + start * sizeof(void*));
 
-        for( ; d < max; d++ )
+        for (; d < max; d++)
         {
-            if( *d )
+            if (*d)
                 engine->ReleaseScriptObject(*d, objType->GetSubType());
         }
     }
 }
 
-
 // internal
-bool CScriptArray::Less(const void *a, const void *b, bool asc, asIScriptContext *ctx, SArrayCache *cache)
+bool CScriptArray::Less(const void* a, const void* b, bool asc, asIScriptContext* ctx, SArrayCache* cache)
 {
-    if( !asc )
+    if (!asc)
     {
         // Swap items
-        const void *TEMP = a;
+        const void* TEMP = a;
         a = b;
         b = TEMP;
     }
 
-    if( !(subTypeId & ~asTYPEID_MASK_SEQNBR) )
+    if (!(subTypeId & ~asTYPEID_MASK_SEQNBR))
     {
         // Simple compare of values
-        switch( subTypeId )
+        switch (subTypeId)
         {
-            #define COMPARE(T) *((T*)a) < *((T*)b)
-            case asTYPEID_BOOL: return COMPARE(bool);
-            case asTYPEID_INT8: return COMPARE(signed char);
-            case asTYPEID_UINT8: return COMPARE(unsigned char);
-            case asTYPEID_INT16: return COMPARE(signed short);
-            case asTYPEID_UINT16: return COMPARE(unsigned short);
-            case asTYPEID_INT32: return COMPARE(signed int);
-            case asTYPEID_UINT32: return COMPARE(unsigned int);
-            case asTYPEID_FLOAT: return COMPARE(float);
-            case asTYPEID_DOUBLE: return COMPARE(double);
-            default: return COMPARE(signed int); // All enums fall in this case
-            #undef COMPARE
+#define COMPARE(T) *((T*)a) < *((T*)b)
+        case asTYPEID_BOOL:
+            return COMPARE(bool);
+        case asTYPEID_INT8:
+            return COMPARE(signed char);
+        case asTYPEID_UINT8:
+            return COMPARE(unsigned char);
+        case asTYPEID_INT16:
+            return COMPARE(signed short);
+        case asTYPEID_UINT16:
+            return COMPARE(unsigned short);
+        case asTYPEID_INT32:
+            return COMPARE(signed int);
+        case asTYPEID_UINT32:
+            return COMPARE(unsigned int);
+        case asTYPEID_FLOAT:
+            return COMPARE(float);
+        case asTYPEID_DOUBLE:
+            return COMPARE(double);
+        default:
+            return COMPARE(signed int); // All enums fall in this case
+#undef COMPARE
         }
     }
     else
     {
         int r = 0;
 
-        if( subTypeId & asTYPEID_OBJHANDLE )
+        if (subTypeId & asTYPEID_OBJHANDLE)
         {
             // Allow sort to work even if the array contains null handles
-            if( *(void**)a == nullptr ) return true;
-            if( *(void**)b == nullptr ) return false;
+            if (*(void**)a == nullptr)
+                return true;
+            if (*(void**)b == nullptr)
+                return false;
         }
 
         // Execute object opCmp
-        if( cache && cache->cmpFunc )
+        if (cache && cache->cmpFunc)
         {
             // TODO: Add proper error handling
-            r = ctx->Prepare(cache->cmpFunc); assert(r >= 0);
+            r = ctx->Prepare(cache->cmpFunc);
+            assert(r >= 0);
 
-            if( subTypeId & asTYPEID_OBJHANDLE )
+            if (subTypeId & asTYPEID_OBJHANDLE)
             {
-                r = ctx->SetObject(*((void**)a)); assert(r >= 0);
-                r = ctx->SetArgObject(0, *((void**)b)); assert(r >= 0);
+                r = ctx->SetObject(*((void**)a));
+                assert(r >= 0);
+                r = ctx->SetArgObject(0, *((void**)b));
+                assert(r >= 0);
             }
             else
             {
-                r = ctx->SetObject((void*)a); assert(r >= 0);
-                r = ctx->SetArgObject(0, (void*)b); assert(r >= 0);
+                r = ctx->SetObject((void*)a);
+                assert(r >= 0);
+                r = ctx->SetArgObject(0, (void*)b);
+                assert(r >= 0);
             }
 
             r = ctx->Execute();
 
-            if( r == asEXECUTION_FINISHED )
+            if (r == asEXECUTION_FINISHED)
             {
                 return (int)ctx->GetReturnDWord() < 0;
             }
@@ -924,11 +912,11 @@ void CScriptArray::Reverse()
 {
     asUINT size = GetSize();
 
-    if( size >= 2 )
+    if (size >= 2)
     {
         asBYTE TEMP[16];
 
-        for( asUINT i = 0; i < size / 2; i++ )
+        for (asUINT i = 0; i < size / 2; i++)
         {
             Copy(TEMP, GetArrayItemPointer(i));
             Copy(GetArrayItemPointer(i), GetArrayItemPointer(size - i - 1));
@@ -937,29 +925,29 @@ void CScriptArray::Reverse()
     }
 }
 
-bool CScriptArray::operator==(const CScriptArray &other) const
+bool CScriptArray::operator==(const CScriptArray& other) const
 {
-    if( objType != other.objType )
+    if (objType != other.objType)
         return false;
 
-    if( GetSize() != other.GetSize() )
+    if (GetSize() != other.GetSize())
         return false;
 
-    asIScriptContext *cmpContext = nullptr;
+    asIScriptContext* cmpContext = nullptr;
     bool isNested = false;
 
-    if( subTypeId & ~asTYPEID_MASK_SEQNBR )
+    if (subTypeId & ~asTYPEID_MASK_SEQNBR)
     {
         // Try to reuse the active context
         cmpContext = asGetActiveContext();
-        if( cmpContext )
+        if (cmpContext)
         {
-            if( cmpContext->GetEngine() == objType->GetEngine() && cmpContext->PushState() >= 0 )
+            if (cmpContext->GetEngine() == objType->GetEngine() && cmpContext->PushState() >= 0)
                 isNested = true;
             else
                 cmpContext = nullptr;
         }
-        if( cmpContext == nullptr )
+        if (cmpContext == nullptr)
         {
             // TODO: Ideally this context would be retrieved from a pool, so we don't have to
             //       create a new one every time. We could keep a context with the array object
@@ -970,21 +958,21 @@ bool CScriptArray::operator==(const CScriptArray &other) const
 
     // Check if all elements are equal
     bool isEqual = true;
-    auto*cache = reinterpret_cast<SArrayCache*>(objType->GetUserData(ARRAY_CACHE));
-    for( asUINT n = 0; n < GetSize(); n++ )
-        if( !Equals(At(n), other.At(n), cmpContext, cache) )
+    auto* cache = reinterpret_cast<SArrayCache*>(objType->GetUserData(ARRAY_CACHE));
+    for (asUINT n = 0; n < GetSize(); n++)
+        if (!Equals(At(n), other.At(n), cmpContext, cache))
         {
             isEqual = false;
             break;
         }
 
-    if( cmpContext )
+    if (cmpContext)
     {
-        if( isNested )
+        if (isNested)
         {
             asEContextState state = cmpContext->GetState();
             cmpContext->PopState();
-            if( state == asEXECUTION_ABORTED )
+            if (state == asEXECUTION_ABORTED)
                 cmpContext->Abort();
         }
         else
@@ -995,82 +983,103 @@ bool CScriptArray::operator==(const CScriptArray &other) const
 }
 
 // internal
-bool CScriptArray::Equals(const void *a, const void *b, asIScriptContext *ctx, SArrayCache *cache) const
+bool CScriptArray::Equals(const void* a, const void* b, asIScriptContext* ctx, SArrayCache* cache) const
 {
-    if( !(subTypeId & ~asTYPEID_MASK_SEQNBR) )
+    if (!(subTypeId & ~asTYPEID_MASK_SEQNBR))
     {
         // Simple compare of values
-        switch( subTypeId )
+        switch (subTypeId)
         {
-            #define COMPARE(T) *((T*)a) == *((T*)b)
-            case asTYPEID_BOOL: return COMPARE(bool);
-            case asTYPEID_INT8: return COMPARE(signed char);
-            case asTYPEID_UINT8: return COMPARE(unsigned char);
-            case asTYPEID_INT16: return COMPARE(signed short);
-            case asTYPEID_UINT16: return COMPARE(unsigned short);
-            case asTYPEID_INT32: return COMPARE(signed int);
-            case asTYPEID_UINT32: return COMPARE(unsigned int);
-            case asTYPEID_FLOAT: return COMPARE(float);
-            case asTYPEID_DOUBLE: return COMPARE(double);
-            default: return COMPARE(signed int); // All enums fall here
-            #undef COMPARE
+#define COMPARE(T) *((T*)a) == *((T*)b)
+        case asTYPEID_BOOL:
+            return COMPARE(bool);
+        case asTYPEID_INT8:
+            return COMPARE(signed char);
+        case asTYPEID_UINT8:
+            return COMPARE(unsigned char);
+        case asTYPEID_INT16:
+            return COMPARE(signed short);
+        case asTYPEID_UINT16:
+            return COMPARE(unsigned short);
+        case asTYPEID_INT32:
+            return COMPARE(signed int);
+        case asTYPEID_UINT32:
+            return COMPARE(unsigned int);
+        case asTYPEID_FLOAT:
+            return COMPARE(float);
+        case asTYPEID_DOUBLE:
+            return COMPARE(double);
+        default:
+            return COMPARE(signed int); // All enums fall here
+#undef COMPARE
         }
     }
     else
     {
         int r = 0;
 
-        if( subTypeId & asTYPEID_OBJHANDLE )
+        if (subTypeId & asTYPEID_OBJHANDLE)
         {
             // Allow the find to work even if the array contains null handles
-            if( *(void**)a == *(void**)b ) return true;
+            if (*(void**)a == *(void**)b)
+                return true;
         }
 
         // Execute object opEquals if available
-        if( cache && cache->eqFunc )
+        if (cache && cache->eqFunc)
         {
             // TODO: Add proper error handling
-            r = ctx->Prepare(cache->eqFunc); assert(r >= 0);
+            r = ctx->Prepare(cache->eqFunc);
+            assert(r >= 0);
 
-            if( subTypeId & asTYPEID_OBJHANDLE )
+            if (subTypeId & asTYPEID_OBJHANDLE)
             {
-                r = ctx->SetObject(*((void**)a)); assert(r >= 0);
-                r = ctx->SetArgObject(0, *((void**)b)); assert(r >= 0);
+                r = ctx->SetObject(*((void**)a));
+                assert(r >= 0);
+                r = ctx->SetArgObject(0, *((void**)b));
+                assert(r >= 0);
             }
             else
             {
-                r = ctx->SetObject((void*)a); assert(r >= 0);
-                r = ctx->SetArgObject(0, (void*)b); assert(r >= 0);
+                r = ctx->SetObject((void*)a);
+                assert(r >= 0);
+                r = ctx->SetArgObject(0, (void*)b);
+                assert(r >= 0);
             }
 
             r = ctx->Execute();
 
-            if( r == asEXECUTION_FINISHED )
+            if (r == asEXECUTION_FINISHED)
                 return ctx->GetReturnByte() != 0;
 
             return false;
         }
 
         // Execute object opCmp if available
-        if( cache && cache->cmpFunc )
+        if (cache && cache->cmpFunc)
         {
             // TODO: Add proper error handling
-            r = ctx->Prepare(cache->cmpFunc); assert(r >= 0);
+            r = ctx->Prepare(cache->cmpFunc);
+            assert(r >= 0);
 
-            if( subTypeId & asTYPEID_OBJHANDLE )
+            if (subTypeId & asTYPEID_OBJHANDLE)
             {
-                r = ctx->SetObject(*((void**)a)); assert(r >= 0);
-                r = ctx->SetArgObject(0, *((void**)b)); assert(r >= 0);
+                r = ctx->SetObject(*((void**)a));
+                assert(r >= 0);
+                r = ctx->SetArgObject(0, *((void**)b));
+                assert(r >= 0);
             }
             else
             {
-                r = ctx->SetObject((void*)a); assert(r >= 0);
-                r = ctx->SetArgObject(0, (void*)b); assert(r >= 0);
+                r = ctx->SetObject((void*)a);
+                assert(r >= 0);
+                r = ctx->SetArgObject(0, (void*)b);
+                assert(r >= 0);
             }
 
             r = ctx->Execute();
 
-            if( r == asEXECUTION_FINISHED )
+            if (r == asEXECUTION_FINISHED)
                 return (int)ctx->GetReturnDWord() == 0;
 
             return false;
@@ -1080,31 +1089,28 @@ bool CScriptArray::Equals(const void *a, const void *b, asIScriptContext *ctx, S
     return false;
 }
 
-int CScriptArray::FindByRef(void *ref) const
-{
-    return FindByRef(0, ref);
-}
+int CScriptArray::FindByRef(void* ref) const { return FindByRef(0, ref); }
 
-int CScriptArray::FindByRef(asUINT startAt, void *ref) const
+int CScriptArray::FindByRef(asUINT startAt, void* ref) const
 {
     // Find the matching element by its reference
     asUINT size = GetSize();
-    if( subTypeId & asTYPEID_OBJHANDLE )
+    if (subTypeId & asTYPEID_OBJHANDLE)
     {
         // Dereference the pointer
         ref = *(void**)ref;
-        for( asUINT i = startAt; i < size; i++ )
+        for (asUINT i = startAt; i < size; i++)
         {
-            if( *(void**)At(i) == ref )
+            if (*(void**)At(i) == ref)
                 return i;
         }
     }
     else
     {
         // Compare the reference directly
-        for( asUINT i = startAt; i < size; i++ )
+        for (asUINT i = startAt; i < size; i++)
         {
-            if( At(i) == ref )
+            if (At(i) == ref)
                 return i;
         }
     }
@@ -1122,38 +1128,37 @@ bool CScriptArray::Swap(CScriptArray& other)
     return false;
 }
 
-int CScriptArray::Find(void *value) const
-{
-    return Find(0, value);
-}
+int CScriptArray::Find(void* value) const { return Find(0, value); }
 
-int CScriptArray::Find(asUINT startAt, void *value) const
+int CScriptArray::Find(asUINT startAt, void* value) const
 {
     // Check if the subtype really supports find()
     // TODO: Can't this be done at compile time too by the template callback
-    SArrayCache *cache = nullptr;
-    if( subTypeId & ~asTYPEID_MASK_SEQNBR )
+    SArrayCache* cache = nullptr;
+    if (subTypeId & ~asTYPEID_MASK_SEQNBR)
     {
         cache = reinterpret_cast<SArrayCache*>(objType->GetUserData(ARRAY_CACHE));
-        if( !cache || (cache->cmpFunc == nullptr && cache->eqFunc == nullptr) )
+        if (!cache || (cache->cmpFunc == nullptr && cache->eqFunc == nullptr))
         {
-            asIScriptContext *ctx = asGetActiveContext();
+            asIScriptContext* ctx = asGetActiveContext();
             asITypeInfo* subType = objType->GetEngine()->GetTypeInfoById(subTypeId);
 
             // Throw an exception
-            if( ctx )
+            if (ctx)
             {
                 char tmp[512];
 
-                if( cache && cache->eqFuncReturnCode == asMULTIPLE_FUNCTIONS )
+                if (cache && cache->eqFuncReturnCode == asMULTIPLE_FUNCTIONS)
 #if defined(_MSC_VER) && _MSC_VER >= 1500 && !defined(__S3E__)
-                    sprintf_s(tmp, 512, "Type '%s' has multiple matching opEquals or opCmp methods", subType->GetName());
+                    sprintf_s(tmp, 512, "Type '%s' has multiple matching opEquals or opCmp methods",
+                              subType->GetName());
 #else
                     sprintf(tmp, "Type '%s' has multiple matching opEquals or opCmp methods", subType->GetName());
 #endif
                 else
 #if defined(_MSC_VER) && _MSC_VER >= 1500 && !defined(__S3E__)
-                    sprintf_s(tmp, 512, "Type '%s' does not have a matching opEquals or opCmp method", subType->GetName());
+                    sprintf_s(tmp, 512, "Type '%s' does not have a matching opEquals or opCmp method",
+                              subType->GetName());
 #else
                     sprintf(tmp, "Type '%s' does not have a matching opEquals or opCmp method", subType->GetName());
 #endif
@@ -1164,21 +1169,21 @@ int CScriptArray::Find(asUINT startAt, void *value) const
         }
     }
 
-    asIScriptContext *cmpContext = nullptr;
+    asIScriptContext* cmpContext = nullptr;
     bool isNested = false;
 
-    if( subTypeId & ~asTYPEID_MASK_SEQNBR )
+    if (subTypeId & ~asTYPEID_MASK_SEQNBR)
     {
         // Try to reuse the active context
         cmpContext = asGetActiveContext();
-        if( cmpContext )
+        if (cmpContext)
         {
-            if( cmpContext->GetEngine() == objType->GetEngine() && cmpContext->PushState() >= 0 )
+            if (cmpContext->GetEngine() == objType->GetEngine() && cmpContext->PushState() >= 0)
                 isNested = true;
             else
                 cmpContext = nullptr;
         }
-        if( cmpContext == nullptr )
+        if (cmpContext == nullptr)
         {
             // TODO: Ideally this context would be retrieved from a pool, so we don't have to
             //       create a new one every time. We could keep a context with the array object
@@ -1191,23 +1196,23 @@ int CScriptArray::Find(asUINT startAt, void *value) const
     int ret = -1;
     asUINT size = GetSize();
 
-    for( asUINT i = startAt; i < size; i++ )
+    for (asUINT i = startAt; i < size; i++)
     {
         // value passed by reference
-        if( Equals(At(i), value, cmpContext, cache) )
+        if (Equals(At(i), value, cmpContext, cache))
         {
             ret = (int)i;
             break;
         }
     }
 
-    if( cmpContext )
+    if (cmpContext)
     {
-        if( isNested )
+        if (isNested)
         {
             asEContextState state = cmpContext->GetState();
             cmpContext->PopState();
-            if( state == asEXECUTION_ABORTED )
+            if (state == asEXECUTION_ABORTED)
                 cmpContext->Abort();
         }
         else
@@ -1217,28 +1222,19 @@ int CScriptArray::Find(asUINT startAt, void *value) const
     return ret;
 }
 
-
-
 // internal
 // Copy object handle or primitive value
-void CScriptArray::Copy(void *dst, void *src)
-{
-    memcpy(dst, src, elementSize);
-}
-
+void CScriptArray::Copy(void* dst, void* src) { memcpy(dst, src, elementSize); }
 
 // internal
 // Return pointer to array item (object handle or primitive value)
-void *CScriptArray::GetArrayItemPointer(int index)
-{
-    return buffer->data + index * elementSize;
-}
+void* CScriptArray::GetArrayItemPointer(int index) { return buffer->data + index * elementSize; }
 
 // internal
 // Return pointer to data in buffer (object or primitive)
-void *CScriptArray::GetDataPointer(void *buffer)
+void* CScriptArray::GetDataPointer(void* buffer)
 {
-    if ((subTypeId & asTYPEID_MASK_OBJECT) && !(subTypeId & asTYPEID_OBJHANDLE) )
+    if ((subTypeId & asTYPEID_MASK_OBJECT) && !(subTypeId & asTYPEID_OBJHANDLE))
     {
         // Real address of object
         return reinterpret_cast<void*>(*(size_t*)buffer);
@@ -1250,50 +1246,36 @@ void *CScriptArray::GetDataPointer(void *buffer)
     }
 }
 
+// Sort ascending
+void CScriptArray::SortAsc() { Sort(0, GetSize(), true); }
 
 // Sort ascending
-void CScriptArray::SortAsc()
-{
-    Sort(0, GetSize(), true);
-}
-
-// Sort ascending
-void CScriptArray::SortAsc(asUINT startAt, asUINT count)
-{
-    Sort(startAt, count, true);
-}
+void CScriptArray::SortAsc(asUINT startAt, asUINT count) { Sort(startAt, count, true); }
 
 // Sort descending
-void CScriptArray::SortDesc()
-{
-    Sort(0, GetSize(), false);
-}
+void CScriptArray::SortDesc() { Sort(0, GetSize(), false); }
 
 // Sort descending
-void CScriptArray::SortDesc(asUINT startAt, asUINT count)
-{
-    Sort(startAt, count, false);
-}
-
+void CScriptArray::SortDesc(asUINT startAt, asUINT count) { Sort(startAt, count, false); }
 
 // internal
 void CScriptArray::Sort(asUINT startAt, asUINT count, bool asc)
 {
     // Subtype isn't primitive and doesn't have opCmp
-    auto*cache = reinterpret_cast<SArrayCache*>(objType->GetUserData(ARRAY_CACHE));
-    if( subTypeId & ~asTYPEID_MASK_SEQNBR )
+    auto* cache = reinterpret_cast<SArrayCache*>(objType->GetUserData(ARRAY_CACHE));
+    if (subTypeId & ~asTYPEID_MASK_SEQNBR)
     {
-        if( !cache || cache->cmpFunc == nullptr )
+        if (!cache || cache->cmpFunc == nullptr)
         {
-            asIScriptContext *ctx = asGetActiveContext();
+            asIScriptContext* ctx = asGetActiveContext();
             asITypeInfo* subType = objType->GetEngine()->GetTypeInfoById(subTypeId);
 
             // Throw an exception
-            if( ctx )
+            if (ctx)
             {
                 char tmp[512];
 
-                if( cache && cache->cmpFuncReturnCode == asMULTIPLE_FUNCTIONS )
+                if (cache && cache->cmpFuncReturnCode == asMULTIPLE_FUNCTIONS)
 #if defined(_MSC_VER) && _MSC_VER >= 1500 && !defined(__S3E__)
                     sprintf_s(tmp, 512, "Type '%s' has multiple matching opCmp methods", subType->GetName());
 #else
@@ -1314,7 +1296,7 @@ void CScriptArray::Sort(asUINT startAt, asUINT count, bool asc)
     }
 
     // No need to sort
-    if( count < 2 )
+    if (count < 2)
     {
         return;
     }
@@ -1323,12 +1305,12 @@ void CScriptArray::Sort(asUINT startAt, asUINT count, bool asc)
     int end = startAt + count;
 
     // Check if we could access invalid item while sorting
-    if( start >= (int)buffer->numElements || end > (int)buffer->numElements )
+    if (start >= (int)buffer->numElements || end > (int)buffer->numElements)
     {
-        asIScriptContext *ctx = asGetActiveContext();
+        asIScriptContext* ctx = asGetActiveContext();
 
         // Throw an exception
-        if( ctx )
+        if (ctx)
         {
             ctx->SetException("Index out of bounds");
         }
@@ -1337,21 +1319,21 @@ void CScriptArray::Sort(asUINT startAt, asUINT count, bool asc)
     }
 
     asBYTE tmp[16];
-    asIScriptContext *cmpContext = nullptr;
+    asIScriptContext* cmpContext = nullptr;
     bool isNested = false;
 
-    if( subTypeId & ~asTYPEID_MASK_SEQNBR )
+    if (subTypeId & ~asTYPEID_MASK_SEQNBR)
     {
         // Try to reuse the active context
         cmpContext = asGetActiveContext();
-        if( cmpContext )
+        if (cmpContext)
         {
-            if( cmpContext->GetEngine() == objType->GetEngine() && cmpContext->PushState() >= 0 )
+            if (cmpContext->GetEngine() == objType->GetEngine() && cmpContext->PushState() >= 0)
                 isNested = true;
             else
                 cmpContext = nullptr;
         }
-        if( cmpContext == nullptr )
+        if (cmpContext == nullptr)
         {
             // TODO: Ideally this context would be retrieved from a pool, so we don't have to
             //       create a new one every time. We could keep a context with the array object
@@ -1361,13 +1343,13 @@ void CScriptArray::Sort(asUINT startAt, asUINT count, bool asc)
     }
 
     // Insertion sort
-    for( int i = start + 1; i < end; i++ )
+    for (int i = start + 1; i < end; i++)
     {
         Copy(tmp, GetArrayItemPointer(i));
 
         int j = i - 1;
 
-        while( j >= start && Less(GetDataPointer(tmp), At(j), asc, cmpContext, cache) )
+        while (j >= start && Less(GetDataPointer(tmp), At(j), asc, cmpContext, cache))
         {
             Copy(GetArrayItemPointer(j + 1), GetArrayItemPointer(j));
             j--;
@@ -1376,13 +1358,13 @@ void CScriptArray::Sort(asUINT startAt, asUINT count, bool asc)
         Copy(GetArrayItemPointer(j + 1), tmp);
     }
 
-    if( cmpContext )
+    if (cmpContext)
     {
-        if( isNested )
+        if (isNested)
         {
             asEContextState state = cmpContext->GetState();
             cmpContext->PopState();
-            if( state == asEXECUTION_ABORTED )
+            if (state == asEXECUTION_ABORTED)
                 cmpContext->Abort();
         }
         else
@@ -1391,52 +1373,52 @@ void CScriptArray::Sort(asUINT startAt, asUINT count, bool asc)
 }
 
 // internal
-void CScriptArray::CopyBuffer(SArrayBuffer *dst, SArrayBuffer *src)
+void CScriptArray::CopyBuffer(SArrayBuffer* dst, SArrayBuffer* src)
 {
-    asIScriptEngine *engine = objType->GetEngine();
-    if( subTypeId & asTYPEID_OBJHANDLE )
+    asIScriptEngine* engine = objType->GetEngine();
+    if (subTypeId & asTYPEID_OBJHANDLE)
     {
         // Copy the references and increase the reference counters
-        if( dst->numElements > 0 && src->numElements > 0 )
+        if (dst->numElements > 0 && src->numElements > 0)
         {
             int count = dst->numElements > src->numElements ? src->numElements : dst->numElements;
 
-            auto**max = (void**)(dst->data + count * sizeof(void*));
-            auto**d   = (void**)dst->data;
-            auto**s   = (void**)src->data;
+            auto** max = (void**)(dst->data + count * sizeof(void*));
+            auto** d = (void**)dst->data;
+            auto** s = (void**)src->data;
 
-            for( ; d < max; d++, s++ )
+            for (; d < max; d++, s++)
             {
-                void *tmp = *d;
+                void* tmp = *d;
                 *d = *s;
-                if( *d )
+                if (*d)
                     engine->AddRefScriptObject(*d, objType->GetSubType());
                 // Release the old ref after incrementing the new to avoid problem incase it is the same ref
-                if( tmp )
+                if (tmp)
                     engine->ReleaseScriptObject(tmp, objType->GetSubType());
             }
         }
     }
     else
     {
-        if( dst->numElements > 0 && src->numElements > 0 )
+        if (dst->numElements > 0 && src->numElements > 0)
         {
             int count = dst->numElements > src->numElements ? src->numElements : dst->numElements;
-            if( subTypeId & asTYPEID_MASK_OBJECT )
+            if (subTypeId & asTYPEID_MASK_OBJECT)
             {
                 // Call the assignment operator on all of the objects
-                auto**max = (void**)(dst->data + count * sizeof(void*));
-                auto**d   = (void**)dst->data;
-                auto**s   = (void**)src->data;
+                auto** max = (void**)(dst->data + count * sizeof(void*));
+                auto** d = (void**)dst->data;
+                auto** s = (void**)src->data;
 
-                asITypeInfo *subType = objType->GetSubType();
-                for( ; d < max; d++, s++ )
+                asITypeInfo* subType = objType->GetSubType();
+                for (; d < max; d++, s++)
                     engine->AssignScriptObject(*d, *s, subType);
             }
             else
             {
                 // Primitives are copied byte for byte
-                memcpy(dst->data, src->data, count*elementSize);
+                memcpy(dst->data, src->data, count * elementSize);
             }
         }
     }
@@ -1450,15 +1432,16 @@ void CScriptArray::Precache()
 
     // Check if it is an array of objects. Only for these do we need to cache anything
     // Type ids for primitives and enums only has the sequence number part
-    if( !(subTypeId & ~asTYPEID_MASK_SEQNBR) )
+    if (!(subTypeId & ~asTYPEID_MASK_SEQNBR))
         return;
 
     // The opCmp and opEquals methods are cached because the searching for the
     // methods is quite time consuming if a lot of array objects are created.
 
     // First check if a cache already exists for this array type
-    auto*cache = reinterpret_cast<SArrayCache*>(objType->GetUserData(ARRAY_CACHE));
-    if( cache ) return;
+    auto* cache = reinterpret_cast<SArrayCache*>(objType->GetUserData(ARRAY_CACHE));
+    if (cache)
+        return;
 
     // We need to make sure the cache is created only once, even
     // if multiple threads reach the same point at the same time
@@ -1467,7 +1450,7 @@ void CScriptArray::Precache()
     // Now that we got the lock, we need to check again to make sure the
     // cache wasn't created while we were waiting for the lock
     cache = reinterpret_cast<SArrayCache*>(objType->GetUserData(ARRAY_CACHE));
-    if( cache )
+    if (cache)
     {
         asReleaseExclusiveLock();
         return;
@@ -1480,55 +1463,56 @@ void CScriptArray::Precache()
     // If the sub type is a handle to const, then the methods must be const too
     bool mustBeConst = (subTypeId & asTYPEID_HANDLETOCONST) ? true : false;
 
-    asITypeInfo *subType = objType->GetEngine()->GetTypeInfoById(subTypeId);
-    if( subType )
+    asITypeInfo* subType = objType->GetEngine()->GetTypeInfoById(subTypeId);
+    if (subType)
     {
-        for( asUINT i = 0; i < subType->GetMethodCount(); i++ )
+        for (asUINT i = 0; i < subType->GetMethodCount(); i++)
         {
-            asIScriptFunction *func = subType->GetMethodByIndex(i);
+            asIScriptFunction* func = subType->GetMethodByIndex(i);
 
-            if( func->GetParamCount() == 1 && (!mustBeConst || func->IsReadOnly()) )
+            if (func->GetParamCount() == 1 && (!mustBeConst || func->IsReadOnly()))
             {
                 asDWORD flags = 0;
                 int returnTypeId = func->GetReturnTypeId(&flags);
 
                 // The method must not return a reference
-                if( flags != asTM_NONE )
+                if (flags != asTM_NONE)
                     continue;
 
                 // opCmp returns an int and opEquals returns a bool
                 bool isCmp = false, isEq = false;
-                if( returnTypeId == asTYPEID_INT32 && strcmp(func->GetName(), "opCmp") == 0 )
+                if (returnTypeId == asTYPEID_INT32 && strcmp(func->GetName(), "opCmp") == 0)
                     isCmp = true;
-                if( returnTypeId == asTYPEID_BOOL && strcmp(func->GetName(), "opEquals") == 0 )
+                if (returnTypeId == asTYPEID_BOOL && strcmp(func->GetName(), "opEquals") == 0)
                     isEq = true;
 
-                if( !isCmp && !isEq )
+                if (!isCmp && !isEq)
                     continue;
 
                 // The parameter must either be a reference to the subtype or a handle to the subtype
                 int paramTypeId;
                 func->GetParam(0, &paramTypeId, &flags);
 
-                if( (paramTypeId & ~(asTYPEID_OBJHANDLE|asTYPEID_HANDLETOCONST)) != (subTypeId &  ~(asTYPEID_OBJHANDLE|asTYPEID_HANDLETOCONST)) )
+                if ((paramTypeId & ~(asTYPEID_OBJHANDLE | asTYPEID_HANDLETOCONST)) !=
+                    (subTypeId & ~(asTYPEID_OBJHANDLE | asTYPEID_HANDLETOCONST)))
                     continue;
 
-                if( (flags & asTM_INREF) )
+                if ((flags & asTM_INREF))
                 {
-                    if( (paramTypeId & asTYPEID_OBJHANDLE) || (mustBeConst && !(flags & asTM_CONST)) )
+                    if ((paramTypeId & asTYPEID_OBJHANDLE) || (mustBeConst && !(flags & asTM_CONST)))
                         continue;
                 }
-                else if( paramTypeId & asTYPEID_OBJHANDLE )
+                else if (paramTypeId & asTYPEID_OBJHANDLE)
                 {
-                    if( mustBeConst && !(paramTypeId & asTYPEID_HANDLETOCONST) )
+                    if (mustBeConst && !(paramTypeId & asTYPEID_HANDLETOCONST))
                         continue;
                 }
                 else
                     continue;
 
-                if( isCmp )
+                if (isCmp)
                 {
-                    if( cache->cmpFunc || cache->cmpFuncReturnCode )
+                    if (cache->cmpFunc || cache->cmpFuncReturnCode)
                     {
                         cache->cmpFunc = nullptr;
                         cache->cmpFuncReturnCode = asMULTIPLE_FUNCTIONS;
@@ -1536,9 +1520,9 @@ void CScriptArray::Precache()
                     else
                         cache->cmpFunc = func;
                 }
-                else if( isEq )
+                else if (isEq)
                 {
-                    if( cache->eqFunc || cache->eqFuncReturnCode )
+                    if (cache->eqFunc || cache->eqFuncReturnCode)
                     {
                         cache->eqFunc = nullptr;
                         cache->eqFuncReturnCode = asMULTIPLE_FUNCTIONS;
@@ -1550,9 +1534,9 @@ void CScriptArray::Precache()
         }
     }
 
-    if( cache->eqFunc == nullptr && cache->eqFuncReturnCode == 0 )
+    if (cache->eqFunc == nullptr && cache->eqFuncReturnCode == 0)
         cache->eqFuncReturnCode = asNO_FUNCTION;
-    if( cache->cmpFunc == nullptr && cache->cmpFuncReturnCode == 0 )
+    if (cache->cmpFunc == nullptr && cache->cmpFuncReturnCode == 0)
         cache->cmpFuncReturnCode = asNO_FUNCTION;
 
     // Set the user data only at the end so others that retrieve it will know it is complete
@@ -1562,22 +1546,22 @@ void CScriptArray::Precache()
 }
 
 // GC behaviour
-void CScriptArray::EnumReferences(asIScriptEngine *engine)
+void CScriptArray::EnumReferences(asIScriptEngine* engine)
 {
     // If the array is holding handles, then we need to notify the GC of them
-    if( subTypeId & asTYPEID_MASK_OBJECT )
+    if (subTypeId & asTYPEID_MASK_OBJECT)
     {
-        auto**d = (void**)buffer->data;
-        for( asUINT n = 0; n < buffer->numElements; n++ )
+        auto** d = (void**)buffer->data;
+        for (asUINT n = 0; n < buffer->numElements; n++)
         {
-            if( d[n] )
+            if (d[n])
                 engine->GCEnumCallback(d[n]);
         }
     }
 }
 
 // GC behaviour
-void CScriptArray::ReleaseAllHandles(asIScriptEngine *)
+void CScriptArray::ReleaseAllHandles(asIScriptEngine*)
 {
     // Resizing to zero will release everything
     Resize(0);
@@ -1594,7 +1578,7 @@ void CScriptArray::Release() const
 {
     // Clearing the GC flag then descrease the counter
     gcFlag = false;
-    if( asAtomicDec(refCount) == 0 )
+    if (asAtomicDec(refCount) == 0)
     {
         // When reaching 0 no more references to this instance
         // exists and the object should be destroyed
@@ -1604,82 +1588,98 @@ void CScriptArray::Release() const
 }
 
 // GC behaviour
-int CScriptArray::GetRefCount()
-{
-    return refCount;
-}
+int CScriptArray::GetRefCount() { return refCount; }
 
 // GC behaviour
-void CScriptArray::SetFlag()
-{
-    gcFlag = true;
-}
+void CScriptArray::SetFlag() { gcFlag = true; }
 
 // GC behaviour
-bool CScriptArray::GetFlag()
-{
-    return gcFlag;
-}
+bool CScriptArray::GetFlag() { return gcFlag; }
 
-
-static void ScriptArrayClear(CScriptArray* ptr)
-{
-    ptr->Resize(0);
-}
+static void ScriptArrayClear(CScriptArray* ptr) { ptr->Resize(0); }
 
 void RegisterArray(asIScriptEngine* engine)
 {
-    engine->RegisterObjectBehaviour("Array<T>", asBEHAVE_TEMPLATE_CALLBACK, "bool f(int&in, bool&out)", asFUNCTION(ScriptArrayTemplateCallback), asCALL_CDECL);
-    engine->RegisterObjectBehaviour("Array<T>", asBEHAVE_FACTORY, "Array<T>@ f(int&in)", asFUNCTIONPR(CScriptArray::Create, (asITypeInfo*), CScriptArray*), asCALL_CDECL);
-    engine->RegisterObjectBehaviour("Array<T>", asBEHAVE_FACTORY, "Array<T>@ f(int&in, uint)", asFUNCTIONPR(CScriptArray::Create, (asITypeInfo*, asUINT), CScriptArray*), asCALL_CDECL);
-    engine->RegisterObjectBehaviour("Array<T>", asBEHAVE_FACTORY, "Array<T>@ f(int&in, uint, const T &in)", asFUNCTIONPR(CScriptArray::Create, (asITypeInfo*, asUINT, void *), CScriptArray*), asCALL_CDECL);
-    engine->RegisterObjectBehaviour("Array<T>", asBEHAVE_LIST_FACTORY, "Array<T>@ f(int&in type, int&in list) {repeat T}", asFUNCTIONPR(CScriptArray::Create, (asITypeInfo*, void*), CScriptArray*), asCALL_CDECL);
-    engine->RegisterObjectBehaviour("Array<T>", asBEHAVE_ADDREF, "void f()", asMETHOD(CScriptArray, AddRef), asCALL_THISCALL);
-    engine->RegisterObjectBehaviour("Array<T>", asBEHAVE_RELEASE, "void f()", asMETHOD(CScriptArray, Release), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Array<T>", "T& opIndex(uint)", asMETHODPR(CScriptArray, At, (unsigned), void*), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Array<T>", "const T& opIndex(uint) const", asMETHODPR(CScriptArray, At, (unsigned), void*), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Array<T>", "Array<T>& opAssign(const Array<T>& in)", asMETHOD(CScriptArray, operator=), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Array<T>", "void Insert(uint, const T& in)", asMETHOD(CScriptArray, InsertAt), asCALL_THISCALL);
+    engine->RegisterObjectBehaviour("Array<T>", asBEHAVE_TEMPLATE_CALLBACK, "bool f(int&in, bool&out)",
+                                    asFUNCTION(ScriptArrayTemplateCallback), asCALL_CDECL);
+    engine->RegisterObjectBehaviour("Array<T>", asBEHAVE_FACTORY, "Array<T>@ f(int&in)",
+                                    asFUNCTIONPR(CScriptArray::Create, (asITypeInfo*), CScriptArray*), asCALL_CDECL);
+    engine->RegisterObjectBehaviour("Array<T>", asBEHAVE_FACTORY, "Array<T>@ f(int&in, uint)",
+                                    asFUNCTIONPR(CScriptArray::Create, (asITypeInfo*, asUINT), CScriptArray*),
+                                    asCALL_CDECL);
+    engine->RegisterObjectBehaviour("Array<T>", asBEHAVE_FACTORY, "Array<T>@ f(int&in, uint, const T &in)",
+                                    asFUNCTIONPR(CScriptArray::Create, (asITypeInfo*, asUINT, void*), CScriptArray*),
+                                    asCALL_CDECL);
+    engine->RegisterObjectBehaviour(
+        "Array<T>", asBEHAVE_LIST_FACTORY, "Array<T>@ f(int&in type, int&in list) {repeat T}",
+        asFUNCTIONPR(CScriptArray::Create, (asITypeInfo*, void*), CScriptArray*), asCALL_CDECL);
+    engine->RegisterObjectBehaviour("Array<T>", asBEHAVE_ADDREF, "void f()", asMETHOD(CScriptArray, AddRef),
+                                    asCALL_THISCALL);
+    engine->RegisterObjectBehaviour("Array<T>", asBEHAVE_RELEASE, "void f()", asMETHOD(CScriptArray, Release),
+                                    asCALL_THISCALL);
+    engine->RegisterObjectMethod("Array<T>", "T& opIndex(uint)", asMETHODPR(CScriptArray, At, (unsigned), void*),
+                                 asCALL_THISCALL);
+    engine->RegisterObjectMethod("Array<T>", "const T& opIndex(uint) const",
+                                 asMETHODPR(CScriptArray, At, (unsigned), void*), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Array<T>", "Array<T>& opAssign(const Array<T>& in)",
+                                 asMETHOD(CScriptArray, operator=), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Array<T>", "void Insert(uint, const T& in)", asMETHOD(CScriptArray, InsertAt),
+                                 asCALL_THISCALL);
     engine->RegisterObjectMethod("Array<T>", "void Erase(uint)", asMETHOD(CScriptArray, RemoveAt), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Array<T>", "void Push(const T& in)", asMETHOD(CScriptArray, InsertLast), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Array<T>", "void Push(const T& in)", asMETHOD(CScriptArray, InsertLast),
+                                 asCALL_THISCALL);
     engine->RegisterObjectMethod("Array<T>", "void Pop()", asMETHOD(CScriptArray, RemoveLast), asCALL_THISCALL);
     engine->RegisterObjectMethod("Array<T>", "void Reserve(uint)", asMETHOD(CScriptArray, Reserve), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Array<T>", "void Resize(uint)", asMETHODPR(CScriptArray, Resize, (asUINT), void), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Array<T>", "void Resize(uint)", asMETHODPR(CScriptArray, Resize, (asUINT), void),
+                                 asCALL_THISCALL);
     engine->RegisterObjectMethod("Array<T>", "void Clear()", asFUNCTION(ScriptArrayClear), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("Array<T>", "void Sort()", asMETHODPR(CScriptArray, SortAsc, (), void), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Array<T>", "void Sort(uint, uint)", asMETHODPR(CScriptArray, SortAsc, (asUINT, asUINT), void), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Array<T>", "void SortReverse()", asMETHODPR(CScriptArray, SortDesc, (), void), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Array<T>", "void SortReverse(uint, uint)", asMETHODPR(CScriptArray, SortDesc, (asUINT, asUINT), void), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Array<T>", "void Sort()", asMETHODPR(CScriptArray, SortAsc, (), void),
+                                 asCALL_THISCALL);
+    engine->RegisterObjectMethod("Array<T>", "void Sort(uint, uint)",
+                                 asMETHODPR(CScriptArray, SortAsc, (asUINT, asUINT), void), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Array<T>", "void SortReverse()", asMETHODPR(CScriptArray, SortDesc, (), void),
+                                 asCALL_THISCALL);
+    engine->RegisterObjectMethod("Array<T>", "void SortReverse(uint, uint)",
+                                 asMETHODPR(CScriptArray, SortDesc, (asUINT, asUINT), void), asCALL_THISCALL);
     engine->RegisterObjectMethod("Array<T>", "void Reverse()", asMETHOD(CScriptArray, Reverse), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Array<T>", "int Find(const T&in) const", asMETHODPR(CScriptArray, Find, (void*) const, int), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Array<T>", "int Find(uint, const T&in) const", asMETHODPR(CScriptArray, Find, (asUINT, void*) const, int), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Array<T>", "int FindByRef(const T&in) const", asMETHODPR(CScriptArray, FindByRef, (void*) const, int), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Array<T>", "int FindByRef(uint, const T&in) const", asMETHODPR(CScriptArray, FindByRef, (asUINT, void*) const, int), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Array<T>", "bool Swap(Array<T>&inout)", asMETHOD(CScriptArray, Swap), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Array<T>", "bool opEquals(const Array<T>&in) const", asMETHOD(CScriptArray, operator==), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Array<T>", "uint get_length() const", asMETHOD(CScriptArray, GetSize), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Array<T>", "void set_length(uint)", asMETHODPR(CScriptArray, Resize, (asUINT), void), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Array<T>", "bool get_empty() const", asMETHOD(CScriptArray, IsEmpty), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Array<T>", "int Find(const T&in) const",
+                                 asMETHODPR(CScriptArray, Find, (void*) const, int), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Array<T>", "int Find(uint, const T&in) const",
+                                 asMETHODPR(CScriptArray, Find, (asUINT, void*) const, int), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Array<T>", "int FindByRef(const T&in) const",
+                                 asMETHODPR(CScriptArray, FindByRef, (void*) const, int), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Array<T>", "int FindByRef(uint, const T&in) const",
+                                 asMETHODPR(CScriptArray, FindByRef, (asUINT, void*) const, int), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Array<T>", "bool Swap(Array<T>&inout)", asMETHOD(CScriptArray, Swap),
+                                 asCALL_THISCALL);
+    engine->RegisterObjectMethod("Array<T>", "bool opEquals(const Array<T>&in) const",
+                                 asMETHOD(CScriptArray, operator==), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Array<T>", "uint get_length() const", asMETHOD(CScriptArray, GetSize),
+                                 asCALL_THISCALL);
+    engine->RegisterObjectMethod("Array<T>", "void set_length(uint)", asMETHODPR(CScriptArray, Resize, (asUINT), void),
+                                 asCALL_THISCALL);
+    engine->RegisterObjectMethod("Array<T>", "bool get_empty() const", asMETHOD(CScriptArray, IsEmpty),
+                                 asCALL_THISCALL);
     engine->RegisterDefaultArrayType("Array<T>");
 }
 
-CScriptDictionary *CScriptDictionary::Create(asIScriptEngine *engine)
+CScriptDictionary* CScriptDictionary::Create(asIScriptEngine* engine)
 {
     // Use the custom memory routine from AngelScript to allow application to better control how much memory is used
-    auto*obj = (CScriptDictionary*)asAllocMem(sizeof(CScriptDictionary));
-    new(obj) CScriptDictionary(engine);
+    auto* obj = (CScriptDictionary*)asAllocMem(sizeof(CScriptDictionary));
+    new (obj) CScriptDictionary(engine);
     return obj;
 }
 
-CScriptDictionary *CScriptDictionary::Create(asBYTE *buffer)
+CScriptDictionary* CScriptDictionary::Create(asBYTE* buffer)
 {
     // Use the custom memory routine from AngelScript to allow application to better control how much memory is used
-    auto*obj = (CScriptDictionary*)asAllocMem(sizeof(CScriptDictionary));
-    new(obj) CScriptDictionary(buffer);
+    auto* obj = (CScriptDictionary*)asAllocMem(sizeof(CScriptDictionary));
+    new (obj) CScriptDictionary(buffer);
     return obj;
 }
 
-CScriptDictionary::CScriptDictionary(asIScriptEngine *engine)
+CScriptDictionary::CScriptDictionary(asIScriptEngine* engine)
 {
     // We start with one reference
     refCount = 1;
@@ -1698,7 +1698,7 @@ CScriptDictionary::CScriptDictionary(asIScriptEngine *engine)
     */
 }
 
-CScriptDictionary::CScriptDictionary(asBYTE *buffer)
+CScriptDictionary::CScriptDictionary(asBYTE* buffer)
 {
     // We start with one reference
     refCount = 1;
@@ -1706,7 +1706,7 @@ CScriptDictionary::CScriptDictionary(asBYTE *buffer)
 
     // This constructor will always be called from a script
     // so we can get the engine from the active context
-    asIScriptContext *ctx = asGetActiveContext();
+    asIScriptContext* ctx = asGetActiveContext();
     engine = ctx->GetEngine();
 
     // Urho3D: garbage collection disabled
@@ -1720,11 +1720,11 @@ CScriptDictionary::CScriptDictionary(asBYTE *buffer)
     asUINT length = *(asUINT*)buffer;
     buffer += 4;
 
-    while( length-- )
+    while (length--)
     {
         // Align the buffer pointer on a 4 byte boundary in
         // case previous value was smaller than 4 bytes
-        if( asPWORD(buffer) & 0x3 )
+        if (asPWORD(buffer) & 0x3)
             buffer += 4 - (asPWORD(buffer) & 0x3);
 
         // Get the name value pair from the buffer and insert it in the dictionary
@@ -1736,36 +1736,55 @@ CScriptDictionary::CScriptDictionary(asBYTE *buffer)
         buffer += sizeof(int);
 
         // Depending on the type id, the value will inline in the buffer or a pointer
-        auto*ref = (void*)buffer;
+        auto* ref = (void*)buffer;
 
-        if( typeId >= asTYPEID_INT8 && typeId <= asTYPEID_DOUBLE )
+        if (typeId >= asTYPEID_INT8 && typeId <= asTYPEID_DOUBLE)
         {
             // Convert primitive values to either int64 or double, so we can use the overloaded Set methods
             asINT64 i64;
             double d;
-            switch( typeId )
+            switch (typeId)
             {
-            case asTYPEID_INT8: i64 = *(char*)ref; break;
-            case asTYPEID_INT16: i64 = *(short*)ref; break;
-            case asTYPEID_INT32: i64 = *(int*)ref; break;
-            case asTYPEID_INT64: i64 = *(asINT64*)ref; break;
-            case asTYPEID_UINT8: i64 = *(unsigned char*)ref; break;
-            case asTYPEID_UINT16: i64 = *(unsigned short*)ref; break;
-            case asTYPEID_UINT32: i64 = *(unsigned int*)ref; break;
-            case asTYPEID_UINT64: i64 = *(asINT64*)ref; break;
-            case asTYPEID_FLOAT: d = *(float*)ref; break;
-            case asTYPEID_DOUBLE: d = *(double*)ref; break;
+            case asTYPEID_INT8:
+                i64 = *(char*)ref;
+                break;
+            case asTYPEID_INT16:
+                i64 = *(short*)ref;
+                break;
+            case asTYPEID_INT32:
+                i64 = *(int*)ref;
+                break;
+            case asTYPEID_INT64:
+                i64 = *(asINT64*)ref;
+                break;
+            case asTYPEID_UINT8:
+                i64 = *(unsigned char*)ref;
+                break;
+            case asTYPEID_UINT16:
+                i64 = *(unsigned short*)ref;
+                break;
+            case asTYPEID_UINT32:
+                i64 = *(unsigned int*)ref;
+                break;
+            case asTYPEID_UINT64:
+                i64 = *(asINT64*)ref;
+                break;
+            case asTYPEID_FLOAT:
+                d = *(float*)ref;
+                break;
+            case asTYPEID_DOUBLE:
+                d = *(double*)ref;
+                break;
             }
 
-            if( typeId >= asTYPEID_FLOAT )
+            if (typeId >= asTYPEID_FLOAT)
                 Set(name, d);
             else
                 Set(name, i64);
         }
         else
         {
-            if( (typeId & asTYPEID_MASK_OBJECT) &&
-                !(typeId & asTYPEID_OBJHANDLE) &&
+            if ((typeId & asTYPEID_MASK_OBJECT) && !(typeId & asTYPEID_OBJHANDLE) &&
                 (engine->GetTypeInfoById(typeId)->GetFlags() & asOBJ_REF))
             {
                 // Dereference the pointer to get the reference to the actual object
@@ -1776,15 +1795,15 @@ CScriptDictionary::CScriptDictionary(asBYTE *buffer)
         }
 
         // Advance the buffer pointer with the size of the value
-        if( typeId & asTYPEID_MASK_OBJECT )
+        if (typeId & asTYPEID_MASK_OBJECT)
         {
-            asITypeInfo *ot = engine->GetTypeInfoById(typeId);
-            if( ot->GetFlags() & asOBJ_VALUE )
+            asITypeInfo* ot = engine->GetTypeInfoById(typeId);
+            if (ot->GetFlags() & asOBJ_VALUE)
                 buffer += ot->GetSize();
             else
                 buffer += sizeof(void*);
         }
-        else if( typeId == 0 )
+        else if (typeId == 0)
         {
             // null pointer
             buffer += sizeof(void*);
@@ -1813,58 +1832,49 @@ void CScriptDictionary::Release() const
 {
     // We need to clear the GC flag
     gcFlag = false;
-    if( asAtomicDec(refCount) == 0 )
+    if (asAtomicDec(refCount) == 0)
     {
         this->~CScriptDictionary();
         asFreeMem(const_cast<CScriptDictionary*>(this));
     }
 }
 
-int CScriptDictionary::GetRefCount()
-{
-    return refCount;
-}
+int CScriptDictionary::GetRefCount() { return refCount; }
 
-void CScriptDictionary::SetGCFlag()
-{
-    gcFlag = true;
-}
+void CScriptDictionary::SetGCFlag() { gcFlag = true; }
 
-bool CScriptDictionary::GetGCFlag()
-{
-    return gcFlag;
-}
+bool CScriptDictionary::GetGCFlag() { return gcFlag; }
 
-void CScriptDictionary::EnumReferences(asIScriptEngine *engine)
+void CScriptDictionary::EnumReferences(asIScriptEngine* engine)
 {
     // Call the gc enum callback for each of the objects
     HashMap<String, CScriptDictValue>::Iterator it;
-    for( it = dict.Begin(); it != dict.End(); it++ )
+    for (it = dict.Begin(); it != dict.End(); it++)
     {
-        if( it->second_.m_typeId & asTYPEID_MASK_OBJECT )
+        if (it->second_.m_typeId & asTYPEID_MASK_OBJECT)
             engine->GCEnumCallback(it->second_.m_valueObj);
     }
 }
 
-void CScriptDictionary::ReleaseAllReferences(asIScriptEngine * /*engine*/)
+void CScriptDictionary::ReleaseAllReferences(asIScriptEngine* /*engine*/)
 {
     // We're being told to release all references in
     // order to break circular references for dead objects
     DeleteAll();
 }
 
-CScriptDictionary &CScriptDictionary::operator =(const CScriptDictionary &other)
+CScriptDictionary& CScriptDictionary::operator=(const CScriptDictionary& other)
 {
     // Clear everything we had before
     DeleteAll();
 
     // Do a shallow copy of the dictionary
     HashMap<String, CScriptDictValue>::ConstIterator it;
-    for( it = other.dict.Begin(); it != other.dict.End(); it++ )
+    for (it = other.dict.Begin(); it != other.dict.End(); it++)
     {
-        if( it->second_.m_typeId & asTYPEID_OBJHANDLE )
+        if (it->second_.m_typeId & asTYPEID_OBJHANDLE)
             Set(it->first_, (void*)&it->second_.m_valueObj, it->second_.m_typeId);
-        else if( it->second_.m_typeId & asTYPEID_MASK_OBJECT )
+        else if (it->second_.m_typeId & asTYPEID_MASK_OBJECT)
             Set(it->first_, (void*)it->second_.m_valueObj, it->second_.m_typeId);
         else
             Set(it->first_, (void*)&it->second_.m_valueInt, it->second_.m_typeId);
@@ -1873,38 +1883,38 @@ CScriptDictionary &CScriptDictionary::operator =(const CScriptDictionary &other)
     return *this;
 }
 
-CScriptDictValue *CScriptDictionary::operator[](const String &key)
+CScriptDictValue* CScriptDictionary::operator[](const String& key)
 {
     // Return the existing value if it exists, else insert an empty value
     HashMap<String, CScriptDictValue>::Iterator it;
     it = dict.Find(key);
-    if( it == dict.End() )
+    if (it == dict.End())
         it = dict.Insert(MakePair(key, CScriptDictValue()));
 
     return &it->second_;
 }
 
-const CScriptDictValue *CScriptDictionary::operator[](const String &key) const
+const CScriptDictValue* CScriptDictionary::operator[](const String& key) const
 {
     // Return the existing value if it exists
     HashMap<String, CScriptDictValue>::ConstIterator it;
     it = dict.Find(key);
-    if( it != dict.End() )
+    if (it != dict.End())
         return &it->second_;
 
     // Else raise an exception
-    asIScriptContext *ctx = asGetActiveContext();
-    if( ctx )
+    asIScriptContext* ctx = asGetActiveContext();
+    if (ctx)
         ctx->SetException("Invalid access to non-existing value");
 
     return nullptr;
 }
 
-void CScriptDictionary::Set(const String &key, void *value, int typeId)
+void CScriptDictionary::Set(const String& key, void* value, int typeId)
 {
     HashMap<String, CScriptDictValue>::Iterator it;
     it = dict.Find(key);
-    if( it == dict.End() )
+    if (it == dict.End())
         it = dict.Insert(MakePair(key, CScriptDictValue()));
 
     it->second_.Set(engine, value, typeId);
@@ -1915,7 +1925,7 @@ void CScriptDictionary::Set(const String &key, void *value, int typeId)
 // through implicit conversions. This simplifies the management of the
 // numeric types when the script retrieves the stored value using a
 // different type.
-void CScriptDictionary::Set(const String &key, const asINT64 &value)
+void CScriptDictionary::Set(const String& key, const asINT64& value)
 {
     Set(key, const_cast<asINT64*>(&value), asTYPEID_INT64);
 }
@@ -1924,17 +1934,17 @@ void CScriptDictionary::Set(const String &key, const asINT64 &value)
 // will be stored in the dictionary as double through implicit conversions.
 // This simplifies the management of the numeric types when the script
 // retrieves the stored value using a different type.
-void CScriptDictionary::Set(const String &key, const double &value)
+void CScriptDictionary::Set(const String& key, const double& value)
 {
     Set(key, const_cast<double*>(&value), asTYPEID_DOUBLE);
 }
 
 // Returns true if the value was successfully retrieved
-bool CScriptDictionary::Get(const String &key, void *value, int typeId) const
+bool CScriptDictionary::Get(const String& key, void* value, int typeId) const
 {
     HashMap<String, CScriptDictValue>::ConstIterator it;
     it = dict.Find(key);
-    if( it != dict.End() )
+    if (it != dict.End())
         return it->second_.Get(engine, value, typeId);
 
     // AngelScript has already initialized the value with a default value,
@@ -1945,31 +1955,25 @@ bool CScriptDictionary::Get(const String &key, void *value, int typeId) const
 }
 
 // Returns the type id of the stored value
-int CScriptDictionary::GetTypeId(const String &key) const
+int CScriptDictionary::GetTypeId(const String& key) const
 {
     HashMap<String, CScriptDictValue>::ConstIterator it;
     it = dict.Find(key);
-    if( it != dict.End() )
+    if (it != dict.End())
         return it->second_.m_typeId;
 
     return -1;
 }
 
-bool CScriptDictionary::Get(const String &key, asINT64 &value) const
-{
-    return Get(key, &value, asTYPEID_INT64);
-}
+bool CScriptDictionary::Get(const String& key, asINT64& value) const { return Get(key, &value, asTYPEID_INT64); }
 
-bool CScriptDictionary::Get(const String &key, double &value) const
-{
-    return Get(key, &value, asTYPEID_DOUBLE);
-}
+bool CScriptDictionary::Get(const String& key, double& value) const { return Get(key, &value, asTYPEID_DOUBLE); }
 
-bool CScriptDictionary::Exists(const String &key) const
+bool CScriptDictionary::Exists(const String& key) const
 {
     HashMap<String, CScriptDictValue>::ConstIterator it;
     it = dict.Find(key);
-    if( it != dict.End() )
+    if (it != dict.End())
         return true;
 
     return false;
@@ -1977,22 +1981,19 @@ bool CScriptDictionary::Exists(const String &key) const
 
 bool CScriptDictionary::IsEmpty() const
 {
-    if( dict.Size() == 0 )
+    if (dict.Size() == 0)
         return true;
 
     return false;
 }
 
-asUINT CScriptDictionary::GetSize() const
-{
-    return asUINT(dict.Size());
-}
+asUINT CScriptDictionary::GetSize() const { return asUINT(dict.Size()); }
 
-void CScriptDictionary::Delete(const String &key)
+void CScriptDictionary::Delete(const String& key)
 {
     HashMap<String, CScriptDictValue>::Iterator it;
     it = dict.Find(key);
-    if( it != dict.End() )
+    if (it != dict.End())
     {
         it->second_.FreeValue(engine);
         dict.Erase(it);
@@ -2002,7 +2003,7 @@ void CScriptDictionary::Delete(const String &key)
 void CScriptDictionary::DeleteAll()
 {
     HashMap<String, CScriptDictValue>::Iterator it;
-    for( it = dict.Begin(); it != dict.End(); it++ )
+    for (it = dict.Begin(); it != dict.End(); it++)
         it->second_.FreeValue(engine);
 
     dict.Clear();
@@ -2015,13 +2016,13 @@ CScriptArray* CScriptDictionary::GetKeys() const
     //                 Only problem is if multiple engines are used, as they may not
     //                 share the same type id. Alternatively it can be stored in the
     //                 user data for the dictionary type.
-    asITypeInfo *ot = engine->GetTypeInfoByDecl("Array<String>");
+    asITypeInfo* ot = engine->GetTypeInfoByDecl("Array<String>");
 
     // Create the array object
-    CScriptArray *array = CScriptArray::Create(ot, asUINT(dict.Size()));
+    CScriptArray* array = CScriptArray::Create(ot, asUINT(dict.Size()));
     long current = -1;
     HashMap<String, CScriptDictValue>::ConstIterator it;
-    for( it = dict.Begin(); it != dict.End(); it++ )
+    for (it = dict.Begin(); it != dict.End(); it++)
     {
         current++;
         *(String*)array->At(current) = it->first_;
@@ -2030,40 +2031,40 @@ CScriptArray* CScriptDictionary::GetKeys() const
     return array;
 }
 
-void ScriptDictionaryFactory_Generic(asIScriptGeneric *gen)
+void ScriptDictionaryFactory_Generic(asIScriptGeneric* gen)
 {
     *(CScriptDictionary**)gen->GetAddressOfReturnLocation() = CScriptDictionary::Create(gen->GetEngine());
 }
 
-void ScriptDictionaryListFactory_Generic(asIScriptGeneric *gen)
+void ScriptDictionaryListFactory_Generic(asIScriptGeneric* gen)
 {
-    auto*buffer = (asBYTE*)gen->GetArgAddress(0);
+    auto* buffer = (asBYTE*)gen->GetArgAddress(0);
     *(CScriptDictionary**)gen->GetAddressOfReturnLocation() = CScriptDictionary::Create(buffer);
 }
 
-CScriptDictValue::CScriptDictValue()    // NOLINT(hicpp-member-init)
+CScriptDictValue::CScriptDictValue() // NOLINT(hicpp-member-init)
 {
     m_valueObj = nullptr;
-    m_typeId   = 0;
+    m_typeId = 0;
 }
 
-CScriptDictValue::CScriptDictValue(asIScriptEngine *engine, void *value, int typeId)    // NOLINT(hicpp-member-init)
+CScriptDictValue::CScriptDictValue(asIScriptEngine* engine, void* value, int typeId) // NOLINT(hicpp-member-init)
 {
     m_valueObj = nullptr;
-    m_typeId   = 0;
+    m_typeId = 0;
     Set(engine, value, typeId);
 }
 
 CScriptDictValue::~CScriptDictValue()
 {
     // Must not hold an object when destroyed, as then the object will never be freed
-    assert( (m_typeId & asTYPEID_MASK_OBJECT) == 0 );
+    assert((m_typeId & asTYPEID_MASK_OBJECT) == 0);
 }
 
-void CScriptDictValue::FreeValue(asIScriptEngine *engine)
+void CScriptDictValue::FreeValue(asIScriptEngine* engine)
 {
     // If it is a handle or a ref counted object, call release
-    if( m_typeId & asTYPEID_MASK_OBJECT )
+    if (m_typeId & asTYPEID_MASK_OBJECT)
     {
         // Let the engine release the object
         engine->ReleaseScriptObject(m_valueObj, engine->GetTypeInfoById(m_typeId));
@@ -2074,18 +2075,18 @@ void CScriptDictValue::FreeValue(asIScriptEngine *engine)
     // For primitives, there's nothing to do
 }
 
-void CScriptDictValue::Set(asIScriptEngine *engine, void *value, int typeId)
+void CScriptDictValue::Set(asIScriptEngine* engine, void* value, int typeId)
 {
     FreeValue(engine);
 
     m_typeId = typeId;
-    if( typeId & asTYPEID_OBJHANDLE )
+    if (typeId & asTYPEID_OBJHANDLE)
     {
         // We're receiving a reference to the handle, so we need to dereference it
         m_valueObj = *(void**)value;
         engine->AddRefScriptObject(m_valueObj, engine->GetTypeInfoById(typeId));
     }
-    else if( typeId & asTYPEID_MASK_OBJECT )
+    else if (typeId & asTYPEID_MASK_OBJECT)
     {
         // Create a copy of the object
         m_valueObj = engine->CreateScriptObjectCopy(value, engine->GetTypeInfoById(typeId));
@@ -2104,7 +2105,7 @@ void CScriptDictValue::Set(asIScriptEngine *engine, void *value, int typeId)
 // through implicit conversions. This simplifies the management of the
 // numeric types when the script retrieves the stored value using a
 // different type.
-void CScriptDictValue::Set(asIScriptEngine *engine, const asINT64 &value)
+void CScriptDictValue::Set(asIScriptEngine* engine, const asINT64& value)
 {
     Set(engine, const_cast<asINT64*>(&value), asTYPEID_INT64);
 }
@@ -2113,37 +2114,37 @@ void CScriptDictValue::Set(asIScriptEngine *engine, const asINT64 &value)
 // will be stored in the dictionary as double through implicit conversions.
 // This simplifies the management of the numeric types when the script
 // retrieves the stored value using a different type.
-void CScriptDictValue::Set(asIScriptEngine *engine, const double &value)
+void CScriptDictValue::Set(asIScriptEngine* engine, const double& value)
 {
     Set(engine, const_cast<double*>(&value), asTYPEID_DOUBLE);
 }
 
-bool CScriptDictValue::Get(asIScriptEngine *engine, void *value, int typeId) const
+bool CScriptDictValue::Get(asIScriptEngine* engine, void* value, int typeId) const
 {
     // Return the value
-    if( typeId & asTYPEID_OBJHANDLE )
+    if (typeId & asTYPEID_OBJHANDLE)
     {
         // A handle can be retrieved if the stored type is a handle of same or compatible type
         // or if the stored type is an object that implements the interface that the handle refer to.
 
         void* cast = nullptr;
-        if ((m_typeId & asTYPEID_MASK_OBJECT) &&
-            engine->RefCastObject(m_valueObj, engine->GetTypeInfoById(m_typeId), engine->GetTypeInfoById(typeId), &cast) >= 0)
+        if ((m_typeId & asTYPEID_MASK_OBJECT) && engine->RefCastObject(m_valueObj, engine->GetTypeInfoById(m_typeId),
+                                                                       engine->GetTypeInfoById(typeId), &cast) >= 0)
         {
             *(void**)value = m_valueObj;
 
             return true;
         }
     }
-    else if( typeId & asTYPEID_MASK_OBJECT )
+    else if (typeId & asTYPEID_MASK_OBJECT)
     {
         // Verify that the copy can be made
         bool isCompatible = false;
-        if( m_typeId == typeId )
+        if (m_typeId == typeId)
             isCompatible = true;
 
         // Copy the object into the given reference
-        if( isCompatible )
+        if (isCompatible)
         {
             engine->AssignScriptObject(value, m_valueObj, engine->GetTypeInfoById(typeId));
 
@@ -2152,7 +2153,7 @@ bool CScriptDictValue::Get(asIScriptEngine *engine, void *value, int typeId) con
     }
     else
     {
-        if( m_typeId == typeId )
+        if (m_typeId == typeId)
         {
             int size = engine->GetSizeOfPrimitiveType(typeId);
             memcpy(value, &m_valueInt, size);
@@ -2160,12 +2161,12 @@ bool CScriptDictValue::Get(asIScriptEngine *engine, void *value, int typeId) con
         }
 
         // We know all numbers are stored as either int64 or double, since we register overloaded functions for those
-        if( m_typeId == asTYPEID_INT64 && typeId == asTYPEID_DOUBLE )
+        if (m_typeId == asTYPEID_INT64 && typeId == asTYPEID_DOUBLE)
         {
             *(double*)value = double(m_valueInt);
             return true;
         }
-        else if( m_typeId == asTYPEID_DOUBLE && typeId == asTYPEID_INT64 )
+        else if (m_typeId == asTYPEID_DOUBLE && typeId == asTYPEID_INT64)
         {
             *(asINT64*)value = asINT64(m_valueFlt);
             return true;
@@ -2176,76 +2177,70 @@ bool CScriptDictValue::Get(asIScriptEngine *engine, void *value, int typeId) con
     return false;
 }
 
-bool CScriptDictValue::Get(asIScriptEngine *engine, asINT64 &value) const
+bool CScriptDictValue::Get(asIScriptEngine* engine, asINT64& value) const
 {
     return Get(engine, &value, asTYPEID_INT64);
 }
 
-bool CScriptDictValue::Get(asIScriptEngine *engine, double &value) const
+bool CScriptDictValue::Get(asIScriptEngine* engine, double& value) const
 {
     return Get(engine, &value, asTYPEID_DOUBLE);
 }
 
-int CScriptDictValue::GetTypeId() const
-{
-    return m_typeId;
-}
+int CScriptDictValue::GetTypeId() const { return m_typeId; }
 
-static void CScriptDictValue_Construct(void *mem)
-{
-    new(mem) CScriptDictValue();
-}
+static void CScriptDictValue_Construct(void* mem) { new (mem) CScriptDictValue(); }
 
-static void CScriptDictValue_Destruct(CScriptDictValue *obj)
+static void CScriptDictValue_Destruct(CScriptDictValue* obj)
 {
-    asIScriptContext *ctx = asGetActiveContext();
-    if( ctx )
+    asIScriptContext* ctx = asGetActiveContext();
+    if (ctx)
     {
-        asIScriptEngine *engine = ctx->GetEngine();
+        asIScriptEngine* engine = ctx->GetEngine();
         obj->FreeValue(engine);
     }
     obj->~CScriptDictValue();
 }
 
-static CScriptDictValue &CScriptDictValue_opAssign(void *ref, int typeId, CScriptDictValue *obj)
+static CScriptDictValue& CScriptDictValue_opAssign(void* ref, int typeId, CScriptDictValue* obj)
 {
-    asIScriptContext *ctx = asGetActiveContext();
-    if( ctx )
+    asIScriptContext* ctx = asGetActiveContext();
+    if (ctx)
     {
-        asIScriptEngine *engine = ctx->GetEngine();
+        asIScriptEngine* engine = ctx->GetEngine();
         obj->Set(engine, ref, typeId);
     }
     return *obj;
 }
 
-static CScriptDictValue &CScriptDictValue_opAssign(double val, CScriptDictValue *obj)
+static CScriptDictValue& CScriptDictValue_opAssign(double val, CScriptDictValue* obj)
 {
     return CScriptDictValue_opAssign(&val, asTYPEID_DOUBLE, obj);
 }
 
-static CScriptDictValue &CScriptDictValue_opAssign(asINT64 val, CScriptDictValue *obj)
+static CScriptDictValue& CScriptDictValue_opAssign(asINT64 val, CScriptDictValue* obj)
 {
     return CScriptDictValue_opAssign(&val, asTYPEID_INT64, obj);
 }
 
-static void CScriptDictValue_opCast(void *ref, int typeId, CScriptDictValue *obj)
+static void CScriptDictValue_opCast(void* ref, int typeId, CScriptDictValue* obj)
 {
-    asIScriptContext *ctx = asGetActiveContext();
-    if( ctx )
+    asIScriptContext* ctx = asGetActiveContext();
+    if (ctx)
     {
-        asIScriptEngine *engine = ctx->GetEngine();
+        asIScriptEngine* engine = ctx->GetEngine();
         obj->Get(engine, ref, typeId);
     }
 }
 
-static asINT64 CScriptDictValue_opConvInt(CScriptDictValue *obj)
+static asINT64 CScriptDictValue_opConvInt(CScriptDictValue* obj)
 {
     asINT64 value;
     CScriptDictValue_opCast(&value, asTYPEID_INT64, obj);
     return value;
 }
 
-static double CScriptDictValue_opConvDouble(CScriptDictValue *obj)
+static double CScriptDictValue_opConvDouble(CScriptDictValue* obj)
 {
     double value;
     CScriptDictValue_opCast(&value, asTYPEID_DOUBLE, obj);
@@ -2255,20 +2250,17 @@ static double CScriptDictValue_opConvDouble(CScriptDictValue *obj)
 static void CScriptDictValue_opAssign_gen(asIScriptGeneric* gen)
 {
     *static_cast<CScriptDictValue**>(gen->GetAddressOfReturnLocation()) =
-        &CScriptDictValue_opAssign(*static_cast<void**>(gen->GetAddressOfArg(0)),
-            gen->GetArgTypeId(0),
-            static_cast<CScriptDictValue*>(gen->GetObject()));
+        &CScriptDictValue_opAssign(*static_cast<void**>(gen->GetAddressOfArg(0)), gen->GetArgTypeId(0),
+                                   static_cast<CScriptDictValue*>(gen->GetObject()));
 }
 
 static void CScriptDictValue_opCast_gen(asIScriptGeneric* gen)
 {
-    CScriptDictValue_opCast(
-        *static_cast<void**>(gen->GetAddressOfArg(0)),
-        gen->GetArgTypeId(0),
-        static_cast<CScriptDictValue*>(gen->GetObject()));
+    CScriptDictValue_opCast(*static_cast<void**>(gen->GetAddressOfArg(0)), gen->GetArgTypeId(0),
+                            static_cast<CScriptDictValue*>(gen->GetObject()));
 }
 
-static void ScriptDictionarySet_Generic(asIScriptGeneric *gen)
+static void ScriptDictionarySet_Generic(asIScriptGeneric* gen)
 {
     CScriptDictionary* dict = (CScriptDictionary*)gen->GetObject();
     String* key = *(String**)gen->GetAddressOfArg(0);
@@ -2277,7 +2269,7 @@ static void ScriptDictionarySet_Generic(asIScriptGeneric *gen)
     dict->Set(*key, ref, type_id);
 }
 
-static void ScriptDictionaryGet_Generic(asIScriptGeneric *gen)
+static void ScriptDictionaryGet_Generic(asIScriptGeneric* gen)
 {
     CScriptDictionary* dict = (CScriptDictionary*)gen->GetObject();
     String* key = *(String**)gen->GetAddressOfArg(0);
@@ -2287,66 +2279,109 @@ static void ScriptDictionaryGet_Generic(asIScriptGeneric *gen)
 }
 #endif
 
-void RegisterDictionary(asIScriptEngine *engine)
+void RegisterDictionary(asIScriptEngine* engine)
 {
-    engine->RegisterObjectBehaviour("DictionaryValue", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(CScriptDictValue_Construct), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectBehaviour("DictionaryValue", asBEHAVE_DESTRUCT, "void f()", asFUNCTION(CScriptDictValue_Destruct), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("DictionaryValue", "DictionaryValue &opAssign(double)", asFUNCTIONPR(CScriptDictValue_opAssign, (double, CScriptDictValue*), CScriptDictValue &), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("DictionaryValue", "DictionaryValue &opAssign(int64)", asFUNCTIONPR(CScriptDictValue_opAssign, (asINT64, CScriptDictValue*), CScriptDictValue &), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("DictionaryValue", "int64 opConv()", asFUNCTIONPR(CScriptDictValue_opConvInt, (CScriptDictValue*), asINT64), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("DictionaryValue", "double opConv()", asFUNCTIONPR(CScriptDictValue_opConvDouble, (CScriptDictValue*), double), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectBehaviour("DictionaryValue", asBEHAVE_CONSTRUCT, "void f()",
+                                    asFUNCTION(CScriptDictValue_Construct), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectBehaviour("DictionaryValue", asBEHAVE_DESTRUCT, "void f()",
+                                    asFUNCTION(CScriptDictValue_Destruct), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod(
+        "DictionaryValue", "DictionaryValue &opAssign(double)",
+        asFUNCTIONPR(CScriptDictValue_opAssign, (double, CScriptDictValue*), CScriptDictValue&), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod(
+        "DictionaryValue", "DictionaryValue &opAssign(int64)",
+        asFUNCTIONPR(CScriptDictValue_opAssign, (asINT64, CScriptDictValue*), CScriptDictValue&), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("DictionaryValue", "int64 opConv()",
+                                 asFUNCTIONPR(CScriptDictValue_opConvInt, (CScriptDictValue*), asINT64),
+                                 asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("DictionaryValue", "double opConv()",
+                                 asFUNCTIONPR(CScriptDictValue_opConvDouble, (CScriptDictValue*), double),
+                                 asCALL_CDECL_OBJLAST);
 
     engine->RegisterObjectType("Dictionary", sizeof(CScriptDictionary), asOBJ_REF);
-    engine->RegisterObjectBehaviour("Dictionary", asBEHAVE_FACTORY, "Dictionary@ f()", asFUNCTION(ScriptDictionaryFactory_Generic), asCALL_GENERIC);
-    engine->RegisterObjectBehaviour("Dictionary", asBEHAVE_LIST_FACTORY, "Dictionary @f(int &in) {repeat {String, ?}}", asFUNCTION(ScriptDictionaryListFactory_Generic), asCALL_GENERIC);
-    engine->RegisterObjectBehaviour("Dictionary", asBEHAVE_ADDREF, "void f()", asMETHOD(CScriptDictionary,AddRef), asCALL_THISCALL);
-    engine->RegisterObjectBehaviour("Dictionary", asBEHAVE_RELEASE, "void f()", asMETHOD(CScriptDictionary,Release), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Dictionary", "Dictionary &opAssign(const Dictionary &in)", asMETHODPR(CScriptDictionary, operator=, (const CScriptDictionary &), CScriptDictionary&), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Dictionary", "void Set(const String &in, const int64&in)", asMETHODPR(CScriptDictionary,Set,(const String&,const asINT64&),void), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Dictionary", "bool Get(const String &in, int64&out) const", asMETHODPR(CScriptDictionary,Get,(const String&,asINT64&) const,bool), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Dictionary", "void Set(const String &in, const double&in)", asMETHODPR(CScriptDictionary,Set,(const String&,const double&),void), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Dictionary", "bool Get(const String &in, double&out) const", asMETHODPR(CScriptDictionary,Get,(const String&,double&) const,bool), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Dictionary", "bool Exists(const String &in) const", asMETHOD(CScriptDictionary,Exists), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Dictionary", "bool get_empty() const", asMETHOD(CScriptDictionary, IsEmpty), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Dictionary", "uint get_length() const", asMETHOD(CScriptDictionary, GetSize), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Dictionary", "void Erase(const String &in)", asMETHOD(CScriptDictionary,Delete), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Dictionary", "void Clear()", asMETHOD(CScriptDictionary,DeleteAll), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Dictionary", "Array<String> @get_keys() const", asMETHOD(CScriptDictionary,GetKeys), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Dictionary", "DictionaryValue &opIndex(const String &in)", asMETHODPR(CScriptDictionary, operator[], (const String &), CScriptDictValue*), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Dictionary", "const DictionaryValue &opIndex(const String &in) const", asMETHODPR(CScriptDictionary, operator[], (const String &) const, const CScriptDictValue*), asCALL_THISCALL);
+    engine->RegisterObjectBehaviour("Dictionary", asBEHAVE_FACTORY, "Dictionary@ f()",
+                                    asFUNCTION(ScriptDictionaryFactory_Generic), asCALL_GENERIC);
+    engine->RegisterObjectBehaviour("Dictionary", asBEHAVE_LIST_FACTORY, "Dictionary @f(int &in) {repeat {String, ?}}",
+                                    asFUNCTION(ScriptDictionaryListFactory_Generic), asCALL_GENERIC);
+    engine->RegisterObjectBehaviour("Dictionary", asBEHAVE_ADDREF, "void f()", asMETHOD(CScriptDictionary, AddRef),
+                                    asCALL_THISCALL);
+    engine->RegisterObjectBehaviour("Dictionary", asBEHAVE_RELEASE, "void f()", asMETHOD(CScriptDictionary, Release),
+                                    asCALL_THISCALL);
+    engine->RegisterObjectMethod(
+        "Dictionary", "Dictionary &opAssign(const Dictionary &in)",
+        asMETHODPR(CScriptDictionary, operator=, (const CScriptDictionary&), CScriptDictionary&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Dictionary", "void Set(const String &in, const int64&in)",
+                                 asMETHODPR(CScriptDictionary, Set, (const String&, const asINT64&), void),
+                                 asCALL_THISCALL);
+    engine->RegisterObjectMethod("Dictionary", "bool Get(const String &in, int64&out) const",
+                                 asMETHODPR(CScriptDictionary, Get, (const String&, asINT64&) const, bool),
+                                 asCALL_THISCALL);
+    engine->RegisterObjectMethod("Dictionary", "void Set(const String &in, const double&in)",
+                                 asMETHODPR(CScriptDictionary, Set, (const String&, const double&), void),
+                                 asCALL_THISCALL);
+    engine->RegisterObjectMethod("Dictionary", "bool Get(const String &in, double&out) const",
+                                 asMETHODPR(CScriptDictionary, Get, (const String&, double&) const, bool),
+                                 asCALL_THISCALL);
+    engine->RegisterObjectMethod("Dictionary", "bool Exists(const String &in) const",
+                                 asMETHOD(CScriptDictionary, Exists), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Dictionary", "bool get_empty() const", asMETHOD(CScriptDictionary, IsEmpty),
+                                 asCALL_THISCALL);
+    engine->RegisterObjectMethod("Dictionary", "uint get_length() const", asMETHOD(CScriptDictionary, GetSize),
+                                 asCALL_THISCALL);
+    engine->RegisterObjectMethod("Dictionary", "void Erase(const String &in)", asMETHOD(CScriptDictionary, Delete),
+                                 asCALL_THISCALL);
+    engine->RegisterObjectMethod("Dictionary", "void Clear()", asMETHOD(CScriptDictionary, DeleteAll), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Dictionary", "Array<String> @get_keys() const", asMETHOD(CScriptDictionary, GetKeys),
+                                 asCALL_THISCALL);
+    engine->RegisterObjectMethod("Dictionary", "DictionaryValue &opIndex(const String &in)",
+                                 asMETHODPR(CScriptDictionary, operator[], (const String&), CScriptDictValue*),
+                                 asCALL_THISCALL);
+    engine->RegisterObjectMethod(
+        "Dictionary", "const DictionaryValue &opIndex(const String &in) const",
+        asMETHODPR(CScriptDictionary, operator[], (const String&) const, const CScriptDictValue*), asCALL_THISCALL);
 
 #ifndef AS_MAX_PORTABILITY
-    engine->RegisterObjectMethod("DictionaryValue", "DictionaryValue &opHndlAssign(const ?&in)", asFUNCTIONPR(CScriptDictValue_opAssign, (void *, int, CScriptDictValue*), CScriptDictValue &), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("DictionaryValue", "DictionaryValue &opAssign(const ?&in)", asFUNCTIONPR(CScriptDictValue_opAssign, (void *, int, CScriptDictValue*), CScriptDictValue &), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("DictionaryValue", "void opCast(?&out)", asFUNCTIONPR(CScriptDictValue_opCast, (void *, int, CScriptDictValue*), void), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("DictionaryValue", "void opConv(?&out)", asFUNCTIONPR(CScriptDictValue_opCast, (void *, int, CScriptDictValue*), void), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("Dictionary", "void Set(const String &in, const ?&in)", asMETHODPR(CScriptDictionary, Set, (const String&, void*, int), void), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Dictionary", "bool Get(const String &in, ?&out) const", asMETHODPR(CScriptDictionary, Get, (const String&, void*, int) const, bool), asCALL_THISCALL);
+    engine->RegisterObjectMethod(
+        "DictionaryValue", "DictionaryValue &opHndlAssign(const ?&in)",
+        asFUNCTIONPR(CScriptDictValue_opAssign, (void*, int, CScriptDictValue*), CScriptDictValue&),
+        asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod(
+        "DictionaryValue", "DictionaryValue &opAssign(const ?&in)",
+        asFUNCTIONPR(CScriptDictValue_opAssign, (void*, int, CScriptDictValue*), CScriptDictValue&),
+        asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("DictionaryValue", "void opCast(?&out)",
+                                 asFUNCTIONPR(CScriptDictValue_opCast, (void*, int, CScriptDictValue*), void),
+                                 asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("DictionaryValue", "void opConv(?&out)",
+                                 asFUNCTIONPR(CScriptDictValue_opCast, (void*, int, CScriptDictValue*), void),
+                                 asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("Dictionary", "void Set(const String &in, const ?&in)",
+                                 asMETHODPR(CScriptDictionary, Set, (const String&, void*, int), void),
+                                 asCALL_THISCALL);
+    engine->RegisterObjectMethod("Dictionary", "bool Get(const String &in, ?&out) const",
+                                 asMETHODPR(CScriptDictionary, Get, (const String&, void*, int) const, bool),
+                                 asCALL_THISCALL);
 #else
-    engine->RegisterObjectMethod("DictionaryValue", "DictionaryValue &opHndlAssign(const ?&in)", asFUNCTION(CScriptDictValue_opAssign_gen), asCALL_GENERIC);
-    engine->RegisterObjectMethod("DictionaryValue", "DictionaryValue &opAssign(const ?&in)", asFUNCTION(CScriptDictValue_opAssign_gen), asCALL_GENERIC);
-    engine->RegisterObjectMethod("DictionaryValue", "void opCast(?&out)", asFUNCTION(CScriptDictValue_opCast_gen), asCALL_GENERIC);
-    engine->RegisterObjectMethod("DictionaryValue", "void opConv(?&out)", asFUNCTION(CScriptDictValue_opCast_gen), asCALL_GENERIC);
-    engine->RegisterObjectMethod("Dictionary", "void Set(const String &in, const ?&in)", asFUNCTION(ScriptDictionarySet_Generic), asCALL_GENERIC);
-    engine->RegisterObjectMethod("Dictionary", "bool Get(const String &in, ?&out) const", asFUNCTION(ScriptDictionaryGet_Generic), asCALL_GENERIC);
+    engine->RegisterObjectMethod("DictionaryValue", "DictionaryValue &opHndlAssign(const ?&in)",
+                                 asFUNCTION(CScriptDictValue_opAssign_gen), asCALL_GENERIC);
+    engine->RegisterObjectMethod("DictionaryValue", "DictionaryValue &opAssign(const ?&in)",
+                                 asFUNCTION(CScriptDictValue_opAssign_gen), asCALL_GENERIC);
+    engine->RegisterObjectMethod("DictionaryValue", "void opCast(?&out)", asFUNCTION(CScriptDictValue_opCast_gen),
+                                 asCALL_GENERIC);
+    engine->RegisterObjectMethod("DictionaryValue", "void opConv(?&out)", asFUNCTION(CScriptDictValue_opCast_gen),
+                                 asCALL_GENERIC);
+    engine->RegisterObjectMethod("Dictionary", "void Set(const String &in, const ?&in)",
+                                 asFUNCTION(ScriptDictionarySet_Generic), asCALL_GENERIC);
+    engine->RegisterObjectMethod("Dictionary", "bool Get(const String &in, ?&out) const",
+                                 asFUNCTION(ScriptDictionaryGet_Generic), asCALL_GENERIC);
 #endif
 }
 
+static void ConstructString(String* ptr) { new (ptr) String(); }
 
-static void ConstructString(String* ptr)
-{
-    new(ptr) String();
-}
+static void ConstructStringCopy(const String& str, String* ptr) { new (ptr) String(str); }
 
-static void ConstructStringCopy(const String& str, String* ptr)
-{
-    new(ptr) String(str);
-}
-
-static void DestructString(String* ptr)
-{
-    ptr->~String();
-}
+static void DestructString(String* ptr) { ptr->~String(); }
 
 static char* StringCharAt(unsigned i, String& str)
 {
@@ -2378,64 +2413,51 @@ void StringResize(unsigned newSize, String& str)
         str[i] = ' ';
 }
 
-static void ConstructStringInt(int value, String* ptr)
+static void ConstructStringInt(int value, String* ptr) { new (ptr) String(value); }
+
+static void ConstructStringUInt(unsigned value, String* ptr) { new (ptr) String(value); }
+
+static void ConstructStringFloat(float value, String* ptr) { new (ptr) String(value); }
+
+static void ConstructStringDouble(double value, String* ptr) { new (ptr) String(value); }
+
+static void ConstructStringBool(bool value, String* ptr) { new (ptr) String(value); }
+
+static void StringSetUTF8FromLatin1(const String& src, String& str) { str.SetUTF8FromLatin1(src.CString()); }
+
+void RegisterString(asIScriptEngine* engine)
 {
-    new(ptr) String(value);
-}
+    // static const unsigned NPOS = String::NPOS; // workaround for GCC
+    // static StringFactory stringFactory;
+    // engine->RegisterGlobalProperty("const uint NPOS", (void*)&NPOS);
+    // engine->RegisterStringFactory("String", &stringFactory);
 
-static void ConstructStringUInt(unsigned value, String* ptr)
-{
-    new(ptr) String(value);
-}
-
-static void ConstructStringFloat(float value, String* ptr)
-{
-    new(ptr) String(value);
-}
-
-static void ConstructStringDouble(double value, String* ptr)
-{
-    new(ptr)String(value);
-}
-
-static void ConstructStringBool(bool value, String* ptr)
-{
-    new(ptr) String(value);
-}
-
-
-
-static void StringSetUTF8FromLatin1(const String& src, String& str)
-{
-    str.SetUTF8FromLatin1(src.CString());
-}
-
-void RegisterString(asIScriptEngine *engine)
-{
-    //static const unsigned NPOS = String::NPOS; // workaround for GCC
-    //static StringFactory stringFactory;
-    //engine->RegisterGlobalProperty("const uint NPOS", (void*)&NPOS);
-    //engine->RegisterStringFactory("String", &stringFactory);
-    
     // TODO Обертку с контролем размера массива
-    //engine->RegisterObjectMethod("String", "uint8 &opIndex(uint)", asFUNCTION(StringCharAt), asCALL_CDECL_OBJLAST);
-    //engine->RegisterObjectMethod("String", "const uint8 &opIndex(uint) const", asFUNCTION(StringCharAt), asCALL_CDECL_OBJLAST);
+    // engine->RegisterObjectMethod("String", "uint8 &opIndex(uint)", asFUNCTION(StringCharAt), asCALL_CDECL_OBJLAST);
+    // engine->RegisterObjectMethod("String", "const uint8 &opIndex(uint) const", asFUNCTION(StringCharAt),
+    // asCALL_CDECL_OBJLAST);
 
     // TODO у меня int8
-    //engine->RegisterObjectMethod("String", "void Replace(uint8, uint8, bool caseSensitive = true)", asMETHODPR(String, Replace, (char, char, bool), void), asCALL_THISCALL);
-    //engine->RegisterObjectMethod("String", "String Replaced(uint8, uint8, bool caseSensitive = true) const", asMETHODPR(String, Replaced, (char, char, bool) const, String), asCALL_THISCALL);
-    //engine->RegisterObjectMethod("String", "uint Find(uint8, uint start = 0, bool caseSensitive = true) const", asMETHODPR(String, Find, (char, unsigned, bool) const, unsigned), asCALL_THISCALL);
-    
+    // engine->RegisterObjectMethod("String", "void Replace(uint8, uint8, bool caseSensitive = true)",
+    // asMETHODPR(String, Replace, (char, char, bool), void), asCALL_THISCALL); engine->RegisterObjectMethod("String",
+    // "String Replaced(uint8, uint8, bool caseSensitive = true) const", asMETHODPR(String, Replaced, (char, char, bool)
+    // const, String), asCALL_THISCALL); engine->RegisterObjectMethod("String", "uint Find(uint8, uint start = 0, bool
+    // caseSensitive = true) const", asMETHODPR(String, Find, (char, unsigned, bool) const, unsigned), asCALL_THISCALL);
+
     // NPOS починить
-    //engine->RegisterObjectMethod("String", "uint FindLast(const String&in, uint start = 0xffffffff, bool caseSensitive = true) const", asMETHODPR(String, FindLast, (const String&, unsigned, bool) const, unsigned), asCALL_THISCALL);
-    //engine->RegisterObjectMethod("String", "uint FindLast(uint8, uint start = 0xffffffff, bool caseSensitive = true) const", asMETHODPR(String, FindLast, (char, unsigned, bool) const, unsigned), asCALL_THISCALL);
-    
-    // ручная привязка
-    //engine->RegisterObjectMethod("String", "void SetUTF8FromLatin1(const String& in)", asFUNCTION(StringSetUTF8FromLatin1), asCALL_CDECL_OBJLAST);
-    
-    // TODO у меня int8
-    //engine->RegisterObjectMethod("String", "bool Contains(uint8, bool caseSensitive = true) const", asMETHODPR(String, Contains, (char, bool) const, bool), asCALL_THISCALL);
+    // engine->RegisterObjectMethod("String", "uint FindLast(const String&in, uint start = 0xffffffff, bool
+    // caseSensitive = true) const", asMETHODPR(String, FindLast, (const String&, unsigned, bool) const, unsigned),
+    // asCALL_THISCALL); engine->RegisterObjectMethod("String", "uint FindLast(uint8, uint start = 0xffffffff, bool
+    // caseSensitive = true) const", asMETHODPR(String, FindLast, (char, unsigned, bool) const, unsigned),
+    // asCALL_THISCALL);
 
+    // ручная привязка
+    // engine->RegisterObjectMethod("String", "void SetUTF8FromLatin1(const String& in)",
+    // asFUNCTION(StringSetUTF8FromLatin1), asCALL_CDECL_OBJLAST);
+
+    // TODO у меня int8
+    // engine->RegisterObjectMethod("String", "bool Contains(uint8, bool caseSensitive = true) const",
+    // asMETHODPR(String, Contains, (char, bool) const, bool), asCALL_THISCALL);
 }
 
 const void* StringFactory::GetStringConstant(const char* data, asUINT length)
@@ -2444,7 +2466,8 @@ const void* StringFactory::GetStringConstant(const char* data, asUINT length)
 
     StringHash hash(data);
     auto iter = map_.Find(hash);
-    return reinterpret_cast<const void*>(&(iter == map_.End() ? map_.Insert(MakePair(hash, String(data))) : iter)->second_);
+    return reinterpret_cast<const void*>(
+        &(iter == map_.End() ? map_.Insert(MakePair(hash, String(data))) : iter)->second_);
 }
 
 int StringFactory::ReleaseStringConstant(const void* str)
@@ -2473,15 +2496,16 @@ void ASRegisterManualFirst_Addons(asIScriptEngine* engine)
     engine->SetTypeInfoUserDataCleanupCallback(CleanupTypeInfoArrayCache, ARRAY_CACHE);
     engine->RegisterObjectType("Array<class T>", 0, asOBJ_REF | asOBJ_TEMPLATE);
     RegisterArray(engine);
-    
-    engine->RegisterObjectType("DictionaryValue", sizeof(CScriptDictValue), asOBJ_VALUE | asOBJ_ASHANDLE | asOBJ_APP_CLASS_CD);
+
+    engine->RegisterObjectType("DictionaryValue", sizeof(CScriptDictValue),
+                               asOBJ_VALUE | asOBJ_ASHANDLE | asOBJ_APP_CLASS_CD);
 }
 
 // This function is called after ASRegisterGenerated()
 void ASRegisterManualLast_Addons(asIScriptEngine* engine)
 {
-    //RegisterArray(engine);
+    // RegisterArray(engine);
     RegisterDictionary(engine);
 }
 
-}
+} // namespace Urho3D

@@ -153,9 +153,11 @@ bool Texture2D::SetData(unsigned level, int x, int y, int width, int height, con
     if (!IsCompressed())
     {
         if (wholeLevel)
-            glTexImage2D(target_, level, format, width, height, 0, GetExternalFormat(format_), GetDataType(format_), data);
+            glTexImage2D(target_, level, format, width, height, 0, GetExternalFormat(format_), GetDataType(format_),
+                         data);
         else
-            glTexSubImage2D(target_, level, x, y, width, height, GetExternalFormat(format_), GetDataType(format_), data);
+            glTexSubImage2D(target_, level, x, y, width, height, GetExternalFormat(format_), GetDataType(format_),
+                            data);
     }
     else
     {
@@ -191,7 +193,8 @@ bool Texture2D::SetData(Image* image, bool useAlpha)
         unsigned components = image->GetComponents();
         if (Graphics::GetGL3Support() && ((components == 1 && !useAlpha) || components == 2))
         {
-            mipImage = image->ConvertToRGBA(); image = mipImage;
+            mipImage = image->ConvertToRGBA();
+            image = mipImage;
             if (!image)
                 return false;
             components = image->GetComponents();
@@ -205,7 +208,8 @@ bool Texture2D::SetData(Image* image, bool useAlpha)
         // Discard unnecessary mip levels
         for (unsigned i = 0; i < mipsToSkip_[quality]; ++i)
         {
-            mipImage = image->GetNextLevel(); image = mipImage;
+            mipImage = image->GetNextLevel();
+            image = mipImage;
             levelData = image->GetData();
             levelWidth = image->GetWidth();
             levelHeight = image->GetHeight();
@@ -230,11 +234,12 @@ bool Texture2D::SetData(Image* image, bool useAlpha)
             break;
 
         default:
-            assert(false);  // Should not reach here
+            assert(false); // Should not reach here
             break;
         }
 
-        // If image was previously compressed, reset number of requested levels to avoid error if level count is too high for new size
+        // If image was previously compressed, reset number of requested levels to avoid error if level count is too
+        // high for new size
         if (IsCompressed() && requestedLevels_ > 1)
             requestedLevels_ = 0;
         SetSize(levelWidth, levelHeight, format);
@@ -248,7 +253,8 @@ bool Texture2D::SetData(Image* image, bool useAlpha)
 
             if (i < levels_ - 1)
             {
-                mipImage = image->GetNextLevel(); image = mipImage;
+                mipImage = image->GetNextLevel();
+                image = mipImage;
                 levelData = image->GetData();
                 levelWidth = image->GetWidth();
                 levelHeight = image->GetHeight();
@@ -390,8 +396,8 @@ bool Texture2D::Create()
     unsigned externalFormat = GetExternalFormat(format_);
     unsigned dataType = GetDataType(format_);
 
-    // Create a renderbuffer instead of a texture if depth texture is not properly supported, or if this will be a packed
-    // depth stencil texture
+    // Create a renderbuffer instead of a texture if depth texture is not properly supported, or if this will be a
+    // packed depth stencil texture
 #ifndef GL_ES_VERSION_2_0
     if (format == Graphics::GetDepthStencilFormat())
 #else
@@ -494,4 +500,4 @@ bool Texture2D::Create()
     return success;
 }
 
-}
+} // namespace Urho3D
