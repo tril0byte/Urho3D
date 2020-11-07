@@ -301,12 +301,10 @@ end
 
 task :style do
   system 'bash', '-c', %q{
-    git diff --name-only HEAD~ -- Source \
-      |grep -v ThirdParty \
-      |grep -P '\.(?:c|cpp|h|hpp)' \
+    find Source -path Source/ThirdParty -prune -o -type f -regextype posix-egrep -regex '.*\.(c|h)p*$' -print \
       |xargs clang-format -n -Werror 2>&1 \
       |tee build/clang-format.out \
-      && exit ${PIPESTATUS[3]}
+      && exit ${PIPESTATUS[1]}
   } or abort 'Failed to pass style checks'
   puts 'Passed the style checks'
 end
